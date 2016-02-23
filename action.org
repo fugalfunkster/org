@@ -1,0 +1,228 @@
+ACTION
+
+* Ready or Nearly So 
+
+** todolist [1/7]
+*** TODO Wrap up Passport Scaffold
+*** TODO Finish Design Recipe for Voting App
+*** TODO Start over w/ FCC algorithms
+*** TODO Memoize Express Stuff
+*** TODO Ch 3, 4, 5 of YDKJS: this & Object Protos
+*** TODO Ch 6, 7, Intermezzo 1 of HtDP
+*** DONE RealTime Web with NodeJs : Socket.IO
+
+    
+** Spring Goals
+
+*** Finish FreeCode Camp
+**** Full Stack Projects
+**** React / Sass Projects
+**** Algorithms
+
+
+*** Finish YDKJS Series (42p week)
+this & Object Prototypes (100p rem.)
+- ch 3, 4, 5 (55p)
+- ch 6 (31p)
+Types and Grammar (180p)
+- Chs 1, 2, 3 (57p)
+- Ch 4 (62p)
+- Ch 5 (40p)
+**** Async & Perf (280p)
+**** ES6 and Beyond (280p)
+
+
+*** HtDP [5/43]
+I. Processing Simple Forms of Data
+- [X] Students, Teachers, Computers
+- [X] Numbers, Expressions, Simple Programs
+- [X] Programs are Function Plus Variable Definitions
+- [X] Conditional Expressions and Functions
+- [X] Symbolic Information
+- [ ] Compound Data, Part 1: Structures
+- [ ] The Varieties of Data
+- [ ] Intermezzo 1: Syntax and Semantics
+II. Processing Arbitrarily Large Data
+- [ ] Compound Data, Part 2: Lists
+- [ ] More on Processing Lists
+- [ ] Natural Numbers
+- [ ] Composing Functions, Revisited Again
+- [ ] Intermezzo 2: List Abbreviations
+III. More on Processing Arbitrarily Large Data
+- [ ] More Self-referential Data Definitions
+- [ ] Mutually Referential data Definitions
+- [ ] Development through Iterative Refinement
+- [ ] Processing Two Complex Pieces of Data
+- [ ] Intermezzo 3: Local Definitions and Lexical Scope
+IV. Abstracting Designs
+- [ ] Similarities in Definitions
+- [ ] Functions as Values
+- [ ] Designing Abstractions from Examples
+- [ ] Designing Abstractions with First-Class Functions
+- [ ] Mathematical Examples
+- [ ] Intermezzo 4: Defining Functions on the Fly
+V. Generative Recursion
+- [ ] A New Form of Recursion
+- [ ] Designing Algorithms
+- [ ] Variations on a Theme
+- [ ] Algorithms that Backtrack
+- [ ] Intermezzo 5: The Cost of Computing and Vectors
+VI. Accumulating Knowledge
+- [ ] The Loss of Knowledge
+- [ ] Designing Accumulator-Style Functions
+- [ ] More Uses of Accumulation
+- [ ] Intermezzo 6: The Nature of Inexact Numbers
+VII. Changing the State of Variables
+- [ ] Memory for Functions
+- [ ] Assignment to Variables
+- [ ] Designating Functions with Memory
+- [ ] Examples of Memory Usage
+- [ ] Intermezzo 7: The Final Syntax and Semantics
+VIII.
+- [ ] Encapsulation
+- [ ] Mutable Structures
+- [ ] Designing Functions that Change Structures
+- [ ] Equality
+- [ ] Changing Structures, Vectors, and Objects
+Epilogue
+
+
+*** Linux Command Line
+
+
+*** Online Courses [0/14]
+- [ ] Real Time Web with Node.js
+- [ ] jQuery-free JS (2:26)
+- [ ] Intro to Mongoose for node.js and MongoDB (1:41)
+- [ ] JS Templating with Handlebars (2:19)
+- [ ] Creating JS Modules w/ Browserify (1:13)
+- [ ] Learn & Understand Node.js (6:30)
+- [ ] React.js: Getting Started (1:29)
+- [ ] Building Applications with React and Flux (5:08)
+- [ ] BUild Apps with React Native (Udemy) (?)
+- [ ] CSS
+- [ ] CSS
+- [ ] SASS?
+- [ ] HTML
+- [ ] HTML
+
+
+
+
+* Codus
+
+** Memoize
+*** Express Memoize
+**** Big Ideas in Express
+- Module Patterns
+- Express Modules
+  - app.listen
+  - app.use
+  - app.set
+  - app.http
+  - express.Router()
+  - express.static()
+  - app.param
+- Router
+  - router.all
+  - router.method
+  - router.route
+  - router.use
+  - req.params
+- custom middleware
+- MVC 
+- Controllers
+- sessions
+
+*** EJS / JADE? / HANDLEBARS?
+*** Passport Memoize
+- passport-local
+- passport-git
+- passport-facebook
+*** MongoDB, Mongoose and Memoize
+- objectID (require?)
+*** Node and Memoize
+**** NPM
+- versioning (^/~/ /etc.)
+- package.json / scripts / "start"
+**** Node Modules
+- http
+- xml2js
+- flash (connect-flash)
+- morgan?
+- crypto
+- parsers
+  - bodyparser
+    - cookieparser 
+
+*** React and Memoize
+*** CSS / SASS and Memoize
+*** HTML5 and Memoize
+*** D3 and Memoize
+    
+
+
+* Agros
+
+** Lemons
+
+** Hazels & Baptisia
+
+** Apples
+
+** Cover Crop
+
+** Garden
+
+** Firepit
+
+** West Fence
+
+** Structures
+
+
+* Allocation
+
+** Lecture
+- 6 h/w
+
+** Memoize
+- 3 h/w
+
+** CODE
+- 3 h/w
+
+** Eloquent JavaScript
+- 3 h/w
+
+** YDKJS
+- 3 h/w
+
+** The Little Schemer
+- at leisure
+
+** HtDP
+- 3-6 h/w
+
+** SICP
+- 3-6 h/w
+
+
+* Pedagogicus
+
+** Pedantic Markup
+** Vanilla JS
+** Node
+** Express
+** MongoDB & Mongoose
+** Passport
+** Functional Programming
+** Reactive Programming
+
+
+
+* Horizons
+
+** 3 Month Slog: Elixir / Io / Go 
+** SICP
+** Clojure
