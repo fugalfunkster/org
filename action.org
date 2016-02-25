@@ -2,11 +2,12 @@ ACTION
 
 * Ready or Nearly So 
 
-** todolist [1/7]
-*** TODO Wrap up Passport Scaffold
+** todolist [2/7]
+*** DONE Wrap up Passport Scaffold
+*** TODO Memoize passport scaffold
+*** TODO Memoize Express Stuff
 *** TODO Finish Design Recipe for Voting App
 *** TODO Start over w/ FCC algorithms
-*** TODO Memoize Express Stuff
 *** TODO Ch 3, 4, 5 of YDKJS: this & Object Protos
 *** TODO Ch 6, 7, Intermezzo 1 of HtDP
 *** DONE RealTime Web with NodeJs : Socket.IO

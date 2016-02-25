@@ -256,54 +256,6 @@ NOTES
 
 * SICP
 
-
-* FCC
-
-** Ballot Box
-
-*** Objective: Build a full stack JavaScript app that is functionally similar to this: https://fcc-voting-arthow4n.herokuapp.com/ and deploy it to Heroku.
-  - As an authenticated user, I can keep my polls and come back later to access them.
-  - As an authenticated user, I can share my polls with my friends.
-  - As an authenticated user, I can see the aggregate results of my polls.
-  - As an authenticated user, I can delete polls that I decide I don't want anymore.
-  - As an authenticated user, I can create a poll with any number of possible items.
-  - As an unauthenticated or authenticated user, I can see and vote on everyone's polls.
-  - As an unauthenticated or authenticated user, I can see the results of polls in chart form. (This could be implemented using Chart.js or Google Charts.)
-  - As an authenticated user, if I don't like the options on a poll, I can create a new option.
-
-*** User Permissions
-
-**** Any user can
-  - view a list of all polls
-    - and their outcomes
-  - view a single poll
-    - and a chart of its outcome
-    - vote
-
-**** An authenticated user can
-  - create and save a poll
-    - with multiple options
-  - share one of her existing polls with friends
-  - view a list of her polls
-    - and their outcomes
-  - view a single poll
-    - vote on that poll
-    - create a new option
-
-*** M. V. C.
-
-**** Views
-  - lists of polls
-    - all polls
-    - my polls
-  - single polls
-    - my poll
-    - another person's poll
-    - vote
-    - new option
-    - outcome chart
-  - new poll
-    
     
 * Video Courses
   
