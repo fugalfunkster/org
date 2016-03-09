@@ -2,11 +2,10 @@ ACTION
 
 * Ready or Nearly So 
 
-** todolist [2/7]
+** todolist [3/8]
 *** DONE Wrap up Passport Scaffold
-*** TODO Memoize passport scaffold
 *** TODO Memoize Express Stuff
-*** TODO Finish Design Recipe for Voting App
+*** DONE Finish Design Recipe for Voting App
 *** TODO Start over w/ FCC algorithms
 *** TODO Ch 3, 4, 5 of YDKJS: this & Object Protos
 *** TODO Ch 6, 7, Intermezzo 1 of HtDP
@@ -31,6 +30,15 @@ Types and Grammar (180p)
 - Ch 5 (40p)
 **** Async & Perf (280p)
 **** ES6 and Beyond (280p)
+
+
+*** Memoize HTML / CSS / DOM
+
+
+*** Memoize Node and Express
+
+
+*** Memoize Mongo and Mongoose
 
 
 *** HtDP [5/43]
@@ -91,23 +99,7 @@ Epilogue
 *** Linux Command Line
 
 
-*** Online Courses [0/14]
-- [ ] Real Time Web with Node.js
-- [ ] jQuery-free JS (2:26)
-- [ ] Intro to Mongoose for node.js and MongoDB (1:41)
-- [ ] JS Templating with Handlebars (2:19)
-- [ ] Creating JS Modules w/ Browserify (1:13)
-- [ ] Learn & Understand Node.js (6:30)
-- [ ] React.js: Getting Started (1:29)
-- [ ] Building Applications with React and Flux (5:08)
-- [ ] BUild Apps with React Native (Udemy) (?)
-- [ ] CSS
-- [ ] CSS
-- [ ] SASS?
-- [ ] HTML
-- [ ] HTML
-
-
+*** Explore emacs
 
 
 * Codus
@@ -217,13 +209,24 @@ Epilogue
 ** Express
 ** MongoDB & Mongoose
 ** Passport
+** Async / Generators / Iterators
+** ES 2015
 ** Functional Programming
+  - Javascript Allonge
+  - Professor Bisby's Mostly Adequate Guide
+  - Hardcore Functional Programming w/ JS
 ** Reactive Programming
+  - http://reactivex.io/learnrx/
+  - https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
+  - https://medium.com/@puppybits/rxjs-is-great-so-why-have-i-moved-on-534c513e7af3#.bsgoy4rdg
+  - streams
+  - map, flatmap
 
 
 
 * Horizons
 
-** 3 Month Slog: Elixir / Io / Go 
-** SICP
+** FFC Volunteer Work
+** SNAP
+** HtDP // SICP
 ** Clojure
