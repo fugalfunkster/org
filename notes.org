@@ -96,7 +96,7 @@ NOTES
 **** clojure-mode-ex
 ***** http://github.com/clojure-emacs/clojure-mode
 **** dash
-**** TODO emmet-mode
+**** emmet-mode
 ***** fork of zencoding mode
 ***** https://www.youtube.com/watch?v=p7qore_HpC4
 ***** README: https://github.com/rooney/zencoding/blob/master/README.md
@@ -105,7 +105,7 @@ NOTES
 ***** Emacs Package Library
 ***** EPL provides a convenient high-level API for various package.el versions
 ***** http://github.com/cask/epl
-**** TODO expand-region
+**** PAUSED expand-region
 ***** http://emacsrocks.com/e09.html
 ***** see docs in pkg mgr
 **** exec-path-from-shell
@@ -170,7 +170,6 @@ NOTES
 **** TODO yasnippet
 ***** https://www.youtube.com/watch?v=-4O-ZYjQxks
 ***** http://github.com/capitaomorte/yasnippet
-**** zsh
 
 
 * HtDP
