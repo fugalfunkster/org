@@ -99,6 +99,88 @@ Epilogue
 *** Linux Command Line
 
 
+*** Online Courses
+**** Pluralsight 
+***** Misc
+     - [X] Git Fundamentals : James Kovacs (1:52)
+     - [X] Meet Emacs : Phil Hagelberg (0:58)
+     - [ ] Using the Chrome Developer Tools : John Sonmez (2:50)
+     - [ ] Meet the Command Line : Dan Benjamin (1:53)
+***** JS
+     - [X] Advanced JavaScript : Kyle Simpson (6:54)
+     - [X] JavaScript Objects and Prototypes : Jim Cooper (0:48)
+     - [ ] Practical Design Patterns in JavaScript : Jonathan Mills (3:10)
+     - [ ] jQuery-free JavaScript : Elijah Manor (2:26)
+     - [ ] Creating JS Modules with Browserify : Jeff Valore (1:13)
+     - [ ] JS.Next: ES6 : Aaron Frost (5:29)
+     - [ ] Babel: Get Started : Craig McKeachie (2:03)
+***** Node / Express / Mongo
+     - [X] Real Time Web with Node.js : Kyle Simpson (5:23)
+     - [X] Intro to NPM as a Build Tool : Marcus Hammarberg (1:37)
+     - [ ] Intro to Node.js : Paul O'Fallon (2:48)
+     - [ ] Building Web Apps with Node.js : Kevin Whinnery (3:43)
+     - [ ] Node Application Patterns : Rob Conery (2:30)
+     - [X] RESTful Web Services with Node.js and Express : Jonathan Mills (2:04)
+     - [ ] Securing Your Application with OAuth and Passport (2:23)
+     - [ ] Five Essential Tools for REST APIs : Elton Stoneman (2:56)
+     - [X] Building Web Apps with Node and Express 4.0 : Jonathan Mills (4:43)
+     - [ ] Intro to Mongoose for Node.js and MongoDB : Mark Scott (1:41)
+     - [ ] JavaScript Templating With Handlebars : Ryan Lewis (2:19)
+***** React
+     - [ ] React.js: Getting Started : Samer Buna (1:29)
+     - [ ] Building Applications with React and Flux : Cory House (5:08)
+***** HTML / CSS
+     - [ ] Intro to HTML5 and CSS3 : Christopher Schmitt (2:53)
+     - [ ] HTML Forms : Matt Milner (2:04)
+     - [ ] HTML5 Advanced Topics : Craig Shoemaker (2:45)
+     - [ ] CSS3 In-Depth : Estelle Weyl (6:15)
+     - [ ] Responsive Websites with Bootstrap 3 : Mark Zamoyta (2:53)
+     - [ ] D3.js Data Visualization Fundamentals : Ben Sullins (4:35)
+***** CompSci
+     - [ ] Algorhithms and Data Scrictures I. : Robert Horvick (3:13)
+     - [ ] Algorhithms and Data Scrictures II. : Robert Horvick (2:30)
+**** Udemy
+     - [X] JavaScript the Wierd Parts : Anthony (11:30+)
+     - [ ] Learn & Understand Node.js Anthony (12:00+)
+     - [ ] Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:00)
+     - [ ] Build Apps with React Native : Stephen Grider (8:00+)
+     - [ ] Build Web Apps with ReactJS and Flux : Stephen Grider (9:30+)
+**** FrontEnd Masters
+***** Node
+     - [ ] API Design with Node.js using Express : Scott Moss (10:18)
+     - [ ] Meteor : Chris Mather (10:03)
+***** D3
+     - [ ] Interactive Data Visualization with D3.js : Ian Johnson (5:31)
+***** JS 
+     - [ ] Organizing Javascript Functionality : Kyle Simpson (5:11)
+     - [ ] Coercion in Javascript : Kyle Simpson (3:20)
+     - [ ] Functional-Lite JS : Kyle Simpson (3:10)
+***** RxJS
+     - [ ] Asynchronous Programming in Javascript : Jafar Husain (9:36)
+**** Egghead Io
+***** React
+  - [ ] Build Your First React.js App : Tyler McGinnis
+  - [ ] Getting Started with Redux : Dan Abramov
+  - [ ] React Fundamentals : Joe Maddalone
+  - [ ] React Native Fundamentals : Tyler McGinnis
+***** D3
+  - [ ] Intro to D3 : Ben Clinkinbeard
+***** JavaScript
+  - [ ] Regex in JavaScript : Joe Maddalone
+***** Functional JS
+  - [ ] Asynchronous Programming: The End of the Loop : Jafar Husain
+  - [ ] JavaScript Arrays in Depth : Shane Osbourne
+  - [ ] Learn how to use Immutable JS : J.S. Leonard
+  - [ ] Reduce Data with JavaScript Array#reduce : Myokola Bilokon
+***** Reactive Programming
+     - [ ] Introduction to Reactive Programming : Andre Staltz
+     - [ ] Step-by-Step Async JavaScript with RxJS : John Lindquist
+     - [ ] Cycle.js Fundamentals : Andre Staltz
+
+
+
+
+
 *** Explore emacs
 
 
@@ -216,12 +298,20 @@ Epilogue
   - Professor Bisby's Mostly Adequate Guide
   - Hardcore Functional Programming w/ JS
 ** Reactive Programming
+  - streams
+  - map, flatmap
   - http://reactivex.io/learnrx/
   - https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
   - https://medium.com/@puppybits/rxjs-is-great-so-why-have-i-moved-on-534c513e7af3#.bsgoy4rdg
-  - streams
-  - map, flatmap
+** Falcor
+** React
 
+
+
+** Clojure
+** ClojureScript
+** Figwheel
+** Om Next
 
 
 * Horizons
