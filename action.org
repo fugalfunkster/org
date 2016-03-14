@@ -3,15 +3,24 @@ ACTION
 * Ready or Nearly So 
 
 ** todolist [3/8]
-*** DONE Wrap up Passport Scaffold
-*** TODO Memoize Express Stuff
-*** DONE Finish Design Recipe for Voting App
-*** TODO Start over w/ FCC algorithms
+*** TODO Finish 'Recipes' and 'Picking' in JS Allonge
+*** TODO Finish Stock App
+*** TODO Refactor Full-Stack Apps
+*** TODO Wrap Up Pluralsight Courses
+    - [ ] Intro to Mongoose
+    - [ ] Securing your Apps with Passport
+    - [ ] Intro to Node
+    - [ ] Building Web Apps w/ Node
+    - [ ] Tools for REST APIs
+    - [ ] Meet the Command Line
+    - [ ] Chrome Dev. Tools
+    - [ ] JSNext
+*** TODO Wrap-Up Udemy Node Course
 *** TODO Ch 3, 4, 5 of YDKJS: this & Object Protos
 *** TODO Ch 6, 7, Intermezzo 1 of HtDP
-*** DONE RealTime Web with NodeJs : Socket.IO
+*** TODO Memoize Express Stuff
 
-    
+     
 ** Spring Goals
 
 *** Finish FreeCode Camp
@@ -119,7 +128,6 @@ Epilogue
      - [X] Intro to NPM as a Build Tool : Marcus Hammarberg (1:37)
      - [ ] Intro to Node.js : Paul O'Fallon (2:48)
      - [ ] Building Web Apps with Node.js : Kevin Whinnery (3:43)
-     - [ ] Node Application Patterns : Rob Conery (2:30)
      - [X] RESTful Web Services with Node.js and Express : Jonathan Mills (2:04)
      - [ ] Securing Your Application with OAuth and Passport (2:23)
      - [ ] Five Essential Tools for REST APIs : Elton Stoneman (2:56)
