@@ -121,7 +121,7 @@ Epilogue
      - [ ] Practical Design Patterns in JavaScript : Jonathan Mills (3:10)
      - [ ] jQuery-free JavaScript : Elijah Manor (2:26)
      - [ ] Creating JS Modules with Browserify : Jeff Valore (1:13)
-     - [ ] JS.Next: ES6 : Aaron Frost (5:29)
+     - [X] JS.Next: ES6 : Aaron Frost (5:29)
      - [ ] Babel: Get Started : Craig McKeachie (2:03)
 ***** Node / Express / Mongo
      - [X] Real Time Web with Node.js : Kyle Simpson (5:23)
