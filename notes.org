@@ -1459,9 +1459,32 @@ NOTES
 
 
 *** Left-Variadic Function
+**** Variadic functions accept a variable number of arguments.
+***** JS now lets you do this when using rest parameters. Ex: (x, y, ...z)
+***** This may be useful for certian kinds of destructuring algorithms
+***** But JS only permits gathering parameters from the end of the parameter list
+****** AKA: Right Variadic Functions
+**** Left Variadic Functions require some fussing
+***** thankfully, the rest parameter is (acts like?) a proper array
+***** so we can grab all argument with the rest parameter, and slice them up to 
+***** grab the right-most arguments, and bundle the rest
+****** See Code Example in allonge recipes.js
+**** Destructuring
+***** Javascript can now destructure arrays when assigning variables 
+****** Ex: const [first, ...butFirst] = ['why', 'hello', 'there', 'little', 'droid'];
+****** first >> 'why'
+****** butFirst >> ['hello','there','little','droid']
+***** Note again, this is right variadic destructuring
+**** leftGather
+***** We can use the rest parameter, and Array#slice to make our own leftGather function
+***** see code ex in allonge recipes.js
+***** we have to supply the length of the array into which we will destructure
+***** so that excess arguments can be collected in the left parameter
+****** Ex: const [butLast, last] = leftGather(2)(['why', 'hello', 'there', 'little', 'droid']);
 
 
 *** Compose and Pipeline
+**** 
 
 
 ** Picking the Bean: Choice and Truthiness
