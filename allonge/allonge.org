@@ -7,12 +7,23 @@ Javascript Allonge Notepad
 
 *** http://howardism.org/Technical/Emacs/literate-programming-tutorial.html
 
+*** Not all code will appear in a block
+** Terminology
+
+*** cf : compare
+
 ** Org-Babel
 
 ** ES6 code blocks
 
+*** node npm babel
 *** http://rwx.io/blog/2015/10/06/org-with-babel-node/
 
+*** In this doc, code blocks will be labeled as "Ex:" with their own bullet to expand
+*** Note that many of these code blocks begin with return when the result isn't 
+*** logges to stdout (in this case, console.log)
+**** this is required to recieve the return value of an expression 
+**** because org-babel executes the code-block within a function wrapper
 ** Do the tangle
 
 *** What is tangling?
@@ -23,9 +34,9 @@ Javascript Allonge Notepad
 *** Here's the doc-wide tangle property if you wish to modify it:
 **** note, this property tag must be registered with the point over the code and a lil C-c C-c
 
- #+PROPERTY: tangle ~/code/org/allonge/recipes.js
+ #+PROPERTY: tangle ~/code/org/allonge/recipes.js cmd "babel-node --presets es2015"
 
-
+ 
 * Prelude: Values and Expressions over Coffee
 
 ** values are expressions
@@ -56,9 +67,25 @@ Javascript Allonge Notepad
  
 ** As little as possible about Functions
 *** functions are values that represent computations to be performed
-**** Ex: () => 0 >> [function] in node
-**** we use functions by applying them to arguments (0 or more values)
-**** Ex: (() => 0 )() >> 0
+
+***** Ex:
+  #+BEGIN_SRC js
+    return () => 0
+  #+END_SRC
+
+  #+RESULTS:
+  | Function |
+
+**** We use functions by applying them to arguments (0 or more values)
+
+***** Ex:
+  #+BEGIN_SRC js
+    return (() => 0 )()
+  #+END_SRC
+
+  #+RESULTS:
+  : 0
+
 **** functions return values (including other functions)
 **** functions evaluate expressions
 *** blocks
@@ -70,15 +97,38 @@ Javascript Allonge Notepad
 **** idiomatically: void 0 >> undefined
 *** statements
 **** all expressions are statements - but some return undefined when applied
-**** Ex: () => {2 + 2} >> [function]
-**** Ex: (() => {2+2})() >> undefined
+
+***** Ex:
+ #+BEGIN_SRC js
+   return () => {2 + 2}
+ #+END_SRC
+
+ #+RESULTS:
+ | Function |
+
+***** cf Ex: 
+#+BEGIN_SRC js
+  return (() => {2+2})()
+#+END_SRC
+
+#+RESULTS:
+: undefined
+
 **** not all statements are expressions
 *** the return keyword
 **** allows us to return a value from a function,
 **** when that function evaluates a block
 **** return immediately terminates the function application and 
 **** returns the result of evaluating its expression
-**** Ex: (() => { return 2+2; })() >> 4
+
+***** Ex:
+ #+BEGIN_SRC js
+  return (() => { return 2+2; })()  
+ #+END_SRC
+
+ #+RESULTS:
+ : 4
+
 *** functions are reference types
 
 
@@ -95,7 +145,15 @@ Javascript Allonge Notepad
 **** Every time a function is invoked, a new environment is created
 **** each environment maps variable names to argument values
 **** like a dictionary {x: 2}
-**** Ex: ((x) => x)(2) >> 2
+
+***** Ex:
+#+BEGIN_SRC js
+  ((x) => x)(2)
+#+END_SRC
+
+#+RESULTS:
+: undefined
+
 **** recall YDKJS discussion of scope/environments/etc...
 *** II - Call by sharing
 **** when js binds a value-type to a name it makes a copy of the value
@@ -107,7 +165,15 @@ Javascript Allonge Notepad
 **** bound with a var/let/const or via an argument
 **** Functions containing no free variables are called pure functions
 ***** But a pure function can contain a closure
-***** Ex: ((x) => (y) => x)(1)(2)
+
+***** Ex:
+#+BEGIN_SRC js
+  return ((x) => (y) => x)(1)(2)
+#+END_SRC
+
+#+RESULTS:
+: 1
+
 **** Functions containing one or more free variables are called closures
 ***** closures cannot contain pure functions, because free variables
 ***** remain accessable to inner functions
@@ -126,9 +192,25 @@ Javascript Allonge Notepad
 *** Immediately Invoked Function Expressions
 **** We can bind any value we want for an expression by wrapping the expression
 **** in a function and subsequently invoking the function with our value
-***** ex: ((pi) => (diameter) => diameter * pi)(3.14)(10)
+
+***** ex: 
+#+BEGIN_SRC js
+  return ((pi) => (diameter) => diameter * pi)(3.14)(10)
+#+END_SRC
+
+#+RESULTS:
+: 31.400000000000002
+
 **** inside-out
-***** ((diameter) => ((pi) => diameter * pi)(3.14))(10)
+
+***** Ex:
+#+BEGIN_SRC js
+  return ((diameter) => ((pi) => diameter * pi)(3.14))(10)
+#+END_SRC
+
+#+RESULTS:
+: 31.400000000000002
+
 **** invoking functions is considerably more expensive than evaluating functions
 ***** every time we invoke the outer function, we'll invoke the inner function
 *** const - can bind any expression (including functions)
@@ -201,7 +283,7 @@ Javascript Allonge Notepad
 **** Ex: const cookAndEat = (food) => eat(cook(food));
 **** the trick is to organize your code so you can compose functions
 *** partial application
-**** When a functio takes multiple arguments, we need not apply all arguments
+**** When a function takes multiple arguments, we need not apply all arguments
 ***** if we can return a function with arguments pre-supplied
 **** orthogonal (involving right angles) to composition
 
@@ -218,7 +300,7 @@ Javascript Allonge Notepad
 **** If you call a function more than once, give it a name and first-class status
 **** If the function only represents an expression to be computed, use fat arrows
 **** The distinction helps sort out the syntatic differences re: magic words
-
+     
 
 ** Summary
 *** Functions are values that can be part of expressions, returned from other functions
@@ -382,7 +464,7 @@ Javascript Allonge Notepad
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
   const [first, ...butFirst] = ['why', 'hello', 'there', 'little', 'droid'];
   //console.log(butFirst);
-  //console.log(first); 
+ms  //console.log(first); 
 
 #+END_SRC
 
