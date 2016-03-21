@@ -132,7 +132,7 @@ Epilogue
      - [ ] Securing Your Application with OAuth and Passport (2:23)
      - [ ] Five Essential Tools for REST APIs : Elton Stoneman (2:56)
      - [X] Building Web Apps with Node and Express 4.0 : Jonathan Mills (4:43)
-     - [ ] Intro to Mongoose for Node.js and MongoDB : Mark Scott (1:41)
+     - [X] Intro to Mongoose for Node.js and MongoDB : Mark Scott (1:41)
      - [ ] JavaScript Templating With Handlebars : Ryan Lewis (2:19)
 ***** React
      - [ ] React.js: Getting Started : Samer Buna (1:29)
@@ -181,15 +181,13 @@ Epilogue
   - [ ] Learn how to use Immutable JS : J.S. Leonard
   - [ ] Reduce Data with JavaScript Array#reduce : Myokola Bilokon
 ***** Reactive Programming
-     - [ ] Introduction to Reactive Programming : Andre Staltz
-     - [ ] Step-by-Step Async JavaScript with RxJS : John Lindquist
-     - [ ] Cycle.js Fundamentals : Andre Staltz
+  - [ ] Introduction to Reactive Programming : Andre Staltz
+  - [ ] Step-by-Step Async JavaScript with RxJS : John Lindquist
+  - [ ] Cycle.js Fundamentals : Andre Staltz
 
 
 
 
-
-*** Explore emacs
 
 
 * Codus

@@ -251,9 +251,6 @@ NOTES
 *** TODO jQuery-free Javascript
 
 
-*** TODO Intro to Mongoose for node.js and MongoDB
-
-
 *** WAIT Creating JS Modules with Browserify
 
 **** Getting Started
@@ -1116,4 +1113,19 @@ NOTES
 ****** you want to be using SSL on your websockets
 ****** socket.io is an extension on websockets
 ****** we're going to use 0.9.16 version
+
+
+*** DONE Intro to Mongoose for node.js and MongoDB
+**** Validation
+***** Built in Validators
+****** All Types: required
+****** String: 
+******* enum - 
+******* match - allows regex validation
+****** Number: min, max
+***** 
+**** Tools
+***** RoboMongo
+***** MongoView
+***** 3T Products
 

@@ -66,7 +66,7 @@ Javascript Allonge Notepad
 *** +, -, *, /, %, -:
 
 
-* The first sip: Basic Functions
+* The First Sip: Basic Functions
  
 ** As little as possible about Functions
 *** functions are values that represent computations to be performed
@@ -762,5 +762,364 @@ console.log(setter(2));
 
 
 * Picking the Bean: Choice and Truthiness
+** Boolean
+*** true and false are value types, true === true, false === false
+** truthiness
+*** 6 kinds of wrong
+**** 0, '', NaN, undefined, null, false
+*** Everything else is truthy
+** "Logical" operators evaluate truthiness, not boolean values
+*** ! - negation operator
+**** unary prefix
+**** returns false if its argument is truthy
+**** returns true if its argument is falsey
+***** !! is a way to convert a truthy value to the boolean true
+*** && - logical and
+**** binary infix
+**** && evaluates its left-hand expression, and if falsey, returns that value
+**** else, && evaluates and returns its right-hand expression
+*** || - logical or
+**** binary infix
+**** || evaluates its left-hand expression, and if truthey, returns that value
+**** else, || evaluates and returns its right-hand expression
+*** first ? second : third  - the ternary operator
+**** if the ternary's first argument is truthy,
+**** it evaluates it's second argument,
+**** otherwise it evaluates its third argument
+**** an expression, not a statement (like if/else)
+** These operators provide flow control, not pure logical operators
+*** Function parameters are eagerly evaluated
+**** This means that JavaScript always evaluates expressions provided as parameters
+**** to a function, before passing those values into the function for invocation
+**** Recall Applicative Order and Normal Order
+***** See SICP and HtDP
+**** If we need to roll our own control-flow semantics,
+**** we must pass functions as parameters to other functions,
+**** not expressions, which would be evaluated
+*** Flow Control operators have "short-cut" semantics
+
 
 * Composing and Decomposing Data
+
+** Arrays and Destructuring Arguments
+*** Arrays are ordered collections of elements
+**** Arrays are reference types
+**** Literals - [element, element, element]
+***** Array literals are expressions that evaluate to an array
+**** Element References
+***** In JavaScript, arrays are 0 based
+***** You can extract an element within an array by using bracket notation
+***** Example:
+
+#+BEGIN_SRC js
+  const x = [], a = [x];
+  console.log(a[0] === x);
+
+#+END_SRC
+
+#+RESULTS:
+: true
+: undefined
+
+***** As the previous example demonstrates, 
+***** arrays relate to their elements by reference
+*** Destructuring Arrays
+**** New ES6 Syntax
+***** In addition to bracket notation, we can extract elements of an array
+***** by destructuring the array.
+***** Destructuring an array mirrors array declaration.
+***** On the left side of an assignment,
+***** we have brackers surrounding the name binding(s)
+***** And on the right, the array to destructure
+**** Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+// declare
+  const container = ['goodies'];
+// destructure
+  const unwrap = (wrapped) => { 
+    const [something] = wrapped;
+    return something; 
+  }
+  console.log(unwrap(container));
+
+#+END_SRC
+
+#+RESULTS:
+: goodies
+: undefined
+
+*** Gathering and Spreading
+**** Gathering (extracting an array from an array)
+***** We can also extract arrays from an array, for example extracting the head
+***** and the remaining elements of the array (the "rest")
+****** Recall our right and left variadiac functions
+**** Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const [car, ...cdr] = [1, 2, 3, 4, 5];
+  console.log(car);
+  console.log(cdr);
+#+END_SRC
+
+#+RESULTS:
+: 1
+: [ 2, 3, 4, 5 ]
+**** Spreading (assembling an array with an array)
+**** Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+  const oneTwoThree = ['one', 'two', 'three'];
+  console.log(['zero', ...oneTwoThree]);
+
+#+END_SRC
+
+#+RESULTS:
+| zero | one | two | three |
+
+*** Application
+**** Destructuring is not Pattern Matching
+***** When destructuring, the sides of the assignment operator should align
+***** In other programming languages, a mismatched destructuring attempt will err
+***** JavaScript, however, simply assigns undefined when destructuring fails
+***** Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+  const [thistle, that, theOther] = ['duck feet', 'tiger tail'];
+  console.log(theOther);
+
+  const [...what] = [];
+  console.log(what);
+
+#+END_SRC
+
+#+RESULTS:
+: undefined
+: []
+: undefined
+
+**** Destructuring and Return Values
+***** Some languages support multiple return values, ie: a function can return
+***** several things at once, like a value and an error code. We can emulate that
+***** with destructuring
+***** Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const description = (nameAndOccupation) => { 
+    if (nameAndOccupation.length < 2) {
+      return ["", "occupation missing"] 
+    } else {
+      const [[first, last], occupation] = nameAndOccupation;
+      return [`${first} is a ${occupation}`, "ok"];
+    }
+  }
+
+  const [reg, status] = description([["Reginald", "Braithwaite"], "programmer"]);
+
+  console.log(reg);
+  console.log(status);
+#+END_SRC
+
+#+RESULTS:
+: Reginald is a programmer
+: ok
+
+**** Destructuring parameters
+***** Consider that the parameters to a function are also a collection of elements
+***** We can destructure those too! permitting us to create functions that accept
+***** a variable number of arguments
+***** Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+ const theWholeShebang = (car, ...cdr) => [car, cdr];
+ console.log(theWholeShebang('why', 'hello', 'there', 'little', 'droid'));
+
+#+END_SRC
+
+#+RESULTS:
+: [ 'why', [ 'hello', 'there', 'little', 'droid' ] ]
+
+
+** Self-Similarity
+*** What is a list?
+    Lists are a collection composed of zero or more elements.
+      In the previous chapter, we created arrays through literal declaration
+    and then destructured arrays into their constituent elements. These two
+    operations are opposites.
+      We can also define a list in terms of rules, that - if followed - 
+    create a list. Traditionally, there are two rules that define a list. A list is
+    either:
+      1. Empty
+      2. Consists of an element concatenated with a list
+    Thus, [] is a list. So is ["baz", []]. 
+*** A process to determing whether a value is an empty list:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const isEmpty = ([first, ...rest]) => first === undefined; 
+
+  console.log(isEmpty([]));
+  console.log(isEmpty([0]));
+  console.log(isEmpty([[]]));
+
+#+END_SRC
+
+#+RESULTS:
+: true
+: false
+: false
+
+*** A recursive process to determine the length of an array
+
+ #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+   const length = ([first, ...rest]) =>
+     first === undefined 
+       ? 0
+       : 1 + length(rest);
+
+   console.log(length([]));
+   console.log(length([1,2,3]));
+
+ #+END_SRC
+
+ #+RESULTS:
+ : 0
+ : 3
+*** Recursion
+    Our length function is recursive, it calls itself. This makes sense because
+    our definition of a list is recursive, and if a list is self-similar, it is
+    natural to create an algorithm that is also self similar.
+      Recursive algorithms follow the "divide and conquer" strategy:
+    1. Divide the problem into smaller problems
+    2. If a smaller problem is solvable, solve the small problem
+    3. If a smaller problem is not solvable, divide and conquer that problem
+    4. When all problems are solved, compose the solutions   
+*** Linear Recursion
+    Linear recursion varies from this strategy in that it entails breaking off
+    a piece of a problem, the terminal case, solving that piece and then sticking
+    it onto a solution for the rest of the problem.
+*** Flatten-ing
+
+#+BEGIN_SRC  js :cmd "org-babel-node --presets es2015" :results output
+
+  const flatten = ([first, ...rest]) => {
+    if (first === undefined) {
+      return [];
+    } else if (!Array.isArray(first)) {
+      return [first, ...flatten(rest)];
+    } else {
+      return [...flatten(first), ...flatten(rest)];
+    }
+}
+
+console.log(flatten(['foo', [3, 4, []]]));
+
+#+END_SRC
+
+#+RESULTS:
+: [ 'foo', 3, 4 ]
+
+*** Map-ing:
+    Mapping, applying a function to each element of an array, is a form of 
+    linear recursion.
+**** Recipe:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" 
+  const mapWith = (fn, [first, ...rest]) => {
+    first === undefined
+      ? []
+      : [fn(first), mapWith(fn, rest)];
+  }
+
+#+END_SRC
+**** Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" 
+  const mapMaker = (fn, [first, ...rest]) => 
+    first === undefined ? [] : [fn(first), ...mapMaker(fn, rest)];
+
+  console.log(mapMaker((x) => x * x, [1,2,3,4]));
+
+#+END_SRC
+
+#+RESULTS:
+
+*** Fold-ing:
+    With the exception of the length example earlier, all of our examples have used
+    the spread operator, ... , to rebuild our solution. We might instead want to
+    concatenate the values from each step of the process.
+**** sumSquares Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const sumSquares = ([first, ...rest]) => 
+    first === undefined 
+      ? 0
+      : first * first + sumSquares(rest);
+
+  console.log(sumSquares([1,2,3]));
+
+#+END_SRC
+
+#+RESULTS:
+: 14
+
+**** sumSquares vs. Map
+     There are two differences between sumSquares and our map example:
+       1. Given the terminal case of an empty list, we return 0 instead of []
+       2. We catenate the square of each element to the result of fn(rest) 
+**** foldWith, a moar general mapWith:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const foldWith = (fn, terminalValue, [first, ...rest]) => 
+    first === undefined
+      ? terminalValue
+      : fn(first, foldWith(fn, terminalValue, rest));
+
+  console.log(foldWith((x, rest) => x * x + rest, 0, [1,2,3]));
+
+#+END_SRC
+
+#+RESULTS:
+: 14
+
+*** Folding is a form of linear recursion, mapping is a form of folding 
+    We can represent a map as a fold, we just need to supply the array-rebuilding 
+    code
+**** Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const foldWith = (fn, terminalValue, [first, ...rest]) => 
+    first === undefined
+      ? terminalValue
+      : fn(first, foldWith(fn, terminalValue, rest));
+
+  const mapWith = (fn, array) => 
+    foldWith((first, rest) => [fn(first), ...rest], [], array);
+
+  const squareAll = (array) => mapWith((x) => x * x, array);
+
+  console.log(squareAll([1,2,3,4,5]));
+
+#+END_SRC
+
+#+RESULTS:
+: [ 1, 4, 9, 16, 25 ]
+
+  
+** Tail Calls (and Default Arguments)
+
+** Garbage, Garbage Everywhere
+
+** Plain Old JavaScript Objects
+
+** Mutation
+
+** Reassignment
+
+** Copy on Write
+
+** Tortises, Hares, and Teleporting Turtles
+
+** Functional Iterators
+
+** Making Data Out Of Functions
