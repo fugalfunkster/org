@@ -1,8 +1,23 @@
 Javascript Allonge Notepad
 
-* Readme: An Aside: Welcome to fugalfunkster's notebook
+* Aside: Welcome to fugalfunkster's notebook
+
+** Hello... But, why? 
+   My name is Matthew, and I remember things better when I write them down.
+   Normally, I like to take notes with pen and paper, and I keep myself organized
+   with index cards. but now that I'm learning to program computers, I've reached 
+   the limit of that medium. In the search for something more idiomatic, 
+   interactive, and sharable, I found org mode.
+     Org mode is a mode (modality) for emacs, packed full of tools for organizing 
+   ones thoughts and getting things done. Note that this document is just a text 
+   file with a .org file type. Viewed without the aid of org mode, the document
+   contains meaningful but useless markup. When edited in emacs' org mode, that
+   markup breathes structure and interactivity into the document.
+     This notebook is the product of my study of Reginald Braithwaite's "Javascript
+   Allonge." 
 
 ** Org-Mode and Literate Programming
+   This document is saved as a text file, suffixed with .org 
 
 *** http://howardism.org/Technical/Emacs/literate-programming-tutorial.html
 
@@ -20,7 +35,7 @@ Javascript Allonge Notepad
 
 *** In this doc, code blocks will be labeled as "Ex:" with their own bullet to expand
 *** Note that many of these code blocks begin with return when the result isn't 
-*** logges to stdout (in this case, console.log)
+*** logged to stdout (in this case, console.log)
 **** this is required to recieve the return value of an expression 
 **** because org-babel executes the code-block within a function wrapper
 
@@ -65,7 +80,7 @@ Javascript Allonge Notepad
 ** operations on numbers
 *** +, -, *, /, %, -:
 
-
+    
 * The First Sip: Basic Functions
  
 ** As little as possible about Functions
@@ -1107,19 +1122,632 @@ console.log(flatten(['foo', [3, 4, []]]));
 
   
 ** Tail Calls (and Default Arguments)
+*** Stack Overflow 
+    Our implementations of mapWith and foldWith consume memory proportional
+    to the size of the array on which they operate. Each time the process recurrs, 
+    the engine will open a new function execution context to contine the recursion.
+    But, because information that is critical to the final result remains in 
+    each function body (at each level or recursion) the JavaScript engine cannot
+    discard any of the execution contexts.
+      Thus, doubling the size of an array, would double the size of the call stack
+    and thus the amount of memory required to map or fold that array.
+*** Tail-call Optimization
+    A tail call occurs when a function's last act is to invoke another function,
+    and then return whatever the other function returns. This permits the engine to
+    throw away the prior execution context as it recurrs. Thus, if a function makes
+    a call in tail position, JavaScript optimizes away the function call overhead
+    and stack space.
+**** Example sans TCO:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+  const length = ([first, ...rest]) => 
+    first === undefined
+      ? 0
+      : 1 + length(rest);
+
+#+END_SRC
+
+**** Example w/ TCO:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+  const lengthTCO = ([first, ...rest], counter) => 
+    first === undefined
+      ? counter
+      : length(rest, 1 + counter);
+
+#+END_SRC
+        
+*** Converting to TCO
+    The examples show that a tail-call optimized recursive process passes 
+    every expression needed to complete the process into each recursive call. Thus
+    the function signature must accept parameters to facilitate this hand-off 
+    from one execution context to the next. But, once we modify our function
+    signature, our initial call must be aware that we are invoking a TCO process,
+    and supply a starting point for the process.
+      For our length example, the "counter" parameter should begin at 0. But, we
+    can use partial application to avoid having to remember to call lengthTCO
+    with a 0 each time.
+**** Length Example:
+    
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+
+  const lengthTCO = ([first, ...rest], counter) => 
+    first === undefined
+      ? counter
+      : lengthTCO(rest, 1 + counter);
+
+  const callLast = (fn, ...args) =>
+    (...moarArgs) =>
+      fn(...moarArgs, ...args);
+
+  const length = callLast(lengthTCO, 0);
+
+  console.log(length(['how', 'now', 'brown', 'cow']));
+
+#+END_SRC
+
+#+RESULTS:
+: 4
+: undefined
+
+**** Factorial Example
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+
+  const factorialTCO = (num, product) => 
+    num === 1
+      ? product
+      : factorialTCO(num - 1, num * product);
+
+  const callLast = (fn, ...args) =>
+    (...moarArgs) =>
+      fn(...moarArgs, ...args);
+
+  const factorial = callLast(factorialTCO, 1);
+
+  console.log(factorial(5));
+
+#+END_SRC
+
+#+RESULTS:
+: 120
+: undefined
+
+*** Default Arguments
+    We can also set default values for function parameters. Within the function
+    signature, we can "assign" a value to a parameter in the event that the
+    function is invoked without an argument for that parameter.  
+**** Example:
+     
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const factorial = (n, work = 1) =>
+    n === 1
+      ? work
+      : factorial(n - 1, n * work)
+
+  console.log(factorial(5));
+
+#+END_SRC
+
+#+RESULTS:
+: 120
+
+**** Length and mapWith Examples:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const length = ([first, ...rest], numberToBeAdded = 0) =>
+    first === undefined
+      ? numberToBeAdded
+      : length(rest, 1 + numberToBeAdded)
+ 
+  console.log(length(["foo", "bar", "baz"]));
+
+  const mapWith = (fn, [first, ...rest], prepend = []) =>
+    first === undefined
+      ? prepend
+      : mapWith(fn, rest, [...prepend, fn(first)]);
+
+  console.log(mapWith((x) => x * x, [1, 2, 3, 4, 5]));
+
+#+END_SRC
+
+#+RESULTS:
+: 3
+: [ 1, 4, 9, 16, 25 ]
+
+*** Defaults and Destructuring
+    We saw that destructuring parameters works the same was as destructuring
+    assignment. Now we learn that we can create a default parameter argument. We
+    can also create a default destructuring assignment!
+**** Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const [first, second = "two"] = ["one"];
+  console.log(`${first} . ${second}`);
+
+  const [third, fourth = "two"] = ["primus", "secundus"]; 
+  console.log(`${third} . ${fourth}`);
+
+#+END_SRC
+
+#+RESULTS:
+: one . two
+: primus . secundus
+
 
 ** Garbage, Garbage Everywhere
+*** Waste
+    Our latest mapWith implementation is much improved. Using tail-call
+    optimization, mapWith executes in constant space, saving memory.
+      But, our implementation is still relatively slow for another reason: Each
+    time our process recurrs, it creates a new array [...prepend, fn(first)], and 
+    passes that array into mapWith. Once done, the arrays created from the last 
+    execution context cease to matter, and are "garbage collected."
+      This is wasteful, because each of these temporary arrays takes time to
+    create, and is eventually discarded. So why implement recursion in this way?
+*** LISP's Lists, a history lesson
+    Lisp was first implemented on the IBM 704, a computer that had a 36-bit word,
+    meaning that it was very fast to store and retrieve 36-bit values. The CPU's
+    instruction set featured two important macros: CAR would fetch 15 bits
+    representing the Contents of the Address part of the Register, while CDR would
+    fetch the contents of the Decrement Part of the Register. 
+      In broad terms, this means that a single 36-bit word could store two
+    separate 15-bit values and and it was very fast to save and retrieve pairs of
+    values. If you had two 15-bit values and wished to write them to the register,
+    the CONS macro would take the values and write them to a 36-bit word.
+      Thus, Cons put two values together, CAR extracted one, and CDR extracted the
+    other. Lisp's basic data type is often said to be the list, but in actuality it
+    was the CONS cell, the term used to describe two 15-bit values stored in one
+    word. The 15-bit values were used as pointers that could refer to a location in
+    memory, so in effect, a cons cell was a little data structure with two pointers
+    to other cons cells.
+      Lists were represented as linked lists of cons cells, with each cell's head
+    pointing to an element and the tail pointing to another cons cell. Retrieval of 
+    the CAR and CDR were fast because those macros were baked into the hardware.
+*** Linked Lists in JavaScript
+    In JavaScript we can emulate the semantics of CONS, CAR, and CDR:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+  const cons = (a, d) => [a, d];
+  const car =([a,d])=>a;
+  const cdr =([a,d])=>d;
+
+  const oneToFive = cons(1, cons(2, cons(3, cons(4, cons(5, null)))));
+
+#+END_SRC
+
+    Although JavaScript would display out list as a series of nested arrays, because 
+    array's are reference types, oneToFive is more accutarely represented as:
+  
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+  const node5 = [5, null],
+        node4 = [4, node5],
+        node3 = [3, node4],
+        node2 = [2, node3],
+        node1 = [1, node2];
+
+  const oneToFive = node1;
+
+#+END_SRC
+
+    Our implementation is much faster at getting all of the elements except for
+    the head of a linked list than it would be if we were using an array. Getting
+    one reference to a structure that already exists is faster than copying a bunch
+    of elements. 
+      So, when we gather or spread arrays during our recursions - using
+    [first, ...rest] - we're doing something laborious and memory-inefficient
+    compared to using a linked list.
+
+*** Arrays, what are they good for?
+    If arrays are so slow, why does JavaScript sport them out of the box? Arrays
+    are relatively slow when it comes to CAR and CDR, but much faster at other
+    operations, like:
+      1. Iteration over the list
+      2. Retrieving data by index
+      3. Changing elements in place
+
 
 ** Plain Old JavaScript Objects
+*** Dictionaries
+    Lists were performant because they closely mapped hardware, but they're not
+    particularly user friendly. How is one to remember what data is stored where?
+      Dictionaries evolved out of a need to name the data stored in lists. 
+    Dictionaries store key-value pairs, but the underlying implementation could
+    be a hashed colletion, a tree of some sort, or something else. JavaScript calls
+    its dictionaries "objects."
+      In JavaScript an object is a map from string keys to values.
+*** Object Literals
+**** Syntax: { key: 'value', anotherKey: 'anotherValue' }
+**** Like arrays, objects are reference types
+**** Value access with bracket notation or dot notation if the name conforms 
+**** Expressions can be used for keys when enclosed in square brackets
+**** Keys can store any value: functions, arrays, other objects, etc.
+*** Three different ways to store functions:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const combinator = {
+    idiotBird : function (x) {
+      return x;
+    },
+    kestrel : function kestrel (x) {
+      return (y) => (x);
+    },
+    blackBird (a, b) {
+     return (c) => a(b(c));
+    }
+  }
+
+  var bigBird = combinator.blackBird(combinator.kestrel, combinator.idiotBird)(3);
+
+  console.log(bigBird());
+
+#+END_SRC
+
+#+RESULTS:
+: 3
+: undefined
+
+*** Destructuring Objects
+**** Literal Destructuring:
+     
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const knight = {
+    name: {
+      first: 'Matthew',
+      last: 'Hoselton'
+    },
+    quest: 'to seek the Y combinator',
+    color: 'blue'
+  }
+
+  const {name: {first: given, last: surname}, quest, color} = user;
+
+  console.log(given + ' ' + surname);
+
+#+END_SRC
+
+#+RESULTS:
+: Matthew Hoselton
+: undefined
+
+**** Destructuring Parameters:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const knight = {
+    name: {
+      first: 'Matthew',
+      last: 'Hoselton'
+    },
+    quest: 'to seek the Y combinator',
+    color: 'blue'
+  }
+
+  const description = ({name: {first: given, last: surname}, quest, color}) =>
+   `Sir ${surname} is on a quest ${quest}`
+
+  console.log(description(knight));
+
+#+END_SRC
+
+#+RESULTS:
+: Sir Hoselton is on a quest to seek the y combinator
+: undefined
+
+**** Sugar (for when the object key is a valid variable name):
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const knight = {
+    name: {
+      first: 'Matthew',
+      last: 'Hoselton'
+    },
+    quest: 'to seek the Y combinator',
+    color: 'blue'
+  }
+
+  const description = ({name: {first, last}, quest, color}) =>
+   `Sir ${last} is on a quest ${quest}`
+
+  console.log(description(knight));
+
+#+END_SRC
+
+#+RESULTS:
+: Sir Hoselton is on a quest to seek the Y combinator
+: undefined
+
+*** Linked Lists Revisited
+**** Object Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const EMPTY = {};
+  const oneTwoThree = { first: 1, 
+                        rest: { 
+                          first: 2,
+                          rest: { 
+                            first: 3, 
+                            rest: EMPTY  
+                          }
+                        }
+                      };
+
+  console.log(oneTwoThree.first);
+  console.log(oneTwoThree.rest);
+
+#+END_SRC
+
+#+RESULTS:
+: 1
+: { first: 2, rest: { first: 3, rest: {} } }
+
+**** Length Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const EMPTY = {};
+  const oneTwoThree = {first: 1, rest: {first: 2, rest: {first: 3, rest: EMPTY}}};
+
+  const length = (node, counter = 0) =>
+    node === EMPTY
+      ? counter
+      : length(node.rest, counter + 1)
+
+  console.log(length(oneTwoThree));
+
+#+END_SRC
+
+#+RESULTS:
+: 3
+
+**** Slow Copy Example:
+     
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const EMPTY = {};
+  const oneTwoThree = {first: 1, rest: {first: 2, rest: {first: 3, rest: EMPTY}}};
+
+  const slowcopy = (node) => 
+    node === EMPTY
+      ? EMPTY
+      : { first: node.first, rest: slowcopy(node.rest)};
+
+  console.log(slowcopy(oneTwoThree));
+
+#+END_SRC
+
+#+RESULTS:
+: { first: 1, rest: { first: 2, rest: { first: 3, rest: {} } } }
+
+**** Reverse Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const EMPTY = {};
+  const oneTwoThree = {first: 1, rest: {first: 2, rest: {first: 3, rest: EMPTY}}};
+
+  const reverse = (node, delayed = EMPTY) => 
+    node === EMPTY
+      ? delayed
+      : reverse(node.rest, {first: node.first, rest: delayed});
+
+  console.log(reverse(oneTwoThree));
+
+#+END_SRC
+
+#+RESULTS:
+: { first: 3, rest: { first: 2, rest: { first: 1, rest: {} } } }
+
+**** reverseMap Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const EMPTY = {};
+  const oneTwoThree = {first: 1, rest: {first: 2, rest: {first: 3, rest: EMPTY}}};
+
+  const reverseMap = (fn, node, delayed = EMPTY) => 
+    node === EMPTY
+      ? delayed
+      : reverseMap(fn, node.rest, {first: fn(node.first), rest: delayed});
+
+  console.log(reverseMap((x) => x * x, oneTwoThree));
+
+#+END_SRC
+
+#+RESULTS:
+: { first: 9, rest: { first: 4, rest: { first: 1, rest: {} } } }
+
+**** Map Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const EMPTY = {};
+  const oneTwoThree = {first: 1, rest: {first: 2, rest: {first: 3, rest: EMPTY}}};
+
+  const reverse = (node, delayed = EMPTY) => 
+    node === EMPTY
+      ? delayed
+      : reverse(node.rest, {first: node.first, rest: delayed});
+
+  const map = (fn, node, delayed = EMPTY) => 
+    node === EMPTY
+      ? reverse(delayed)
+      : map(fn, node.rest, {first: fn(node.first), rest: delayed});
+
+  console.log(map((x) => x * x, oneTwoThree));
+
+#+END_SRC
+
+#+RESULTS:
+: { first: 1, rest: { first: 4, rest: { first: 9, rest: {} } } }
+
+**** Discussion:
+     Our object based map function takes twice as long as straight iteration,
+     because it iterates over the entire list twice: once to map and once to
+     reverse the list. Likewise, it takes twice as much memory, because it
+     constructs a reverse of the desired result before throwing it away.
+       This is still much, much faster than making partial copies of arrays.  For a
+     list of length n, we created n superfluous nodes and copied n superfluous
+     values. Whereas out naive array algorithm created 2n superflous arrays and
+     copied n^2 superfluous values.
+
 
 ** Mutation
+   In JavaScript, almost every type of value can mutate: their binding stays the
+   same, but their structure changes. For now, we'll focus on mutations with arrays
+   and objects. 
+     Just as you can access a value from within an array or object using bracket
+   or dot notation, you can reassign a value using the same.
+     Remember that we can assign two different bindings to the same value. For
+   reference types, like objects, there is only ever one value. Each binding is
+   merely an alias.
+     JavaScript permits the reassignment of new values to existing bindings, as
+   well as the reassignment and assignment of new values to elements of container
+   such as arrays and objects. Mutating existing objects has special implications
+   when two bindings are aliases of the same value.
+     Note well that devlaring a variable const does not prevent us from mutating
+   its value, only from rebinding its name. 
+*** Mutation Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const allHallowsEve = [2012, 10, 31];
+  (function (halloween) {
+    halloween[0] = 2013;
+  })(allHallowsEve);
+
+  console.log(allHallowsEve);
+
+#+END_SRC
+
+#+RESULTS:
+| 2013 | 10 | 31 |
+
+*** moar simple mutation example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const allHallowsEve = [2012, 10, 31];
+  const halloween = allHallowsEve;
+  halloween[0] = 2013;
+  console.log(allHallowsEve);
+
+#+END_SRC
+
+#+RESULTS:
+| 2013 | 10 | 31 |
+
+*** Mutation and Data Structures
+    Generally, mutation makes some algorithms shorter to write and possibly
+    faster, by conserving space. But mutation often makes a process harder to 
+    reason about, as we then have to consider whether the mutations will cause
+    unwanted side effects.
+*** Building with Mutation
+    One pattern many people follow is to be liberal with mutation when 
+    constructing data, but conservative with mutation when consuming data.
+      If we want to make a copy of a linked list without iterating over it twice
+    and making a copy that will be gc'd later, we can use mutation. The following
+    algorithm makes copies of nodes as it goes, and mutates the last node in the
+    list so that it can splice the next one on.
+**** Copy Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const copy = (node, head = null, tail = null) => {
+    if (node === EMPTY) {
+      return head; 
+    } else if (tail === null) {
+      const { first, rest } = node;
+      const newNode = { first, rest };
+      return copy(rest, newNode, newNode);
+    } else {
+      const { first, rest } = node;
+      const newNode = { first, rest }; tail.rest = newNode;
+      return copy(node.rest, head, newNode);
+    }
+  }
+
+#+END_SRC
+
+**** Map Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+const EMPTY = {};
+const OneToFive = {first: 1,
+                   rest: {
+                     first: 2,
+                     rest: {
+                       first: 3,
+                       rest: {
+                         first: 4,
+                         rest: {
+                           first: 5,
+                           rest: EMPTY }}}}};
+
+  const mapWith = (fn, node, head = null, tail = null) => {
+    if (node === EMPTY) {
+      return head; 
+    } else if (tail === null) {
+      const { first, rest } = node;
+      const newNode = { first: fn(first), rest };
+      return mapWith(fn, rest, newNode, newNode);
+    } else {
+      const { first, rest } = node;
+      const newNode = { first: fn(first), rest };
+      tail.rest = newNode;
+      return mapWith(fn, node.rest, head, newNode);
+    }
+  }
+
+console.log(mapWith((x) => 1.0 / x, OneToFive));
+
+#+END_SRC
+
+#+RESULTS:
+: { first: 1,
+:   rest: 
+:    { first: 0.5,
+:      rest: { first: 0.3333333333333333, rest: [Object] } } }
+: undefined
+
 
 ** Reassignment
+   JavaScript does not permit us to rebind a name that has been bound with const.
+   But, we can shadow it by using const to declare a new binding with a new
+   function or block scope. And, we can rebind parameters bound in a function or
+   with the let keyword.
+*** let
+    Like const, let names can be shadowed by bindings in local environments.
+    Unlike const, let bindings can be rebound, assigned a different value in the
+    same environment.
+*** var
+    JavaScript has one more way to bind a name to a value: var. Var is a lot like
+    let, it can be reassigned. But instead of scoping to containing blocks, var 
+    scopes to containing functions. 
+      All var declarations are hoisted to the top of the function, a little like
+    function declarations. But, remember that assignments are not hoisted, creating
+    a temporal zone in which the name-binding exists but it's value is undefined.
+*** why const and let were invented
+    const and let first appeared in ES6. var's function scope caused confusion for
+    those who didn't understand lexical scope. 
+**** see YDKJS discussion of let and var in for loops
+
 
 ** Copy on Write
 
+
 ** Tortises, Hares, and Teleporting Turtles
 
+
 ** Functional Iterators
+
 
 ** Making Data Out Of Functions
