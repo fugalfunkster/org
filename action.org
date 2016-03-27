@@ -2,9 +2,7 @@ ACTION
 
 * Ready or Nearly So 
 
-** todolist [3/8]
-*** TODO Finish 'Recipes' and 'Picking' in JS Allonge
-*** TODO Finish Stock App
+** todolist [0/3]
 *** TODO Refactor Full-Stack Apps
 *** TODO Wrap Up Pluralsight Courses
     - [ ] Intro to Mongoose
@@ -16,97 +14,8 @@ ACTION
     - [ ] Chrome Dev. Tools
     - [ ] JSNext
 *** TODO Wrap-Up Udemy Node Course
-*** TODO Ch 3, 4, 5 of YDKJS: this & Object Protos
-*** TODO Ch 6, 7, Intermezzo 1 of HtDP
-*** TODO Memoize Express Stuff
 
-     
 ** Spring Goals
-
-*** Finish FreeCode Camp
-**** Full Stack Projects
-**** React / Sass Projects
-**** Algorithms
-
-
-*** Finish YDKJS Series (42p week)
-this & Object Prototypes (100p rem.)
-- ch 3, 4, 5 (55p)
-- ch 6 (31p)
-Types and Grammar (180p)
-- Chs 1, 2, 3 (57p)
-- Ch 4 (62p)
-- Ch 5 (40p)
-**** Async & Perf (280p)
-**** ES6 and Beyond (280p)
-
-
-*** Memoize HTML / CSS / DOM
-
-
-*** Memoize Node and Express
-
-
-*** Memoize Mongo and Mongoose
-
-
-*** HtDP [5/43]
-I. Processing Simple Forms of Data
-- [X] Students, Teachers, Computers
-- [X] Numbers, Expressions, Simple Programs
-- [X] Programs are Function Plus Variable Definitions
-- [X] Conditional Expressions and Functions
-- [X] Symbolic Information
-- [ ] Compound Data, Part 1: Structures
-- [ ] The Varieties of Data
-- [ ] Intermezzo 1: Syntax and Semantics
-II. Processing Arbitrarily Large Data
-- [ ] Compound Data, Part 2: Lists
-- [ ] More on Processing Lists
-- [ ] Natural Numbers
-- [ ] Composing Functions, Revisited Again
-- [ ] Intermezzo 2: List Abbreviations
-III. More on Processing Arbitrarily Large Data
-- [ ] More Self-referential Data Definitions
-- [ ] Mutually Referential data Definitions
-- [ ] Development through Iterative Refinement
-- [ ] Processing Two Complex Pieces of Data
-- [ ] Intermezzo 3: Local Definitions and Lexical Scope
-IV. Abstracting Designs
-- [ ] Similarities in Definitions
-- [ ] Functions as Values
-- [ ] Designing Abstractions from Examples
-- [ ] Designing Abstractions with First-Class Functions
-- [ ] Mathematical Examples
-- [ ] Intermezzo 4: Defining Functions on the Fly
-V. Generative Recursion
-- [ ] A New Form of Recursion
-- [ ] Designing Algorithms
-- [ ] Variations on a Theme
-- [ ] Algorithms that Backtrack
-- [ ] Intermezzo 5: The Cost of Computing and Vectors
-VI. Accumulating Knowledge
-- [ ] The Loss of Knowledge
-- [ ] Designing Accumulator-Style Functions
-- [ ] More Uses of Accumulation
-- [ ] Intermezzo 6: The Nature of Inexact Numbers
-VII. Changing the State of Variables
-- [ ] Memory for Functions
-- [ ] Assignment to Variables
-- [ ] Designating Functions with Memory
-- [ ] Examples of Memory Usage
-- [ ] Intermezzo 7: The Final Syntax and Semantics
-VIII.
-- [ ] Encapsulation
-- [ ] Mutable Structures
-- [ ] Designing Functions that Change Structures
-- [ ] Equality
-- [ ] Changing Structures, Vectors, and Objects
-Epilogue
-
-
-*** Linux Command Line
-
 
 *** Online Courses
 **** Pluralsight 
@@ -240,7 +149,6 @@ Epilogue
 *** CSS / SASS and Memoize
 *** HTML5 and Memoize
 *** D3 and Memoize
-    
 
 
 * Agros
@@ -262,36 +170,16 @@ Epilogue
 ** Structures
 
 
-* Allocation
-
-** Lecture
-- 6 h/w
-
-** Memoize
-- 3 h/w
-
-** CODE
-- 3 h/w
-
-** Eloquent JavaScript
-- 3 h/w
-
-** YDKJS
-- 3 h/w
-
-** The Little Schemer
-- at leisure
-
-** HtDP
-- 3-6 h/w
-
-** SICP
-- 3-6 h/w
-
-
 * Pedagogicus
 
-** Pedantic Markup
+** HTML5
+** CSS3
+** SASS
+** JS Dom Manip.
+** JQuery
+** React
+** Falcor
+
 ** Vanilla JS
 ** Node
 ** Express
@@ -299,6 +187,7 @@ Epilogue
 ** Passport
 ** Async / Generators / Iterators
 ** ES 2015
+
 ** Functional Programming
   - Javascript Allonge
   - Professor Bisby's Mostly Adequate Guide
@@ -309,8 +198,6 @@ Epilogue
   - http://reactivex.io/learnrx/
   - https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
   - https://medium.com/@puppybits/rxjs-is-great-so-why-have-i-moved-on-534c513e7af3#.bsgoy4rdg
-** Falcor
-** React
 
 
 
@@ -322,7 +209,60 @@ Epilogue
 
 * Horizons
 
-** FFC Volunteer Work
-** SNAP
+** SoilApp // SNAP
 ** HtDP // SICP
-** Clojure
+*** HtDP [5/43]
+I. Processing Simple Forms of Data
+- [X] Students, Teachers, Computers
+- [X] Numbers, Expressions, Simple Programs
+- [X] Programs are Function Plus Variable Definitions
+- [X] Conditional Expressions and Functions
+- [X] Symbolic Information
+- [ ] Compound Data, Part 1: Structures
+- [ ] The Varieties of Data
+- [ ] Intermezzo 1: Syntax and Semantics
+II. Processing Arbitrarily Large Data
+- [ ] Compound Data, Part 2: Lists
+- [ ] More on Processing Lists
+- [ ] Natural Numbers
+- [ ] Composing Functions, Revisited Again
+- [ ] Intermezzo 2: List Abbreviations
+III. More on Processing Arbitrarily Large Data
+- [ ] More Self-referential Data Definitions
+- [ ] Mutually Referential data Definitions
+- [ ] Development through Iterative Refinement
+- [ ] Processing Two Complex Pieces of Data
+- [ ] Intermezzo 3: Local Definitions and Lexical Scope
+IV. Abstracting Designs
+- [ ] Similarities in Definitions
+- [ ] Functions as Values
+- [ ] Designing Abstractions from Examples
+- [ ] Designing Abstractions with First-Class Functions
+- [ ] Mathematical Examples
+- [ ] Intermezzo 4: Defining Functions on the Fly
+V. Generative Recursion
+- [ ] A New Form of Recursion
+- [ ] Designing Algorithms
+- [ ] Variations on a Theme
+- [ ] Algorithms that Backtrack
+- [ ] Intermezzo 5: The Cost of Computing and Vectors
+VI. Accumulating Knowledge
+- [ ] The Loss of Knowledge
+- [ ] Designing Accumulator-Style Functions
+- [ ] More Uses of Accumulation
+- [ ] Intermezzo 6: The Nature of Inexact Numbers
+VII. Changing the State of Variables
+- [ ] Memory for Functions
+- [ ] Assignment to Variables
+- [ ] Designating Functions with Memory
+- [ ] Examples of Memory Usage
+- [ ] Intermezzo 7: The Final Syntax and Semantics
+VIII.
+- [ ] Encapsulation
+- [ ] Mutable Structures
+- [ ] Designing Functions that Change Structures
+- [ ] Equality
+- [ ] Changing Structures, Vectors, and Objects
+Epilogue
+
+** Scheme // Clojure

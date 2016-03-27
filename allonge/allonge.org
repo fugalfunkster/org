@@ -1742,12 +1742,526 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
 
 
 ** Copy on Write
+*** On Arrays and Linked Lists
+    We used destructuring to access the ...rest of an array, in the form of a
+    copy of that array, less its head. We have also used CDR and node.rest
+    traversal to request the rest of a linked list, and recieve the nodes of
+    the elements of the original list.
+      The difference between the two is consequential, modifications to the ...rest
+    of an array affect a copy of the original. Whereas modifications to the CDR of
+    a list change the same nodes referred to by the list's head(s).
+      This is remarkably unsafe: Only if we know that a list doesn't share any
+    elements with another list can we can safely modify it.
+**** Array Example:
 
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const parentArray = [1, 2, 3];
+  const [aFirst, ...childArray] = parentArray;
+
+  parentArray[2] = "three";
+  childArray[0] = "two";
+ 
+  console.log(parentArray);
+  console.log(childArray);
+  
+#+END_SRC
+
+#+RESULTS:
+: [ 1, 2, 'three' ]
+: [ 'two', 3 ]
+
+**** Linked List Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const EMPTY = { first: {}, rest: {} };
+  const parentList = { first: 1, rest: { first: 2, rest: { first: 3, rest: EMPTY }}};
+  const childList = parentList.rest;
+
+  parentList.rest.rest.first = "three";
+  childList.first = "two";
+  
+  console.log(parentList);
+  console.log(childList);
+  
+#+END_SRC
+
+#+RESULTS:
+: { first: 1,
+:   rest: { first: 'two', rest: { first: 'three', rest: [Object] } } }
+: { first: 'two',
+:   rest: { first: 'three', rest: { first: {}, rest: {} } } }
+
+*** A few utilities for linked lists:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const copy = (node, head = null, tail = null) => { 
+    if (node === EMPTY) {
+      return head;
+    } else if (tail === null) {
+      const { first, rest } = node;
+      const newNode = { first, rest };
+      return copy(rest, newNode, newNode);
+    } else {
+      const { first, rest } = node;
+      const newNode = { first, rest };
+      tail.rest = newNode;
+      return copy(node.rest, head, newNode);
+    }
+  }
+
+  const first = ({first, rest}) => first;
+  const rest = ({first, rest}) => rest;
+  const EMPTY = {first: {}, rest: {}};
+  
+  const reverse = (node, delayed = EMPTY) => 
+    node === EMPTY
+      ? delayed
+      : reverse(rest(node), { first: first(node), rest: delayed });
+
+  const mapWith = (fn, node, delayed = EMPTY) =>
+    node === EMPTY
+      ? reverse(delayed)
+      : mapWith(fn, rest(node), { first: fn(first(node)), rest: delayed });
+
+  const at = (index, list) =>
+    index === 0
+      ? first(list)
+      : at(index - 1, rest(list));
+
+  const set = (index, value, list, originalList = list) =>
+    index === 0
+      ? (list.first = value, originalList)
+      : set(index - 1, value, rest(list), originalList)
+ 
+  const parentList = { first: 1, rest: { first: 2, rest: { first: 3, rest: EMPTY }}};
+  const childList = rest(parentList);
+
+  set(2, "three", parentList);
+  set(0, "two", childList);
+
+  console.log(parentList);
+  console.log(childList);
+
+#+END_SRC
+
+#+RESULTS:
+: { first: 1,
+:   rest: { first: 'two', rest: { first: 'three', rest: [Object] } } }
+: { first: 'two',
+:   rest: { first: 'three', rest: { first: {}, rest: {} } } }
+
+*** TODO Copy-on-read (code example doesn't reflect book, or scope of section)
+    One strategy to avoid unwanted side-effects when mutating a linked list's node
+    is to make a copy whenever we take the rest of a list.
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+ const copy = (node, head = null, tail = null) => { 
+    if (node === EMPTY) {
+      return head;
+    } else if (tail === null) {
+      const { first, rest } = node;
+      const newNode = { first, rest };
+      return copy(rest, newNode, newNode);
+    } else {
+      const { first, rest } = node;
+      const newNode = { first, rest };
+      tail.rest = newNode;
+      return copy(node.rest, head, newNode);
+    }
+  }
+
+  const rest = ({first, rest}) => copy(rest);
+
+  const EMPTY = {first: {}, rest: {}};
+
+  const set = (index, value, list, originalList = list) =>
+    index === 0
+      ? (list.first = value, originalList)
+      : set(index - 1, value, rest(list), originalList)
+
+  const parentList = { first: 1, rest: { first: 2, rest: { first: 3, rest: EMPTY }}};
+  const childList = rest(parentList);
+
+  set(2, "three", parentList); // this doesn't seem to do anything?
+  set(0, "two", childList);
+
+  console.log(parentList);
+  console.log(childList);
+
+#+END_SRC
+
+#+RESULTS:
+: { first: 1,
+:   rest: { first: 2, rest: { first: 3, rest: [Object] } } }
+: { first: 'two',
+:   rest: { first: 3, rest: { first: {}, rest: {} } } }
+
+      This strategy is called "copy-on-read" because when we attempt to access the
+    rest of a list, we automatically make a copy, in anticipation of subsequent
+    mutation, to ensure that those mutations don't affect the parent list. 
+      But, while effective at avoiding mutations to the parent, this technique is
+    a costly prophylactic measure to take everytime we want the rest of a list.
+
+*** Copy-on-write
+    Instead of calling copy each time we take the rest of a list, we could only
+    copy when we call set - until we are going to mutate state.
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+
+  const rest = ({first, rest}) => rest;
+
+  const EMPTY = {first: {}, rest: {}};
+
+  const set = (index, value, list) =>
+    index === 0
+      ? { first: value, rest: list.rest }
+      : { first: list.first, rest: set(index - 1, value, list.rest) };
+
+  const parentList = { first: 1, rest: { first: 2, rest: { first: 3, rest: EMPTY }}};
+  const childList = rest(parentList);
+
+  const newParentList = set(2, "three", parentList);
+  const newChildList = set(0, "two", childList);
+
+  console.log(parentList);
+  console.log(childList);
+
+  console.log(newParentList);
+  console.log(newChildList);
+
+#+END_SRC
+
+#+RESULTS:
+: { first: 1,
+:   rest: { first: 2, rest: { first: 3, rest: [Object] } } }
+: { first: 2, rest: { first: 3, rest: { first: {}, rest: {} } } }
+: { first: 1,
+:   rest: { first: 2, rest: { first: 'three', rest: [Object] } } }
+: { first: 'two',
+:   rest: { first: 3, rest: { first: {}, rest: {} } } }
+
+*** Tradeoffs
+    Like all strategies, COW (copy-on-write) makes a tradeoff. It's much cheaper
+    than copying structures when you make an infrequent number of small changes,
+    but if you tend to make a lot of changes to some that you aren't sharing, it's
+    more expensive.
+      Note that the copy function doesn't COW. Instead it follows the pattern that
+    while constructing something, we own it and can be liberal with mutation. Once
+    we're done with it and give it to someone else, we need to be resume our more
+    conservative approach to mutation, and implement a strategy like copy-on-read
+    or copy-on-write.
+    
 
 ** Tortises, Hares, and Teleporting Turtles
 
 
 ** Functional Iterators
+*** Fold revisited
+    Let's revisit folding. Remember that folding is a form of linear recursion.
+    foldWith accepts a function, a terminal value, and a data structure. Fold allows
+    us to the action that we wish to perform on the array (the function) from the
+    process of traversing that array via linear recursion.   
+*** callLeft, foldArrayWith, and arraySum Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  const callLeft = (fn, ...args) =>
+    (...remainingArgs) =>
+      fn(...args, ...remainingArgs);
+
+  const foldArrayWith = (fn, terminalValue, [first, ...rest]) =>
+    first === undefined
+      ? terminalValue
+      : fn(first, foldArrayWith(fn, terminalValue, rest));
+
+  const arraySum = callLeft(foldArrayWith, (a, b) => a + b, 0);
+  
+  console.log(arraySum([1, 4, 9, 16, 25]));
+
+#+END_SRC
+
+#+RESULTS:
+: 55
+
+*** Separating Concerns
+    Our arraySum function mostly concerns itself with summing, but it relies on
+    foldArrayWith, so it can only sum arrays. foldArray combines the traversal with
+    arrays, a specific data structure. What if we want to sum trees? or linked
+    lists? Let's make our code more modular by separating our summing function from
+    the data-structure traversal process.
+**** First, generalize our summing function for any foldable data structure.
+
+ #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+   const foldArray = (array) => callRight(foldArrayWith, array);
+  
+   const sumFoldable = (folder) => folder((a, b) => a + b, 0);
+
+   sumFoldable(foldArray([1, 4, 9, 16, 25]));
+
+ #+END_SRC
+
+**** Second, implement a fold that works on tree structures
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const callRight = (fn, ...args) =>
+    (...remainingArgs) =>
+      fn(...remainingArgs, ...args);
+
+  const foldTreeWith = (fn, terminalValue, [first, ...rest]) =>
+    first === undefined
+      ? terminalValue
+      : Array.isArray(first)
+        ? fn(foldTreeWith(fn, terminalValue, first),
+                          foldTreeWith(fn, terminalValue, rest))
+        : fn(first, foldTreeWith(fn, terminalValue, rest));
+
+  const foldTree = (tree) => callRight(foldTreeWith, tree);
+  
+  const sumFoldable = (folder) => folder((a, b) => a + b, 0);
+
+ console.log(sumFoldable(foldTree([1, [4, [9, 16]], 25])));
+
+#+END_SRC
+
+#+RESULTS:
+: 55
+      
+*** Iterating
+    Folds can do anything that for loops can do. What fold accomplished with linear
+    recursion, for accomplishes with iteration (specific to arrays?). 
+      We can also iterate with while loops, but we have to micro-manage the state
+    of the iteration. We can internalize the state to array sum, as in the first
+    example. And we can manage that state within a pojo, as in the second example.
+    In the third example things get interesting, we can take the state of our
+    iteration and move it into a stateful iterator function. And we can modify
+    iterator function for other types of data structures - for lists our iterator
+    holds the state of the current pair to determine wether the iterator is done.
+**** while Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const arraySum = (array) => {
+    let done;
+    let sum = 0;
+    let i = 0;
+  
+    while ((done = i == array.length, !done)) {
+      const value = array[i++];
+      sum += value;
+    }
+
+    return sum
+  }
+ 
+  console.log(arraySum([1, 4, 9, 16, 25]));
+
+#+END_SRC
+
+#+RESULTS:
+: 55
+: undefined
+
+**** TODO we can represent out state with a pojo (err obj not declar in text):
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const arraySum = (array) => {
+    let done;
+    let sum = 0;
+    let index = 0;
+    let eachIteration = {};
+
+    while ((eachIteration = { 
+              done: index === array.length,
+              value: index < array.length ? array[index] : undefined },
+            ++index,
+            !eachIteration.done)) {
+              sum += eachIteration.value;
+    }
+
+    return sum;
+  }
+
+  console.log(arraySum([1, 4, 9, 16, 25]));
+
+#+END_SRC
+
+#+RESULTS:
+: 55
+: undefined
+
+**** we can extract the state keeping bits into an iterator function:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+  const arrayIterator = (array) => {
+    let i = 0;
+    return () => {
+      const done = i === array.length;
+      return { done,
+               value: done ? undefined : array[i++] }
+    }
+  }
+
+  const iteratorSum = (iterator) => {
+    let eachIteration, sum = 0;
+
+    while ((eachIteration = iterator(), !eachIteration.done)) {
+      sum += eachIteration.value;
+    }
+
+    return sum;  
+  }
+
+console.log(iteratorSum(arrayIterator([1, 4, 9, 16, 25])));
+
+#+END_SRC
+
+#+RESULTS:
+: 55
+: undefined
+
+**** now iterators with lists
+     
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
+  const EMPTY = null;
+  
+  const isEmpty = (node) =>
+    node === EMPTY;
+
+  const pair = (first, rest = EMPTY) =>
+    ({first, rest});
+
+  const list = (...elements) =>{
+    const [first, ...rest] = elements;
+    return elements.length === 0
+      ? EMPTY
+      : pair(first, list(...rest))
+  }
+
+  const print = (aPair) =>
+    isEmpty(aPair)
+      ? ""
+      : `${aPair.first} ${print(aPair.rest)}`
+
+  const listIterator = (aPair) =>
+    () => {
+      const done = isEmpty(aPair);
+      if (done) {
+        return {done};
+      } else {
+        const {first, rest} = aPair;
+        aPair = aPair.rest;
+        return { done, value: first }
+      }
+    }
+
+  const iteratorSum = (iterator) => {
+    let eachIteration;
+    let sum = 0;
+    
+    while ((eachIteration = iterator(), !eachIteration.done)) {
+      sum += eachIteration.value;
+    }
+    
+    return sum
+  }
+
+  const aListIterator = listIterator(list(1, 4, 9, 16, 25)); 
+
+  console.log(iteratorSum(aListIterator));
+
+#+END_SRC
+
+#+RESULTS:
+: 55
+: undefined
+
+*** Unfolding and laziness
+**** Iterators are functions.
+     When they iterate over an array or linked list, they
+     are traversing something that is already there. But they could just as easily
+     manufacture data as they go.
+**** FibonacciIterator Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+const fibIter = () => {
+  let previous = 0;
+  let current = 1;
+
+  return () => {
+    
+    let value = previous;
+    previous = current;
+    current = value + previous;
+
+    return {done: false, value}
+  }
+
+}
+
+const infinifib = fibIter();
+
+console.log(infinifib().value);
+console.log(infinifib().value);
+console.log(infinifib().value);
+console.log(infinifib().value);
+console.log(infinifib().value);
+console.log(infinifib().value);
+console.log(infinifib().value);
+console.log(infinifib().value);
+
+#+END_SRC
+
+#+RESULTS:
+: 0
+: 1
+: 1
+: 2
+: 3
+: 5
+: 8
+: 13
+**** unfold
+     A function that starts with a seed and expands it into a data structure is
+     called an unfold. It's possible to write a generic unfold mechanism, as we did
+     with fold. 
+**** Mapping an iterator Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const NumberIterator = (number = 0) =>
+    () =>
+      ({ done: false, value: number++ })
+
+  const mapIteratorWith = (fn, iterator) => 
+    () => {
+      const {done, value} = iterator();
+        return ({done, value: done ? undefined : fn(value)});
+    }
+
+  const squares = mapIteratorWith((x) => x * x, NumberIterator(1));
+
+  console.log( squares().value);
+  console.log( squares().value);
+  console.log( squares().value);
+  console.log( squares().value);
+
+#+END_SRC
+
+#+RESULTS:
+: 1
+: 4
+: 9
+: 16
+
+*** Bonus
+*** caveat
 
 
 ** Making Data Out Of Functions
