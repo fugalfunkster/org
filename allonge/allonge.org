@@ -2260,8 +2260,42 @@ console.log(infinifib().value);
 : 9
 : 16
 
+**** taking from infinite iterators
+     take is a function that accepts an iterator as an argument, and returns an
+     iterator that only returns a fixed number of elements
+**** take example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" results: output
+
+
+
+#+END_SRC
+
 *** Bonus
 *** caveat
-
-
 ** Making Data Out Of Functions
+*** The kestrel and the idiot
+*** backwardness
+*** the vireo
+*** lists with functions as data
+*** say "please"
+*** functions are not the real point
+*** a return to backward thinking
+
+
+* Recipes with Data
+** mapWith
+** Flip
+*** self currying flip
+*** flipping methods
+** Object.assign
+** Why?
+
+
+* A Warm Cup: Basic Strings
+
+** quasi-literals
+** evaluation time
+
+
+* Stir the Allonge: Objects and State

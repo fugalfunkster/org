@@ -2,9 +2,20 @@ ACTION
 
 * Ready or Nearly So 
 
-** todolist [0/3]
+** todolist [0/6]
+*** JavaScript Allonge
+**** TODO Functional Iterators
+**** TODO Makind Data with Functions
+**** TODO Recipes with Data
+*** YDKJS 
+**** TODO Types and Grammar - Ch. 5 Grammar
+*** JavaScript on the High Seas
+**** TODO Outline
+**** TODO Intro
+**** TODO Syntax
+*** TODO Wrap-Up Udemy Node Course
 *** TODO Refactor Full-Stack Apps
-*** TODO Wrap Up Pluralsight Courses
+*** TODO Pluralsight Courses
     - [ ] Intro to Mongoose
     - [ ] Securing your Apps with Passport
     - [ ] Intro to Node
@@ -12,11 +23,23 @@ ACTION
     - [ ] Tools for REST APIs
     - [ ] Meet the Command Line
     - [ ] Chrome Dev. Tools
-    - [ ] JSNext
-*** TODO Wrap-Up Udemy Node Course
+
 
 ** Spring Goals
-
+*** Finish JavaScript Allonge
+*** Finish YDKJS
+*** Memorize HTML/CSS/DOM basics
+*** Write a little library
+*** Write JavaScript on the High Seas
+**** Intro
+**** Syntax
+**** Grammar
+**** Types
+**** Functions
+**** Arrays
+**** POJOs
+*** Finish FreeCodeCamp
+*** Refactor repos
 *** Online Courses
 **** Pluralsight 
 ***** Misc
@@ -93,17 +116,16 @@ ACTION
   - [ ] Introduction to Reactive Programming : Andre Staltz
   - [ ] Step-by-Step Async JavaScript with RxJS : John Lindquist
   - [ ] Cycle.js Fundamentals : Andre Staltz
+*** Complete Mongo Certification
 
 
 
 
 
 
-* Codus
-
-** Memoize
-*** Express Memoize
-**** Big Ideas in Express
+* Memoize
+** Express
+*** Big Ideas in Express
 - Module Patterns
 - Express Modules
   - app.listen
@@ -124,18 +146,18 @@ ACTION
 - Controllers
 - sessions
 
-*** EJS / JADE? / HANDLEBARS?
-*** Passport Memoize
+** EJS / JADE? / HANDLEBARS?
+** Passport
 - passport-local
 - passport-git
 - passport-facebook
-*** MongoDB, Mongoose and Memoize
-- objectID (require?)
-*** Node and Memoize
-**** NPM
+** MongoDB and Mongoose
+- objectID (require?
+** Node
+*** NPM
 - versioning (^/~/ /etc.)
 - package.json / scripts / "start"
-**** Node Modules
+*** Node Modules
 - http
 - xml2js
 - flash (connect-flash)
@@ -145,10 +167,11 @@ ACTION
   - bodyparser
     - cookieparser 
 
-*** React and Memoize
-*** CSS / SASS and Memoize
-*** HTML5 and Memoize
-*** D3 and Memoize
+
+** React
+** CSS / SASS
+** HTML5
+** D3
 
 
 * Agros
@@ -209,60 +232,65 @@ ACTION
 
 * Horizons
 
-** SoilApp // SNAP
-** HtDP // SICP
-*** HtDP [5/43]
-I. Processing Simple Forms of Data
-- [X] Students, Teachers, Computers
-- [X] Numbers, Expressions, Simple Programs
-- [X] Programs are Function Plus Variable Definitions
-- [X] Conditional Expressions and Functions
-- [X] Symbolic Information
-- [ ] Compound Data, Part 1: Structures
-- [ ] The Varieties of Data
-- [ ] Intermezzo 1: Syntax and Semantics
-II. Processing Arbitrarily Large Data
-- [ ] Compound Data, Part 2: Lists
-- [ ] More on Processing Lists
-- [ ] Natural Numbers
-- [ ] Composing Functions, Revisited Again
-- [ ] Intermezzo 2: List Abbreviations
-III. More on Processing Arbitrarily Large Data
-- [ ] More Self-referential Data Definitions
-- [ ] Mutually Referential data Definitions
-- [ ] Development through Iterative Refinement
-- [ ] Processing Two Complex Pieces of Data
-- [ ] Intermezzo 3: Local Definitions and Lexical Scope
-IV. Abstracting Designs
-- [ ] Similarities in Definitions
-- [ ] Functions as Values
-- [ ] Designing Abstractions from Examples
-- [ ] Designing Abstractions with First-Class Functions
-- [ ] Mathematical Examples
-- [ ] Intermezzo 4: Defining Functions on the Fly
-V. Generative Recursion
-- [ ] A New Form of Recursion
-- [ ] Designing Algorithms
-- [ ] Variations on a Theme
-- [ ] Algorithms that Backtrack
-- [ ] Intermezzo 5: The Cost of Computing and Vectors
-VI. Accumulating Knowledge
-- [ ] The Loss of Knowledge
-- [ ] Designing Accumulator-Style Functions
-- [ ] More Uses of Accumulation
-- [ ] Intermezzo 6: The Nature of Inexact Numbers
-VII. Changing the State of Variables
-- [ ] Memory for Functions
-- [ ] Assignment to Variables
-- [ ] Designating Functions with Memory
-- [ ] Examples of Memory Usage
-- [ ] Intermezzo 7: The Final Syntax and Semantics
-VIII.
-- [ ] Encapsulation
-- [ ] Mutable Structures
-- [ ] Designing Functions that Change Structures
-- [ ] Equality
-- [ ] Changing Structures, Vectors, and Objects
-Epilogue
-
-** Scheme // Clojure
+** Work
+*** SoilApp
+*** SNAP
+** Scheme
+*** HtDP // SICP
+**** HtDP [5/43]
+ I. Processing Simple Forms of Data
+ - [X] Students, Teachers, Computers
+ - [X] Numbers, Expressions, Simple Programs
+ - [X] Programs are Function Plus Variable Definitions
+ - [X] Conditional Expressions and Functions
+ - [X] Symbolic Information
+ - [ ] Compound Data, Part 1: Structures
+ - [ ] The Varieties of Data
+ - [ ] Intermezzo 1: Syntax and Semantics
+ II. Processing Arbitrarily Large Data
+ - [ ] Compound Data, Part 2: Lists
+ - [ ] More on Processing Lists
+ - [ ] Natural Numbers
+ - [ ] Composing Functions, Revisited Again
+ - [ ] Intermezzo 2: List Abbreviations
+ III. More on Processing Arbitrarily Large Data
+ - [ ] More Self-referential Data Definitions
+ - [ ] Mutually Referential data Definitions
+ - [ ] Development through Iterative Refinement
+ - [ ] Processing Two Complex Pieces of Data
+ - [ ] Intermezzo 3: Local Definitions and Lexical Scope
+ IV. Abstracting Designs
+ - [ ] Similarities in Definitions
+ - [ ] Functions as Values
+ - [ ] Designing Abstractions from Examples
+ - [ ] Designing Abstractions with First-Class Functions
+ - [ ] Mathematical Examples
+ - [ ] Intermezzo 4: Defining Functions on the Fly
+ V. Generative Recursion
+ - [ ] A New Form of Recursion
+ - [ ] Designing Algorithms
+ - [ ] Variations on a Theme
+ - [ ] Algorithms that Backtrack
+ - [ ] Intermezzo 5: The Cost of Computing and Vectors
+ VI. Accumulating Knowledge
+ - [ ] The Loss of Knowledge
+ - [ ] Designing Accumulator-Style Functions
+ - [ ] More Uses of Accumulation
+ - [ ] Intermezzo 6: The Nature of Inexact Numbers
+ VII. Changing the State of Variables
+ - [ ] Memory for Functions
+ - [ ] Assignment to Variables
+ - [ ] Designating Functions with Memory
+ - [ ] Examples of Memory Usage
+ - [ ] Intermezzo 7: The Final Syntax and Semantics
+ VIII.
+ - [ ] Encapsulation
+ - [ ] Mutable Structures
+ - [ ] Designing Functions that Change Structures
+ - [ ] Equality
+ - [ ] Changing Structures, Vectors, and Objects
+ Epilogue
+*** Little Schemer / Seasoned Schemer
+** Clojure
+*** Living Clojure
+*** Clojure for the Brave and True
