@@ -2,11 +2,11 @@ ACTION
 
 * Ready or Nearly So 
 
-** todolist [0/6]
-*** JavaScript Allonge
-**** TODO Functional Iterators
-**** TODO Makind Data with Functions
-**** TODO Recipes with Data
+** todolist [0/3]
+*** JavaScript Allonge 
+**** DONE Functional Iterators
+**** DONE Making Data with Functions
+**** DONE Recipes with Data
 *** YDKJS 
 **** TODO Types and Grammar - Ch. 5 Grammar
 *** JavaScript on the High Seas
@@ -124,7 +124,6 @@ ACTION
 
 
 * Memoize
-
 ** Express
 *** Big Ideas in Express
 - Module Patterns
@@ -146,7 +145,6 @@ ACTION
 - MVC 
 - Controllers
 - sessions
-
 ** Passport
 - passport-local
 - passport-git
@@ -168,8 +166,7 @@ ACTION
     - cookieparser 
 
 
-* Agros
-
+* Aros
 ** Lemons
 ** Hazels & Baptisia
 ** Apples
@@ -181,14 +178,12 @@ ACTION
 
 
 * Pedagogicus
-
 ** Principles
 *** Compositional Logic
 *** Functional Programming
 *** Algorhithm Design
 *** Data Structures
 *** Object Oriented Programming
-
 
 ** Languages
 *** JavaScript
@@ -225,7 +220,6 @@ ACTION
 **** Immutability
 **** Async / concurrent / parralel
 
-
 ** Technology Stacks
 *** Front End
 **** HTML5
@@ -233,7 +227,6 @@ ACTION
 **** SASS
 **** JS Dom Manip.
 **** JQuery
-
 *** Frameworks
 **** React
 **** Falcor
@@ -252,11 +245,9 @@ ACTION
 
 
 * Horizons
-
 ** Work
 *** SoilApp
 *** SNAP
-
 
 ** Scheme
 *** Little Schemer / Seasoned Schemer
@@ -316,7 +307,6 @@ Epilogue
 
 *** SICP
 
-
 ** CompSci
 *** 6.01   - Intro to EE and CompSci
 *** 18.01  - Single Variable Calculus
@@ -325,7 +315,6 @@ Epilogue
 *** 18.02  - MultiVariable Calculus
 *** 6.046  - Algorithms
 *** 18.310 - Principles of Discrete Applied Math
-
 
 ** Clojure
 *** Living Clojure
