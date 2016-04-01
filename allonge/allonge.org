@@ -2874,14 +2874,23 @@ const fibIter = () => {
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
+  // First I present the Y combinator:
+
   const Y = (f) =>
   ( x => f(v => x(x)(v)) )
   ( x => f(v => x(x)(v)) );
+
+  // Next, a function to pass to the Y combinator
+  // It's nothing fancy, just a function to compute factorials
+  // It's interesting to note that it return a function
+  // that returns a ternary expression, reminiscent of linear recursion
 
   const factorial = Y(function (fac) { 
     return function (n) {
       return (n == 0 ? 1 : n * fac(n - 1)); }
     });
+
+  // 
 
   factorial(5);
 
@@ -2927,6 +2936,7 @@ const fibIter = () => {
   // Ok, I just ran the above and got the same answer.
   // So, I'm going to proceed as if I haven't make any substitution errors.
   // Let's begin to evaluate our function!
+  // First, we pass 5 to our function, binding 5 to n
   // n !== 0 so we're left with
 
 
