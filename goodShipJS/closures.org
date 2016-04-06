@@ -1,0 +1,71 @@
+
+* Talk on Lexical Scope and Closures
+
+** name bindings in name binding in javascript
+
+** Assignment
+
+** Variable assignment and hoisting
+- var (hoisting) also function declarations
+- let (doesn't hoist)
+- const (doesn't hoist, can't be reassigned)
+
+** What is Function Scope?
+
+** What is Block Scope?
+
+** Show examples of nesting scopes p.14
+
+** the scope chain
+
+** shadowing
+
+* What does the scope manager do?
+
+*** looks ups follow the scope chain
+
+** Execution context?
+
+** Closures
+
+* kyles def: closure is when a function can access its lexical scope, even when it's invoked outside of its lexical scope
+
+* For loops help use see closures in action
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  for (let i = 1; i<=5; i++) {
+    setTimeout( function timer(){
+      console.log(i);
+    }, i*1000);
+  }
+
+  // console.log(i + "outside the for block");
+#+END_SRC
+
+#+RESULTS:
+: 1
+: 2
+: 3
+: 4
+: 5
+
+#+BEGIN_SRC js
+
+function makeAdder (x) {
+  function add(y) {
+    return y + x;
+  }
+  return add;
+}
+
+var addFive = makeAdder(5);
+
+console.log(addFive(2));
+
+#+END_SRC
+
+#+RESULTS:
+: 7
+: undefined
+
