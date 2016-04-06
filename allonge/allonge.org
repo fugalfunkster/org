@@ -183,8 +183,8 @@ Javascript Allonge Notepad
 **** bound with a var/let/const or via an argument
 **** Functions containing no free variables are called pure functions
 ***** But a pure function can contain a closure
-
 ***** Ex:
+
 #+BEGIN_SRC js
   return ((x) => (y) => x)(1)(2)
 #+END_SRC
@@ -2850,7 +2850,8 @@ const fibIter = () => {
 : { apples: 12, oranges: 12 }
 
 ** Why?
-   The Y combinator:
+  
+ The Y combinator:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
@@ -2882,7 +2883,7 @@ const fibIter = () => {
 
   // Next, a function to pass to the Y combinator
   // It's nothing fancy, just a function to compute factorials
-  // It's interesting to note that it return a function
+  // It's interesting to note that it returns a function
   // that returns a ternary expression, reminiscent of linear recursion
 
   const factorial = Y(function (fac) { 
@@ -2955,6 +2956,7 @@ const fibIter = () => {
   // We've got a starting value that looks like it's the beginning of a deffered computation;
   // And we're about to apply its decrement to a function that looks suspiciously similar to 
   // the Y combinator that we started with.
+
   // Enough talking. Substitute!
  
   (5 * (n => {
@@ -2981,6 +2983,12 @@ const fibIter = () => {
             (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(3)));
 
   // Whew! That's tiring. I'm going to stop here. I think we all get the idea...
+  // So what's going on, there seems to be dinstinct behavior for three pieces
+  // First, X has no interaction with our factorial function. 
+  // Second, V serves as a means to pass the decrement of the original input to
+  // the next recursion. In this way it balances n => in our factorial function
+  // Third, the factorial function 
+
 
 #+END_SRC
 
