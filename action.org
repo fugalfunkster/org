@@ -166,17 +166,6 @@ ACTION
     - cookieparser 
 
 
-* Aros
-** Lemons
-** Hazels & Baptisia
-** Apples
-** Cover Crop
-** Garden
-** Firepit
-** West Fence
-** Structures
-
-
 * Pedagogicus
 ** Principles
 *** Compositional Logic
