@@ -1,0 +1,614 @@
+* The Good Ship JavaScript
+
+** a short list of you will need some things on our voyage:
+ 1. your tools
+    1. a computer you can modify
+    2. a text editor you feel comfortable with (the built in control panel is emacs)
+    3. a JavaScript REPL that understands ES2015
+       1. the ship's engine is V8, but more on that later
+       2. a babel-fish might be in order
+ 2. your keen judgment
+    1. if you see a leak, report it! captain fugalfunkster's goodshipmockingbird github repo is the place for such things
+    2. dont' do stupid stuff, a ship is a dangerous place to horse around
+ 3. your will to improve
+    1. because you are but an assistant engineer, our crew does not expect that you will swab the deck, 
+       but you will learn little if you don't pitch in, and you certantly won't get any respect from the mates
+ 4. your sense of humor
+    1. for the captain is a serious man, and it is best not to take him too seriously
+
+** learning the ropes
+*** pacing yourself
+
+** rigging - the syntax and grammar of JavaScript
+*** The Engine Room
+**** Meet the Compiler
+***** tokenizing/lexing
+***** parsing
+***** code generation
+*** AST (the abstract syntax tree)
+**** A binary tree
+**** https://en.wikipedia.org/wiki/Abstract_syntax_tree
+*** Tokens
+**** What is a token?
+     The spec defines tokens by deduction: Tokens are input elements that are not
+     line terminators, comments, or white space.
+***** ECMA 2015 Spec 11: Lexical Grammar:
+      "The source text of an ECMAScript Script or Module is first converted into a
+      sequence of input elements, which are tokens, line terminators, comments, or
+      white space."
+***** ECMA 2015 Spec 5.1.2:
+      "Input elements other than white space and comments form the terminal symbols
+      for the syntactic grammar for ECMAScript and are called ECMAScript tokens.
+      These tokens are the reserved words, identifiers, literals, and punctuators
+      of the ECMAScript language. Moreover, line terminators, although not
+      considered to be tokens, also become part of the stream of input elements and
+      guide the process of automatic semicolon insertion (11.9). Simple white space
+      and single-line comments are discarded and do not appear in the stream of
+      input elements for the syntactic grammar."
+**** Categories of Tokens
+     The spec articulates multiple productions of tokens. As near as I can tell,
+     productions are just different rubrics for handling different families of 
+     tokens. This makes sense, a compiler would have to treat a 
+     RegularExpressionLiteral differently than a StringLiteral. For our purposes
+     we'll just just note that most tokens fall under the CommonToken production. 
+***** CommonToken(s) defined in ECMA 2015 Spec @ 11.5):
+****** TODO IdentifierNames
+       IdentifierNames include reserved words,  names are any input that has 
+******* Reserved Words are ItentifierName that may not be used as Identifiers
+******** ECMA Spec 2015 11.6.2.1: Keywords
+
+ | break   | case     | catch  | class  | const  | continue   | debugger |
+ | default | delete   | do     | else   | export | extends    | finally  |
+ | for     | function | if     | import | in     | instanceof | new      |
+ | return  | super    | switch | this   | throw  | try        | typeof   |
+ | var     | void     | while  | with   | yield  |            |          |
+
+******* Future Reserved Words
+******* Null Literal :: null
+******* Boolean Literal :: true false
+****** Punctuators
+******* {} [] ()
+******* . ...
+******* ;
+******* , (comma operator)
+******* > < <= >= == != === !== (comparison operators)
+******* + - * / % ++ -- (arithmetic operators) (+ is also a string operator)
+******* >>> 
+******* & | ~ ^ << >> (bitwise operators)
+******* ! && || (logical operators)
+******* ? : (the conditional ternary operator)
+******* + += (string operators)
+*******  = += -= *= **= /= %= <<= >>= >>>= &= ^= (assignment operators)
+******** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Assignment_operators
+******* => (arrow function)
+****** Numeric Literals
+****** String Literals
+****** Templates
+**** Blog Post: Most Popular javaScript tokens
+***** http://ariya.ofilabs.com/2012/07/most-popular-javascript-tokens.html
+**** Blog Post: Most popular JavaScript keywords
+***** http://ariya.ofilabs.com/2012/03/most-popular-javascript-keywords.html
+*** Operators
+    What is an Operator?
+**** unary, binary, ternary oh my
+     Operators can be categorized by the number of operands they affect. A unary
+     operator affects one operand, a binary affects twooperands, etc.. There is only
+     one ternary operator in JavaScript!
+**** Operator Precedence
+
+| Operator type          | Individual operators                |
+|------------------------+-------------------------------------|
+| member                 | . []                                |
+| call / create instance | () new                              |
+| negation/increment     | ! ~ - + ++ -- typeof void delete    |
+| multiply/divide        | * / %                               |
+| addition/subtraction   | + -                                 |
+| bitwise shift          | << >> >>>                           |
+| relational             | < <= > >= in instanceof             |
+| equality               | == != === !==                       |
+| bitwise-and            | &                                   |
+| bitwise-xor            | ^                                   |
+| bitwise-or             |                                     |  
+| logical-and            | &&                                  |
+| logical-or             |                                     |
+| conditional            | ?:                                  |
+| assignment             | = += -= *= /= %= <<= >>= >>>= &= ^= | (also |=)
+| comma                  | ,                                   |
+  
+**** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Unary_operators
+*** Expressions
+**** Expressions
+     Expressions always resolve to a single value. Anytime you have an assignment,
+     the RHS is an expression. Anytime you console.log, that's an expression.
+     Anytime you call a function, that's an expression.
+***** Expression Examples:
+****** 3 * 9
+****** b
+****** false ? 1 : 'yes' 
+**** Expressions and side effects
+**** MDN Expressions and Operators:
+***** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators
+*** Statements and Declarations
+    Statements always have completion values. 
+      Declaration Statements (var, const, let statements)
+      Blocks are statements that contain other statements and expressions. The
+    completion value of a block is the completion value of the last statement or
+    expression inside that block.
+**** MDN: Statements and Declarations
+***** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements
+**** The Spec Defines these:
+***** Statement [Yield, Return]
+****** BlockStatement[?Yield, ?Return]
+****** VariableStatement[?Yield]
+****** EmptyStatement
+****** ExpressionStatement[?Yield]
+****** IfStatement[?Yield, ?Return]
+****** BreakableStatement[?Yield, ?Return]
+****** ContinueStatement[?Yield]
+****** BreakStatement[?Yield] [+Return]
+****** ReturnStatement[?Yield]
+****** WithStatement[?Yield, ?Return]
+****** LabelledStatement[?Yield, ?Return]
+****** ThrowStatement[?Yield]
+****** TryStatement[?Yield, ?Return]
+****** DebuggerStatement
+***** Declaration[Yield]
+****** HoistableDeclaration[?Yield]
+****** ClassDeclaration[?Yield]
+****** LexicalDeclaration[In, ?Yield]
+***** HoistableDeclaration[Yield, Default]
+****** FunctionDeclaration[?Yield,?Default]
+****** GeneratorDeclaration[?Yield, ?Default]
+***** BreakableStatement[Yield, Return]
+****** IterationStatement[?Yield, ?Return]
+****** SwitchStatement[?Yield, ?Return]
+**** Expression Statements
+     Expressions can produce side effects. What are side effects? Impure functions.
+****** the increment ++ and decrement -- unary operators
+****** delete operator
+****** assignment operators
+***** http://www.2ality.com/2012/09/expressions-vs-statements.html
+***** http://speakingjs.com/es5/ch07.html
+**** Declaration Statements
+**** Blog Post: Most Popular JavaScript Statements
+*** Esprima: A JS Parser!
+**** http://esprima.org/
+**** http://esprima.org/demo/parse.html#
+*** Automatic Semicolon Insertion
+**** http://www.2ality.com/2011/05/semicolon-insertion.html
+**** http://inimino.org/~inimino/blog/javascript_semicolons
+**** http://cjihrig.com/blog/the-dangers-of-javascripts-automatic-semicolon-insertion/
+**** http://blog.izs.me/post/2353458699/an-open-letter-to-javascript-leaders-regarding
+*** Style Guide! JSCS
+** the wind in our sails - types (briefly)
+*** YDKJS - Types and Grammar
+**** A Type by any other name : 1-3
+**** Built in Types : 3-5
+**** Values as Types : 5-10
+**** Strings : 14-17
+**** Numbers : 17-24
+**** Special values: 24-33
+**** value vs reference : 33-38
+** the main'sl : functions 
+*** declaring a function
+*** anonymous functions
+*** function expressions
+*** Immediately Invoked Function Expressions
+*** Modules
+*** YDKJS - Scope and Closures
+**** Chapter 1: What is Scope?
+***** Compiler Theory
+***** Understanding Scope
+***** Nested Scope
+***** Errors
+**** Chapter 2: Lexical Scope
+***** Lex-time
+***** Cheating Lexical
+**** Chapter 3: Function vs. Block Scope
+***** Scope From Functions
+***** Hiding In Plain Scope
+***** Functions As Scopes
+***** Blocks As Scopes
+**** Chapter 4: Hoisting
+***** Chicken Or The Egg?
+***** The Compiler Strikes Again
+***** Functions First
+**** Chapter 5: Scope Closures
+***** Enlightenment
+***** Nitty Gritty
+***** Now I Can See
+***** Loops + Closure
+***** Modules
+**** Appendix A: Dynamic Scope
+**** Appendix B: Polyfilling Block Scope
+**** Appendix C: Lexical-this
+**** Appendix D: Acknowledgments
+
+** make it fast - binding values to names
+** should we encounter pirates - advanced types
+*** coercion, bribery, and old fashioned corruption
+
+*** YDKJS - Types and Grammar
+**** Converting values : 57-59
+**** Abstract value operations : 59-71
+**** Explicit Coercion : 71-86
+**** Implicit Coersion : 86-99
+**** Loose and Strict Equals : 99-116
+**** Abstract Realtional Comparison : 116-119
+
+** setting sail - simple functions
+*** scope
+*** closures
+** data structures
+*** arrays 
+*** pojos
+*** YDKJS - Types and Grammar
+**** Arrays : 11-14
+**** value vs reference : 33-38
+** sail changes - objects
+*** reference values embiggened
+*** functions
+*** arrays
+*** pojos
+*** this
+*** oloo
+**** http://www.2ality.com/2014/05/oop-layers.html
+**** http://bibliography.selflanguage.org/organizing-programs.html
+*** other ways of doing it
+ Natives 
+*** YDKJS - Types and Grammar (natives, and vales revisited)
+**** Internal [class] : 39-42
+**** Boxing Wrappers : 42-43
+**** Unboxing : 43-44
+**** Natives as Constructors : 44-55
+**** value vs reference : 33-38
+
+** the right tack - performant
+** empyting the bilge talk: garbage collection
+*** http://v8project.blogspot.com/2015/08/getting-garbage-collection-for-free.html
+*** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management
+*** https://developer.mozilla.org/en-US/docs/Mozilla/Performance
+*** http://www.ibm.com/developerworks/web/library/wa-memleak/
+** the communication systems - asyncronicity
+
+
+* YDKJS
+
+** Up and Going
+Chapter 1: Into Programming
+Code
+Try It Yourself
+Operators
+Values & Types
+Code Comments
+Variables
+Blocks
+Conditionals
+Loops
+Functions
+Practice
+Chapter 2: Into JavaScript
+Values & Types
+Variables
+Conditionals
+Strict Mode
+Functions As Values
+this Keyword
+Prototypes
+Old & New
+Non-JavaScript
+Chapter 3: Into YDKJS
+Scope & Closures
+this & Object Prototypes
+Types & Grammar
+Async & Performance
+ES6 & Beyond
+Appendix A: Acknowledgments
+
+
+** Types and Grammar: 
+*** Statements & Expressions : 121-137
+*** Operator Precedence : 137-146
+*** Automatic Semicolons : 146-149
+*** Errors : 149-151
+*** Function Arguments : 151-154
+*** try...finally : 154-157
+*** switch : 157-160 
+
+
+** Scope and Closures
+*** Chapter 1: What is Scope? : 1
+**** Compiler Theory : 1-3
+**** Understanding Scope : 3-8
+**** Nested Scope : 8-10
+**** Errors : 10-11
+**** Review : 11-13
+*** Chapter 2: Lexical Scope : 13
+**** Lex-time : 13-16
+**** Cheating Lexical : 16-21
+**** Review : 21-23
+*** Chapter 3: Function vs. Block Scope : 23
+**** Scope From Functions : 23-24
+**** Hiding In Plain Scope : 24-28
+**** Functions As Scopes : 28-33
+**** Blocks As Scopes : 33-39
+**** Review : 39-41
+*** Chapter 4: Hoisting : 41
+**** Chicken Or The Egg? : 41-42
+**** The Compiler Strikes Again : 42-44
+**** Functions First : 44-46
+**** Review : 46-47
+*** Chapter 5: Scope Closures : 47
+**** Enlightenment : 47-48
+**** Nitty Gritty : 48-51
+**** Now I Can See :  51-53
+**** Loops + Closure : 53-56
+**** Modules : 56-63
+**** Review : 63-65
+*** Appendix A: Dynamic Scope : 65
+*** Appendix B: Polyfilling Block Scope : 69
+*** Appendix C: Lexical-this : 75
+*** Appendix D: Acknowledgments : 79
+
+
+** this and Object Prototypes
+Chapter 1: this Or That?
+Why this?
+Confusions
+What's this?
+Chapter 2: this All Makes Sense Now!
+Call-site
+Nothing But Rules
+Everything In Order
+Binding Exceptions
+Lexical this
+Chapter 3: Objects
+Syntax
+Type
+Contents
+Iteration
+Chapter 4: Mixing (Up) "Class" Objects
+Class Theory
+Class Mechanics
+Class Inheritance
+Mixins
+Chapter 5: Prototypes
+[[Prototype]]
+"Class"
+"(Prototypal) Inheritance"
+Object Links
+Chapter 6: Behavior Delegation
+Towards Delegation-Oriented Design
+Classes vs. Objects
+Simpler Design
+Nicer Syntax
+Introspection
+Appendix A: ES6 class
+Appendix B: Acknowledgments
+
+
+** ES6 and Beyond
+*** Chapter 1: ES? Now & Future
+**** Versioning
+**** Transpiling
+*** Chapter 2: Syntax
+**** Block-Scoped Declarations
+**** Spread / Rest
+**** Default Parameter Values
+**** Destructuring
+**** Object Literal Extensions
+**** Template Literals
+**** Arrow Functions
+**** for..of Loops
+**** Regular Expression Extensions
+**** Number Literal Extensions
+**** Unicode
+**** Symbols
+*** Chapter 3: Organization
+**** Iterators
+**** Generators
+**** Modules
+**** Classes
+*** Chapter 4: Async Flow Control
+**** Promises
+**** Generators + Promises
+*** Chapter 5: Collections
+**** TypedArrays
+**** Maps
+**** WeakMaps
+**** Sets
+**** WeakSets
+*** Chapter 6: API Additions
+**** Array
+**** Object
+**** Math
+**** Number
+**** String
+*** Chapter 7: Meta Programming
+**** Function Names
+**** Meta Properties
+**** Well Known Symbols
+**** Proxies
+**** Reflect API
+**** Feature Testing
+**** Tail Call Optimization (TCO)
+*** Chapter 8: Beyond ES6
+**** async functions
+**** Object.observe(..)
+**** Exponentiation Operator
+**** Object Properties and ...
+**** Array#includes(..)
+**** SIMD
+*** Appendix A: Acknowledgments
+
+
+** async and performance
+Chapter 1: Asynchrony: Now & Later
+A Program In Chunks
+Event Loop
+Parallel Threading
+Concurrency
+Jobs
+Statement Ordering
+Chapter 2: Callbacks
+Continuations
+Sequential Brain
+Trust Issues
+Trying To Save Callbacks
+Chapter 3: Promises
+What is a Promise?
+Thenable Duck-Typing
+Promise Trust
+Chain Flow
+Error Handling
+Promise Patterns
+Promise API Recap
+Promise Limitations
+Chapter 4: Generators
+Breaking Run-to-completion
+Generator'ing Values
+Iterating Generators Asynchronously
+Generators + Promises
+Generator Delegation
+Generator Concurrency
+Thunks
+Pre-ES6 Generators
+Chapter 5: Program Performance
+Web Workers
+SIMD
+asm.js
+Chapter 6: Benchmarking & Tuning
+Benchmarking
+Context Is King
+jsPerf.com
+Writing Good Tests
+Microperformance
+Tail Call Optimization (TCO)
+Appendix A: asynquence Library
+Appendix B: Advanced Async Patterns
+Appendix C: Acknowledgments
+
+
+
+* Guide to the Spec
+
+** 1. Scope
+** 2. Conformance
+** 3. Normative references
+** 4. Overview
+** 5. Notational Conventions
+** 6. ECMAScript Data Types and Values
+** 7. Abstract Operations
+** 8. Executable Code and Execution Contexts
+** 9. Ordinary and Exotic Objects Behaviours
+** 10. ECMAScript Language: Source Code
+** 11. ECMAScript Language: Lexical Grammar
+** 12. ECMAScript Language: Expressions
+** 13. ECMAScript Language: Statements and Declarations
+** 14. ECMAScript Language: Functions and Classes
+** 15. ECMAScript Language: Scripts and Modules
+** 16. Error Handling and Language Extensions
+** 17. ECMAScript Standard Built-In Objects
+** 18. The Global Object
+** 19. Fundamental Objects
+** 20. Numbers and Dates
+** 21. Text Procesing
+** 22. Indexed Collection
+** 23. Keyed Collection
+** 24. Structured Data
+** 25. Control Abstraction Objects
+** 26. Reflection
+** Annex A
+** Annex B
+** Annex C
+** Annex D
+** Annex E
+
+
+* Flash Cards
+
+** compare and contrast
+*** var, let, const, function declarations, function parameters
+**** hoisting
+**** names
+**** TDZ
+**** reassignment
+**** block scope
+*** assignment of values
+**** LHS v. RHS
+*** Errors
+**** Reference Error
+**** Type Error
+*** Scope
+**** block
+***** const & let
+***** try catch
+**** lexical
+**** dynamic
+*** Execution context stuff
+**** this
+**** arguments
+**** arrow functions
+*** statements v. expressions
+*** module patterns
+**** Common JS
+**** ES6
+**** UMD
+*** object descriptors
+**** writable
+**** enumerable
+**** configurable
+**** iterable?
+*** types
+**** reference
+**** value
+*** control flow
+**** if/else
+**** ? :
+**** || &&
+**** switch
+**** promises?
+** Describe how they work
+*** the prototype chain
+*** the call stack
+*** garbage collection
+*** first class-functions
+**** scope and closures
+**** IIFE
+*** Execution Contexts and this
+**** 4 rules
+*** Compiler
+**** tokenizing/lexing
+**** parsing
+**** code generation
+*** this keyword
+*** natives and boxing
+*** spead and rest operators
+*** default arguments
+*** destructuring
+** Lists
+*** type coercion
+*** Common Object Methods
+**** execution context
+***** call, apply, bind
+**** immutability
+***** preventExtension, seal, freeze
+**** getters and setters
+**** iteration
+***** for in v. for of
+*** types and natives
+*** side effects
+*** bad practices and why
+**** eval
+**** with
+**** labeled statements YDKJS Types and Grammar p. 131
+*** operator precedence
+** Know your options
+*** HTML Elements
+*** CSS properties
+*** JS Dom Manip
+** ES6 stuff
+*** template literals
+*** object literal extensions
+*** iterators and generators
+*** promises
