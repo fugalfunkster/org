@@ -66,9 +66,7 @@ NOTES
 *** Magit
 *** nodejs-repl
 
-
 ** Packages
-
 *** currently installed
 **** async
 ***** http://elpa.gnu.org/packages/async.html
@@ -108,8 +106,8 @@ NOTES
 ***** https://github.com/mooz/js2-mode/
 **** TODO js2-refactor
 ***** see docs in pkg mgr
-**** magit
-***** TODO https://github.com/magit/magit
+**** TODO magit
+***** https://github.com/magit/magit
 **** magit-popup
 *****  https://github.com/magit/magit
 **** multi-eshell
@@ -155,7 +153,7 @@ NOTES
 ***** https://www.youtube.com/watch?v=-4O-ZYjQxks
 ***** http://github.com/capitaomorte/yasnippet
 
-
+      
 * HtDP
 
 ** I. Processing Simple Forms of Data
@@ -835,7 +833,7 @@ NOTES
 *** DONE Javascript Objects and Prototypes (no notes)
 
 
-*** DONE OPEN Real Time Web w/ Node
+*** DONE Real Time Web w/ Node
 
 **** HTMl5 Facades
      - Facade is a thin layer of abstraction over an API
