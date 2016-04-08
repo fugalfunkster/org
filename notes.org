@@ -152,7 +152,7 @@ NOTES
 **** TODO yasnippet
 ***** https://www.youtube.com/watch?v=-4O-ZYjQxks
 ***** http://github.com/capitaomorte/yasnippet
-** Magit
+** Magit (Howard's talk through 8:21)
 *** Magit popups allow you to toggle switches, options, etc. 
 **** default options (C-t)
 **** actions complete the popup process
@@ -197,7 +197,6 @@ NOTES
 *** On Merging and rebasing
 **** gerrit requires a straight history, no twigs
 **** to achieve this you must rebase, which magit makes easy
-***
 
 * HtDP
 
