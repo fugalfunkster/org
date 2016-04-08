@@ -156,6 +156,8 @@ NOTES
 ***** http://github.com/capitaomorte/yasnippet
 
 
+** Figure it out
+
 * HtDP
 
 ** I. Processing Simple Forms of Data
