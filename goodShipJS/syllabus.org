@@ -25,9 +25,21 @@
 ***** tokenizing/lexing
 ***** parsing
 ***** code generation
-*** AST (the abstract syntax tree)
-**** A binary tree
-**** https://en.wikipedia.org/wiki/Abstract_syntax_tree
+**** Building Blocks
+***** Tokens
+***** Values
+***** Operators
+***** Expressions
+***** Statements
+***** Declarations
+**** Using Parsers to Learn and Look Good
+***** Esprima: A JS Parser!
+****** http://esprima.org/
+****** http://esprima.org/demo/parse.html#
+***** JSCS
+**** AST (the abstract syntax tree)
+***** A binary tree
+***** https://en.wikipedia.org/wiki/Abstract_syntax_tree
 *** Tokens
 **** What is a token?
      The spec defines tokens by deduction: Tokens are input elements that are not
@@ -48,13 +60,13 @@
 **** Categories of Tokens
      The spec articulates multiple productions of tokens. As near as I can tell,
      productions are just different rubrics for handling different families of 
-     tokens. This makes sense, a compiler would have to treat a 
+     tokens. This makes sense, the compiler will address
      RegularExpressionLiteral differently than a StringLiteral. For our purposes
      we'll just just note that most tokens fall under the CommonToken production. 
 ***** CommonToken(s) defined in ECMA 2015 Spec @ 11.5):
 ****** TODO IdentifierNames
-       IdentifierNames include reserved words,  names are any input that has 
-******* Reserved Words are ItentifierName that may not be used as Identifiers
+       IdentifierNames include reserved words, keywords, and future reserved words
+******* Reserved Words are IdentifierName that may not be used as Identifiers
 ******** ECMA Spec 2015 11.6.2.1: Keywords
 
  | break   | case     | catch  | class  | const  | continue   | debugger |
@@ -88,52 +100,296 @@
 ***** http://ariya.ofilabs.com/2012/07/most-popular-javascript-tokens.html
 **** Blog Post: Most popular JavaScript keywords
 ***** http://ariya.ofilabs.com/2012/03/most-popular-javascript-keywords.html
-*** Operators
-    What is an Operator?
-**** unary, binary, ternary oh my
-     Operators can be categorized by the number of operands they affect. A unary
-     operator affects one operand, a binary affects twooperands, etc.. There is only
-     one ternary operator in JavaScript!
-**** Operator Precedence
-
-| Operator type          | Individual operators                |
-|------------------------+-------------------------------------|
-| member                 | . []                                |
-| call / create instance | () new                              |
-| negation/increment     | ! ~ - + ++ -- typeof void delete    |
-| multiply/divide        | * / %                               |
-| addition/subtraction   | + -                                 |
-| bitwise shift          | << >> >>>                           |
-| relational             | < <= > >= in instanceof             |
-| equality               | == != === !==                       |
-| bitwise-and            | &                                   |
-| bitwise-xor            | ^                                   |
-| bitwise-or             |                                     |  
-| logical-and            | &&                                  |
-| logical-or             |                                     |
-| conditional            | ?:                                  |
-| assignment             | = += -= *= /= %= <<= >>= >>>= &= ^= | (also |=)
-| comma                  | ,                                   |
-  
-**** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Unary_operators
-*** Expressions
-**** Expressions
+*** Expressions and Operators
+**** What is an Expression?
      Expressions always resolve to a single value. Anytime you have an assignment,
      the RHS is an expression. Anytime you console.log, that's an expression.
      Anytime you call a function, that's an expression.
-***** Expression Examples:
-****** 3 * 9
-****** b
-****** false ? 1 : 'yes' 
-**** Expressions and side effects
-**** MDN Expressions and Operators:
-***** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators
+****** Expression Examples:
+******* 3 * 9
+******* b
+******* false ? 1 : 'yes' 
+***** Expressions and side effects
+**** Operators!
+***** unary, binary, ternary oh my
+      Operators can be categorized by the number of operands they affect. A unary
+      operator affects one operand, a binary affects two operands, etc.. There is only
+      one ternary operator in JavaScript!
+***** Operator Precedence
+
+ | Operator type          | Individual operators                |
+ |------------------------+-------------------------------------|
+ | member                 | . []                                |     FIRST
+ | call / create instance | () new                              |
+ | negation/increment     | ! ~ - + ++ -- typeof void delete    |
+ | multiply/divide        | * / %                               |
+ | addition/subtraction   | + -                                 |
+ | bitwise shift          | << >> >>>                           |
+ | relational             | < <= > >= in instanceof             |
+ | equality               | == != === !==                       |
+ | bitwise-and            | &                                   |
+ | bitwise-xor            | ^                                   |
+ | bitwise-or             |                                     | (|) 
+ | logical-and            | &&                                  |
+ | logical-or             |                                     | (||)
+ | conditional            | ?:                                  |
+ | assignment             | = += -= *= /= %= <<= >>= >>>= &= ^= | (|=)
+ | comma                  | ,                                   |     LAST
+  
+***** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Unary_operators
+**** Categories of Expressions and Operators (from MDN)
+***** Primary Expressions 
+      Basic keywords and general expressions in JavaScript
+****** this
+       the this keyword refers to the function's execution context)
+****** function 
+       the function keyword defines a function expression
+****** class
+       the class keyword defines a class expression
+****** function*
+       the function* keyword defines a generator function expression
+****** yield
+       pause and resume a generator function
+****** yield*
+       delegate to another generator function or iterable object
+****** []
+       array initilizer / literal syntax
+****** {}
+       object initializer / literal syntax
+****** /ab+c/i
+       Regular Expression literal syntax
+****** ()
+       grouping operator
+***** Left-hand-side expressions
+      Left values are the destination of an assignment
+****** Property accessors
+       Member operators provide access to a property or method of an object
+       (object.property and object["property"]).
+****** new
+       The new operator creates an instance of a constructor.
+****** new.target
+       In constructors, new.target refers to the constructor that was invoked by new.
+****** super
+       The super keyword calls the parent constructor.
+****** ...obj
+       The spread operator allows an expression to be expanded in places where 
+       multiple arguments (for function calls) or multiple elements (for array 
+       literals) are expected.
+***** Increment and Decrement
+      Postfix/prefix increment and postfix/prefix decrement operators
+****** A++
+       Postfix increment operator.
+****** A--
+       Postfix decrement operator
+****** ++A
+       Prefix increment operator.
+****** --A
+       Prefix decrement operator.
+***** Unary Operators
+      A unary operation is operation with only one operand.
+****** delete
+       The delete operator deletes a property from an object.
+****** void
+       The void operator discards an expression's return value.
+****** typeof
+       The typeof operator determines the type of a given object.
+****** + 
+       The unary plus operator converts its operand to Number type.
+****** - 
+       The unary negation operator converts its operand to Number type and then negates it.
+****** ~
+       Bitwise NOT operator.
+****** !
+       Logical NOT operator.
+***** Arithmetic Operators
+      Arithmetic operators take numerical values (either literals or variables)
+      as their operands and return a single numerical value.
+****** +
+       Addition operator.
+****** -
+       Subtraction operator.
+****** /
+       Division operator.
+****** *
+       Multiplication operator.
+****** %
+       Remainder operator.
+****** **
+       Exponentiation operator.
+***** Relational Operators
+      A comparison operator compares its operands and returns a Boolean value
+      based on whether the comparison is true.
+****** in
+       The in operator determines whether an object has a given property.
+****** instanceof
+       The instanceof operator determines whether an object is an instance of another object.
+****** <
+       Less than operator.
+****** >
+       Greater than operator.
+****** <=
+       Less than or equal operator.
+****** >=
+       Greater than or equal operator.
+***** Equality Operators
+      The result of evaluating an equality operator is always of type Boolean based
+      on whether the comparison is true.
+****** ==
+       Equality operator.
+****** !=
+       Inequality operator.
+****** ===
+       Identity operator.
+****** !==
+       Nonidentity operator.
+***** Bitwise shift Operators
+      Operations to shift all bits of the operand.
+****** <<
+       Bitwise left shift operator.
+****** >>
+       Bitwise right shift operator.
+****** >>>
+       Bitwise unsigned right shift operator.
+***** Binary bitwise operators
+      Bitwise operators treat their operands as a set of 32 bits (zeros and ones)
+      and return standard JavaScript numerical values.
+****** &
+       Bitwise AND.
+****** |
+       Bitwise OR.
+****** ^
+       Bitwise XOR.
+***** Binary Logical Operators
+      Logical operators are typically used with boolean (logical) values, and when
+      they are, they return a boolean value.
+****** &&
+       Logical AND.
+****** ||
+       Logical OR.
+***** Conditional Ternary Operator
+****** (condition ? ifTrue : ifFalse)
+       The conditional operator returns one of two values based on the logical
+       value of the condition.
+***** Assignment Operators
+      An assignment operator assigns a value to its left operand based on the
+      value of its right operand
+****** =
+       Assignment operator.
+****** *=
+       Multiplication assignment.
+****** /=
+       Division assignment.
+****** %=
+       Remainder assignment.
+****** +=
+       Addition assignment.
+****** -=
+       Subtraction assignment
+****** <<=
+       Left shift assignment.
+****** >>=
+       Right shift assignment.
+****** >>>=
+       Unsigned right shift assignment.
+****** &=
+       Bitwise AND assignment.
+****** ^=
+       Bitwise XOR assignment.
+****** |=
+       Bitwise OR assignment.
+****** [a, b] = [1, 2]     {a, b} = {a:1, b:2}
+       Destructuring assignment allows you to assign the properties of an array or
+       object to variables using syntax that looks similar to array or object
+       literals
+***** Comma Operator
+****** ,
+       The comma operator allows multiple expressions to be evaluated in a single
+       statement and returns the result of the last expression.
 *** Statements and Declarations
     Statements always have completion values. 
       Declaration Statements (var, const, let statements)
       Blocks are statements that contain other statements and expressions. The
     completion value of a block is the completion value of the last statement or
     expression inside that block.
+**** Categories of Statements and Declarations (From MDN)
+***** Control flow
+****** Block
+       A block statement is used to group zero or more statements. The block is
+       delimited by a pair of curly brackets.
+****** break
+       Terminates the current loop, switch, or label statement and transfers 
+       program control to the statement following the terminated statement.
+****** continue
+       Terminates execution of the statements in the current iteration of the
+       current or labeled loop, and continues execution of the loop with the next
+       iteration.
+****** Empty
+       An empty statement is used to provide no statement, although the JavaScript
+       syntax would expect one.
+****** if...else
+       Executes a statement if a specified condition is true. If the condition is
+       false, another statement can be executed.
+****** switch
+       Evaluates an expression, matching the expression's value to a case clause,
+       and executes statements associated with that case.
+****** throw
+       Throws a user-defined exception.
+****** try...catch
+       Marks a block of statements to try, and specifies a response, should an
+       exception be thrown.
+***** Declarations
+****** var
+       Declares a variable, optionally initializing it to a value.
+****** let
+       Declares a block scope local variable, optionally initializing it to a value.
+****** const
+       Declares a read-only named constant.
+***** Functions and classes
+****** function
+       Declares a function with the specified parameters.
+****** function*
+       Generators functions enable writing iterators more easily.
+****** return
+       Specifies the value to be returned by a function.
+****** class
+       Declares a class.
+***** Iterations
+****** do...while
+       Creates a loop that executes a specified statement until the test condition
+       evaluates to false. The condition is evaluated after executing the statement,
+       resulting in the specified statement executing at least once.
+****** for
+       Creates a loop that consists of three optional expressions, enclosed in
+       parentheses and separated by semicolons, followed by a statement executed
+       in the loop.
+****** for each...in
+       Iterates a specified variable over all values of object's properties. For
+       each distinct property, a specified statement is executed.
+****** for...in
+       Iterates over the enumerable properties of an object, in arbitrary order.
+       For each distinct property, statements can be executed.
+****** for...of
+       Iterates over iterable objects (including arrays, array-like objects,
+       iterators and generators), invoking a custom iteration hook with statements
+       to be executed for the value of each distinct property.
+****** while
+       Creates a loop that executes a specified statement as long as the test
+       condition evaluates to true. The condition is evaluated before executing
+       the statement.
+***** Others
+****** debugger
+       Invokes any available debugging functionality. If no debugging functionality
+       is available, this statement has no effect.
+****** export
+       Used to export functions to make them available for imports in external
+       modules, another scripts.
+****** import
+       Used to import functions exported from an external module, another script.
+****** label
+       Provides a statement with an identifier that you can refer to using a break
+       or continue statement.
+****** with
+       Extends the scope chain for a statement.
 **** MDN: Statements and Declarations
 ***** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements
 **** The Spec Defines these:
@@ -171,15 +427,13 @@
 ***** http://speakingjs.com/es5/ch07.html
 **** Declaration Statements
 **** Blog Post: Most Popular JavaScript Statements
-*** Esprima: A JS Parser!
-**** http://esprima.org/
-**** http://esprima.org/demo/parse.html#
+
 *** Automatic Semicolon Insertion
 **** http://www.2ality.com/2011/05/semicolon-insertion.html
 **** http://inimino.org/~inimino/blog/javascript_semicolons
 **** http://cjihrig.com/blog/the-dangers-of-javascripts-automatic-semicolon-insertion/
 **** http://blog.izs.me/post/2353458699/an-open-letter-to-javascript-leaders-regarding
-*** Style Guide! JSCS
+
 ** the wind in our sails - types (briefly)
 *** YDKJS - Types and Grammar
 **** A Type by any other name : 1-3
@@ -612,3 +866,4 @@ Appendix C: Acknowledgments
 *** object literal extensions
 *** iterators and generators
 *** promises
+
