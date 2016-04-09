@@ -1,12 +1,16 @@
 ACTION
 
 * Ready or Nearly So 
-
+  
 ** todolist [0/3]
+*** learning tooling
+**** TODO magit
+***** branching and merging
+**** TODO docker
+***** docker.el?
+***** dockerfile.mode
 *** JavaScript Allonge 
-**** DONE Functional Iterators
-**** DONE Making Data with Functions
-**** DONE Recipes with Data
+**** TODO Review First Third
 *** YDKJS 
 **** TODO Types and Grammar - Ch. 5 Grammar
 *** JavaScript on the High Seas
@@ -26,10 +30,10 @@ ACTION
 
 
 ** queue
-*** Finish JavaScript Allonge
-*** Finish YDKJS
-*** Memorize HTML/CSS/DOM basics
+*** JavaScript Allonge
+*** Memoize HTML/CSS/DOM basics
 *** Write a little library
+*** YDKJS
 *** Write JavaScript on the High Seas
 **** Intro
 **** Syntax
@@ -38,8 +42,7 @@ ACTION
 **** Functions
 **** Arrays
 **** POJOs
-*** Finish FreeCodeCamp
-*** Refactor repos
+*** Start FreeCodeCamp React Challenges
 *** Online Courses
 **** Pluralsight 
 ***** Misc
@@ -234,10 +237,6 @@ ACTION
 
 
 * Horizons
-** Work
-*** SoilApp
-*** SNAP
-
 ** Scheme
 *** Little Schemer / Seasoned Schemer
 *** HtDP [5/43]
