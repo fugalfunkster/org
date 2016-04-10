@@ -1,0 +1,95 @@
+* Recipes 
+
+** Partial Application
+
+** Unary
+
+** Tap
+
+** Maybe
+
+** Once
+
+** Left-Variadic Functions
+
+** Compose and Pipeline
+
+** mapWith
+
+** Flip
+
+** Object.assign
+
+** Why?
+
+
+* Combinators
+
+** Defined
+
+** I
+
+** K
+
+** B
+
+** V
+
+** Y
+
+
+* Big Ideas
+
+** First Class Functions
+
+** by reference and by value
+
+** scope, closures, and shadowing
+
+** Principle of least privledge
+
+** reassignment vs. mutation
+
+** Function decorators
+
+** Pure functions
+
+** composition
+
+** partial application
+
+** execution context
+
+** many forms of functions
+
+** truthiness and logical operators
+
+** control flow
+
+** destructuring arrays and objects, spreading, and rest parameters
+
+** big O
+
+** linked lists
+
+*** implementing with arrays
+
+*** impl w/ obj
+
+*** impl w/ funcs
+
+** recursion
+
+** flattening
+
+** mapping
+
+** folding
+
+** TCO
+
+** default arguments
+
+** iterators
+
+** lazy vs eager evaluation

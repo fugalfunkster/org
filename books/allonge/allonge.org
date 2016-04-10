@@ -60,6 +60,7 @@ Javascript Allonge Notepad
 ** values are expressions
 *** but not all expressions are values
 *** when an expression includes an operator, it is not a value
+*** TODO but every expression evaluates to a value?
 ** values and identity
 *** we test whether two values are identical with === and !== 
 ** value types
@@ -85,7 +86,6 @@ Javascript Allonge Notepad
  
 ** As little as possible about Functions
 *** functions are values that represent computations to be performed
-
 ***** Ex:
   #+BEGIN_SRC js
     return () => 0
@@ -95,7 +95,6 @@ Javascript Allonge Notepad
   | Function |
 
 **** We use functions by applying them to arguments (0 or more values)
-
 ***** Ex:
   #+BEGIN_SRC js
     return (() => 0 )()
@@ -2394,6 +2393,7 @@ const fibIter = () => {
     state of the original!
       Once you pass an iterator to a function, you can expect that you no longer
     "own" that iterator, and that its state has either changes or will change.
+
 
 ** Making Data Out Of Functions
 *** The kestrel and the idiot
