@@ -3000,3 +3000,1382 @@ const fibIter = () => {
 
 
 * Stir the Allonge: Objects and State
+  Thus far, we have avoided objects that are meant to be changed, objects that
+  model state. It's time to change that.
+** Encapsulating State with Closures (Making a Stack)
+*** What is hiding of state-process, and why does it matter?
+    Stacks are data structures. We can interact with a stack using three basic 
+    operations:
+      1. Pushing a value onto the top (push)
+      2. popping a value off the top (pop)
+      3. and testing to see whether the stack is empty or not (isEmpty)
+    These basic operations are the stable interface.
+      A stack could use an array to hold its contents, or a linked list. You might
+    need an index, you might not. These design choices are often driven by
+    performance considerations.
+      But once you decide on an underlying implementation, you must also determine
+    whether to expose implementation details. For example, if a stack uses an
+    array behind the scenes, you have multiple options as to how a developer might
+    determine the length of the stack. If the array index is exposed, the
+    developer might use that directly. However, this makes changes to the
+    implementation difficult, since code depends on the presence of an index. This
+    dependency is called coupling. Alternately, the stack could have a size
+    function, a new, stable operation, that continues to hide the underlying
+    implementation.
+      Hiding information (or "state") is the design principle that allows us to
+    limit the coupling between components of software.
+*** How do we hide state using JavaScript?
+    Because objects' elements are mutable, we can use an object to model the state
+    of our stack: an array and an index. Next can implement our three basic 
+    operations as functions. And, because objects can store any value, we can
+    bundle these functions with our state. Finally, our functions must be able to 
+    refer to our stack's state. We can accomplish this by naming the object.
+**** Stack via IIFE Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+const stack = (() => {
+  const obj = {
+    array: [],
+    index: -1,
+    push (value) {
+      return obj.array[obj.index += 1] = value
+    },
+    pop () {
+      const value = obj.array[obj.index];
+      obj.array[obj.index] = undefined;
+      if (obj.index >= 0) {
+        obj.index -= 1
+      }
+    return value
+    },
+    isEmpty () {
+      return obj.index < 0
+    }
+  };
+  return obj;
+})();
+
+console.log(stack.isEmpty());
+console.log(stack.push('hello'));
+console.log(stack.push('JavaScript'));
+console.log(stack.isEmpty());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.isEmpty());
+
+#+END_SRC
+
+#+RESULTS:
+: true
+: hello
+: JavaScript
+: false
+: JavaScript
+: hello
+: true
+       
+*** Method-ology (What is a method?)
+    This text takes the view that a function is a method of an object if it
+    belongs to that object and interacts with that object in some way. So, the
+    functions implementing the operations on the stack are all absolutely methods
+    of the stack. 
+*** Hiding State
+    The previous stack example did not encapsulate its own state. Indeed, the IIFE
+    is superfluous - an object literal would have been sufficient. But, the IIFE
+    provides a closure that we can use for encapsulation.
+      If we need more than one stack, we don't want to repeat our code, so let's
+    also create a "stack maker." We could do this by wrapping our IIFE in a
+    function wrapper that returns our IIFE that returns our stack object. But
+    there's an easier way.
+**** Stack via IIFE w/ encapsulation Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+const stack = (() => {
+  const array = [];
+  let index = -1;
+  const obj = {
+    push (value) {
+      return array[index += 1] = value
+    },
+    pop () {
+      const value = array[index];
+      array[index] = undefined;
+      if (index >= 0) {
+        index -= 1
+      }
+    return value
+    },
+    isEmpty () {
+      return index < 0
+    }
+  };
+  return obj;
+})();
+
+console.log(stack.isEmpty());
+console.log(stack.push('hello'));
+console.log(stack.push('JavaScript'));
+console.log(stack.isEmpty());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.isEmpty());
+
+#+END_SRC
+
+#+RESULTS:
+: true
+: hello
+: JavaScript
+: false
+: JavaScript
+: hello
+: true
+
+**** Stack Maker Function Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+const Stack = () => {
+  const array = [];
+  let index = -1;
+  return {
+    push (value) {
+      return array[index += 1] = value
+    },
+    pop () {
+      const value = array[index];
+      array[index] = undefined;
+      if (index >= 0) {
+        index -= 1
+      }
+    return value
+    },
+    isEmpty () {
+      return index < 0
+    }
+  };
+};
+
+const stack = Stack();
+console.log(stack.isEmpty());
+console.log(stack.push('hello'));
+console.log(stack.push('JavaScript'));
+console.log(stack.isEmpty());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.isEmpty());
+
+#+END_SRC
+
+#+RESULTS:
+: true
+: hello
+: JavaScript
+: false
+: JavaScript
+: hello
+: true
+
+*** Is encapsulation "object oriented"?
+    We've built something with hidden internal state and "methods", all without
+    needing special def or private keywords. Mind you, we haven't included all
+    sorts of complicated mechanisms to support inheritance, mixins, and other
+    opportunities for debating the nature of the One True Object-Oriented Style
+    on the Internet.
+      Then, again, the key lesson experienced programmers repeat - although it
+    often falls on deaf ear - is favor composition over inheritance. So maybe we
+    aren't missing much.
+** Composition and Extensions
+*** Composition
+    A deeply fundamental practice is to build components out of smaller components.
+    The choice of how to divide a component into smaller components is called
+    factoring, after the operation in number theory. And, when you take an already
+    factored component and rearrange things so that it is factored into a different
+    set of subcomponents without altering its behavior, you are refactoring.
+      The simplest and easiest way to build components out of smaller components in
+    JavaScript is also the most obvious: Each component is a value, and the
+    components can be put together into a single object or encapsulated with a
+    closure.
+      Here's an abstract model that supports undo and redo composed from a pair of
+    stacks, and a POJO. We can get and set attributes on our model, and we can undo
+    and redo our settings.
+      The techniques used for encapsulation work well with composition. In this
+    case, we have a "model" that hides its attribute store as well as its
+    implementation that is composed of an undo stack and redo stack.
+**** Model w/ undo/redo stacks Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const shallowCopy = (source) => {
+    const dest = {};
+    for (let key in source) {
+      dest[key] = source[key]
+    }
+    return dest
+  };
+
+  const Stack = () => {
+    const array = [];
+    let index = -1;
+
+    return {
+      push (value) {
+        array[index += 1] = value
+      },
+      pop () {
+        let value = array[index];
+        if (index >= 0) {
+          index -= 1
+        }
+        return value
+      },
+      isEmpty () { return index < 0}
+    }
+};
+
+
+  const Model = function (initialAttributes) {
+    let attributes = shallowCopy(initialAttributes || {});
+    const redoStack = Stack();
+    const undoStack = Stack();
+    const obj = {
+      set: (attrsToSet) => {
+        undoStack.push(shallowCopy(attributes));
+        if (!redoStack.isEmpty()) {
+            redoStack.length = 0;
+        }
+        for (let key in (attrsToSet || {})) {
+          attributes[key] = attrsToSet[key]
+        }
+        return obj
+      },
+      undo: () => {
+        if (!undoStack.isEmpty()) {
+          redoStack.push(shallowCopy(attributes));
+          attributes = undoStack.pop()
+        }
+        return obj
+      },
+      redo: () => {
+        if (!redoStack.isEmpty()) {
+          undoStack.push(shallowCopy(attributes));
+          attributes = redoStack.pop()
+        }
+        return obj
+      },
+      get: (key) => attributes[key],
+      has: (key) => attributes.hasOwnProperty(key),
+      attributes: () => shallowCopy(attributes)
+    };
+    return obj
+  };
+
+  const model = Model();
+  model.set({"Doctor": "de Grasse"});
+  model.set({"Doctor": "Who"});
+  model.undo();
+  console.log(model.get("Doctor"));
+  model.redo();
+  console.log(model.get("Doctor"));
+
+#+END_SRC
+
+#+RESULTS:
+: de Grasse
+: Who
+
+*** Extension
+    Another practice that many people consider fundamental is to extend an
+    implementation. Meaning, they wish to define a new data structure in terms of
+    adding new operations and semantics to an existing data structure.
+      If we create a queue data structure we might initially create operations to
+    pushTail and pullHead. But we might later wish to add operations to pullTail
+    and pushHead. To modify our queue, it cannot be encapsulated.
+      The design goals of encapsulation and extension exist in a natural state of
+    tension. A program with elaborate encapsulation resists breakage but can also
+    be difficult to refactor in other ways. Be mindful of when it's best to
+    Compose and when it's best to Extend.
+**** Encapsulated Queue Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const Queue = () => {
+    let array = [];
+    let head = 0;
+    let tail = -1;
+    return {
+      pushTail: (value) => array[++tail] = value,
+      pullHead: () => {
+        if (tail >= head) {
+          const value = array[head];
+          array[head] = undefined;
+          ++head;
+          return value
+        }
+      },
+      isEmpty: () => tail < head
+    }
+  };
+
+  const queue = Queue();
+  queue.pushTail("Hello");
+  queue.pushTail("JavaScript");
+  queue.pushTail("Allongé");
+  console.log(queue.pullHead());
+  console.log(queue.pullHead());
+
+#+END_SRC
+
+#+RESULTS:
+: Hello
+: JavaScript
+
+**** De-Encapsulated Queue Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const Queue = function () {
+    const queue = {
+      array : [],
+      head : 0,
+      tail : -1,
+      pushTail: (value) => queue.array[++queue.tail] = value,
+      pullHead: () => {
+        if (queue.tail >= queue.head) {
+          const value = queue.array[queue.head];
+          queue.array[queue.head] = undefined;
+          ++queue.head;
+          return value
+        }
+      },
+      isEmpty: () => queue.tail < queue.head
+    }
+    return queue;
+  };
+
+  const queue = Queue();
+  queue.pushTail("Hello");
+  queue.pushTail("JavaScript");
+  queue.pushTail("Allongé");
+  console.log(queue.pullHead());
+  console.log(queue.pullHead());
+
+#+END_SRC
+
+#+RESULTS:
+: Hello
+: JavaScript
+
+**** Extending a Queue to a Deque Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const Queue = function () {
+    const queue = {
+      array : [],
+      head : 0,
+      tail : -1,
+      pushTail: (value) => queue.array[++queue.tail] = value,
+      pullHead: () => {
+        if (queue.tail >= queue.head) {
+          const value = queue.array[queue.head];
+          queue.array[queue.head] = undefined;
+          ++queue.head;
+          return value
+        }
+      },
+      isEmpty: () => queue.tail < queue.head,
+      expose: () => ({
+        array: queue.array,
+        head: queue.head,
+        tail: queue.tail
+      })
+    }
+    return queue;
+  };
+
+  const Dequeue = function () {
+    const deque = Queue();
+    let increment = 0;
+    return Object.assign(deque, {
+      size: () => deque.tail - deque.head + 1,
+      pullTail: () => {
+        if (!deque.isEmpty()) {
+          const value = deque.array[deque.tail];
+          deque.array[deque.tail] = undefined;
+          deque.tail -= 1;
+          return value;
+        }
+      },
+      pushHead: (value) => {
+        if (deque.head === 0) {
+          increment = deque.tail - deque.head;
+          for (let i = deque.tail; i >= deque.head; i--) {
+            deque.array[i + increment] = deque.array[i];
+          }
+          deque.tail += increment;
+          deque.head += increment;
+        }
+        return deque.array[deque.head -= 1] = value;
+      }
+    })
+  };
+
+  const dequeue = Dequeue();
+  dequeue.pushTail("Hello");
+  dequeue.pushTail("JavaScript");
+  dequeue.pushHead("Allongé");
+  console.log(dequeue.pullTail());
+  console.log(dequeue.pullHead());
+  console.log(dequeue.pullTail());
+
+#+END_SRC
+
+#+RESULTS:
+: JavaScript
+: Allongé
+: Hello
+
+** This and That
+   If we use Object.assign to copy a queue, it will return a queue that references
+   the state of the original queue. Because objects hold values by reference, the
+   queue copy has access to the same environment enclosed during the creation of the
+   first queue.
+     This is a general issue with closures. Closures couple functions to
+   environments, and that makes them very elegant in the small, and very handy for
+   making opaque data structures. Alas, their strength in the small is their
+   weakness in the large. When you're trying to make reusable components, this
+   coupling is sometimes a hindrance.
+     However, we could create a queue with amnesia - a queue with methods that
+   must be passed an environment on which to operate. The drawback to such an
+   approach is that we have to make sure we're always passing the currect queue in
+   every time we invoke a function...
+**** TODO (const in for loop) copyOfQueue Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" results: output
+
+  const Queue = () => {
+    const queue = {
+      array: [],
+      head: 0,
+      tail: -1,
+       pushTail (value) {
+         return queue.array[++queue.tail] = value
+       },
+       pullHead () {
+         if (queue.tail >= queue.head) {
+           const value = queue.array[queue.head];
+           queue.array[queue.head] = undefined;
+           queue.head += 1;
+           return value
+         }
+       },
+       isEmpty () {
+         return queue.tail < queue.head;
+       }
+     };
+     return queue
+   };
+
+  const queue = Queue();
+  queue.pushTail('Hello');
+  queue.pushTail('JavaScript');
+  const copyOfQueue = Object.assign({}, queue);
+
+  console.log(queue !== copyOfQueue);
+
+  copyOfQueue.array = [];
+  for (let i = 0; i < 2; ++i) {
+    copyOfQueue.array[i] = queue.array[i]
+  }
+
+  console.log(queue.pullHead());
+  console.log(copyOfQueue.pullHead());
+
+#+END_SRC
+
+#+RESULTS:
+: true
+: Hello
+: JavaScript
+: undefined
+
+**** queueWithAmnesia Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" results: output
+
+  const AmnesiacQueue = () => ({
+    array: [],
+    head: 0,
+    tail: -1,
+    pushTail (myself, value) {
+      return myself.array[myself.tail += 1] = value
+    },
+    pullHead (myself) {
+      if (myself.tail >= myself.head) {
+        let value = myself.array[myself.head];
+        myself.array[myself.head] = void 0;
+        myself.head += 1;
+        return value;
+      }
+    },
+    isEmpty (myself) {
+      return myself.tail < myself.head;
+    }
+  });
+
+  const queueWithAmnesia = AmnesiacQueue();
+
+  queueWithAmnesia.pushTail(queueWithAmnesia, 'Hello');
+  queueWithAmnesia.pushTail(queueWithAmnesia, 'JavaScript');
+
+  const queueWithAmnesiaToo = Object.assign({}, queueWithAmnesia);
+
+  queueWithAmnesiaToo.array = [];
+  for (let i = 0; i < 2; ++i) {
+    queueWithAmnesiaToo.array[i] = queueWithAmnesia.array[i]
+  }
+
+  console.log(queueWithAmnesia.pullHead(queueWithAmnesia));
+  console.log(queueWithAmnesia.pullHead(queueWithAmnesiaToo));
+
+#+END_SRC
+
+#+RESULTS:
+: Hello
+: Hello
+: undefined
+
+*** TODO what's all this ?
+    When we write a function expression using the compact method syntax (or use the
+    function keyword instead of the fat arrow), and then invoke that function using
+    . notation, JavaScript binds the "receiver" of the "method invocation" to the
+    special name this.
+      Our AmnesiacQueue uses compact method notation, and we can replace the method
+    parameter -myself- with -this- within the body of each function. Now, when we
+    invoke the functions we've bound to pushTail and pullHead, JavaScript will
+    automatically bind betterQueue to the name this within those methods.
+      Every time you invoke a function that is a member of an object, javaScript
+    binds that object to the name this in the environment of the function just as if
+    it were an argument.
+      This allows us to copy arrays. By getting rid of the closure and taking
+    advantage of -this-, we have functions that are more easily portable between
+    objects, and the code is simples as wel. This is very important. Being able to
+    copy objects is an example of a larger concern: Being able to share functions
+    between objects. That's how classes work. That's how extending objects works.
+    Being able to share functions means being able to compose and reuse
+    functionality.
+      Closures tightly couple functions to the environments where they are created,
+    limiting their flexibility. Using -this- alleviates the coupling. Copying
+    objects is but one example of where that flexibility is needed. 
+**** BetterQueue with -this- Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" results: output
+
+  const BetterQueue = () => ({
+    array: [],
+    head: 0,
+    tail: -1,
+    pushTail (value) {
+      return this.array[this.tail += 1] = value
+    },
+    pullHead () {
+      if (this.tail >= this.head) {
+        let value = this.array[this.head];
+        this.array[this.head] = void 0;
+        this.head += 1;
+        return value;
+      }
+    },
+    isEmpty () {
+      return this.tail < this.head;
+    }
+  });
+
+  const betterQueue = BetterQueue();
+  betterQueue.pushTail('Hello');
+  betterQueue.pushTail('JavaScript');
+
+  const copyOfQueue = Object.assign({}, betterQueue);
+
+  copyOfQueue.array = [];
+  for (let i = 0; i < 2; ++i) {
+    copyOfQueue.array[i] = betterQueue.array[i]
+  }
+
+  console.log(betterQueue.pullHead());
+  console.log(copyOfQueue.pullHead());
+
+#+END_SRC
+
+#+RESULTS:
+: Hello
+: Hello
+: undefined
+
+** What Context Applies When We Call a Function
+   In this and that, we learned that when a function is denoted using the function
+   keyword, and is called as an object method, the name this is bound in its
+   environment to the object acting as a "reciever."
+     We could thus construct a method that returns whatever value is bound to -this-
+   and compare it to the object that references that method.
+**** -this- self reference Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const someObject = {
+    returnMyThis () {
+      return this;
+    }
+  };
+
+  console.log(someObject.returnMyThis() === someObject);
+
+#+END_SRC
+
+#+RESULTS:
+: true
+
+*** TODO it's all about the way the function is called
+    JavaScript programmers talk about functions having a "context" when called.
+    -this- is bound to the context. The important thing to understand is that the
+    context for a function being called is set by the way the function is called,
+    not the function itself. 
+      This is an important distinction. Consider closures: A function's free
+    variables are resolved by looking them up in their enclosing functions'
+    environments. You can always determine the functions that define free variables
+    by examining the source code of a JavaScript program, which is why this scheme
+    is known as Lexical Scope.
+      However, a function's context cannot be determined by examining the source
+    code of a JavaScript program.
+!!!!! I really don't like that reasoning. You must be able to determine a function's
+    context based upon an examination of the source code. If you could not, how
+    could the compiler? The compiler creates a function's context each time the
+    source code invokes that function. Thus, you can certaintly examine the source
+    code for function invocations, and determine what the function's context will be
+    based upon the circumstances of the invocation. The important distinction is
+    that function declarations can only have one lexical scope. But a function can
+    have multiple execution contexts, because you can invoke a function more than
+    once. 
+      The following example demonstrates that when you call a function with . or []
+    notation, the function's execution context is the object on which the access
+    notation operates. Otherwise, you get the global environment.
+**** global -this- and shared method -this- Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const global = this;
+
+  const someObject = { 
+    someFunction () {
+      return this;
+    }
+  };
+
+  const someFunction = someObject.someFunction;
+  console.log(someFunction() === someObject);
+  console.log(someFunction() === global);
+
+  const anotherObject = {
+    someFunction: someObject.someFunction
+  }
+  console.log(anotherObject.someFunction() === anotherObject);
+  console.log(anotherObject.someFunction() === someObject);
+
+#+END_SRC
+
+#+RESULTS:
+: false
+: true
+: true
+: false
+
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const global = this;
+
+  const someObject = { 
+    someFunction () {
+      return this;
+    }
+  };
+
+  const someFunction = someObject.someFunction;
+  console.log(someFunction() === someObject);
+  console.log(someFunction() === global);
+
+  const anotherObject = {
+    someFunction: someObject.someFunction
+  }
+  console.log(anotherObject.someFunction() === anotherObject);
+  console.log(anotherObject.someFunction() === someObject);
+
+#+END_SRC
+
+*** setting your own context using call
+    There are actually two other ways to set the context of a function. And, once
+    again, both are determined by the caller. At the end of "objects everywhere?"
+    we'll see that everything in JavaScript behaves like an object, including
+    functions. We'll learn that functions have methods themselves, and one of them
+    is -call-.
+      When you call a function with -call-, you set the context by passing it in as
+    the first parameter. Other arguments are passed to the function in the normal
+    manner. Much hilatiry can result from -call- shenanigans:
+**** -call- shenanigans
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const a = [1,2,3], b = [4,5,6];
+  console.log(a.concat([2,1]));
+  console.log(a.concat.call(b,[2,1]));
+
+#+END_SRC
+
+#+RESULTS:
+: [ 1, 2, 3, 2, 1 ]
+: [ 4, 5, 6, 2, 1 ]
+
+*** arguments
+    JavaScript has another binding in every function's environment. -arguments- is a
+    special object that references a handful of array-like methods and permits
+    element access using bracket notation.
+      Gathering arguments with the spread operator ... accomplished most of the use
+    cases people have for using the arguments special binding, and in addition, 
+    gathering works with both fat arrows and with the function keyword, whereas
+    -arguments- only works with the function keyword.
+      There are a few things that -arguments- can do that gathering cannot. For
+    example, arguments holds every argument passed to a function, regardless of
+    whether the function signature contains a parameter for that argument. This,
+    -arguments- works alongside a function's declared parameters.
+*** application
+    JavaScript also provides a fourth way to set the context for a function. .apply
+    is a method implemented by every function that takes a context as its first
+    argument, and it takes an array or array-like thing of arguments as its second
+    argument.
+**** .call and .apply example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const array = [1,2,3,4,5];
+
+  const third = function () { 
+    return arguments[2]
+  }
+
+  console.log(third(...array));
+  console.log(third.call(this, ...array));
+  console.log(third.apply(this, array));
+
+#+END_SRC
+
+#+RESULTS:
+: 3
+: 3
+: 3
+
+*** TODO contextualization
+    The apply and call methods both take a context as the first parameter, and
+    function arguments as the remaining parameters. We can write a utilitiy that
+    partially applies the .apply method.
+      Our contextualize function returns a new function that calls a function with
+    a fixed context.
+**** TODO un-travesty 209
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const a = [1,2,3];
+  const accrete = (x) => a.concat(x);
+  console.log(accrete([4,5]));
+
+#+END_SRC
+
+#+RESULTS:
+: [ 1, 2, 3, 4, 5 ]
+
+**** contextualize Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const a = [1,2,3];
+
+  const contextualize = (fn, context) => 
+    (...args) =>
+      fn.apply(context, args)
+
+  const accrete2 = contextualize(a.concat, a);
+  console.log(accrete2([4,5]));
+
+#+END_SRC
+
+#+RESULTS:
+: [ 1, 2, 3, 4, 5 ]
+
+**** contextualize and uncontextualize Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const contextualize = (fn, context) => 
+    (...args) =>
+      fn.apply(context, args)
+
+  var aFourthObject = {};
+  var returnThis = function () { return this; };
+
+  aFourthObject.uncontextualized = returnThis;
+  aFourthObject.contextualized = contextualize(returnThis, aFourthObject);
+  
+  console.log(aFourthObject.uncontextualized() === aFourthObject);
+  console.log(aFourthObject.contextualized() === aFourthObject);
+
+  // but
+
+  var uncontextualized = aFourthObject.uncontextualized;
+  var contextualized = aFourthObject.contextualized;
+  console.log(uncontextualized() === aFourthObject);
+  console.log(contextualized() === aFourthObject);
+
+#+END_SRC
+
+#+RESULTS:
+: true
+: true
+: false
+: true
+
+** Method Decorators
+   In function decorators, we learned that a decorator takes a function as an
+   argument, returns a function, and there's a semantic relationship between the
+   two. If a function is a verb, a decorator is an adverb.
+     Decorators can be used to decorate methods provided that they carefully
+   preserve the function's context. As long as we are correctly preserving -this-
+   by 
+     1. using a function keyword, and
+     2. invoking the decorated function with .call(this, ...) or .apply(this, ...)
+   we can decorate methods as well as functions. 
+     Unfortunately, using .call or .apply is substantially slower than writing
+   function decorators that aren't usable as method decorators. However, in practice
+   you're far more likely to introduce a defect by failing to pass the context
+   through a decorator than by introducing a performance pessimization, so the
+   default choice should be to write all function decorators in such a way that
+   they are "context agnostic."
+     In some cases, there are other considerations to writing a method decorator. If
+   the decorator introduces state of any kind (such as once and memoize do), this
+   must be carefully managed for the case whenseveral objects share the same method
+   through the mechanism of the prototype or through sharing references to the same
+   function.
+*** TODO a-contextual function decorator Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const maybe = (fn) =>
+    x => 
+      x != null ? fn(x) : x;
+
+const plus1 = x => x + 1;
+  console.log(plus1(1));
+  console.log(plus1(0));
+  console.log(plus1(null));
+  console.log(plus1(undefined));  // returns NaN not null
+
+  const maybePlus1 = maybe(plus1);
+  console.log(maybePlus1(1));
+  console.log(maybePlus1(0));
+  console.log(maybePlus1(null));
+  console.log(maybePlus1(undefined));
+
+#+END_SRC
+
+#+RESULTS:
+: 2
+: 1
+: 1
+: NaN
+: 2
+: 1
+: null
+: undefined
+
+*** context sensitive function decorator Example:
+
+ #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+ 
+  const maybe = (fn) =>
+    function (x) {
+      return x != null ? fn.call(this, x) : x;
+    };
+
+ #+END_SRC
+
+*** csfd(above) with variadic functions and methods Recipe:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const maybe = (fn) =>
+    function (...args) {
+      for (const i in args) {
+        if (args[i] == null) return args[i];
+      }
+    return fn.apply(this, args);
+  };
+
+
+#+END_SRC
+
+*** method decorator Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const maybe = (fn) =>
+    function (x) {
+      return x != null ? fn.call(this, x) : x;
+    };
+
+  const someObject = {
+    setSize: maybe(function (size) {
+      this.size = size;
+    })
+  };
+
+  someObject.setSize(5);
+  console.log(someObject);
+
+  someObject.setSize(null);
+  console.log(someObject);
+
+#+END_SRC
+
+#+RESULTS:
+: { setSize: [Function], size: 5 }
+: { setSize: [Function], size: 5 }
+
+** Summary
+*** State can be encapsulated/hidden/privatized with closures
+*** Encapsulations can be aggregated with composition
+*** Encapsulation resists extension
+*** The automatic binding -this- facilitates sharing of functions
+*** Functions can be named and declared with a name
+
+
+* Recipes with Objects, Mutations, and State
+** Memoize
+   Sometimes our algorithms or programs end up calculating the same results over and
+   over again. Consider a function that computes the fibonacci sequence using a
+   recursive process (we won't use a named function expression intentionally). See
+   below on memoizing recursive functions. Each time the process recurs, it
+   performs mirror calculations in a tree.
+     We could rearrange the computation to avoid this, but we can instead trade
+   space for time. What we want to do is use a lookup table. Whenever we want a
+   result, we first look it up. If we don't have it, we calculate it and write the
+   result in the table to use in the future. If we do have the result, we return
+   the result without recalculating it.
+     We can apply memoized to a function and we will get back a new function that
+   "memoizes" its results so that it never has to recalculate the same value twice.
+   It only works for functions that are "idempotent," meaning functions that always
+   return the same result given the same argument(s).
+*** recursive fibonacci:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const fibonacci = (n) =>
+    n < 2
+      ? n
+      : fibonacci(n-2) + fibonacci(n-1);
+
+  console.log([0,1,2,3,4,5,6,7,8].map(fibonacci));
+  //console.log(fibonacci(45)); very slow
+
+#+END_SRC
+
+#+RESULTS:
+: [ 0, 1, 1, 2, 3, 5, 8, 13, 21 ]
+: 1134903170
+  
+*** memoize Recipe:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :tangle yes
+
+  const memoized = (fn) => {
+    const lookupTable = {};
+    return function (...args) {
+      const key = JSON.stringify(this, args);
+      return lookupTable[key] || (lookupTable[key] = fn.apply(this, args));
+    }
+  }
+
+#+END_SRC
+
+*** TODO memo and fibonacci Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const memoized = (fn) => {
+    const lookupTable = {};
+    return function (...args) {
+      const key = JSON.stringify.apply(this, args); //why this w/o apply in book?
+      return lookupTable[key] || (lookupTable[key] = fn.apply(this, args));
+    }
+  }
+
+  const fastFibonacci = memoized(
+    (n) =>
+      n < 2
+        ? n
+        : fastFibonacci(n-2) + fastFibonacci(n-1)
+  );
+
+  console.log(fastFibonacci(45));
+
+#+END_SRC
+
+#+RESULTS:
+: 1134903170
+
+*** TODO memoizing recursive functions (ackward language, functional expressions?)
+    We deliberately picked a recursive function to memoize, because it demonstrates
+    a pitfall when combining decorators with named function expressions. In the code
+    example below, the function bound to the name fibonacci in the other environment
+    has been memoized, but the named function expression binds the name fibonacci
+    inside the unmemoized function, so none of the recursive calls to fibonacci are
+    ever memoized.
+**** broken memoFib (it's slow!) Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const memoized = (fn) => {
+    const lookupTable = {};
+    return function (...args) {
+      const key = JSON.stringify.apply(this, args); //why this w/o apply in book?
+      return lookupTable[key] || (lookupTable[key] = fn.apply(this, args));
+    }
+  }
+
+  var fibonacci = memoized( function fibonacci (n) {
+    if (n < 2) {
+      return n
+    } else {
+      return fibonacci(n-2) + fibonacci(n-1)
+    }
+  });
+
+  console.log(fibonacci(45)); //it's slow!
+
+#+END_SRC
+
+#+RESULTS:
+: 1134903170
+
+**** better memoFib (it's fast!) Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const memoized = (fn) => {
+    const lookupTable = {};
+    return function (...args) {
+      const key = JSON.stringify.apply(this, args); //why this w/o apply in book?
+      return lookupTable[key] || (lookupTable[key] = fn.apply(this, args));
+    }
+  }
+
+  var fibonacci = memoized( function (n) {
+    if (n < 2) {
+      return n
+    } else {
+      return fibonacci(n-2) + fibonacci(n-1)
+    }
+  });
+
+console.log(fibonacci(45)); // its fast!
+
+#+END_SRC
+
+#+RESULTS:
+: 1134903170
+
+** getWith
+   getWith is a very simple function. It takes the name of an attribute and returns
+   a function that extracts the value of that attribute from an object.
+*** getWith Recipe:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :tangle yes
+
+  const getWith = (attr) => (object) => object[attr];
+
+#+END_SRC
+
+*** simple getWith Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const getWith = (attr) => (object) => object[attr]
+
+  const inventory = { apples: 0, oranges: 144, eggs: 36 };
+
+  console.log(getWith('oranges')(inventory));
+
+#+END_SRC
+
+#+RESULTS:
+: 144
+: undefined
+
+*** mapWith(getWith Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const getWith = (attr) => (object) => object[attr];
+
+  const mapWith = (fn) => 
+    (list) => list.map(fn);
+
+  const inventories = [
+{ apples: 0, oranges: 144, eggs: 36 }, { apples: 240, oranges: 54, eggs: 12 }, { apples: 24, oranges: 12, eggs: 42 }
+];
+
+  console.log(mapWith(getWith('oranges'))(inventories));
+
+#+END_SRC
+
+#+RESULTS:
+: [ 144, null, 12 ]
+
+*** mapWith(maybe(getWith Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const getWith = (attr) => (object) => object[attr];
+
+  const mapWith = (fn) => 
+    (list) => list.map(fn);
+
+  const maybe = (fn) =>
+    x => 
+      x != null ? fn(x) : x;
+
+  const inventories = [
+{ apples: 0, oranges: 144, eggs: 36 }, { apples: 240, oranges: null, eggs: 12 }, { apples: 24, oranges: 12, eggs: 42 }
+];
+
+  console.log(mapWith(maybe(getWith('oranges')))(inventories));
+
+#+END_SRC
+
+#+RESULTS:
+: [ 144, undefined, 12 ]
+
+*** what's in a name?
+    Why use a function instead of just using bracket notation for access? We can
+    manipulate functions in ways that we can't manipulate syntax. For example, do
+    you remember from flip that we can define mapWith from map?
+    
+    var mapWith = flip(map);
+
+    We can do the same thing with getWith, and that's why it's named so:
+    
+    var getWith = flip(get);
+
+** pluckWith
+   This pattern of combining mapWith and getWith is very frequent in JavvaScript
+   code. So much so, that we can take it up a notch.
+     pluckWith takes an attribute and returns a function that takes an array
+   of POJOs, maps over the array, returning each element.attribute
+*** pluckWith Recipe:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" tangle: yes
+
+  const pluckWith = (attr) => mapWith(getWith(attr));
+
+  // aka: const pluckWith = compose(mapWith, getWith);
+
+#+END_SRC
+
+*** on _.pluck
+    Libraries like Underscore provide pluck, the flipped version of pluckWith: a 
+    function that takes two arguments:
+                                      _.pluck(array, attr)
+      Our recipe is terser when you want to name a function. And, of course, if we
+    have pluck we can use flip to derive pluckWith: 
+                                         const pluckWith = flip(_pluck)
+
+** Deep Mapping
+   mapWith is an excellent tool, but from time to time you will find yourself
+   working with arrays that represent trees rather than lists. We could next some
+   mapWiths, but there's a better way. 
+*** deepMapWith Recipe:
+    
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :tangle yes
+
+  const deepMapWith = (fn) =>
+    function innerdeepMapWith (tree) {
+      return Array.prototype.map.call(tree, (element) =>
+        Array.isArray(element)
+          ? innerdeepMapWith(element)
+          : fn(element)
+      );
+    };
+
+#+END_SRC
+
+*** deepMapWith Example:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const report =
+  [ [ { price: 1.99, id: 1 },
+      { price: 4.99, id: 2 },
+      { price: 7.99, id: 3 },
+      { price: 1.99, id: 4 },
+      { price: 2.99, id: 5 },
+      { price: 6.99, id: 6 } ],
+    [ { price: 5.99, id: 21 },
+      { price: 1.99, id: 22 },
+      { price: 1.99, id: 23 },
+      { price: 1.99, id: 24 },
+      { price: 5.99, id: 25 } ],
+    [ { price: 7.99, id: 221 },
+      { price: 4.99, id: 222 },
+      { price: 7.99, id: 223 },
+      { price: 10.99, id: 224 },
+      { price: 9.99, id: 225 },
+      { price: 9.99, id: 226 } ] ];
+
+  const getWith = (attr) => (object) => object[attr];
+
+  const deepMapWith = (fn) =>
+    function innerdeepMapWith (tree) {
+      return Array.prototype.map.call(tree, (element) =>
+        Array.isArray(element)
+          ? innerdeepMapWith(element)
+          : fn(element)
+      );
+    };
+
+  console.log(deepMapWith(getWith('price'))(report));
+
+#+END_SRC
+
+#+RESULTS:
+: [ [ 1.99, 4.99, 7.99, 1.99, 2.99, 6.99 ],
+:   [ 5.99, 1.99, 1.99, 1.99, 5.99 ],
+:   [ 7.99, 4.99, 7.99, 10.99, 9.99, 9.99 ] ]
+
+
+* The Coffee Factory: "Object-Oriented Programming"
+  Programming with objects and classes began in Norway in the late 1960s with the
+  Simula programming language. Its creators, Ole-Johan Dahl and Kristen Nygaard,
+  did not use those words to describe what would eventually become the dominant
+  paradigm in computing.
+    A decade later, Dr. Alan Kay coined the phrase “Object-Oriented Programming”
+  along with co- creating the Smalltalk programming language. He has famously
+  said that to him, “OOP” was objects communicating with each other using messages,
+  and that other languages copied the things that didn’t matter from Smalltalk, and
+  ignored the things he thought did matter.
+    Since that time, languages have either bolted object-ish ideas on top of their
+  existing paradigms (like Object Pascal and OCaml), baked them in alongside
+  other paradigms (like JavaScript), or embraced objects wholeheartedly.
+    That being said, there really is no one definition of “object-oriented.” For one
+  thing, there is no one definition of “object.”
+** objects
+   Some languages, like Smalltalk and Ruby, treat an object as a fully
+   encapsulated entity. There is no access to an object’s private state, all you can
+   do is invoke one of its methods. Other languages, like Java, permit objects to
+   access each other’s state.
+     Some languages (again, like Java) have very rigid objects and classes, it is
+   impossible or awkward to add new methods or properties to objects at run time.
+   Some are flexible about adding methods and properties at run time. And yet other
+   languages treat objects as dictionaries, where properties and even methods can be
+   added, modified, or removed with abandon.
+     So we can see that the concept of “object” is flexible across languages.
+** classes
+   The concept of “class” is also flexible across languages. Object-oriented
+   languages do not uniformly agree on whether classes are necessary, much less how
+   they work. For example, The Common Lisp Object System defines behaviour with
+   classes, and it also defines behaviour with generic functions. The Self and
+   NewtonScript languages have prototypes instead of classes.
+     So some “OO” languages have objects, but not classes.
+     C++ has classes, but they are not “first-class entities.” You can’t assign a
+   class to a variable or pass it to a function. You can, however, manipulate the
+   constructors for classes, the functions that make new objects. But you can’t
+   manipulate those constructors to change the behaviour of objects that have
+   already been constructed, instance behaviour is early-bound by default.
+     Ruby has classes, and they’re first-class entities. You can ask an object for
+   its class, you can put a class in a variable, pass it to a method, or return it
+   from a method, just like every other entity in the language. Classes in Ruby and
+   Smalltalk even have their own class, they are instances of Class! Instance
+   behaviour is late-bound and open for extension.
+** constructors
+   Some languages allow programs to construct objects independently, others
+   (notably those that are heavily class-centric) require that objects always be
+   constructed by their classes. Some languages allow any function or method to be
+   used as a constructor, others require a special syntax or declaration for
+   constructors.
+** prototypes are not classes
+   Prototypical languages like Self and NewtonScript eschew classes altogether,
+   using prototypes to define common behaviour for a set of objects. The difference
+   between a prototype and a class is similar to the difference between a model home
+   and a blueprint for a home.
+     You can say to a builder, “make me a home just like that model home,” and the
+   builder makes you a home that has a lot in common with the model home. You then
+   decorate your home with additional personalization. But the model home is, itself,
+   a home. Although you may choose to keep it empty, you could in principle move a
+   family into it. This is different than asking a builder to make you a home based
+   on a blueprint. The blueprint may specify the features of the home, but it isn’t
+   a home. It could never be used as a home.
+     Prototypes are like model homes, and classes are like blueprints. Classes are
+   not like the objects they describe. 
+     Well, actually, the difference between prototypes and classes is like the
+   difference between model homes and blueprints. But prototypes are not like model
+   homes. In actual fact, the relationship between an object and its prototype is
+   one of delegation. So if a model home had a kitchen, and you asked the builder to
+   make you a home using the model as a prototype, you could customize your own
+   kitchen. But if you didn’t want to have your own custom kitchen, you would just
+   use the model home’s kitchen to do all your own cooking. The relationship between
+   a model home and a house is sometimes described as concatenative inheritance, and
+   JavaScript lets you do that too.
+** "object-oriented programming" can mean almost anything
+   From this whirlwind tour of “object-oriented programming,” we can see that the
+   ideas behind “object-oriented programming” have some common roots in the history
+   of programming languages, but each language implements its own particular flavour
+   in its own particular way.
+     Thus, when we talk about “objects” and “prototypes” and “classes” in JavaScript,
+   we’re talking about objects, prototypes, and classes as implemented in JavaScript.
+   And we must keep in mind that other languages can have a radically different take
+   on these ideas.
+** the JavaScript Approach 
+   JavaScript has objects, and by default, those objects are dictionaries. By
+   default, objects directly manipulate each other’s state. Methods can be added to,
+   or removed from objects at run time.
+     JavaScript has optional prototypes. Prototypes are objects in the same sense
+   that model homes are homes.
+     In JavaScript, object and array literals construct objects that delegate
+   behaviour to the standard library’s object prototype and array prototype,
+   respectively. JavaScript also supports using Ob- ject.create to construct objects
+   with or without a prototype, and new to construct objects using a constructor
+   function.
+     Using prototypes and constructor functions, JavaScript programs can emulate
+   many of the features of classes in other languages. JavaScript also has a class
+   keyword that provides syntactic sugar for writing constructor functions and
+   prototypes in a declarative fashion.
+     By default, a JavaScript class is a constructor composed with an object as its
+   associated prototype. This can be denoted with the class keyword, by working
+   with a function’s default .prototype property, or by composing functions and
+   objects independently.
+     JavaScript classes are constructors, but they are more than C++ constructors,
+   in that manipulation of their prototype extends or modifies the behaviour of the
+   instances they create. JavaScript classes take a minimalist approach to OO in
+   the same sense that JavaScript objects take a minimal approach to OO. For
+   example, behaviour can be mixed into an object, a prototype, or a class using
+   the exact same mechanism, because objects, prototypes, and a constructor’s
+   prototype are all objects that are open to extension.
+     In sum, JavaScript is not exactly like any other object-oriented programming
+   language, and its classes aren’t like any other language that features classes,
+   but then again, neither is any other object-oriented programming language, and
+   neither are any other classes.
+
+
+* Served by the Pot: Collections
+
+t
+

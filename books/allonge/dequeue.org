@@ -1,0 +1,68 @@
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const Queue = function () {
+    const queue = {
+      array : [],
+      head : 0,
+      tail : -1,
+      pushTail: (value) => queue.array[++queue.tail] = value,
+      pullHead: () => {
+        if (queue.tail >= queue.head) {
+          const value = queue.array[queue.head];
+          queue.array[queue.head] = undefined;
+          ++queue.head;
+          return value
+        }
+      },
+      isEmpty: () => queue.tail < queue.head,
+      expose: () => ({
+        array: queue.array,
+        head: queue.head,
+        tail: queue.tail
+      })
+    }
+    return queue;
+  };
+
+  const Dequeue = function () {
+    const deque = Queue();
+    let increment = 0;
+    return Object.assign(deque, {
+      size: () => deque.tail - deque.head + 1,
+      pullTail: () => {
+        if (!deque.isEmpty()) {
+          const value = deque.array[deque.tail];
+          deque.array[deque.tail] = undefined;
+          deque.tail -= 1;
+          return value;
+        }
+      },
+      pushHead: (value) => {
+        if (deque.head === 0) {
+          increment = deque.tail - deque.head;
+          for (let i = deque.tail; i >= deque.head; i--) {
+            deque.array[i + increment] = deque.array[i];
+          }
+          deque.tail += increment;
+          deque.head += increment;
+        }
+        return deque.array[deque.head -= 1] = value;
+      }
+    })
+  };
+
+  const dequeue = Dequeue();
+  dequeue.pushTail("Hello");
+  dequeue.pushTail("JavaScript");
+  dequeue.pushHead("Allongé");
+  console.log(dequeue.pullTail());
+  console.log(dequeue.pullHead());
+  console.log(dequeue.pullTail());
+
+#+END_SRC
+
+#+RESULTS:
+: JavaScript
+: Allongé
+: Hello
+
