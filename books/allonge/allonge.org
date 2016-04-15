@@ -60,7 +60,6 @@ Javascript Allonge Notepad
 ** values are expressions
 *** but not all expressions are values
 *** when an expression includes an operator, it is not a value
-*** TODO but every expression evaluates to a value?
 ** values and identity
 *** we test whether two values are identical with === and !== 
 ** value types
@@ -355,10 +354,10 @@ const callLast = (fn, rarg) =>
 };
 #+END_SRC
 
-*** TODO let author know that ...rest as a function param causes error
+*** TODO ...rest as a function param causes error
 *** Example:
 
-#+BEGIN_SRC js
+#+BEGIN_SRC js cmd: "org-babel-node --presets es2015" :results output
 const callFirst = (fn, larg) =>
   function (rest) {
   return fn.call(this, larg, rest);
@@ -375,30 +374,34 @@ console.log(heliosSaysHello('Celine'));
 
 #+RESULTS:
 : Hello, Celine, my name is Helios
-: undefined
 
 *** note that an application of callLast could be named sayHelloToCeline
 *** Gathering and Spreading allow partial application for many args
 *** TODO Recipe:
 
-#+BEGIN_SRC js tangle: yes
- const callLeft = (fn, args) =>
+#+BEGIN_SRC js cmd: "org-babel-node --presets es2015" tangle: yes
+ const callLeft = (fn, ...args) =>
   (remainingArgs) =>
-    fn(args, remainingArgs);
+    fn(...args, ...remainingArgs);
 
- const callRight = (fn, args) =>
+ const callRight = (fn, ...args) =>
   (remainingArgs) =>
     fn(remainingArgs, args);
+
+const greet = (me, you) =>
+  `Hello, ${you}, my name is ${me}`;
+ 
+const heliosSaysHello = callLeft(greet, 'Helios');
+
+console.log(heliosSaysHello('Celine'));
 
 #+END_SRC
 
 #+RESULTS:
-: undefined
 
 *** play with these examples in the repl
 *** design a function with three arguments and partially apply them
 *** try a function with four arguments
-
 
 ** Unary
 *** Definition
@@ -1856,7 +1859,7 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
- const copy = (node, head = null, tail = null) => { 
+  const copy = (node, head = null, tail = null) => { 
     if (node === EMPTY) {
       return head;
     } else if (tail === null) {
@@ -1871,27 +1874,46 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
     }
   }
 
-  const rest = ({first, rest}) => copy(rest);
-
+  const first = ({first, rest}) => first;
   const EMPTY = {first: {}, rest: {}};
+  
+  const reverse = (node, delayed = EMPTY) => 
+    node === EMPTY
+      ? delayed
+      : reverse(rest(node), { first: first(node), rest: delayed });
+
+  const mapWith = (fn, node, delayed = EMPTY) =>
+    node === EMPTY
+      ? reverse(delayed)
+      : mapWith(fn, rest(node), { first: fn(first(node)), rest: delayed });
+
+  const at = (index, list) =>
+    index === 0
+      ? first(list)
+      : at(index - 1, rest(list));
 
   const set = (index, value, list, originalList = list) =>
     index === 0
       ? (list.first = value, originalList)
       : set(index - 1, value, rest(list), originalList)
+ 
+  const rest = ({first, rest}) => copy(rest);
 
   const parentList = { first: 1, rest: { first: 2, rest: { first: 3, rest: EMPTY }}};
   const childList = rest(parentList);
 
-  set(2, "three", parentList); // this doesn't seem to do anything?
+  const newParentList = set(2, "three", parentList);
   set(0, "two", childList);
 
   console.log(parentList);
+  console.log(newParentList);
   console.log(childList);
 
 #+END_SRC
 
 #+RESULTS:
+: { first: 1,
+:   rest: { first: 2, rest: { first: 3, rest: [Object] } } }
 : { first: 1,
 :   rest: { first: 2, rest: { first: 3, rest: [Object] } } }
 : { first: 'two',
@@ -2066,7 +2088,7 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
 
 **** TODO we can represent out state with a pojo (err obj not declar in text):
 
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
   const arraySum = (array) => {
     let done;
@@ -2091,7 +2113,6 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
 
 #+RESULTS:
 : 55
-: undefined
 
 **** we can extract the state keeping bits into an iterator function:
 
@@ -3611,9 +3632,6 @@ console.log(stack.isEmpty());
 #+END_SRC
 
 #+RESULTS:
-: Hello
-: Hello
-: undefined
 
 ** What Context Applies When We Call a Function
    In this and that, we learned that when a function is denoted using the function
@@ -3866,7 +3884,7 @@ console.log(stack.isEmpty());
    must be carefully managed for the case whenseveral objects share the same method
    through the mechanism of the prototype or through sharing references to the same
    function.
-*** TODO a-contextual function decorator Example:
+*** DONE a-contextual function decorator Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
@@ -4007,7 +4025,7 @@ const plus1 = x => x + 1;
 
 #+END_SRC
 
-*** TODO memo and fibonacci Example:
+*** DONE memo and fibonacci Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
@@ -4033,7 +4051,7 @@ const plus1 = x => x + 1;
 #+RESULTS:
 : 1134903170
 
-*** TODO memoizing recursive functions (ackward language, functional expressions?)
+*** DONE memoizing recursive functions (ackward language, functional expressions?)
     We deliberately picked a recursive function to memoize, because it demonstrates
     a pitfall when combining decorators with named function expressions. In the code
     example below, the function bound to the name fibonacci in the other environment
@@ -4378,4 +4396,23 @@ console.log(fibonacci(45)); // its fast!
 * Served by the Pot: Collections
 
 t
+
+
+
+#+BEGIN_SRC js :results output
+
+var exec = require('child_process').exec;
+console.log('Node Version ' + process.version);
+console.log('Node Path: ' + process.env.NODE_PATH);
+exec("org-babel-node --version", function (error, stdout, stderr) {
+console.log('Babel Version: ' + stdout);
+});
+
+#+END_SRC
+
+#+RESULTS:
+: Node Version v4.1.1
+: Node Path: /Users/fugalfunkster/code/org/node_modules:
+: Babel Version: 6.7.5
+: 
 
