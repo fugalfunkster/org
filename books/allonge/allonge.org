@@ -1906,14 +1906,11 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
   set(0, "two", childList);
 
   console.log(parentList);
-  console.log(newParentList);
   console.log(childList);
 
 #+END_SRC
 
 #+RESULTS:
-: { first: 1,
-:   rest: { first: 2, rest: { first: 3, rest: [Object] } } }
 : { first: 1,
 :   rest: { first: 2, rest: { first: 3, rest: [Object] } } }
 : { first: 'two',
@@ -2086,7 +2083,7 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
 : 55
 : undefined
 
-**** TODO we can represent out state with a pojo (err obj not declar in text):
+**** we can represent out state with a pojo (err obj not declar in text):
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
@@ -2319,7 +2316,7 @@ const fibIter = () => {
       array.push(eachIteration.value);
     }
     return array;
-  }
+   }
 
   console.log(toArray(take(fibIter(), 5)));
 
@@ -2328,17 +2325,17 @@ const fibIter = () => {
 #+RESULTS:
 | 0 | 1 | 1 | 2 | 3 |
 
-**** TODO take with filterIteratorWith
+**** take with filterIteratorWith
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
-  const callLeft = (fn, ...args) =>
-    (...remainingArgs) =>
-      fn(...args, ...remainingArgs);
+  const callLeft = (fn, args) =>
+    (remainingArgs) =>
+      fn(args, remainingArgs);
 
   const NumberIterator = (number = 0) =>
     () =>
-      ({ done: false, value: number++ })
+      ({done: false, value: number++ })
 
   const take = (iterator, numberToTake) => {
     let count = 0;
@@ -2353,8 +2350,9 @@ const fibIter = () => {
 
   const filterIteratorWith = (fn, iterator) =>
     () => {
+      let done, value;
       do {
-        const {done, value} = iterator();
+        ({done, value} = iterator()); // can't be const, redeclaration
       } while (!done && !fn(value));
       return {done, value};
     }
@@ -2383,377 +2381,9 @@ const fibIter = () => {
 #+END_SRC
 
 #+RESULTS:
+: [ 1, 9, 25, 49, 81 ]
 
-*** Bonus
-    Many programmers coming to JavaScript from other languages are familiar with
-    three canonical operations on collections: folding, filtering, and finding.
-**** lazy find example:
-     
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
-
-  const firstInIteration = (fn, iterator) =>
-    take(filterIteratorWith(fn, iterator), 1);
-
-#+END_SRC
-
-**** eager find example
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
-
-  const firstInArray = (fn, array) =>
-    array.filter(fn)[0];
-
-#+END_SRC
-
-*** caveat - iterators are stateful
-    Please note that unlike most of the other functions discusses in this book,
-    iterators are stateful!. There are some important implications of stateful
-    functions. One is that while functions like take(...) appear to create an
-    entirely new iterator, in reality they return a decorated reference to the
-    original iterator. So as you traverse the new decorator, you're changing the
-    state of the original!
-      Once you pass an iterator to a function, you can expect that you no longer
-    "own" that iterator, and that its state has either changes or will change.
-
-
-** Making Data Out Of Functions
-*** The kestrel and the idiot
-    A constant function is a function that alwaus returns the same thing, no
-    matter what you give it. The kestrel, of K is a function that makes constant
-    functions. The identity function is a function that evaluates to whatever
-    parameter you pass it.
-**** The kestrel
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
-
- const K = (x) => (y) => x;
-
- const fortyTwo = K(42);
-
- console.log(fortyTwo(6));
-
-#+END_SRC
-
-#+RESULTS:
-: 42
-: undefined
-
-**** The idiot bird
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
-
- const I = (x) => x;
-
- const fortyTwo = I(42);
-
- console.log(fortyTwo);
-
-
-#+END_SRC
-
-#+RESULTS:
-: 42
-: undefined
-
-**** K(I)
-     Given two values, we can say that K always returns the first value.
-     If the first value is I, then K(I) will always return the second value.
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
-
-  const K = (x) => (y) => x;
-  const I = (x) => x;
-
-  const first = K;
-  const second = K(I);
-
-  console.log(first("primus")("secundus"));
-  console.log(second("primus")("secundus"));
-
-#+END_SRC
-
-#+RESULTS:
-: primus
-: secundus
-
-*** ignorance and backwardness
-    Our K(I) example marks a different approach to functions that access data. We
-    are used to functions knowing about the data they access (for example a
-    function that destructures its arguments must know whether the arguments are
-    arrays or objects.
-      But the first and second we built out of K and I do not attempt to know about
-    their data, they just faithfully return it in the same form it was provided. In
-    order to use them with a two-element array, we'd need to have a piece of code
-    that calls some code.
-      We can create an intermediary function that delays the application of
-    arguments to our first and second selector functions. This creates a data
-    structure that is itself a function. Instead of passing our data to K or K(I),
-    we can pass K or K(I) to our data structure function. This is exactly backwards
-    of the way we write functions that operate on data.
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
-
-  const K = (x) => (y) => x;
-  const I = (x) => x;
-
-  const first = K;
-  const second = K(I);
-
-  const latin = (selector) => selector("primus")("secundus");
-
-  console.log(latin(first));
-  console.log(latin(second));
-
-#+END_SRC
-
-#+RESULTS:
-: primus
-: secundus
-
-*** the vireo
-    Now that we have represented our data structure  as a function that accepts a
-    selector and returns data, we can create a function that returns data
-    structures.
-      Our data structure is the function:
-        (selector) => selector("primus")("secundus")
-    To create such a data structure, we need to extract the data into parameters:
-        (first, second) => (selector) => selector(first)(second)
-    We can also curry the above so that each combinator only recieves one parameter
-        (first) => (second) => (selector) => selector(first)(second)
-    This is the V combinator, the vireo!
-        (x) => (y) => (z) => z(x)(y)
-    Armed with nothing more than K, I, and V, we can make a data structure that
-    holds two values, the cons cell of LISP and the node of a linked list.
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
-
-  const K = (x) => (y) => x;
-  const I = (x) => x;
-  const V = (x) => (y) => (z) => z(x)(y);
-
-  const first = K;
-  const second = K(I);
-  const pair = V;
-
-  const latin = pair("primus")("secundus");
-  
-  console.log(latin(first));
-  console.log(latin(second));
-
-#+END_SRC
-
-#+RESULTS:
-: primus
-: secundus
-
-*** lists with functions as data
-    We can use pure functions to represent a linked list. In fact, anything that
-    can be computed can be computed using functions and nothing else.
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
-
-  const K = (x) => (y) => x;
-  const I = (x) => x;
-  const V = (x) => (y) => (z) => z(x)(y);
-  const EMPTY = (() => {});
-
-  const first = K;
-  const rest = K(I);
-  const pair = V;
-  
-  const l123 = pair(1)(pair(2)(pair(3)(EMPTY)));
-
-  const length = (aPair) =>
-    aPair === EMPTY
-      ? 0
-      : 1 + length(aPair(rest));
-
-  const reverse = (aPair, delayed = EMPTY) =>
-    aPair === EMPTY
-      ? delayed
-      : reverse(aPair(rest), pair(aPair(first))(delayed));
-
-  const mapWith = (fn, aPair, delayed = EMPTY) =>
-    aPair === EMPTY
-      ? reverse(delayed)
-      : mapWith(fn, aPair(rest), pair(fn(aPair(first)))(delayed));
-
-  const doubled = mapWith((x) => x * 2, l123)
-
-  console.log(l123(first), l123(rest)(first), (l123(rest)(rest)(first)));
-
-  console.log(length(l123));
-
-  console.log(doubled(first), doubled(rest)(first), doubled(rest)(rest)(first));
-
-#+END_SRC
-
-#+RESULTS:
-: 1 2 3
-: 3
-: 2 4 6
-
-*** say "please" - the ternary operator
-    We keep using the same pattern in our functions: aPair === EMPTY ? this : that.
-    This follows the philosophy we used with data structures: The function doing
-    the work inspects the data structure.
-      We can reverse this: Instead of asking a pair if it is empty and then
-    deciding what to do, we can ask the pair to do it for us.
-**** length and print with function based ternary Example:
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
-
-  const K = (x) => (y) => x;
-  const I = (x) => x;
-  const V = (x) => (y) => (z) => z(x)(y);
-
-  const pairFirst = K;
-  const pairRest = K(I);
-  const pair = V;
- 
-  const first = (list) => 
-    list(
-      () => "ERROR: Can't take first of an empty list",
-      (aPair) => aPair(pairFirst)
-    );
-
-  const rest  = (list) => 
-    list(
-      () => "ERROR: Can't take first of an empty list",
-      (aPair) => aPair(pairRest)
-    );
-
-  const length = (list) => 
-    list(
-      () => 0,
-      (aPair) => 1 + length(aPair(pairRest))
-    );
-  
-  const print = (list) =>
-    list(
-      () => "EMPTYLIST",
-      (aPair) => `${aPair(pairFirst)} ${print(aPair(pairRest))}`
-    );
-
-  const EMPTYLIST = (whenEmpty, unlessEmpty) => whenEmpty();
-
-  const node = (x) =>
-    (y) =>
-      (whenEmpty, unlessEmpty) =>
-        unlessEmpty(pair(x)(y));
-
-  const l123 = node(1)(node(2)(node(3)(EMPTYLIST)));
-
-  console.log(print(l123));
-  console.log(length(l123));
-
-#+END_SRC
-
-#+RESULTS:
-: 1 2 3 EMPTYLIST
-: 3
-
-**** reverse and map with function based ternary Example:
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
-
-  const K = (x) => (y) => x;
-  const I = (x) => x;
-  const V = (x) => (y) => (z) => z(x)(y);
-
-  const pairFirst = K;
-  const pairRest = K(I);
-  const pair = V;
- 
-  const first = (list) => 
-    list(() => "ERROR: Can't take first of an empty list",
-         (aPair) => aPair(pairFirst));
-
-  const rest  = (list) => 
-    list(() => "ERROR: Can't take first of an empty list",
-         (aPair) => aPair(pairRest));
-  
-  const print = (list) =>
-    list(() => "EMPTYLIST",
-         (aPair) => `${aPair(pairFirst)} ${print(aPair(pairRest))}`);
-
-  const EMPTYLIST = (whenEmpty, unlessEmpty) => whenEmpty();
-
-  const node = (x) =>
-    (y) =>
-      (whenEmpty, unlessEmpty) =>
-        unlessEmpty(pair(x)(y));
-
-  const l123 = node(1)(node(2)(node(3)(EMPTYLIST)));
-
-  const reverse = (list, delayed = EMPTYLIST) => 
-    list(() => delayed, (aPair) =>
-      reverse(aPair(pairRest), node(aPair(pairFirst))(delayed)));
-
-  const mapWith = (fn, list, delayed = EMPTYLIST) =>
-    list(() => reverse(delayed),
-         (aPair) => mapWith(fn, aPair(pairRest),
-                    node(fn(aPair(pairFirst)))(delayed)));
-
-  console.log(print(reverse(l123)));
-  console.log(print(mapWith(x => x * x, reverse(l123))));
-
-#+END_SRC
-
-#+RESULTS:
-: 3 2 1 EMPTYLIST
-: 9 4 1 EMPTYLIST
-
-*** functions are not the real point
-    Functions are a fundamental building block of computation. They are axioms of
-    combinatory logic, and can be used to compute anything that JavaScript can
-    compute.
-      But knowing how to make a linked list out of functions is not really
-    necessary for the working programmer. Knowing that it can be done, on the
-    other hand, is very important to understanding computer science.
-*** a return to backward thinking
-    To make pairs work, we did things backwards: We passed the first and rest
-    functions to the pair, and the pair called our function. As it happened, the
-    pair was composed by the Vireo (or V combinator): (x) => (y) => (z) => z(x)(y).
-      But we cound have done something completely different. We could have written
-    a pair that stored its elements in a POJO, or an array. All we know is that we
-    can pass the pair function a function of our own, and it will be called with
-    the elements of the pair. 
-      The exact implementation of a pair is hidden from the code that uses a pair.
-    The code that uses the data doesn't reach in and touch it: The code that uses
-    the data provides some code and asks the data to do something with it. 
-
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
-
-  const length = (list) => 
-   list(() => 0,
-        (aPair) => 1 + length(aPair(pairRest))
-   );
-
-  const length = (node, delayed = 0) =>
-    node === EMPTY
-      ? delayed
-      : length(node.rest, delayed + 1);
-
-#+END_SRC
-
-    These two functions to compute the length of a list are fundamentally
-    different. The line "node === empty" presumes that there is one canonical
-    empty list value, and that you can compare things to it with the === operator.
-    The function holds information about the structure of lists.
-      Having a list know itself whether it is empty hides implementation
-    information from the code that uses lists. This is a fundamental principle of
-    good design. It is a tenent of Object-Oriented Programming, but it is not
-    exclusive to OOP: We can and should design data structures to hide
-    implementation information from the code that use them, whether we are working
-    with functions, objects, or both.
-      There are many tools for hiding implementation inforamtion, and we have now
-    seen two particularly powerful patterns:
-      1. Instead of directly manipulating part of an entity, pass it a function and
-         have it call our function with the part we want.
-      2. Instead of testing some property of an entity and making a choide of our
-         own with ?: or if, pass the entity the work we want done for each case
-         and let it test itself.
+#+RESULTS         
 
 
 * Recipes with Data
@@ -3473,7 +3103,7 @@ console.log(stack.isEmpty());
    must be passed an environment on which to operate. The drawback to such an
    approach is that we have to make sure we're always passing the currect queue in
    every time we invoke a function...
-**** TODO (const in for loop) copyOfQueue Example:
+**** (const in for loop) copyOfQueue Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" results: output
 
@@ -3569,7 +3199,7 @@ console.log(stack.isEmpty());
 : Hello
 : undefined
 
-*** TODO what's all this ?
+*** TODO what's all this ? (my own words)
     When we write a function expression using the compact method syntax (or use the
     function keyword instead of the fat arrow), and then invoke that function using
     . notation, JavaScript binds the "receiver" of the "method invocation" to the
@@ -3583,7 +3213,7 @@ console.log(stack.isEmpty());
     it were an argument.
       This allows us to copy arrays. By getting rid of the closure and taking
     advantage of -this-, we have functions that are more easily portable between
-    objects, and the code is simples as wel. This is very important. Being able to
+    objects, and the code is simpler as well. This is very important. Being able to
     copy objects is an example of a larger concern: Being able to share functions
     between objects. That's how classes work. That's how extending objects works.
     Being able to share functions means being able to compose and reuse
@@ -3656,7 +3286,7 @@ console.log(stack.isEmpty());
 #+RESULTS:
 : true
 
-*** TODO it's all about the way the function is called
+*** it's all about the way the function is called
     JavaScript programmers talk about functions having a "context" when called.
     -this- is bound to the context. The important thing to understand is that the
     context for a function being called is set by the way the function is called,
@@ -3794,24 +3424,25 @@ console.log(stack.isEmpty());
 : 3
 : 3
 
-*** TODO contextualization
+*** contextualization
     The apply and call methods both take a context as the first parameter, and
     function arguments as the remaining parameters. We can write a utilitiy that
     partially applies the .apply method.
       Our contextualize function returns a new function that calls a function with
     a fixed context.
-**** TODO un-travesty 209
+**** travesty
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
   const a = [1,2,3];
-  const accrete = (x) => a.concat(x);
+  const accrete = a.concat;
   console.log(accrete([4,5]));
+  // doesn't work... we get the result of concatenating an array [4,5]
+  // onto an array containing the global environment....
 
 #+END_SRC
 
 #+RESULTS:
-: [ 1, 2, 3, 4, 5 ]
 
 **** contextualize Example:
 
@@ -4415,4 +4046,5 @@ console.log('Babel Version: ' + stdout);
 : Node Path: /Users/fugalfunkster/code/org/node_modules:
 : Babel Version: 6.7.5
 : 
+
 
