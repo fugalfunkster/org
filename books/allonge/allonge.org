@@ -56,7 +56,6 @@ Javascript Allonge Notepad
 
  
 * Prelude: Values and Expressions over Coffee
-
 ** values are expressions
 *** but not all expressions are values
 *** when an expression includes an operator, it is not a value
@@ -71,7 +70,6 @@ Javascript Allonge Notepad
 
 
 * A Rich Aroma: Basic Numbers
-
 ** literal: notation for representing a fixed value in source code
 *** nums are double-precision floating point 
 *** binary is base 2, some fractions base 10
@@ -82,7 +80,6 @@ Javascript Allonge Notepad
 
     
 * The First Sip: Basic Functions
- 
 ** As little as possible about Functions
 *** functions are values that represent computations to be performed
 ***** Ex:
@@ -147,7 +144,6 @@ Javascript Allonge Notepad
 
 *** functions are reference types
 
-
 ** Ah. I'd like to Have an Argument, Please.
 *** a quick summary of functions and bodies
 **** Expressions consist either of representations of values,
@@ -175,7 +171,6 @@ Javascript Allonge Notepad
 **** when js binds a value-type to a name it makes a copy of the value
 **** when js binds a reference-type to a name, it uses a reference
 
-
 ** Closures and Scope
 *** Free Variables - those not bound within the function
 **** bound with a var/let/const or via an argument
@@ -202,7 +197,6 @@ Javascript Allonge Notepad
 *** the global environment
 **** many programmers enclose each javascript file within a function expression
 ***** (() => { . . . })();
-
 
 ** That Constant Coffee Craving
 *** Immediately Invoked Function Expressions
@@ -249,7 +243,6 @@ Javascript Allonge Notepad
 **** although we can rebind named parameters/arguments to a different value
 **** javascript does not permit us to rebind const-s
 
-
 ** Naming Functions
 *** the function keyword
 **** can have a name! - and should for code clarity and debugging
@@ -272,7 +265,6 @@ Javascript Allonge Notepad
 **** of course, functions declarations often do occur inside other function blocks
 **** see for example, the note on the global environment in Closures and Scope
 
-
 ** Combinators and Function Decorators
 *** higher order functions
 **** any function that takes a function as argument, returns functions, or both
@@ -293,7 +285,6 @@ Javascript Allonge Notepad
 ***** and returns a function (a variation of the argument function)
 **** function decorators need not be pure
 
-     
 ** Building Blocks
 *** composition
 **** Ex: const cookAndEat = (food) => eat(cook(food));
@@ -302,7 +293,6 @@ Javascript Allonge Notepad
 **** When a function takes multiple arguments, we need not apply all arguments
 ***** if we can return a function with arguments pre-supplied
 **** orthogonal (involving right angles) to composition
-
 
 ** Magic Names
 *** this
@@ -317,7 +307,6 @@ Javascript Allonge Notepad
 **** If the function only represents an expression to be computed, use fat arrows
 **** The distinction helps sort out the syntatic differences re: magic words
      
-
 ** Summary
 *** Functions are values that can be part of expressions, returned from other functions
 *** Functions are reference values
@@ -338,7 +327,6 @@ Javascript Allonge Notepad
 
 
 * Recipies with Basic Functions
-
 ** Partial Application
 *** Recipe: 
 
@@ -440,7 +428,6 @@ console.log(['1', '2', '3'].map(unary(parseInt)));
 *** And when you call parseInt with map, the index (an argument of map) is 
 *** interpreted as a radix.
 
-
 ** Tap
 
 *** the K combinator (Kestrel)
@@ -471,13 +458,14 @@ const tap = (value) =>
      value
    );
 
-tap('espresso')(it => {
+console.log(tap('espresso')(it => {
   console.log(`Our drink is '${it}'`);
-});
+}));
 #+END_SRC
 
 #+RESULTS:
-: Out drink is 'espresso'
+: Our drink is 'espresso'
+: espresso
 : undefined
 
 *** Recipe: w/o 'currying'
@@ -512,7 +500,6 @@ const tap = (value, fn) => {
 
 *** a poor mans debugger, and useful for working with object and instance methods
 
-
 ** Maybe
 *** sometimes you want to vet a value before you pass it to a function
 **** in JS you might: value !== null && value !== void 0
@@ -539,8 +526,6 @@ const maybe = (fun) =>
 : undefined
 
 *** note: plays nicely with instance methods (foreshadowing)
-
-
 ** Once
 *** Ensures that a function can only be called once
 *** Recipe:
@@ -588,7 +573,6 @@ console.log(askedOnABlindDate());
 
 *** there's a closure here, to manage the internal state of 'done'
 *** see stateful method decorators... (foreshadowing)
-
 
 ** Left-Variadic Functions
 *** Variadic functions accept a variable number of arguments.
@@ -700,7 +684,6 @@ console.log(last);
 : [ 'why', 'hello', 'there', 'little' ]
 : droid
 
-     
 ** Compose and Pipeline
 *** The B Combinator (again)
 *** Recipe:
@@ -817,7 +800,6 @@ console.log(setter(2));
 
 
 * Composing and Decomposing Data
-
 ** Arrays and Destructuring Arguments
 *** Arrays are ordered collections of elements
 **** Arrays are reference types
@@ -871,7 +853,7 @@ console.log(setter(2));
 ***** We can also extract arrays from an array, for example extracting the head
 ***** and the remaining elements of the array (the "rest")
 ****** Recall our right and left variadiac functions
-**** Example:
+**** Gathering Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
   const [car, ...cdr] = [1, 2, 3, 4, 5];
@@ -883,7 +865,7 @@ console.log(setter(2));
 : 1
 : [ 2, 3, 4, 5 ]
 **** Spreading (assembling an array with an array)
-**** Example:
+**** Spreading Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
   const oneTwoThree = ['one', 'two', 'three'];
@@ -901,7 +883,7 @@ console.log(setter(2));
 ***** JavaScript, however, simply assigns undefined when destructuring fails
 ***** Example:
 
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
   const [thistle, that, theOther] = ['duck feet', 'tiger tail'];
   console.log(theOther);
 
@@ -913,7 +895,6 @@ console.log(setter(2));
 #+RESULTS:
 : undefined
 : []
-: undefined
 
 **** Destructuring and Return Values
 ***** Some languages support multiple return values, ie: a function can return
@@ -955,7 +936,6 @@ console.log(setter(2));
 
 #+RESULTS:
 : [ 'why', [ 'hello', 'there', 'little', 'droid' ] ]
-
 
 ** Self-Similarity
 *** What is a list?
@@ -1060,6 +1040,7 @@ console.log(flatten(['foo', [3, 4, []]]));
 #+END_SRC
 
 #+RESULTS:
+| 1 | 4 | 9 | 16 |
 
 *** Fold-ing:
     With the exception of the length example earlier, all of our examples have used
@@ -1122,7 +1103,6 @@ console.log(flatten(['foo', [3, 4, []]]));
 #+RESULTS:
 : [ 1, 4, 9, 16, 25 ]
 
-  
 ** Tail Calls (and Default Arguments)
 *** Stack Overflow 
     Our implementations of mapWith and foldWith consume memory proportional
@@ -1172,7 +1152,6 @@ console.log(flatten(['foo', [3, 4, []]]));
 **** Length Example:
     
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
-
 
   const lengthTCO = ([first, ...rest], counter) => 
     first === undefined
@@ -1260,7 +1239,7 @@ console.log(flatten(['foo', [3, 4, []]]));
 : [ 1, 4, 9, 16, 25 ]
 
 *** Defaults and Destructuring
-    We saw that destructuring parameters works the same was as destructuring
+    We saw that destructuring parameters works the same way as destructuring
     assignment. Now we learn that we can create a default parameter argument. We
     can also create a default destructuring assignment!
 **** Example:
@@ -1278,7 +1257,6 @@ console.log(flatten(['foo', [3, 4, []]]));
 #+RESULTS:
 : one . two
 : primus . secundus
-
 
 ** Garbage, Garbage Everywhere
 *** Waste
@@ -1350,7 +1328,6 @@ console.log(flatten(['foo', [3, 4, []]]));
       1. Iteration over the list
       2. Retrieving data by index
       3. Changing elements in place
-
 
 ** Plain Old JavaScript Objects
 *** Dictionaries
@@ -1600,7 +1577,6 @@ console.log(flatten(['foo', [3, 4, []]]));
      values. Whereas out naive array algorithm created 2n superflous arrays and
      copied n^2 superfluous values.
 
-
 ** Mutation
    In JavaScript, almost every type of value can mutate: their binding stays the
    same, but their structure changes. For now, we'll focus on mutations with arrays
@@ -1720,7 +1696,6 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
 :      rest: { first: 0.3333333333333333, rest: [Object] } } }
 : undefined
 
-
 ** Reassignment
    JavaScript does not permit us to rebind a name that has been bound with const.
    But, we can shadow it by using const to declare a new binding with a new
@@ -1741,7 +1716,6 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
     const and let first appeared in ES6. var's function scope caused confusion for
     those who didn't understand lexical scope. 
 **** see YDKJS discussion of let and var in for loops
-
 
 ** Copy on Write
 *** On Arrays and Linked Lists
@@ -1972,9 +1946,7 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
     conservative approach to mutation, and implement a strategy like copy-on-read
     or copy-on-write.
     
-
 ** Tortises, Hares, and Teleporting Turtles
-
 
 ** Functional Iterators
 *** Fold revisited
