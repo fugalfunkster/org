@@ -2,7 +2,7 @@
 
 NOTES
 
-* cmd
+* command line
 
 ** Navigation
 
@@ -20,54 +20,198 @@ NOTES
 **** refers to the working dir
 
 
-*** Exploring the Filesystem
-**** ls
-***** list directory contents
+** Exploring the Filesystem
+*** ls
+**** list directory contents
 
 
 * emacs
-
-** Workflow Abstract
-
+** Chords by Package
 *** emacs
-**** IDO
-**** SMEX
-**** neotree
-*** Org Mode
-**** Doing Stuff
-**** Notes
-*** Shell
-**** Init Scripts
-**** NPM
-**** jscs
-**** multiple-eshells
-**** exec-path-from-shell
-*** Editing
-**** Web Mode?
-***** JS Modes
+**** files
+***** C-x b *name* (switch to buffer named name)
+***** C-x C-f *name* (open file named name)
+***** C-x C-s (save buffer to file)
+***** C-x C-w (save buffer to file as)
+**** windows and frames
+***** C-x 0 (delete current window)
+***** C-x 1 (delete all windows except the window containing the point)
+***** C-x 2 (split horizontal)
+***** C-x 3 (split vertical)
+***** C-x o (cycle cursor to next window)
+***** C-M-v (scroll other window)
+**** movement
+***** M-< (top of document)
+***** M-v (top of screen)
+***** C-p (previous line)
+***** C-l (center on cursor)
+***** C-n (next line)
+***** C-v (bottom of screen)
+***** M-> (bottom of document)
+***** C-a (beginning of line)
+***** M-b (back one word)
+***** C-b (back one character)
+***** C-f (forward one character)
+***** M-f (forward one word)
+***** C-e (end of line)
+***** M-g g (go to line)
+***** C-s (regex search)
+***** C-r (regex search reverse)
+**** editing
+***** killing
+****** C-SPACE (set mark)
+****** C-w (kill region)
+****** C-k (kill line)
+****** M-d (kill word)
+****** M-w (copy region to kill ring)
+****** C-y (yank)
+****** M-y (yank, then cycle through kill ring)
+****** C-_ (undo)
+**** eshell
+***** M-x eshell
+***** C-u M-x eshell
+**** modes
+***** M-x (set major mode)
+****** clojure-mode
 ****** js2-mode
-****** js2-refactor?
-***** JS autocompletion
-***** JS templating
-****** yasnippet
-***** JS checking
-****** flycheck
-******* jslint
-******* jscs
-***** HTML, CSS, jsX, Sass Support
-**** Key Chords
-***** Navigation
-***** Kill Ring
-***** Undo Tree
-**** Tricks
-***** emmet-mode
-***** expand-region
-***** multiple-cursors
+****** org-mode
+****** mit-scheme
+***** C-h m (describe mode)
+**** package manager
+***** M-x package-list-packages
+***** M-x package-refresh-contents
+***** M-x package-install
+*** js2-mode
+**** C-c C-e (hide element)
+**** C-c C-s (show element)
+*** js2-refactor
+*** REPLs
+**** M-x nodejs-repl
+**** M-x run-sheme
 *** Magit
-*** nodejs-repl
-
+**** M-x magit-init (create repo)
+**** M-x magit-status
+**** TAB (expand file contents)
+**** RET (edit file)
+**** s (stage)
+**** S (stage all)
+**** u (unstage)
+**** U (unstage all)
+**** k (discard file)
+**** i (add to gitignore)
+**** g (refresh)
+**** c (commit popup)
+**** P (push popup)
+**** F (fetch/pull popup)
+**** l (log popup)
+**** n (next line)
+**** p (previous line)
+**** M-n (forward sibling)
+**** M-p (backward sibling)
+**** q (bury buffer)
+**** e (ediff message)
+***** n (next)
+***** A / B 
+**** C-h k <key> (describe function bound to <key>)
+*** Emmet Mode
+**** a (element, default div)
+**** . (class)
+**** # (id)
+**** / (empty tags)
+**** + (siblings)
+**** > (child)
+**** ^ (climb up)
+**** * (multiply)
+**** $ (numbering, ex: ul>li$*3
+**** {} (text)
+*** IDO Mode
+**** C-f / C-b (toggle IDO off after C-x C-f / C-x C-b
+*** neoTree
+**** n (next)
+**** p (previous)
+**** H (show hidden)
+**** g (refresh)
+**** A (min/max)
+**** TAB/SPC/RET (fold/unfold)
+**** C-c C-n (create a file (or dir if name ends with /)
+**** C-c C-d (delete a file or dir)
+**** C-c C-r (rename a file or dir)
+**** C-c C-c (change root dir)
+*** org-mode
+**** navigation
+***** C-c C-n (next heading)
+***** C-c C-p (previous heading)
+***** C-c C-u (up to higher level heading)
+***** C-c C-f (next heading at same level)
+***** C-c C-b (previous heading at same level)
+**** Headings
+***** M-S-arrow (move/promote/demote current subtree)
+***** M-RET (create bullet at same level of indentation)
+***** C-x n s (narrow to subtree)
+***** C-x n w (widen to full tree)
+**** TODO!
+***** C-C C-t (cycle todo ring)
+***** M-S-RET (insert new TODO @ same level)
+*** flycheck
+**** C-c ! l (list all errors)
+**** C-c ! n (goto next error)
+**** C-c ! p (goto previous error)
+**** C-c ! v (verify flychecker works)
+**** C-c ! x (disable flycheck in buffer)
+**** if in node, paste at top: /* jslint node: true */
+*** yasnippet
+**** http://capitaomorte.github.io/yasnippet/index.html
+*** expand regions
+    lets you send code to REPL
+**** C-= (select/expand)
+**** TAB (format)
+** Magit (Howard's talk through 8:21)
+*** Magit popups allow you to toggle switches, options, etc. 
+**** default options (C-t)
+**** actions complete the popup process
+**** popups
+***** Commit (c)
+****** commit w/o switches or options (c)
+       this opens two windows, one one side, the commit message
+       on the other side the diff for staged files
+****** to submit commit message (C-c C-c)
+***** Push (P)
+***** Pull / Fetch (F)
+***** Log (l l)
+*** Create Repository (M-x magit-init) -- git init
+*** Main interface (M-x magit-status) -- git status
+**** Head: local branch info
+**** Upstream: primary remote
+**** Files can be Untracked, Unstaged, Staged
+***** refresh (g)
+**** When the cursor is over a particular file
+***** stage file (s)
+***** stage All (S)
+***** discard file (k)
+***** add to gitignore (i)
+***** expand file contents (<tab>)
+****** this lets you see the file contents
+****** (<return>) on a particular line allows you to edit that file
+**** Commit Popup (c c)
+**** Push Popup (P P)
+**** Status message ($)
+**** Pull /Fetch Popup (F F)
+**** log (l)
+*** Movement
+**** next line (n)
+**** previous line (p)
+**** forward sibling (M-n)
+**** backward sibling (M-p)
+**** bury buffer (q)
+*** ediff message (e)
+**** next (first) diff (n)
+**** A or B for what you want to keep
+**** Or edit C
+*** On Merging and rebasing
+**** gerrit requires a straight history, no twigs
+**** to achieve this you must rebase, which magit makes easy
 ** Packages
-B*** currently installed
+*** currently installed
 **** async
 ***** http://elpa.gnu.org/packages/async.html
 **** auto-complete
@@ -150,172 +294,137 @@ B*** currently installed
 **** with-editor
 ***** https://github.com/magit/with-editor
 **** TODO yasnippet
+***** http://capitaomorte.github.io/yasnippet/index.html
 ***** https://www.youtube.com/watch?v=-4O-ZYjQxks
 ***** http://github.com/capitaomorte/yasnippet
-** Magit (Howard's talk through 8:21)
-*** Magit popups allow you to toggle switches, options, etc. 
-**** default options (C-t)
-**** actions complete the popup process
-**** popups
-***** Commit (c)
-****** commit w/o switches or options (c)
-       this opens two windows, one one side, the commit message
-       on the other side the diff for staged files
-****** to submit commit message (C-c C-c)
-***** Push (P)
-***** Pull / Fetch (F)
-***** Log (l l)
-*** Create Repository (M-x magit-init) -- git init
-*** Main interface (M-x magit-status) -- git status
-**** Head: local branch info
-**** Upstream: primary remote
-**** Files can be Untracked, Unstaged, Staged
-***** refresh (g)
-**** When the cursor is over a particular file
-***** stage file (s)
-***** stage All (S)
-***** discard file (k)
-***** add to gitignore (i)
-***** expand file contents (<tab>)
-****** this lets you see the file contents
-****** (<return>) on a particular line allows you to edit that file
-**** Commit Popup (c c)
-**** Push Popup (P P)
-**** Status message ($)
-**** Pull /Fetch Popup (F F)
-**** log (l)
-*** Movement
-**** next line (n)
-**** previous line (p)
-**** forward sibling (M-n)
-**** backward sibling (M-p)
-**** bury buffer (q)
-*** ediff message (e)
-**** next (first) diff (n)
-**** A or B for what you want to keep
-**** Or edit C
-*** On Merging and rebasing
-**** gerrit requires a straight history, no twigs
-**** to achieve this you must rebase, which magit makes easy
+** Workflow Abstract
 
-** Figure it out
+*** emacs
+**** IDO
+**** SMEX
+**** neotree
+*** Org Mode
+**** Doing Stuff
+**** Notes
+*** Shell
+**** Init Scripts
+**** NPM
+**** jscs
+**** multiple-eshells
+**** exec-path-from-shell
+*** Editing
+**** Web Mode?
+***** JS Modes
+****** js2-mode
+****** js2-refactor?
+***** JS autocompletion
+***** JS templating
+****** yasnippet
+***** JS checking
+****** flycheck
+******* jslint
+******* jscs
+***** HTML, CSS, jsX, Sass Support
+**** Key Chords
+***** Navigation
+***** Kill Ring
+***** Undo Tree
+**** Tricks
+***** emmet-mode
+***** expand-region
+***** multiple-cursors
+*** Magit
+*** nodejs-repl
 
 
-* HtDP
+* Books
+** HtDP
 
-** I. Processing Simple Forms of Data
+*** I. Processing Simple Forms of Data
  
-*** Programming Languages
-**** Data
-***** Compound Data is composed of Atomic Data
-**** Operations
-***** Programs are composed of Primitive Operations
+**** Programming Languages
+***** Data
+****** Compound Data is composed of Atomic Data
+***** Operations
+****** Programs are composed of Primitive Operations
 
 
-*** Primitive Operations in Scheme
-  - ( + - * / sqrt sqr expt remainder log sin tan )
+**** Primitive Operations in Scheme
+   - ( + - * / sqrt sqr expt remainder log sin tan )
 
 
-*** Errors
-  - Syntax Errors
-  - Runtime-Errors
-  - Logical Errors
+**** Errors
+   - Syntax Errors
+   - Runtime-Errors
+   - Logical Errors
 
 
-*** THE DESIGN RECIPE
+**** THE DESIGN RECIPE
   
-**** An Example:
+***** An Example:
 
-  ;; CONTRACT: area-of-ring : number number -> number
-  ;; PURPOSE: to compute the area of a ring whose radius is OUTER and whose hole has a radius of INNER
-  ;; EXAMPLE: (area-of ring 5 3) should produce 50.24
-  ;; DEFINITION [refines the header]
-     (define (area-of-ring outer inner)
-       (- (area-of-disk outer)
-          (area-of-disk inner)))
-  ;; TESTS:
-     (area-of-ring 5 3)
-  ;; expected value
-  50.24
+   ;; CONTRACT: area-of-ring : number number -> number
+   ;; PURPOSE: to compute the area of a ring whose radius is OUTER and whose hole has a radius of INNER
+   ;; EXAMPLE: (area-of ring 5 3) should produce 50.24
+   ;; DEFINITION [refines the header]
+      (define (area-of-ring outer inner)
+        (- (area-of-disk outer)
+           (area-of-disk inner)))
+   ;; TESTS:
+      (area-of-ring 5 3)
+   ;; expected value
+   50.24
 
-**** Problem Analysis & Data Definition
+***** Problem Analysis & Data Definition
 
-***** DATA ANALYSIS: After we determine that a problem statement deals with distinct situations, we must identify all of them. 
-**** Understand the Program's Purpose 
+****** DATA ANALYSIS: After we determine that a problem statement deals with distinct situations, we must identify all of them. 
+***** Understand the Program's Purpose 
 
-***** CONTRACT: What a program consumes and produces - Input and Output
-***** PURPOSE STATEMENT: A brief comment of what the program is to compute  
-***** HEADER: Restates the programs name and gives each input a distinct name
+****** CONTRACT: What a program consumes and produces - Input and Output
+****** PURPOSE STATEMENT: A brief comment of what the program is to compute  
+****** HEADER: Restates the programs name and gives each input a distinct name
 
-**** Examples - Characterize the I/O relationship with examples
+***** Examples - Characterize the I/O relationship with examples
 
-***** Before creating the program body, make up examples; what would a given invocation of the header return?
-***** This forces us to think about the computational process, which will help when developing the function body
+****** Before creating the program body, make up examples; what would a given invocation of the header return?
+****** This forces us to think about the computational process, which will help when developing the function body
 
-**** Template - Function Template
-**** Body - Define the Function
+***** Template - Function Template
+***** Body - Define the Function
 
-***** Compute the answer from the parameters using primitive operations or operations that we must define
-***** Domain Knowledge - you must understand the domain knowledge for the problem to describe the process
+****** Compute the answer from the parameters using primitive operations or operations that we must define
+****** Domain Knowledge - you must understand the domain knowledge for the problem to describe the process
 
-**** Tests - Discover Errors
-***** Ensure that the program computes the expected outputs from the examples
-
-
-*** Function Composition 
-**** Formulate auxiliary function definitions for every dependency between quantities mentioned in the problem statement or discovered with example calculations.
-**** Define constants instead of repeating them - DRY
+***** Tests - Discover Errors
+****** Ensure that the program computes the expected outputs from the examples
 
 
-*** Conditionals and Relational Operators
-
-**** (if / cond / else / = / < / > / and / or)
-
-
-*** of 'symbols and "strings"
-
-**** 'symbols
-
-***** 'symbols are atomic data
-***** Scheme provides only one basic operation on symbols: symbol=? - A comparison operation
-***** symbol=? consumes two symbols and produces true only if the two symbols are identical
-
-**** "strings
-
-***** "strings" are compound data
-***** string=? consumes two strings and produces true only if the two strings are identical
+**** Function Composition 
+***** Formulate auxiliary function definitions for every dependency between quantities mentioned in the problem statement or discovered with example calculations.
+***** Define constants instead of repeating them - DRY
 
 
-* SICP
+**** Conditionals and Relational Operators
+
+***** (if / cond / else / = / < / > / and / or)
+
+
+**** of 'symbols and "strings"
+
+***** 'symbols
+
+****** 'symbols are atomic data
+****** Scheme provides only one basic operation on symbols: symbol=? - A comparison operation
+****** symbol=? consumes two symbols and produces true only if the two symbols are identical
+
+***** "strings
+
+****** "strings" are compound data
+****** string=? consumes two strings and produces true only if the two strings are identical
+
     
-
 * Video Courses
-  
 ** Pluralsight Courses
-
-*** TODO jQuery-free Javascript
-
-
-*** WAIT Creating JS Modules with Browserify
-
-**** Getting Started
-***** Browserify is a module loader modeled after Node.js' module loader
-***** node.js implemented CommonJS style modules
-***** browserify produces a bundled file for deployment to browsers
-
-
-**** Defining and Requiring Modules
-***** Install browserify via npm (browserify is itself a node module)
-***** $ browserify --help
-***** Defining Modules:
-****** each module is a javascript file
-****** expose functions as properties of the exports object, ex exports.say = function...
-****** (aka module.exports) if you want to set an object = to module.exports
-****** browserify wraps the file in a function before it is executed
-****** on invocation, the module will return the exports object
-***** Requiring 3rd Party Modules
-
-
 *** OPEN Intro to Node.js (Paul O'Fallon)
 **** Accessing the Local System
 
@@ -378,14 +487,27 @@ B*** currently installed
 
 
 **** Scaling Your Node Application
-
-
 *** TODO Building Web Apps with Node.js (Kevin Whinnery)
-
-
+*** TODO jQuery-free Javascript
 *** TODO node application patterns
+*** WAIT Creating JS Modules with Browserify
+
+**** Getting Started
+***** Browserify is a module loader modeled after Node.js' module loader
+***** node.js implemented CommonJS style modules
+***** browserify produces a bundled file for deployment to browsers
 
 
+**** Defining and Requiring Modules
+***** Install browserify via npm (browserify is itself a node module)
+***** $ browserify --help
+***** Defining Modules:
+****** each module is a javascript file
+****** expose functions as properties of the exports object, ex exports.say = function...
+****** (aka module.exports) if you want to set an object = to module.exports
+****** browserify wraps the file in a function before it is executed
+****** on invocation, the module will return the exports object
+***** Requiring 3rd Party Modules
 *** Tools for REST APIs
 
 **** Collaborative Design
@@ -406,12 +528,9 @@ B*** currently installed
 
 **** Monito
 
-
 *** Interactive Data Vis with D3.js
 
-
 *** Javascript Templating with Handlebars
-
 
 *** DONE Intro to NPM as a build tool
 
@@ -553,7 +672,6 @@ B*** currently installed
   - push to github
   - deploy to heroku
   - open to verify success
-
 
 *** DONE Git Fundamentals
 
@@ -864,24 +982,17 @@ B*** currently installed
 ****** git branch -r
 ****** git push :<branch-name-to-delete>
 
-
 *** DONE RESTful Web Services with Node.js and Express (see c9 for notes)
-
 
 *** DONE Building Web Applications with node.js and Express 4.0 (see c9 for notes)
 
-
 *** DONE Advanced Javascript (no notes)
-
 
 *** DONE Meet Emacs (no notes)
 
-
 *** DONE Javascript Objects and Prototypes (no notes)
 
-
 *** DONE Real Time Web w/ Node
-
 **** HTMl5 Facades
      - Facade is a thin layer of abstraction over an API
        a layer between the native API and your production code
@@ -889,7 +1000,6 @@ B*** currently installed
        permits a single change in the facade, instead of changes throught your code
        ex: don't use canvas directly, use a facade
      - h5ive gethub repo
-
 ***** Storage API
      - local storage and session storage
      - permit persistent storage on client's browser
@@ -921,7 +1031,6 @@ B*** currently installed
        - you can listen to in the browser, and any other browsers attached to the store
        - cross-window messaging
 
-
 ***** Canvas API
       - annoying things
         - two different coordinate systems
@@ -942,14 +1051,12 @@ B*** currently installed
           - clockwise in one is countercloskwise in the other
           - facade fixes this
 
-
 ***** getUserMedia
       - allowes us to use JS to get user media streams
       - take the stream and set it as the sorce element to a video tag,
       - and that lets us display the stream to the user
       - h5.userMedia - supersimple facade
       - same object we wound transport across WebRTC to stream to another user
-
 
 ***** requestAnimationFrame
       - not just about animation
@@ -961,7 +1068,6 @@ B*** currently installed
         schedule the repaint
       - helps ensure fast transitions occur correctly
       - h5.animationFrame - facade
-
 
 ***** Web Sockets
       - websockets
@@ -980,9 +1086,7 @@ B*** currently installed
       - it's different to scale, limited number of server ports, etc.
       - what's next?
 
-      
 **** Node.js
-
 ***** Node.js Observations
 ****** What does node do well?
 ******* really good at communication: i/o
@@ -993,7 +1097,6 @@ B*** currently installed
 ******* the front end needs control, but the back end has it deeply embedded
 ******* ex: validation rules, templating, url writing, data formatting, routing, etc.
 
-
 ***** Hello World
 ****** There's no environment, ther's no dom, no browser, no doctype, etc.
 ****** how does node do i/o? where does that capability come from?
@@ -1002,7 +1105,6 @@ B*** currently installed
 ****** Node provides a hosting env. for V8
 ****** the C wrapper handles this
 ****** we could also do stdout;
-
 
 ***** Accepting Input
 ****** what if we wanted to accept input from the cmd line
@@ -1021,11 +1123,9 @@ B*** currently installed
      - NOTE you can add a header to a .js file that tells the terminal to run the file with node
        then you can directly invoke that filename in bash, as if it were a shell script
 
-
 ***** Adding Help
 ****** our own print help
 
-     
 ***** File IO and Modules
 ****** node has a standard, built-in module for reading files: fs
 ******* fs.fileReadSync(filename)
@@ -1033,7 +1133,6 @@ B*** currently installed
 ******* an efficient binary representation of our data
 ******* we can parse our buffer with .toString()
      
-
 ***** Asynchronous File IO
 ****** most natural path is the module pattern and the require system, 
 ******* vs. prototypal inheritance & classes
@@ -1047,7 +1146,6 @@ B*** currently installed
 ******* for some reason setTimeout will execute a function passed to it by reference right away?
 ******* why is there a difference when it's wrapped in a function?
 
-
 ***** Asynquence
 ****** We can express our callbacks as a sequence
 ******* We must require both asynquence and asynquence-contrib
@@ -1056,7 +1154,6 @@ B*** currently installed
 ******* the then, done, val, and or methods are from asynquence
 ******* later
 ******* when I call hello.say I pass it a file name and I either get the content or an error.
-
 
 ***** Creating NPM Modules
 ****** we need to do configuration outsied of our file, we need a package.json file
@@ -1069,11 +1166,9 @@ B*** currently installed
 ******* what's require going to pull in?
 ****** dependencies: what and what version?
 
-
 ***** Publishing NPM Modules
 ****** npm publish and use the name of the module! easy
 ****** then we can npm install and require('name')
-
 
 ***** Extending Modules
 ****** Browserify will include necessary functionality so that a node module will run in the browser
@@ -1082,7 +1177,6 @@ B*** currently installed
 ****** UMD: Universal Module Definition
 *******  one module format, available in all environments!
 
-
 ***** Grunt and Gulp
 ****** build process tools
 ****** make files, bash scripts
@@ -1090,7 +1184,6 @@ B*** currently installed
 ****** gulp is more node-like, no config, 
 ****** npm!
 
-       
 ***** File Streams (3b)
 ****** Streams are an abstraction on IO, using buffers, which are highly memory efficient
 ******* req and res are input and output streams
@@ -1103,13 +1196,11 @@ B*** currently installed
 ******* when the stream is finished, it will emit an 'end' event
 ******* node has a default buffer size, each chunk is this buffer size, so there might be many data events emitted
 
-
 ***** Piping Streams
 ****** we can pipe the output of one stream into the input of another stream
 ****** our code creates a new file!
 ****** checkout node stream playground @ www.nodestreams.com
 ****** 
-
 
 ***** Node as a Webserver (4.server.js)
 ****** node is at it's best when its serving http requests
@@ -1122,7 +1213,6 @@ B*** currently installed
 ****** we can also install the "forever" module
 ******* a process manager, if the process dies, it restarts it immediately
 
-
 ***** Handling Requests
 ****** we can control our response headers
 ******* res.writeHead(<statusCode>, <content-type>)
@@ -1130,15 +1220,12 @@ B*** currently installed
 ****** this allows us to rool our own routing, url requests, etc.
 ****** we can do all of the query string manip that express provides with RegExs
 
-     
 ***** Simulating Asyncronicity (5)
 ****** let's simulate some async!
 ****** putting in some setTimeouts
 
-
 ***** Adding Asyquence
 ****** using ASQ
-
 
 ***** Serving Static Files (6)
 ****** node-static
@@ -1151,14 +1238,12 @@ B*** currently installed
 ****** the second regex makes that number translate to num.html, ex: /6 becomes 6.html
 ****** static fileserver gzips stuff, sometimes automatically
 
-
 **** socket.io
 ***** sockets!
 ****** initial http request, handshake, and upgrade to persistent connection
 ****** you want to be using SSL on your websockets
 ****** socket.io is an extension on websockets
 ****** we're going to use 0.9.16 version
-
 
 *** DONE Intro to Mongoose for node.js and MongoDB
 **** Validation
