@@ -237,74 +237,93 @@ ACTION
 
 
 * Horizons
-** Scheme
-*** Little Schemer / Seasoned Schemer
-*** HtDP [5/43]
-   I. Processing Simple Forms of Data
-- [X] Students, Teachers, Computers
-- [X] Numbers, Expressions, Simple Programs
-- [X] Programs are Function Plus Variable Definitions
-- [X] Conditional Expressions and Functions
-- [X] Symbolic Information
-- [ ] Compound Data, Part 1: Structures
-- [ ] The Varieties of Data
-- [ ] Intermezzo 1: Syntax and Semantics
-II. Processing Arbitrarily Large Data
-- [ ] Compound Data, Part 2: Lists
-- [ ] More on Processing Lists
-- [ ] Natural Numbers
-- [ ] Composing Functions, Revisited Again
-- [ ] Intermezzo 2: List Abbreviations
-III. More on Processing Arbitrarily Large Data
-- [ ] More Self-referential Data Definitions
-- [ ] Mutually Referential data Definitions
-- [ ] Development through Iterative Refinement
-- [ ] Processing Two Complex Pieces of Data
-- [ ] Intermezzo 3: Local Definitions and Lexical Scope
-IV. Abstracting Designs
-- [ ] Similarities in Definitions
-- [ ] Functions as Values
-- [ ] Designing Abstractions from Examples
-- [ ] Designing Abstractions with First-Class Functions
-- [ ] Mathematical Examples
-- [ ] Intermezzo 4: Defining Functions on the Fly
-V. Generative Recursion
-- [ ] A New Form of Recursion
-- [ ] Designing Algorithms
-- [ ] Variations on a Theme
-- [ ] Algorithms that Backtrack
-- [ ] Intermezzo 5: The Cost of Computing and Vectors
-VI. Accumulating Knowledge
-- [ ] The Loss of Knowledge
-- [ ] Designing Accumulator-Style Functions
-- [ ] More Uses of Accumulation
-- [ ] Intermezzo 6: The Nature of Inexact Numbers
-VII. Changing the State of Variables
-- [ ] Memory for Functions
-- [ ] Assignment to Variables
-- [ ] Designating Functions with Memory
-- [ ] Examples of Memory Usage
-- [ ] Intermezzo 7: The Final Syntax and Semantics
-VIII.
-- [ ] Encapsulation
-- [ ] Mutable Structures
-- [ ] Designing Functions that Change Structures
-- [ ] Equality
-- [ ] Changing Structures, Vectors, and Objects
-Epilogue
+** Three Months of Healthy Fun
+*** Cooking
+**** Salads
+**** Soups
+**** Summer Vegetables
+**** Meats
+**** Fruits
+**** Carbs
+*** Exercise and Massage
+**** Yard Projects
+**** Cardio
+**** Massage
+*** Computer Science
+**** Apps
+***** Soil Test
+***** Index Cards
+***** SNAP
+**** Scheme
+***** Little Schemer / Seasoned Schemer
+***** HtDP [5/43]
+     I. Processing Simple Forms of Data
+  - [X] Students, Teachers, Computers
+  - [X] Numbers, Expressions, Simple Programs
+  - [X] Programs are Function Plus Variable Definitions
+  - [X] Conditional Expressions and Functions
+  - [X] Symbolic Information
+  - [ ] Compound Data, Part 1: Structures
+  - [ ] The Varieties of Data
+  - [ ] Intermezzo 1: Syntax and Semantics
+  II. Processing Arbitrarily Large Data
+  - [ ] Compound Data, Part 2: Lists
+  - [ ] More on Processing Lists
+  - [ ] Natural Numbers
+  - [ ] Composing Functions, Revisited Again
+  - [ ] Intermezzo 2: List Abbreviations
+  III. More on Processing Arbitrarily Large Data
+  - [ ] More Self-referential Data Definitions
+  - [ ] Mutually Referential data Definitions
+  - [ ] Development through Iterative Refinement
+  - [ ] Processing Two Complex Pieces of Data
+  - [ ] Intermezzo 3: Local Definitions and Lexical Scope
+  IV. Abstracting Designs
+  - [ ] Similarities in Definitions
+  - [ ] Functions as Values
+  - [ ] Designing Abstractions from Examples
+  - [ ] Designing Abstractions with First-Class Functions
+  - [ ] Mathematical Examples
+  - [ ] Intermezzo 4: Defining Functions on the Fly
+  V. Generative Recursion
+  - [ ] A New Form of Recursion
+  - [ ] Designing Algorithms
+  - [ ] Variations on a Theme
+  - [ ] Algorithms that Backtrack
+  - [ ] Intermezzo 5: The Cost of Computing and Vectors
+  VI. Accumulating Knowledge
+  - [ ] The Loss of Knowledge
+  - [ ] Designing Accumulator-Style Functions
+  - [ ] More Uses of Accumulation
+  - [ ] Intermezzo 6: The Nature of Inexact Numbers
+  VII. Changing the State of Variables
+  - [ ] Memory for Functions
+  - [ ] Assignment to Variables
+  - [ ] Designating Functions with Memory
+  - [ ] Examples of Memory Usage
+  - [ ] Intermezzo 7: The Final Syntax and Semantics
+  VIII.
+  - [ ] Encapsulation
+  - [ ] Mutable Structures
+  - [ ] Designing Functions that Change Structures
+  - [ ] Equality
+  - [ ] Changing Structures, Vectors, and Objects
+  Epilogue
 
-*** SICP
+***** SICP
 
-** CompSci
-*** 6.01   - Intro to EE and CompSci
-*** 18.01  - Single Variable Calculus
-*** 6.042  - Mathematics for Computer Science
-*** 6.006  - Intro to Algorithms
-*** 18.02  - MultiVariable Calculus
-*** 6.046  - Algorithms
-*** 18.310 - Principles of Discrete Applied Math
+**** CompSci
+***** 6.01   - Intro to EE and CompSci
+***** 18.01  - Single Variable Calculus
+***** 6.042  - Mathematics for Computer Science
+***** 6.006  - Intro to Algorithms
+***** 18.02  - MultiVariable Calculus
+***** 6.046  - Algorithms
+***** 18.310 - Principles of Discrete Applied Math
 
-** Clojure
-*** Living Clojure
-*** Clojure for the Brave and True
+**** Clojure
+***** Living Clojure
+***** Clojure for the Brave and True
+*** Nebraska Trip
+*** Seattle Trip
     
