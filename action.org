@@ -6,12 +6,13 @@ ACTION
 *** learning tooling
 **** TODO magit
 ***** branching and merging
+**** TODO React
 **** TODO docker
 ***** docker.el?
 ***** dockerfile.mode
 *** JavaScript Allonge 
 **** TODO Review First Half
-*** YDKJS 
+*** YDKJS
 **** TODO Types and Grammar - Ch. 5 Grammar
 *** JavaScript on the High Seas
 **** TODO Outline
