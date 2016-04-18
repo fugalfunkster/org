@@ -10,7 +10,7 @@ ACTION
 ***** docker.el?
 ***** dockerfile.mode
 *** JavaScript Allonge 
-**** TODO Review First Third
+**** TODO Review First Half
 *** YDKJS 
 **** TODO Types and Grammar - Ch. 5 Grammar
 *** JavaScript on the High Seas
