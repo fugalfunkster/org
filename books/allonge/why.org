@@ -1,5 +1,38 @@
+fugalfunkster's guide to the Y combinator
+
+* What is a combinator?
   
- The Y combinator:
+**** Technical Definition
+    
+     "A combinator is a higher-order function that uses only function application
+     and earlier defined combinators to define a result from its arguments"
+
+     -- https://en.wikipedia.org/wiki/Combinatory_logic
+
+
+**** Looser Definition
+
+     Combinators are higher-order pure functions.
+     Combinators accept functions as arguments.
+     Combinators return a function.
+     
+
+* The Y combinator:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  const Y = (f) =>
+  ( x => f(v => x(x)(v)) )
+  ( x => f(v => x(x)(v)) );
+
+#+END_SRC
+
+
+* An example of its use:
+
+  We can pass the Y combinator a function to compute the nth factorial.
+  Note that our factorial function returns a function that returns a ternary
+  expression, a control flow operator used for linear recursion.
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
@@ -19,123 +52,192 @@
 #+RESULTS:
 : 120
 
-  Here's my guide to the y-combinator!
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+function fac (n) { 
+  return n === 0 ? 1 : n * fac(n - 1);
+}
+
+console.log(fac(5));
+#+END_SRC
+
+#+RESULTS:
+: 120
+
+
+* Substutition
+
+** begin
+
+ #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+   const Y = (f) =>
+   ( x => f(v => x(x)(v)) )
+   ( x => f(v => x(x)(v)) );
+
+   const factorial = Y(function (fac) { 
+     return function (n) {
+       return (n == 0 ? 1 : n * fac(n - 1)); }
+     });
+
+   console.log(factorial(5));
+
+ #+END_SRC
+
+ #+RESULTS:
+ : 120
+
+
+** TODO Substitute the function body for the function call within the console.log statement
+
+ #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output :tangle yes
+
+   // Let the substitution begin!
+   // First I'll substitute function where its called.
+
+   const Y = (f) =>
+   ( x => f(v => x(x)(v)) )
+   ( x => f(v => x(x)(v)) );
+
+   console.log((Y(function (fac) {
+     return function (n) {
+       return (n == 0 ? 1 : n * fac(n - 1)); }
+     }))(5));
+
+ #+END_SRC
+
+ #+RESULTS:
+ : 120
+
+
+** Substitute in the Y combinator
+
+ #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+  
+   console.log((((f) =>
+     ( x => f(v => x(x)(v)) )
+     ( x => f(v => x(x)(v)) ))
+    (function (fac) {
+     return function (n) {
+       return (n == 0 ? 1 : n * fac(n - 1)); }
+     }))(5));
+
+ #+END_SRC
+
+ #+RESULTS:
+ : 120
+
+
+** Pass the factorial function into the combinator:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
-  // First I present the Y combinator:
-
-  const Y = (f) =>
-  ( x => f(v => x(x)(v)) )
-  ( x => f(v => x(x)(v)) );
-
-  // Next, a function to pass to the Y combinator
-  // It's nothing fancy, just a function to compute factorials
-  // It's interesting to note that it returns a function
-  // that returns a ternary expression, reminiscent of linear recursion
-
-  const factorial = Y(function (fac) { 
-    return function (n) {
-      return (n == 0 ? 1 : n * fac(n - 1)); }
-    });
-
-  // 
-
-  factorial(5);
-
-  // Let the substitution begin!
-  // First I'll substitute function where its called.
-
-  (Y(function (fac) {
-    return function (n) {
-      return (n == 0 ? 1 : n * fac(n - 1)); }
-    }))(5)
-
-  // Now, to substitute in the Y combinator
-  
-  (((f) =>
-    ( x => f(v => x(x)(v)) )
-    ( x => f(v => x(x)(v)) ))
-   (function (fac) {
-    return function (n) {
-      return (n == 0 ? 1 : n * fac(n - 1)); }
-    }))(5)
-
- // My, my, my, my, my. what a mess
- // lets apply our function to the combinator
- // and see if we can't clean this up
-
-  (( x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
-   ( x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); }))(5)
+   console.log((( x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
+                ( x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); }))(5));
    
- // Well, it does look more orderly. But I fear we'll just make a mess of it again.
- // Now to apply the inner functions to each other.
- // Hopefully this will return a function to which we can apply 5...
+#+END_SRC
 
-  (n => { 
-    return (
-      n == 0
-        ? 1 
-        : n * (v => (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
-                    (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(v)
-              )(n - 1)
-    ); 
-  })(5)
-
-  // Ok, I just ran the above and got the same answer.
-  // So, I'm going to proceed as if I haven't make any substitution errors.
-  // Let's begin to evaluate our function!
-  // First, we pass 5 to our function, binding 5 to n
-  // n !== 0 so we're left with
+#+RESULTS:
+: 120
 
 
-  (5 * (v => (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
-             (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(v)
-       )(4));
+** Substitute X for X : ternary time
 
-  // AKA
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
-  (5 * ((x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
-        (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(4)));
-
-  // Can you see where this is going?
-  // If the ternary embedded in the function didn't tip you off...
-  // This should definitely smell like linear recursion at this point!
-  // We've got a starting value that looks like it's the beginning of a deffered computation;
-  // And we're about to apply its decrement to a function that looks suspiciously similar to 
-  // the Y combinator that we started with.
-
-  // Enough talking. Substitute!
- 
-  (5 * (n => {
-         return (
-           n == 0
-             ? 1
-             : n * (v => (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
-                         (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
-                         (v)
-                   )(n - 1)
-         );
-       })(4));
-
-  // 4 !== 0
-  // Again! Again!
-
-  (5 * 4 * (v => (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
-                 (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(v)
-           )(3));
-
-  // Simpler! Simpler!
-
-  (5 * 4 * ((x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
-            (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(3)));
-
-  // Whew! That's tiring. I'm going to stop here. I think we all get the idea...
-  // So what's going on, there seems to be dinstinct behavior for three pieces
-  // First, X has no interaction with our factorial function. 
-  // Second, V serves as a means to pass the decrement of the original input to
-  // the next recursion. In this way it balances n => in our factorial function
-  // Third, the factorial function 
-
+  console.log((n => { 
+                return (
+                  n == 0
+                    ? 1 
+                    : n * (v => (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
+                                (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(v)
+                          )(n - 1)
+                ); 
+               })(5));
 
 #+END_SRC
+
+#+RESULTS:
+: 120
+
+
+** Building Up and back to the begin:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  console.log(
+    (5 * (v => (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
+               (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(v)
+         )(4))
+  );
+
+#+END_SRC
+
+#+RESULTS:
+: 120
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  console.log(
+    (5 * ((x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
+          (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(4)))
+  );
+
+#+END_SRC
+
+#+RESULTS:
+: 120
+
+
+** Ternary time:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+ 
+   (5 * (n => {
+          return (
+            n == 0
+              ? 1
+              : n * (v => (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
+                          (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
+                          (v)
+                    )(n - 1)
+          );
+        })(4));
+
+#+END_SRC
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+   // 4 !== 0
+   // Again! Again!
+
+   (5 * 4 * (v => (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
+                  (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(v)
+            )(3));
+
+#+END_SRC
+
+
+** Recursion revealed:
+
+#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
+  console.log(
+    (5 * 4 * ((x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })
+              (x => n => { return (n == 0 ? 1 : n * (v => x(x)(v))(n - 1)); })(3)))
+  );
+
+#+END_SRC
+
+#+RESULTS:
+: 120
+
+
+
+* What I learned
+
+  - Anything you can compute, you can compute with functions.
+  - The ternary operator controls the flow of the recursive process.
+  - The final return is an evaluation of prior calls to the factorial function.
+
+

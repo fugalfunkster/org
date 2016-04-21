@@ -2354,62 +2354,61 @@ const fibIter = () => {
 #+RESULTS         
 
 ** Making Data Out Of Functions
-*** The kestrel and the idiot
-*** backwardness
+*** The kestrel and the idiot : backwardness
     A constant function is a function that alwaus returns the same thing, no
-    matter what you give it. The kestrel, of K is a function that makes constant
-    functions. The identity function is a function that evaluates to whatever
-    parameter you pass it.
-*** The kestrel:
+    matter what you give it. The kestrel - aka the K combinator - is a function
+    that makes constant functions. The Idiot Bird - aka the identity function or 
+    I combinator - is a function that evaluates to whatever parameter you pass it.
+**** The Kestrel:
 
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+ #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
- const K = (x) => (y) => x;
+  const K = (x) => (y) => x;
 
- const fortyTwo = K(42);
+  const fortyTwo = K(42);
 
- console.log(fortyTwo(6));
+  console.log(fortyTwo(6));
 
-#+END_SRC
+ #+END_SRC
 
-#+RESULTS:
-: 42
+ #+RESULTS:
+ : 42
 
-*** The idiot bird
+**** The Idiot Bird
 
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+ #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
- const I = (x) => x;
+  const I = (x) => x;
 
- const fortyTwo = I(42);
+  const fortyTwo = I(42);
 
- console.log(fortyTwo);
+  console.log(fortyTwo);
 
-#+END_SRC
+ #+END_SRC
 
-#+RESULTS:
-: 42
+ #+RESULTS:
+ : 42
 
-*** K(I)
-    Given two values, we can say that K always returns the first value. If the
-    first value is I, then K(I) will always return the second value.
+**** K(I)
+     Given two values, we can say that K always returns the first value. If the
+     first value is I, then K(I) will always return the second value.
 
-#+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+ #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
 
- const K = (x) => (y) => x;
- const I = (x) => x;
+  const K = (x) => (y) => x;
+  const I = (x) => x;
 
- const first = K;
- const second = K(I);
+  const first = K;
+  const second = K(I);
 
- console.log(first("primus")("secundus"));
- console.log(second("primus")("secundus"));
+  console.log(first("primus")("secundus"));
+  console.log(second("primus")("secundus"));
 
-#+END_SRC
+ #+END_SRC
 
-#+RESULTS:
-: primus
-: secundus
+ #+RESULTS:
+ : primus
+ : secundus
 
 *** ignorance and backwardness
     Our K(I) example marks a different approach to functions that access data.
@@ -3196,7 +3195,6 @@ console.log(stack.isEmpty());
     }
 };
 
-
   const Model = function (initialAttributes) {
     let attributes = shallowCopy(initialAttributes || {});
     const redoStack = Stack();
@@ -3399,7 +3397,7 @@ console.log(stack.isEmpty());
 : Allongé
 : Hello
 
-** This and That
+** this and That
    If we use Object.assign to copy a queue, it will return a queue that references
    the state of the original queue. Because objects hold values by reference, the
    queue copy has access to the same environment enclosed during the creation of the

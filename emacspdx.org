@@ -1,4 +1,4 @@
-* Org Mode Meetup
+* March - Org Mode Presentation
 ** Literate Programming
 *** each code block has a typical syntax
 #+BEGIN_SRC 
@@ -251,4 +251,52 @@ fifth
 ** misc features
 *** calling blocks with different parameters
 *** embedded results
-*** 
+
+
+* April
+** emacs Help! (will)
+   You can use these key commands to get information about the code where the
+   cursor is at. The 
+*** C-h
+*** C-h ? (options for help)
+*** C-h f     
+*** C-h k (show the help for a key binding, enter binding after key command)
+*** C-h i (directory node, menu of major topics - relates to installed packages)
+**** other commands available in buffer
+*** C-h S (symbol help mode, opens a window that documents the function)
+*** You can also use this to describe functions in elisp, give it a shot below!
+
+#+BEGIN_SRC elisp
+
+(defun foo (bar)
+  (find-file  ))
+
+#+END_SRC
+
+** avy (howard)
+*** Ways to Jump
+**** good old previous and next
+         - C-u n (jump four lines down)
+         - M-4 M-f (forward four words
+         - C-u C-u
+**** relative line numbers 
+**** Search
+***** C-s (search)
+***** M-s . (highlights word at cursor and sends it to isearch)
+**** avy (lets you jum around based on what you're looking at)
+***** avy-goto-word-1    :   C-c j
+***** avy-goto-word-0    :   C-c k j 
+***** avy-goto-char-2    :   C-c k h 
+***** avy-goto-char-timer:   C-c k k 
+***** avy-pop-mark       :   s-,
+** programming exercises (jeff)
+*** advent of code - 25 coding exercises
+** package managing
+*** use-package
+**** a package that helps you manage your packages
+**** in the init.el, you can write code that lets you retuire and config packages
+**** on list to be put into emacs itself
+*** tim? uses cask to sync multiple machines
+*** if you needed to keep all packages inside a local network, you can utilize
+**** tools built for melpa?
+* 
