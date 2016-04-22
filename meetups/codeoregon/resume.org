@@ -1,0 +1,45 @@
+* Designing Your Portfolio
+** chat with jeena
+*** check out openfarm project, 
+**** openfarm.cc
+** Jack from Planet Argon
+*** Designing Your Portfolio
+**** See blog post by Jack
+***** http://www.jackbouba.com/
+***** http://blog.planetargon.com/jack-bouba
+*** Format
+**** Build
+***** Bootstrap
+***** Bootstrap Templates
+****** TODO http://www.startbootstrap.com
+****** We Used creative template
+****** 
+***** codepen
+***** google fonts
+****** free type delivery system
+***** beautiful-web-type shows great combinations
+***** font-awesome
+****** icon font
+**** Modify
+***** inspiration!
+****** dribble
+****** the best designs
+****** awwwards
+****** site inspire
+****** css winner
+****** muzli
+***** alistapart : a design blog 
+***** the 6 principles of design : fundamentals of design
+***** graphic burder : mockups
+***** the nound project : icon resource
+***** unsplash : a free resource for stock photos
+***** gravit : web based svg tool
+**** Deploy
+***** TODO githubpages
+****** free way to deploy a site
+****** connects to your repo
+****** auto updates upon commit
+****** use a custom domain name to link to github page
+****** SWEET!
+***** ftploy
+****** lets you link a repo with an ftp only sitemag
