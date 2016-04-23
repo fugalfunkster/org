@@ -256,7 +256,7 @@ ACTION
 **** Yard Projects
 **** Cardio
 **** Massage
-*** Computer Science
+*** Learning to Code
 **** Apps
 ***** Soil Test
 ***** Index Cards

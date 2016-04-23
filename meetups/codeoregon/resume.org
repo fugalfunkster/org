@@ -43,3 +43,5 @@
 ****** SWEET!
 ***** ftploy
 ****** lets you link a repo with an ftp only sitemag
+* tesseract - optical recognition, maybe for soilt est app
+* flexbox

@@ -1258,4 +1258,4 @@ NOTES
 ***** RoboMongo
 ***** MongoView
 ***** 3T Products
-
+*** DONE JavaScript Best Practices (no notes)
