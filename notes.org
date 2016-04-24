@@ -482,33 +482,12 @@ NOTES
 ***** "os" module
 ****** provides info about the currently running system
 
-
 **** Testing and Debugging
-
 
 **** Scaling Your Node Application
 *** TODO Building Web Apps with Node.js (Kevin Whinnery)
-*** TODO jQuery-free Javascript
-*** TODO node application patterns
-*** WAIT Creating JS Modules with Browserify
-
-**** Getting Started
-***** Browserify is a module loader modeled after Node.js' module loader
-***** node.js implemented CommonJS style modules
-***** browserify produces a bundled file for deployment to browsers
-
-
-**** Defining and Requiring Modules
-***** Install browserify via npm (browserify is itself a node module)
-***** $ browserify --help
-***** Defining Modules:
-****** each module is a javascript file
-****** expose functions as properties of the exports object, ex exports.say = function...
-****** (aka module.exports) if you want to set an object = to module.exports
-****** browserify wraps the file in a function before it is executed
-****** on invocation, the module will return the exports object
-***** Requiring 3rd Party Modules
-*** Tools for REST APIs
+*** TODO Docker Deep Dive
+*** TODO Tools for REST APIs
 
 **** Collaborative Design
 
@@ -527,11 +506,28 @@ NOTES
 **** Performance Testing
 
 **** Monito
+*** TODO Chrome Dev Tools
+*** TODO jQuery-free Javascript
+*** TODO node application patterns
+*** TODO Creating JS Modules with Browserify
 
-*** Interactive Data Vis with D3.js
+**** Getting Started
+***** Browserify is a module loader modeled after Node.js' module loader
+***** node.js implemented CommonJS style modules
+***** browserify produces a bundled file for deployment to browsers
 
-*** Javascript Templating with Handlebars
 
+**** Defining and Requiring Modules
+***** Install browserify via npm (browserify is itself a node module)
+***** $ browserify --help
+***** Defining Modules:
+****** each module is a javascript file
+****** expose functions as properties of the exports object, ex exports.say = function...
+****** (aka module.exports) if you want to set an object = to module.exports
+****** browserify wraps the file in a function before it is executed
+****** on invocation, the module will return the exports object
+***** Requiring 3rd Party Modules 
+*** TODO Javascript Templating with Handlebars
 *** DONE Intro to NPM as a build tool
 
 **** Basics

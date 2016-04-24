@@ -1,34 +1,31 @@
 ACTION
 
 * Ready or Nearly So 
-  
-** todolist [0/3]
-*** learning tooling
-**** TODO magit
-***** branching and merging
+** todolist
+*** TODO Pluralsight Courses [0/6]
+    - [ ] Using the Chrome Developer Tools : John Sonmez (2:50)
+    - [ ] Docker Deep Dive : Nigel Poulton (5:38)
+    - [ ] JavaScript Design Patterns : Aaron Powell (2:03)
+    - [ ] React.js: Getting Started : Samer Buna (1:29)
+    - [ ] Node.js Testing Strategies : Rob Conery (2:39)
+    - [ ] Node Application Patterns : Rob Conery (2:31)
+*** JavaScript Allonge [0/3]
+**** TODO Review First Half
+**** TODO Served by the Pot: Collections
+**** TODO A coffeehouse: symbols
+*** Tools [0/4]
 **** TODO React
 **** TODO docker
 ***** docker.el?
 ***** dockerfile.mode
-*** JavaScript Allonge 
-**** TODO Review First Half
-*** YDKJS
-**** TODO Types and Grammar - Ch. 5 Grammar
+**** TODO magit
+***** branching and merging
+**** TODO jump around?
 *** JavaScript on the High Seas
 **** TODO Outline
 **** TODO Intro
 **** TODO Syntax
-*** TODO Wrap-Up Udemy Node Course
-*** TODO Refactor Full-Stack Apps
-*** TODO Pluralsight Courses
-    - [ ] Intro to Mongoose
-    - [ ] Securing your Apps with Passport
-    - [ ] Intro to Node
-    - [ ] Building Web Apps w/ Node
-    - [ ] Tools for REST APIs
-    - [ ] Meet the Command Line
-    - [ ] Chrome Dev. Tools
-
+*** TODO Revisit Udemy Node Course
 
 ** queue
 *** JavaScript Allonge
@@ -50,7 +47,6 @@ ACTION
      - [X] Git Fundamentals : James Kovacs (1:52)
      - [X] Meet Emacs : Phil Hagelberg (0:58)
      - [ ] Using the Chrome Developer Tools : John Sonmez (2:50)
-     - [ ] Meet the Command Line : Dan Benjamin (1:53)
 ***** Docker
      - [X] Docker and Containers: The Big Picture : Nigel Poulton (1:47)
      - [ ] Docker Deep Dive : Nigel Poulton (5:38)
@@ -58,7 +54,7 @@ ACTION
      - [X] Advanced JavaScript : Kyle Simpson (6:54)
      - [X] JavaScript Objects and Prototypes : Jim Cooper (0:48)
      - [ ] Practical Design Patterns in JavaScript : Jonathan Mills (3:10)
-     - [ ] JavaScript Best Practices : Jonathan Mills (2:40)
+     - [X] JavaScript Best Practices : Jonathan Mills (2:40)
      - [ ] JavaScript Design Patterns : Aaron Powell (2:03)
      - [ ] jQuery-free JavaScript : Elijah Manor (2:26)
      - [ ] Creating JS Modules with Browserify : Jeff Valore (1:13)
@@ -70,11 +66,13 @@ ACTION
      - [ ] Intro to Node.js : Paul O'Fallon (2:48)
      - [ ] Building Web Apps with Node.js : Kevin Whinnery (3:43)
      - [X] RESTful Web Services with Node.js and Express : Jonathan Mills (2:04)
-     - [ ] Securing Your Application with OAuth and Passport (2:23)
+     - [X] Securing Your Application with OAuth and Passport (2:23)
      - [ ] Five Essential Tools for REST APIs : Elton Stoneman (2:56)
      - [X] Building Web Apps with Node and Express 4.0 : Jonathan Mills (4:43)
      - [X] Intro to Mongoose for Node.js and MongoDB : Mark Scott (1:41)
      - [ ] JavaScript Templating With Handlebars : Ryan Lewis (2:19)
+     - [ ] Node.js Testing Strategies : Rob Conery (2:39)
+     - [ ] Node Application Patterns : Rob Conery (2:31)
 ***** React
      - [ ] React.js: Getting Started : Samer Buna (1:29)
      - [ ] Building Applications with React and Flux : Cory House (5:08)
@@ -85,9 +83,6 @@ ACTION
      - [ ] CSS3 In-Depth : Estelle Weyl (6:15)
      - [ ] Responsive Websites with Bootstrap 3 : Mark Zamoyta (2:53)
      - [ ] D3.js Data Visualization Fundamentals : Ben Sullins (4:35)
-***** CompSci
-     - [ ] Algorhithms and Data Scrictures I. : Robert Horvick (3:13)
-     - [ ] Algorhithms and Data Scrictures II. : Robert Horvick (2:30)
 **** Udemy
      - [X] JavaScript the Wierd Parts : Anthony (11:30+)
      - [ ] Learn & Understand Node.js Anthony (12:00+)
@@ -97,10 +92,7 @@ ACTION
 **** FrontEnd Masters
 ***** Node
      - [ ] API Design with Node.js using Express : Scott Moss (10:18)
-     - [ ] Meteor : Chris Mather (10:03)
-***** D3
-     - [ ] Interactive Data Visualization with D3.js : Ian Johnson (5:31)
-***** JS 
+***** JS
      - [ ] Organizing Javascript Functionality : Kyle Simpson (5:11)
      - [ ] Coercion in Javascript : Kyle Simpson (3:20)
      - [ ] Functional-Lite JS : Kyle Simpson (3:10)
@@ -113,8 +105,6 @@ ACTION
   - [ ] Getting Started with Redux : Dan Abramov
   - [ ] React Fundamentals : Joe Maddalone
   - [ ] React Native Fundamentals : Tyler McGinnis
-***** D3
-  - [ ] Intro to D3 : Ben Clinkinbeard
 ***** JavaScript
   - [ ] Regex in JavaScript : Joe Maddalone
 ***** Functional JS
@@ -241,96 +231,94 @@ ACTION
 **** Figwheel
 **** Om Next
 **** React
+*** Linux / Docker
 
 
 * Horizons
-** Three Months of Healthy Fun
-*** Cooking
-**** Salads
-**** Soups
-**** Summer Vegetables
-**** Meats
-**** Fruits
-**** Carbs
-*** Exercise and Massage
-**** Yard Projects
-**** Cardio
-**** Massage
-*** Learning to Code
-**** Apps
-***** Soil Test
-***** Index Cards
-***** SNAP
-**** Scheme
-***** Little Schemer / Seasoned Schemer
-***** HtDP [5/43]
-     I. Processing Simple Forms of Data
-  - [X] Students, Teachers, Computers
-  - [X] Numbers, Expressions, Simple Programs
-  - [X] Programs are Function Plus Variable Definitions
-  - [X] Conditional Expressions and Functions
-  - [X] Symbolic Information
-  - [ ] Compound Data, Part 1: Structures
-  - [ ] The Varieties of Data
-  - [ ] Intermezzo 1: Syntax and Semantics
-  II. Processing Arbitrarily Large Data
-  - [ ] Compound Data, Part 2: Lists
-  - [ ] More on Processing Lists
-  - [ ] Natural Numbers
-  - [ ] Composing Functions, Revisited Again
-  - [ ] Intermezzo 2: List Abbreviations
-  III. More on Processing Arbitrarily Large Data
-  - [ ] More Self-referential Data Definitions
-  - [ ] Mutually Referential data Definitions
-  - [ ] Development through Iterative Refinement
-  - [ ] Processing Two Complex Pieces of Data
-  - [ ] Intermezzo 3: Local Definitions and Lexical Scope
-  IV. Abstracting Designs
-  - [ ] Similarities in Definitions
-  - [ ] Functions as Values
-  - [ ] Designing Abstractions from Examples
-  - [ ] Designing Abstractions with First-Class Functions
-  - [ ] Mathematical Examples
-  - [ ] Intermezzo 4: Defining Functions on the Fly
-  V. Generative Recursion
-  - [ ] A New Form of Recursion
-  - [ ] Designing Algorithms
-  - [ ] Variations on a Theme
-  - [ ] Algorithms that Backtrack
-  - [ ] Intermezzo 5: The Cost of Computing and Vectors
-  VI. Accumulating Knowledge
-  - [ ] The Loss of Knowledge
-  - [ ] Designing Accumulator-Style Functions
-  - [ ] More Uses of Accumulation
-  - [ ] Intermezzo 6: The Nature of Inexact Numbers
-  VII. Changing the State of Variables
-  - [ ] Memory for Functions
-  - [ ] Assignment to Variables
-  - [ ] Designating Functions with Memory
-  - [ ] Examples of Memory Usage
-  - [ ] Intermezzo 7: The Final Syntax and Semantics
-  VIII.
-  - [ ] Encapsulation
-  - [ ] Mutable Structures
-  - [ ] Designing Functions that Change Structures
-  - [ ] Equality
-  - [ ] Changing Structures, Vectors, and Objects
-  Epilogue
+** Cooking
+*** Salads
+*** Soups
+*** Summer Vegetables
+*** Meats
+*** Fruits
+*** Carbs
+** Exercise and Massage
+*** Yard Projects
+*** Cardio
+*** Massage
+** Learning to Code
+*** Apps
+**** Soil Test
+**** Index Cards
+**** SNAP
+*** Scheme
+**** Little Schemer / Seasoned Schemer
+**** HtDP [5/43]
+    I. Processing Simple Forms of Data
+ - [X] Students, Teachers, Computers
+ - [X] Numbers, Expressions, Simple Programs
+ - [X] Programs are Function Plus Variable Definitions
+ - [X] Conditional Expressions and Functions
+ - [X] Symbolic Information
+ - [ ] Compound Data, Part 1: Structures
+ - [ ] The Varieties of Data
+ - [ ] Intermezzo 1: Syntax and Semantics
+ II. Processing Arbitrarily Large Data
+ - [ ] Compound Data, Part 2: Lists
+ - [ ] More on Processing Lists
+ - [ ] Natural Numbers
+ - [ ] Composing Functions, Revisited Again
+ - [ ] Intermezzo 2: List Abbreviations
+ III. More on Processing Arbitrarily Large Data
+ - [ ] More Self-referential Data Definitions
+ - [ ] Mutually Referential data Definitions
+ - [ ] Development through Iterative Refinement
+ - [ ] Processing Two Complex Pieces of Data
+ - [ ] Intermezzo 3: Local Definitions and Lexical Scope
+ IV. Abstracting Designs
+ - [ ] Similarities in Definitions
+ - [ ] Functions as Values
+ - [ ] Designing Abstractions from Examples
+ - [ ] Designing Abstractions with First-Class Functions
+ - [ ] Mathematical Examples
+ - [ ] Intermezzo 4: Defining Functions on the Fly
+ V. Generative Recursion
+ - [ ] A New Form of Recursion
+ - [ ] Designing Algorithms
+ - [ ] Variations on a Theme
+ - [ ] Algorithms that Backtrack
+ - [ ] Intermezzo 5: The Cost of Computing and Vectors
+ VI. Accumulating Knowledge
+ - [ ] The Loss of Knowledge
+ - [ ] Designing Accumulator-Style Functions
+ - [ ] More Uses of Accumulation
+ - [ ] Intermezzo 6: The Nature of Inexact Numbers
+ VII. Changing the State of Variables
+ - [ ] Memory for Functions
+ - [ ] Assignment to Variables
+ - [ ] Designating Functions with Memory
+ - [ ] Examples of Memory Usage
+ - [ ] Intermezzo 7: The Final Syntax and Semantics
+ VIII.
+ - [ ] Encapsulation
+ - [ ] Mutable Structures
+ - [ ] Designing Functions that Change Structures
+ - [ ] Equality
+ - [ ] Changing Structures, Vectors, and Objects
+ Epilogue
 
-***** SICP
-
-**** CompSci
-***** 6.01   - Intro to EE and CompSci
-***** 18.01  - Single Variable Calculus
-***** 6.042  - Mathematics for Computer Science
-***** 6.006  - Intro to Algorithms
-***** 18.02  - MultiVariable Calculus
-***** 6.046  - Algorithms
-***** 18.310 - Principles of Discrete Applied Math
-
-**** Clojure
-***** Living Clojure
-***** Clojure for the Brave and True
-*** Nebraska Trip
-*** Seattle Trip
+**** SICP
+*** Clojure
+**** Living Clojure
+**** Clojure for the Brave and True
+**** Clojure Applied
+*** CompSci
+**** 6.01   - Intro to EE and CompSci
+**** 18.01  - Single Variable Calculus
+**** 6.042  - Mathematics for Computer Science
+**** 6.006  - Intro to Algorithms
+**** 18.02  - MultiVariable Calculus
+**** 6.046  - Algorithms
+**** 18.310 - Principles of Discrete Applied Math
+** Nebraska Trip
     
