@@ -2,13 +2,14 @@ ACTION
 
 * Ready or Nearly So 
 ** todolist
-*** TODO Pluralsight Courses [0/6]
-    - [ ] Using the Chrome Developer Tools : John Sonmez (2:50)
-    - [ ] Docker Deep Dive : Nigel Poulton (5:38)
-    - [ ] JavaScript Design Patterns : Aaron Powell (2:03)
+*** FreeCodeCamp BackEnd
+**** TODO Book Sharing
+**** Pinterest Clone
+*** Pluralsight Courses [0/4]
     - [ ] React.js: Getting Started : Samer Buna (1:29)
-    - [ ] Node.js Testing Strategies : Rob Conery (2:39)
-    - [ ] Node Application Patterns : Rob Conery (2:31)
+    - [ ] Build Apps with React Native : Stephen Grider (8:00+)
+    - [ ] Build Web Apps with ReactJS and Flux : Stephen Grider (9:30+)
+    - [ ] Docker Deep Dive : Nigel Poulton (5:38)
 *** JavaScript Allonge [0/3]
 **** TODO Review First Half
 **** TODO Served by the Pot: Collections
@@ -25,7 +26,8 @@ ACTION
 **** TODO Outline
 **** TODO Intro
 **** TODO Syntax
-*** TODO Revisit Udemy Node Course
+*** Revisit Udemy Node Course
+
 
 ** queue
 *** JavaScript Allonge
