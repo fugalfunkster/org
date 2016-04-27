@@ -2,6 +2,16 @@ ACTION
 
 * Ready or Nearly So 
 ** todolist
+<<<<<<< HEAD
+*** FreeCodeCamp BackEnd
+**** TODO Book Sharing
+**** Pinterest Clone
+*** Pluralsight Courses [0/4]
+    - [ ] React.js: Getting Started : Samer Buna (1:29)
+    - [ ] Build Apps with React Native : Stephen Grider (8:00+)
+    - [ ] Build Web Apps with ReactJS and Flux : Stephen Grider (9:30+)
+    - [ ] Docker Deep Dive : Nigel Poulton (5:38)
+=======
 *** FreeCodeCamp BackEnd Projects [0/2]
 **** TODO Book Sharing App
 **** TODO Pinterest Clone
@@ -12,6 +22,7 @@ ACTION
     - [ ] Docker Deep Dive : Nigel Poulton (5:38)
     - [ ] Node Application Patterns : Rob Conery (2:31)
     - [ ] Node.js Testing Strategies : Rob Conery (2:39)
+>>>>>>> 04f0c6c657a69463e858ed780d5fe6067cf0c2f9
 *** JavaScript Allonge [0/3]
 **** TODO Review First Half
 **** TODO Served by the Pot: Collections
@@ -29,7 +40,12 @@ ACTION
 **** TODO Intro
 **** TODO Syntax
 *** Revisit Udemy Node Course
+<<<<<<< HEAD
+
+
+=======
     
+>>>>>>> 04f0c6c657a69463e858ed780d5fe6067cf0c2f9
 ** queue
 *** Write a little library
 *** YDKJS

@@ -427,6 +427,15 @@ NOTES
     
 * Video Courses
 ** Pluralsight Courses
+*** ReactJS: Getting Started
+**** A library, for building user interfaces
+**** Components
+***** React's components take in state and properties and output HTML
+***** state can be changed, properties are fixed
+***** when state changes, the component owning that state triggers a re-render
+**** The Virtual DOM
+***** diffing between the virtual DOM and the real DOM, to render the browser's DOM
+**** 
 *** OPEN Intro to Node.js (Paul O'Fallon)
 **** Accessing the Local System
 
@@ -1258,3 +1267,7 @@ NOTES
 ***** 3T Products
 *** DONE JavaScript Best Practices (no notes)
 *** DONE Docker and Containers: The Big Picture (no notes)
+
+
+* React.js Funcamentals Course
+** 
