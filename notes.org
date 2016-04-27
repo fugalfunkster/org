@@ -298,7 +298,6 @@ NOTES
 ***** https://www.youtube.com/watch?v=-4O-ZYjQxks
 ***** http://github.com/capitaomorte/yasnippet
 ** Workflow Abstract
-
 *** emacs
 **** IDO
 **** SMEX
@@ -335,6 +334,9 @@ NOTES
 ***** multiple-cursors
 *** Magit
 *** nodejs-repl
+
+
+* TODO .el requires org-bullets, but no hook to auto-install from melpa
 
 
 * Books
