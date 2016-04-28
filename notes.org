@@ -1269,5 +1269,5 @@ NOTES
 *** DONE Docker and Containers: The Big Picture (no notes)
 
 
-* React.js Funcamentals Course
+* React.js Fundamentals Course
 ** 
