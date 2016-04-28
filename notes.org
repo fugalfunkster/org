@@ -298,7 +298,6 @@ NOTES
 ***** https://www.youtube.com/watch?v=-4O-ZYjQxks
 ***** http://github.com/capitaomorte/yasnippet
 ** Workflow Abstract
-
 *** emacs
 **** IDO
 **** SMEX
@@ -336,7 +335,14 @@ NOTES
 *** Magit
 *** nodejs-repl
 
+<<<<<<< HEAD
     
+=======
+
+* TODO .el requires org-bullets, but no hook to auto-install from melpa
+
+
+>>>>>>> origin/master
 * Books
 ** HtDP
 
@@ -1268,6 +1274,7 @@ NOTES
 
 
 * React.js Fundamentals Course
+<<<<<<< HEAD
 ** Intro to the React Ecosystem
 *** Declarative vs. Imperative
 **** Imperative Code tells the program how to do something
@@ -1410,6 +1417,8 @@ NOTES
 ***** we import link from react router
 ***** and render link components with a to="/route" attribute
 **** nested routes (produces rested UI)
+=======
+>>>>>>> origin/master
 ** 
 ** Container vs. Presentational Components, PropTypes, & Stateless Functional Components
 ** Life Cycle Events and Conditional Rendering
