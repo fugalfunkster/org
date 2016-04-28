@@ -336,7 +336,7 @@ NOTES
 *** Magit
 *** nodejs-repl
 
-
+    
 * Books
 ** HtDP
 
@@ -1267,5 +1267,155 @@ NOTES
 *** DONE Docker and Containers: The Big Picture (no notes)
 
 
-* React.js Funcamentals Course
+* React.js Fundamentals Course
+** Intro to the React Ecosystem
+*** Declarative vs. Imperative
+**** Imperative Code tells the program how to do something
+***** Example: for loops describe how to iterate over an array
+**** Declarative Code tells the program what to do
+***** Example: map iterates over an array under the hood
+**** Benefits of declarative code
+***** Reduces side effects
+***** minimize mutability
+***** more readable code
+***** less bugs
+**** React is mostly declarative
+***** TODO Instead of storing state in the DOm, we internalize it to each component?
+***** We still have to have imperative state modifications
+*** Unidirectional Dataflow
+*** Composition
+**** Everything is a component
+**** In react, we compose components into compositions
+*** Explicit Mutations
+**** With React you need to explicitly call set state to change state
+*** It's Just JavaScript
+*** Piecing the Puzzle
+**** React
+**** React Router
+***** Applications are made of components
+***** React router allows us to map components to specific URLs
+**** Webpack
+***** bundles code into a single file
+****** uses loaders that transform code
+***** frustrating b/c documentation is poor
+**** Babel
+***** does the transformation from jsx to JS
+***** works as loader for webpack
+**** Axios
+***** make http requests
+*** Example App: Github Battle
+** Setting up your first React component with NPM, Babel, and Webpack
+*** using NPM
+**** npm init
+***** makes our pacjage.json file
+**** npm install
+***** --save react react-dom
+****** react-dom is separate from react because react has other targets than just the dom
+******* ex: we might render to react-native
+***** --save-dev html-webpack-plugin webpack-dev-server webpack
+***** --save-dev babel-core babel-loader babel-preset-react
+**** npm scripts
+***** production - triggers preprocessing and outputs to ./dist/ 
+***** start - triggers the webpack-dev-server, which hosts the app/index.html
+*** using webpack
+    Webpack allows you to preprocess files as you require or load them. In order to do
+    so, webpack needs:
+    1. Where is the starting point of the application, or the route javascript file.
+    2. What transformation to make on the code.
+    3. Where to put the code, post-transformation.
+**** the webpack.config.js
+***** exports an object that represents ur config
+***** properties include:
+****** entry (an array containing the root .js file for our app, room for more files...)
+****** output (a path to a directory, and the filename for our new root .js file)
+****** module (the loaders property contains an array for each transformation)
+******* each loader is composed of three things:
+******** which file type to run the transformation on (typically a regex)
+******** directories to exclude from transformation
+******** the loader to use
+******** Example:
+********* {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
+****** plugins
+       Some files don't need to be transformed, but do need to be included in the
+       production dist/ directory. the html-webpack-plugin, let's us grab our html
+       files, use them as a template, inject our transformed root.js, and output a new
+       index.html into the dist/ dir.
+**** webpack CLI and webpack-dev-server
+     In the root dir of our app, we can run webpack from the cmd line
+***** webpack (run through transformation)
+***** webpack -w (watch: auto transform on update)
+***** webpack -p (run through transformations and minify)
+*** using babel
+    Babel is a tool for transpiling / compiling JavaScript. Here, we use babel to
+    transform our JSX to JS. 
+**** .babelrc (instruct babel which transformationf to make)
+**** babel-preset-react (presets, referenced in .babelrc)
+**** babel-loader (loader for webpack)
+*** React components
+    Data is either recieved from a component's parent component, or it's contained
+    in the component itself. In order for a child component to access the state of a
+    parent component, we must explicitly pass the data to our child component as an
+    attribute.
+**** Creating a new React Component
+     Every component is required to have a render method: the component's template.
+***** var componentName  = React.createClass({});
+**** Rendering a react component to the DOM
+     Because of the parent/child relationships, you usually only have to render once,
+     the most parent compone t will render all of its child components. If you want
+     your whole app to be react, you would render the parent component to document.body.
+**** React.DOM takes two arguments, the component and the DOM node to render to
+***** ReactDOM.render(<componentName'>, document.getElementById('anchor');
+**** Diffing and the Virtual Dom
+     The virtual DOM is a JS representation of the actual DOM. React keeps track of changes
+     between the current virtual DOM and the previous virtual DOM, and updates the real
+     DOM as necessary. This conserves DOM changes, and helps us reason about the state of our
+     application. 
+** Pure functions. f(d)=v. Props and Nesting Components
+*** Nested Components and Props
+    This section is about how React can nest components and how we can pass data from
+    parent components to child components.
+**** Props are to components what arguments are to functions
+***** treat props as immutable
+**** When we invoke a component, we can pass in an attribute
+***** Example: <ProfilePic imageUrl={this.props.user.image} />
+**** Attributes are accessable inside the component via this.props
+***** Example: Inside the ProfilePic component, this.props.imageUrl
+*** Building UIs with Pure Functions and Function Composition
+**** a function takes in some data and returns a view : f(d) => v
+**** instead of composing functions to get data, we're composing components to get a UI
+**** we use pure functions, which have the following properties:
+***** Pure functions always return the same result given the same arguments
+***** Pure function's execution doesn't depend on the state of the application.
+***** Pure functions don't modify the variables aoutside of their scope
+**** see .slice vs. .splice
+**** The render method is a pure function 
+*** FIRST (a helpful acronym when thinking about components)
+**** Focused
+**** Independent
+**** Reusuable
+**** Small
+**** Testable
+** this.props.children and getting started with React Router
+*** this.props.children
+**** refers to the contents of an html element
+***** could be text, other elements, etc.
+**** Example: 
+***** <Clock> 12:49 AM </Clock>
+***** this.props.children = "12:49 AM"
+*** React Router tutorial
+**** React Router is a component that we must render
+***** the router has children components
+***** the router passes "path" attributes to its children
+**** the most common component in your app is link, like <a/>
+***** we import link from react router
+***** and render link components with a to="/route" attribute
+**** nested routes (produces rested UI)
 ** 
+** Container vs. Presentational Components, PropTypes, & Stateless Functional Components
+** Life Cycle Events and Conditional Rendering
+** Axios, Promises, and the github API
+** rendering UI
+** More Container vs. Presentational Components
+** Private Functional Stateless Components
+** Building a Highly Reusuable React Component
+** React Router Transition Animation and Webpack's CSS Loader
