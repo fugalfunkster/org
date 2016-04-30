@@ -1412,9 +1412,10 @@ NOTES
 ***** <Clock> 12:49 AM </Clock>
 ***** this.props.children = "12:49 AM"
 *** React Router tutorial
-**** React Router is a component that we must render
-***** the router has children components
-***** the router passes "path" attributes to its children
+**** Rendering a Route
+***** React Router is a component that we must render
+****** the router has children components
+****** the router passes "path" attributes to its children
 **** the most common component in your app is link, like <a/>
 ***** we import link from react router
 ***** and render link components with a to="/routeName" attribute
