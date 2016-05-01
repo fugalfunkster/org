@@ -2,7 +2,6 @@ ACTION
 
 * Ready or Nearly So 
 ** todolist
-<<<<<<< HEAD
 *** FreeCodeCamp BackEnd
 **** TODO Book Sharing
 **** Pinterest Clone
