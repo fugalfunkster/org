@@ -24,8 +24,9 @@ NOTES
 *** ls
 **** list directory contents
 
-
+     
 * emacs
+** TODO .el requires org-bullets, but no hook to auto-install from melpa
 ** Chords by Package
 *** emacs
 **** files
@@ -340,8 +341,6 @@ NOTES
 =======
 
 
-* TODO .el requires org-bullets, but no hook to auto-install from melpa
-
 * Books
 ** HtDP
 
@@ -438,184 +437,6 @@ NOTES
 ***** when state changes, the component owning that state triggers a re-render
 **** The Virtual DOM
 ***** diffing between the virtual DOM and the real DOM, to render the browser's DOM
-*** Weback Fundamentals (Joe Eames)
-**** Intro
-***** Why do we need a build?
-****** By bunding the files the client needs, the client makes fewer requests to the server
-****** reduce code size with minification, compression, etc.
-****** file order dependencies: use modules instead of relying on script order
-****** transpilation
-****** linting / style
-***** other solutions
-****** server side tools (specific)
-****** task runners (grunt, gulp, npm - generic)
-***** webpack is a specialized task runner that specialized on file transformation
-****** webpack uses npm
-****** uses module system(s)
-***** module systems express dependencies between files
-****** no circular dependencies
-****** explicit dependencies permit you to load file dependencies in the right order
-**** Basic Builds
-***** CLI basics
-****** $ npm install webpack
-****** webpack takes .js files and bundles them into a bundle
-****** to bundle from the CLI : $ webpack ./input.js output.js
-***** adding a config file
-      The webpack.config.js file exports a Common.js module, an object with keys that tell
-      webpack how to do its job. Once we have a config file, we can run webpack from the CLI
-      w/o other arguments.At a minimum, the exported object must contain an entry key (the
-      path to the entry .js file), and an output property, with a nested filename property
-      (the path for the bundle.js)
-***** watch mode and the webpack dev server
-****** watch mode automatically rebuilds every time a file changes
-******* from CLI: webpack --watch
-******* in config file add key watch: true
-****** webpack has a webserver for us (hotloading)
-******* $ npm install webpack-dev-server -g
-******* $ webpack-dev-server
-******* localhost:8080/webpack-dev-server/ (for auto reload and status bar)
-******* localhost:8080/ (for app w/o hot reloading or status bar)
-******* if you use --inline when running webpack-dev-server, you can get reloading @ 8080/
-***** Bundling multiple files
-      Webpack understands the common.js module system, and bundles all dependencies of the
-      entry file. In the config, you declare the entry file(s) explicitly, and the entry key
-      can be an array of files.
-        You must restart the webpack-dev-server to reify changes to the config.
-***** using loaders
-      By default, webpack can combine and minify files. Loaders let us add functionality. 
-      For example, we can use babel to help us support ES6, and jshint for linting. Loaders
-      are supplemental modules, npm installed, and saved to package.json. To include loaders
-      in our config, we use the 'module.loaders' key. 
-****** keys:
-******* test: a regex to figure out which files to run through the loader
-******* exclude: files to exclude
-******* loader: the name of the loader module
-******* resolve: an array of file extensions that webpack must process
-****** example:
-
-#+BEGIN_SRC js
-
-  module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'jshint-loader'
-      }
-    ],
-    loaders: [
-      {
-        test: /\.es6$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      }
-    ]
-  },
-  resolve: {
-    extensions: ['', '.js', '.es6']
-  },
-
-#+END_SRC
-
-***** using preloaders
-      Preloaders run before loaders. The preLoader key takes the same format as loader.
-***** creating a start script with npm
-      "start": "webpack-dev-server"
-***** Production v. Development Builds
-      Before deploying our code,  we should minimize the code to save space. Additionally,
-      there are some things we might weant to strip out during production, console.logs ex.
-****** minimize with the -p CLI flag: 
-******* webpack -p
-****** the strip-loader lets us strip out code
-******* console.log, perfLog, etc.
-****** use a separate config file just for production
-       We can make a production specific config file, using js modules to require in the
-       primary config. Because loaders is an array, we can make an object and push the new
-       loader onto the array.
-******* Example:
-
- #+BEGIN_SRC js
-
- var WebpackStrip = require('strip-loader');
- var devConfig = require('./webpack.config.js');
-
- var stripLoader = {
-   test: [/\.js$/, /\.es6$/],
-   exclude: /node-modules/,
-   loader: WebpackStrip.loader('console.log')
- }
-
- devConfig.module.loaders.push(stripLoader);
-
- module.exports = devConfig;
-
- #+END_SRC
-
-******* We can specify a a config file other than the default from the CLI
-******** $ webpack --config webpack-production.config.js -p
-******* $ http-server is a node module that lets us instantiate an http-server w/o webpack
-**** Advanced Builds
-***** organizing our files and folders
-****** We usually organize files in subdirectories of our root directory
-       For example, it's common to create root/js/ for all .js files, and a public dir for
-       all .html and .css. To facilitate this, we need to give our webpack notice that our
-       files reside within a directory within our root directory.
-****** We want to exclude our bundles from version control
-       So, we will configure webpack to store our bundles in root/build/js/
-****** index.html must reference our bundle.js with a logical and accurate path
-******* Ex: <script src="/public/assets/js/bundle.js"></script>
-****** So we can configure webpack to facilitate the above:
-******* Node's path module helps us work with paths
-******** var path = require('path');
-******* context key tells webpack where to find the entry files, a relative root dir path
-******** context: path.resolve('js')
-******* output.path key tells webpack where to place bundled files, a relative root dir path
-******** path: path.resolve('build/js')
-******* output.publicPath key tells webpack where to serve the bundle for the web server
-******** publicPath: '/public/assets/js/'
-******** this must match the path in our index.html file
-******** allows us to redirect requests to public/ into build/
-******* devServer key tells webpack where root requests should be directed to
-******** contentBase: 'public'
-******** this would redirect root requests to the public dir
-****** when using the dev-server, the bundle isn't produced and saved to disk
-***** working with ES6 modules is easy with babel-loader
-      
-      Using babel for transpilation allows us to use the ES6 syntax for modules.
-      
-#+BEGIN_SRC js
-
-  import{login} from './login';
-
-  login('admin', 'radical');
-
-#+END_SRC
-
-***** source map support is built in to webpack
-      Source mapping allows us to view our individual and unminified .js files even after
-      they have been bundled and minified. This lets us use debugger statements in our dev
-      tools (pauses execution).
-****** We can generate the source maps for our .js files from the cli:
-******* $ webpack -d
-******* $ webpack-dev-server -d
-
-***** TODO creating multiple bundles for multiple pages or lazy loading
-      We can configure webpack to automatically generate a unique bundle for a set of entry
-      files.
-****** We need to use the webpack commonsPlugin plugin
-**** TODO Adding CSS to your build
-**** TODO Adding Images and Fonts to your build
-**** TODO Webpack Tools
-***** Using the Connect Middleware - a web server
-***** Creating a Custom Loader
-***** Using Plugins
-**** Webpack and Front End Frameworks
-***** Webpack React Build
-****** babel-preset-react is a loader that processes JSX
-****** we refer to babel-preset-react in our .babelrc presets
-****** babel-loader is all we need in our webpack config!
-
-
 *** PAUSED Intro to Node.js (Paul O'Fallon)
 **** Accessing the Local System
 
@@ -859,6 +680,182 @@ NOTES
   - push to github
   - deploy to heroku
   - open to verify success
+*** DONE Weback Fundamentals (Joe Eames)
+**** Intro
+***** Why do we need a build?
+****** By bunding the files the client needs, the client makes fewer requests to the server
+****** reduce code size with minification, compression, etc.
+****** file order dependencies: use modules instead of relying on script order
+****** transpilation
+****** linting / style
+***** other solutions
+****** server side tools (specific)
+****** task runners (grunt, gulp, npm - generic)
+***** webpack is a specialized task runner that specialized on file transformation
+****** webpack uses npm
+****** uses module system(s)
+***** module systems express dependencies between files
+****** no circular dependencies
+****** explicit dependencies permit you to load file dependencies in the right order
+**** Basic Builds
+***** CLI basics
+****** $ npm install webpack
+****** webpack takes .js files and bundles them into a bundle
+****** to bundle from the CLI : $ webpack ./input.js output.js
+***** adding a config file
+      The webpack.config.js file exports a Common.js module, an object with keys that tell
+      webpack how to do its job. Once we have a config file, we can run webpack from the CLI
+      w/o other arguments.At a minimum, the exported object must contain an entry key (the
+      path to the entry .js file), and an output property, with a nested filename property
+      (the path for the bundle.js)
+***** watch mode and the webpack dev server
+****** watch mode automatically rebuilds every time a file changes
+******* from CLI: webpack --watch
+******* in config file add key watch: true
+****** webpack has a webserver for us (hotloading)
+******* $ npm install webpack-dev-server -g
+******* $ webpack-dev-server
+******* localhost:8080/webpack-dev-server/ (for auto reload and status bar)
+******* localhost:8080/ (for app w/o hot reloading or status bar)
+******* if you use --inline when running webpack-dev-server, you can get reloading @ 8080/
+***** Bundling multiple files
+      Webpack understands the common.js module system, and bundles all dependencies of the
+      entry file. In the config, you declare the entry file(s) explicitly, and the entry key
+      can be an array of files.
+        You must restart the webpack-dev-server to reify changes to the config.
+***** using loaders
+      By default, webpack can combine and minify files. Loaders let us add functionality. 
+      For example, we can use babel to help us support ES6, and jshint for linting. Loaders
+      are supplemental modules, npm installed, and saved to package.json. To include loaders
+      in our config, we use the 'module.loaders' key. 
+****** keys:
+******* test: a regex to figure out which files to run through the loader
+******* exclude: files to exclude
+******* loader: the name of the loader module
+******* resolve: an array of file extensions that webpack must process
+****** example:
+
+#+BEGIN_SRC js
+
+  module: {
+    preLoaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'jshint-loader'
+      }
+    ],
+    loaders: [
+      {
+        test: /\.es6$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['', '.js', '.es6']
+  },
+
+#+END_SRC
+
+***** using preloaders
+      Preloaders run before loaders. The preLoader key takes the same format as loader.
+***** creating a start script with npm
+      "start": "webpack-dev-server"
+***** Production v. Development Builds
+      Before deploying our code,  we should minimize the code to save space. Additionally,
+      there are some things we might weant to strip out during production, console.logs ex.
+****** minimize with the -p CLI flag: 
+******* webpack -p
+****** the strip-loader lets us strip out code
+******* console.log, perfLog, etc.
+****** use a separate config file just for production
+       We can make a production specific config file, using js modules to require in the
+       primary config. Because loaders is an array, we can make an object and push the new
+       loader onto the array.
+******* Example:
+
+ #+BEGIN_SRC js
+
+ var WebpackStrip = require('strip-loader');
+ var devConfig = require('./webpack.config.js');
+
+ var stripLoader = {
+   test: [/\.js$/, /\.es6$/],
+   exclude: /node-modules/,
+   loader: WebpackStrip.loader('console.log')
+ }
+
+ devConfig.module.loaders.push(stripLoader);
+
+ module.exports = devConfig;
+
+ #+END_SRC
+
+******* We can specify a a config file other than the default from the CLI
+******** $ webpack --config webpack-production.config.js -p
+******* $ http-server is a node module that lets us instantiate an http-server w/o webpack
+**** Advanced Builds
+***** organizing our files and folders
+****** We usually organize files in subdirectories of our root directory
+       For example, it's common to create root/js/ for all .js files, and a public dir for
+       all .html and .css. To facilitate this, we need to give our webpack notice that our
+       files reside within a directory within our root directory.
+****** We want to exclude our bundles from version control
+       So, we will configure webpack to store our bundles in root/build/js/
+****** index.html must reference our bundle.js with a logical and accurate path
+******* Ex: <script src="/public/assets/js/bundle.js"></script>
+****** So we can configure webpack to facilitate the above:
+******* Node's path module helps us work with paths
+******** var path = require('path');
+******* context key tells webpack where to find the entry files, a relative root dir path
+******** context: path.resolve('js')
+******* output.path key tells webpack where to place bundled files, a relative root dir path
+******** path: path.resolve('build/js')
+******* output.publicPath key tells webpack where to serve the bundle for the web server
+******** publicPath: '/public/assets/js/'
+******** this must match the path in our index.html file
+******** allows us to redirect requests to public/ into build/
+******* devServer key tells webpack where root requests should be directed to
+******** contentBase: 'public'
+******** this would redirect root requests to the public dir
+****** when using the dev-server, the bundle isn't produced and saved to disk
+***** working with ES6 modules is easy with babel-loader
+      
+      Using babel for transpilation allows us to use the ES6 syntax for modules.
+      
+#+BEGIN_SRC js
+
+  import{login} from './login';
+
+  login('admin', 'radical');
+
+#+END_SRC
+
+***** source map support is built in to webpack
+      Source mapping allows us to view our individual and unminified .js files even after
+      they have been bundled and minified. This lets us use debugger statements in our dev
+      tools (pauses execution).
+****** We can generate the source maps for our .js files from the cli:
+******* $ webpack -d
+******* $ webpack-dev-server -d
+
+***** TODO creating multiple bundles for multiple pages or lazy loading
+      We can configure webpack to automatically generate a unique bundle for a set of entry
+      files.
+****** We need to use the webpack commonsPlugin plugin
+**** TODO Adding CSS to your build
+**** TODO Adding Images and Fonts to your build
+**** TODO Webpack Tools
+***** Using the Connect Middleware - a web server
+***** Creating a Custom Loader
+***** Using Plugins
+**** Webpack and Front End Frameworks
+***** Webpack React Build
+****** babel-preset-react is a loader that processes JSX
+****** we refer to babel-preset-react in our .babelrc presets
+****** babel-loader is all we need in our webpack config!
 
 *** DONE Git Fundamentals
 
@@ -1474,7 +1471,6 @@ NOTES
 *** React Native
 ** Courses
 *** Intro to React (pluralsight)
-**** 
 *** React.js Fundamentals Course
 **** Intro to the React Ecosystem
 ***** Declarative vs. Imperative
@@ -1628,6 +1624,103 @@ NOTES
 **** Private Functional Stateless Components
 **** Building a Highly Reusuable React Component
 **** React Router Transition Animation and Webpack's CSS Loader
+*** Notes on react-router tutorial
+**** Rendering a Route
+  
+     At it's heart, React Router is a component:
+
+#+BEGIN_SRC js
+
+  render(<Router/>, document.getElementById('app'))
+
+#+END_SRC
+
+     To configure a route, we need to import functionality from react-router. The Router
+     component, takes a history attribute (see hashHistory below). We nest Route
+     components within the Router component. Each Route component takes a path
+     attribute and a component attribute. The component attribute takes a react
+     component as its value, and the path attribute takes a url string as its value.
+     The path url string is the url path where the component will render.
+
+#+BEGIN_SRC js
+
+  import { Router, Route, hashHistory } from 'react-router';
+
+  render((
+    <Router history={hashHistory}>
+      <Route path="/" component={App}/>
+    </Router>
+  ), document.getElementById('app'));
+
+#+END_SRC
+
+***** hashHistory
+      hashHistory manages our routing history with the hash portion of the url. It's got
+      that extra junk to shim some behavior the browser has natively when using real 
+      urls. There are other options, like using real urls, but hashHistory doesn't
+      require any server-side configuration.
+
+
+***** Adding more routes
+
+#+BEGIN_SRC js
+
+  import React from 'react'
+  import { render } from 'react-dom'
+  import App from './modules/App'
+  import About from './modules/About'
+  import Repos from './modules/Repos'
+  import { Router, Route, hashHistory } from 'react-router'
+
+  render((
+    <Router history={hashHistory}>
+      <Route path="/" component={App}/>
+      {/* add the routes here */}
+      <Route path="/repos" component={Repos}/>
+      <Route path="/about" component={About}/>
+    </Router>
+  ), document.getElementById('app'))
+
+#+END_SRC
+      
+**** Navigating with Link
+     Links are perhaps the most used component in a React App. It's almost identical to
+     an <a/> tag, except that it's aware of the Router it was rendered in. Link
+     components have a to attribute, that takes a url path string as a value.
+     Predictably, a link component takes the user to its specified path. Links are
+     acceptable to browsers, facilitating backward/forward movement.
+***** Example:
+
+#+BEGIN_SRC js
+
+  // modules/App.js
+  import React from 'react'
+  import { Link } from 'react-router'
+
+  export default React.createClass({
+    render() {
+      return (
+        <div>
+          <h1>React Router Tutorial</h1>
+          <ul role="nav">
+            <li><Link to="/about">About</Link></li>
+            <li><Link to="/repos">Repos</Link></li>
+          </ul>
+        </div>
+      )
+    }
+  })
+
+#+END_SRC
+
+**** Nested Routes
+     Apps are just a series of components nested inside other components. With Router
+     the routing is coupled to the nesting of components. 
+***** Nested UI and Nested URLs
+***** Sharing our Navigation
+***** By Small and Simple Things are Great Things Brought to Pass
+      Every route can be developed, and even rendered, as an independent application.
+      Route configuration stitches component apps together. 
 *** React Fundamentals (egghead)
 *** Getting Started with Redux (egghead)
 *** Getting Started with React Router (egghead)
