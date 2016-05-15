@@ -160,7 +160,60 @@ NOTES
 **** C-c ! v (verify flychecker works)
 **** C-c ! x (disable flycheck in buffer)
 **** if in node, paste at top: /* jslint node: true */
-*** yasnippet
+*** yasnippet snippets (tab)
+**** variable declarations
+     c - const
+     v - var
+     l - let
+**** functions
+     f - anonymous function
+     f* - generator function
+     fn - named function
+     rt - return
+     iife - iife
+     *() - arrow func
+**** Control flow
+     *bl - block
+     *br - break
+     if - if
+     *else - else
+     switch
+     *throw
+     *? - ternary
+     *try
+     *catch
+     *finally
+**** Iterations
+     *for
+     *while
+**** module
+     req - require
+     *imp - import
+     *exp = module.export
+     *exps - module.exports = ;
+**** console
+     console.log
+     *console.warn
+     *console.error
+     *console.debug
+**** objects
+     *method w/ trailing comma
+**** react
+     *gis - getInitialState
+     *gdp - getDefaultProps
+     *cdm - componentDidMount
+     *cwu - component will unmount
+     *rrea - require react
+     *rdom - require reactDOM
+     *ren - ReactDOM.render ()
+     *rrm - render
+     *rr  - react router
+     *rrr - react router route
+     *rrl - react router link
+     *tss - this.setState ({});
+     *ptm - propTypes method
+     *rcc - react createClass
+
 **** http://capitaomorte.github.io/yasnippet/index.html
 *** expand regions
     lets you send code to REPL
