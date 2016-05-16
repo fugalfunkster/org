@@ -3338,3 +3338,73 @@ app.get('*', (req, res) => {
 **** Dev Environment Setup
 *** Getting Started with Redux (egghead)
 *** Getting Started with React Router (egghead)
+*** Modern React with Redux (Udemy)
+**** Intro
+***** Setting up our environment
+      Install the ReduxSimpleStarter boilerplate repo from:
+      https://github.com/StephenGrider/ReduxSimpleStarter
+***** Export Statements 
+****** export default FunctionName;
+***** Functional Components
+****** start with functional components, refactor to classes when necessary 
+***** Class Components
+****** class Name extends React.Component {}
+****** every react class must have a render method 
+******* shorthand
+***** import {property}
+***** events
+****** onChange - a vanilla event
+****** always called with an event object, describes context of event
+****** attributes / props
+***** arrow functions w/o ()
+***** State
+      an object describting state
+      when state changes, react rerenders
+      only class components have state
+****** constructor
+       constructor method sets up state, getInitialState?
+       constructor is the first, and only function called automatically, 
+       reserve for initializing state, variables, etc
+       only inside constructor do we this.state =
+****** super
+       React.component has its own constructor method
+       we call parent constructor method with super()
+****** this.state
+       new state object with properties we want for our component, and initial state      
+****** updating state
+       we only change state this way:
+       this.setState({ ... });
+       this is how we maintain continuity
+       we can change one prop at a time, or whole state obj
+****** state is how we update our components/views
+***** controlled component
+      has it's value set by state, value changes only when state changes
+      controlled input ex: 
+        input: value = state, onchange setsState, react rerenders
+      lets us avoid manipulating the dom to sync state and ui
+***** Review
+****** jsx
+****** components
+******* functional components
+******* class-based components
+****** state
+****** ES6
+******* classes
+******** constructor
+******** super
+******* arrow functions
+******* import / export
+****** youtube API
+**** AJAX with React
+***** downwards data flow
+      the most parent component should be responsible for fetching data
+***** ES6 lets us write {videos} instead of {videos: videos}
+***** className
+***** passing data from parent to child, define property on tag, attributeish PROPS
+      anytime the app rerenders, props are re-passed, updated!
+      props arrive as arguments to function components, aka props.etc
+      in a class component, props are available anywhere as this.props.etc
+***** for a split second we see initial state, then state can be set
+**** making lists with map
+***** react is good at rendering an array of components
+***** but each chld in an arrat or iterator should have a unique key prop
