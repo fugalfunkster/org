@@ -3405,6 +3405,45 @@ app.get('*', (req, res) => {
       props arrive as arguments to function components, aka props.etc
       in a class component, props are available anywhere as this.props.etc
 ***** for a split second we see initial state, then state can be set
-**** making lists with map
+**** Making lists with map
 ***** react is good at rendering an array of components
 ***** but each chld in an arrat or iterator should have a unique key prop
+      when we render multiple items of the same type, react will optimize rendering a list
+      optimizes better with a key
+      adding a key is easy, use an id for each item to make it unique, a unique key!
+***** using object destructuring in function arguments
+      see video-list-items.js
+***** Do I expect this component to need to maintain any state?
+      a question to ask each time you create a component
+***** handling null props
+      some parents cant fetch data fast enough to pas that data to childs before render
+      use control flow to render a loading component
+      on set state, it'll rerender, passing down actual props.
+***** callback passing down
+      pass components down from the stateful component that has state to a presentational component
+      pass down a setState function as props through each nested child
+      rarely go further than two deep
+***** css styling
+***** refactoring
+      important to refactor carefully
+      when you're passing down a state changing function to a component that has it's own state
+      be sure to keep state stright
+***** throttling search term input (throttling re-renders)
+      debounce from lo-dash
+      $ npm install lo-dash
+***** wrapup big ideas
+****** class v. functional component
+       class if for when we need state
+       func. comps. whenever our component is static
+****** state
+       createclass is older, getinitialstate is an artifact
+       we now use es6
+       create state in constructor
+       state is component level
+       redux makes state application level
+****** import and export statements
+       local vs. node_module
+****** callbacks
+       parent child communication
+       redux reduces callbacks, and passing...
+**** Modeling Application State
