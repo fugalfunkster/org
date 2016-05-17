@@ -3447,3 +3447,9 @@ app.get('*', (req, res) => {
        parent child communication
        redux reduces callbacks, and passing...
 **** Modeling Application State
+***** Redux
+      A collection of all the data that describes the app
+      all state of app (data and ui state)
+      all allplications data is in one object
+**** Managing App State with Redux
+     
