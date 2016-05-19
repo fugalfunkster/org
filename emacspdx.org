@@ -300,4 +300,46 @@ fifth
 *** if you needed to keep all packages inside a local network, you can utilize
 **** tools built for melpa?
 
-* 
+
+* May 
+** Working with Clojure in emacs
+   check abrams github for configs
+   https://github.com/howardabrams/dot-files/blob/master/emacs-clojure.org
+*** slime and swank
+    state of the art in 2010
+*** CIDER
+**** toggle stacktraces within repl, nice, because there's a lot of cruft from java
+**** builtin testing for repl
+**** keybindinfs
+     C-x C-e ; send to repl for evaliation
+     C-c C-d ; documentation for any function
+     C-M-x ; evaluate function
+** smacemacs w/ Richard
+   hybrid search patterns, from spc-?
+   everything is bound to space and some other chords
+   you have to elevate bindings you use regularly, so they don't get buried
+   the powerful thing is specified layers, being able to take a group of packages
+   and access their bindings through logical groups (files, searching, defining)
+** workgroups 
+   https://github.com/pashinin/workgroups2
+** elisp
+   - the most important thing you need to know for elisp programming
+     - C-h i
+   - the elisp manual is good, but dated
+   - also, emacs lisp intro
+     both in emacs help?
+   - what good elisp manuals are out there
+   - elisp is otionally lexically scoped, it is normally dymanic, you specify file
+     by file
+   - documentation for url module
+   - learing emacs next time, maybe hack together a API client together?
+   - 
+** magit help
+   rebaseing
+     when you want to merge into master but can't because tou've diverged
+     rebasing lets you lift your changes
+     resets your head to master
+     and re-superimposes your changes on master
+     r - magit rebase
+     fixup
+     
