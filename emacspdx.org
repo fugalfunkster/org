@@ -342,4 +342,4 @@ fifth
      and re-superimposes your changes on master
      r - magit rebase
      fixup
-     
+     lookup z for stashing
