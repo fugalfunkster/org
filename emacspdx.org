@@ -301,7 +301,7 @@ fifth
 **** tools built for melpa?
 
 
-* May 
+* May
 ** Working with Clojure in emacs
    check abrams github for configs
    https://github.com/howardabrams/dot-files/blob/master/emacs-clojure.org
@@ -335,7 +335,7 @@ fifth
    - learing emacs next time, maybe hack together a API client together?
    - 
 ** magit help
-   rebaseing
+   rebasing
      when you want to merge into master but can't because tou've diverged
      rebasing lets you lift your changes
      resets your head to master
@@ -343,3 +343,45 @@ fifth
      r - magit rebase
      fixup
      lookup z for stashing
+
+
+
+
+* August Emacs Conference!
+** Learning JavaScript in Emacs
+*** I started using emacs because a book suggested I should
+    and nothing on the internet convinced me not to
+*** What's an emacs? It's a type of gnu
+**** getting to gnu you
+**** console what
+***** stallman and steele 
+**** simple made easy made wat
+***** keybinds are magic 
+****** they cast a function
+****** some of them can be really useful
+****** like, you can fucking fly man
+***** there are tomes of these spells
+****** and libraries of spells at your fingertips
+****** you can even write your own
+******* emacs lisp, not a great second language, or third, or rlly
+******** wat again?
+***** but, but, but, wat
+****** keybinds hurt, emacs pinky is actually a thing
+****** proficiency require
+****** practice makes permanent
+**** make it stop hurting
+***** jump around
+***** IDO mode
+***** neotree
+***** eshell
+*** Org mode and babel are dope
+*** Tools for Web Devs
+**** web mode
+**** emmet mode
+**** js2-mode is tolerable
+**** flycheck eslint is the new flycheck jscs jshint
+**** snippets
+**** tern it up
+**** magit
+
+
