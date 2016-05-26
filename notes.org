@@ -1498,29 +1498,211 @@ NOTES
 
 
 * Learning React
-** Videos
-*** react-router
-**** https://www.youtube.com/watch?v=XZfvW1a8Xac
-*** Immutability
-**** Immutable Data & React: https://www.youtube.com/watch?v=I7IdS-PbEgI
-** Tooling Tuts
-*** React
-**** Facebook docs
+** React Big Picture
+*** Following Pete Hunt's : https://github.com/petehunt/react-howto
+**** React
+**** React Routing
+     react-router is handy for single-page applications, a page that loads once,
+     and when the user clicks on a link or button, JS running on the page updates
+     the address bar, but the webpage is not refreshed. Management of the address
+     bar is done by something called a router. Thus, if you aren't making a single
+     page web app, you have little reason to sue a router.
+**** Flux Architecture Pattern (Redux)
+     "Flux architecture should only be added once many components have already 
+     been built. /n React components are arranged in a heirarchy. Most of the time
+     your data model also follows a heirarchy. When your React components start to
+     recieve props that feel extraneous, or you have a small number of components 
+     starting to get very complex, then you might want to look into flux.
+**** Inline Styling*
+**** Server Rendering*
+     "Server rendering is often called "universal" or "isomorphic" JS. It means
+     that you can take your React components and render them to static HTML on the
+     server. This improves initial startup performance because the user does not
+     need to wait for JS to download in order to see the initial UI, and React can
+     re-use the server-rendered HTML so it doesn't need to generate it client-side.
+       You need server rendering if you notice that your initial render is too
+     slow or if you want to improve your search engine ranking."
+**** Immutable JS*
+     "Immutable.js provides a set of data structures that can help to solve
+     certain performance issues when building React apps. It's a great library,
+     and you'll probably use it a lot in your apps moving forward, but it's
+     completely unnecessary until you have an appreciation of the performance
+     implications."
+**** Relay & Falcor*
+     "These are technologies that help you reduce the number of AJAX requests.
+     They’re still very cutting-edge, so if you don’t have a problem with too many
+     AJAX requests, you don’t need Relay or Falcor."
+*** Docs
+**** React Facebook docs
 ***** getting started: https://facebook.github.io/react/docs/getting-started.html
 ***** tutorial: https://facebook.github.io/react/docs/tutorial.html
 ***** Thinking in React https://facebook.github.io/react/docs/thinking-in-react.html
-*** webpack
-*** react-router
-**** docs
+**** react-router docs
 ***** tutorial: https://github.com/reactjs/react-router-tutorial
 ***** introduction: https://github.com/reactjs/react-router/blob/master/docs/Introduction.md
 ***** guides: https://github.com/reactjs/react-router/tree/master/docs/guides
 ***** API: https://github.com/reactjs/react-router/blob/master/docs/API.md
 ***** examples: https://github.com/reactjs/react-router/tree/master/examples
-*** Redux
-*** Immutable.js
-*** React Native
+*** pieces
+***** Components
+***** Props
+***** Stateless Functional Components
+***** State
+***** ES6 Classes
+***** React.createClass
+***** this.props.children
+
+** Videos
+*** react-router
+**** https://www.youtube.com/watch?v=XZfvW1a8Xac
+*** Immutability
+**** Immutable Data & React: https://www.youtube.com/watch?v=I7IdS-PbEgI
 ** Courses
+*** React Tutorial (official)
+**** Components
+     React is all about modular, composable components. Note that native HTML element
+     names start with a lowercase letter, while custom React class names begin with an
+     uppercase letter.
+**** JSX
+     XML in our JS! Don't worry, it's there for our convienence; it's ultimately
+     transpiled to javascript. For more info:
+     https://facebook.github.io/react/docs/jsx-in-depth.html
+**** React.createClass({})
+     We pass an object containing methods to React.createClass to create a new React
+     component. 
+***** The render method is super important!
+      The render method returns a tree of React components that will eventually
+      render to HTML. Component tags look just like html elements, but these markers
+      are not transpiled to HTML strings. Additionally, these tags don't need to be
+      HTML tags, we can return a tree of components that you (or someone else) built.
+      This is what makes React composable.
+***** HTML Tags are regular React Components
+      The only difference between HTML components and defined React components is
+      is that HTML components are rewritten to React.createElement(tagName)
+      expressions, which avoids polluting the global namespace with defined
+      components.
+**** ReactDOM.render()
+     ReactDOM.render() instantiates the root component, starts the framework, and
+     injects the markup into a raw DOM element, provided as the second argument.
+     ReactDOM.render() should only be called once all of the composite components
+     have been defined.
+       The ReactDOM module exposes DOM-specific method, but React can also target
+     different platforms, such as React Native.
+**** Composing Components
+**** Using props
+     Data passed from a parent component to a child component is available as a
+     property on the child component. These properties are accessed through
+     this.props.
+**** JS in our render tree
+     By surrounding a JS expression in braces inside JSX (as either an attribute or
+     child of a component) you can drop text or React Components into the tree. We
+     access named attributes passed to the component as keys on this.props and any
+     nested elements as this.props.children.
+**** Component Properties (attributes and this.props.children)
+     We can pass data from a parent component to a child component in two ways:
+     1. We can pass data as an attribute. Attributes look like traditional html
+        attributes: name="value". The value is then available on the child component
+        as this.props.name
+     2. The other way is to put data in between the opening and closing tags of a
+        component: <Button>Some Text</Button>. The data is available to the child
+        component as this.props.children.
+**** Adding Markdown with the marked library
+     Markdown lets us format text inline. Ex: surrounding text with asterisks will
+     add emphasis. To use markup we can bring in a third party library: marked,
+     which takes markdown text and converts it to raw html.
+       BUT, marked accepts a string, and returns an html string. Remember, react
+     doesn't transpile JSX to html by using setInnerHTML, it creates individual
+     elements using createElement.
+       HOWEVER, we can override React's default protection against XSS attacks, and
+     enable an insertion of raw html with an attribute called dangerouslySetHTML,
+     which takes raw markup as a value, and reners that markup as the data.
+       To make this a little less scary, we can scrub our input. The marked library
+     allows you to pass a second argumet to marked, and we can encapsulate the
+     resulting string in a context object:
+
+#+BEGIN_SRC js
+
+// tutorial7.js
+var Comment = React.createClass({
+  rawMarkup: function() {
+    var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
+    return { __html: rawMarkup };
+  },
+
+  render: function() {
+    return (
+      <div className="comment">
+        <h2 className="commentAuthor">
+          {this.props.author}
+        </h2>
+        <span dangerouslySetInnerHTML={this.rawMarkup()} />
+      </div>
+    );
+  }
+});
+
+#+END_SRC
+
+**** Hook Up the Data Model
+     We can render data dynamically by mapping over data, and saving the returned
+     components in a variable to return later.
+
+#+BEGIN_SRC js
+
+// tutorial10.js
+var CommentList = React.createClass({
+  render: function() {
+    var commentNodes = this.props.data.map(function(comment) {
+      return (
+        <Comment author={comment.author} key={comment.id}>
+          {comment.text}
+        </Comment>
+      );
+    });
+    return (
+      <div className="commentList">
+        {commentNodes}
+      </div>
+    );
+  }
+});
+
+#+END_SRC
+
+**** Reactive State
+     render() methods are written declaratively as functions of this.props and
+     this.state. The framework guarantees the UI is always consistent with the
+     inputs.
+       Props are immutable, they are passed from the parent and are owned by the
+     parent. To implement interactions, we introduce mutable state to the component.
+     this.state is private to the component and can be changed by calling
+     this.setState(). When the state updates, the component re-renders itself.
+     the getInitialState() methos executes exactly once during the lifecycle of the
+     component and sets up the initial state of the component.
+**** Updating State
+     componentDidMount() is a method called automatically by React after a component
+     is rendered for the first time. The key to dynamic updates is the call to
+     this.setState(), which lets us replace the previous state with a new state,
+     causing a re-render.
+**** Controlled Components (Forms and Input)
+     In React, components should always represent the state of the view and not
+     only at the point of initialization.
+**** Events
+     React attaches event handlers to components using onChange and onSubmit
+     handlers. We can use this.state to mirror user input into input elements by
+     setting the element's value to this.state, and attach a onOnChange handler
+     to setState.
+       With an onSubmit handler, we can clear the form fields when the form is
+     submitted with valid input.
+       NOTE preventDefault() is useful to prevent the browser's default action of
+     submitting forms.
+**** Callbacks as Props
+     When we need to pass data from a child component back up to its parent, we do
+     this by passing a callback (parent method) to the child as props, and tie that
+     callback to an event on the child component.
+**** Optimization: optimistic updates
+     Instead of relying on our server to handle updating data, we can add the user
+     submitted data to our view optimistically, to make the app feel faster.
 *** React.js Fundamentals Course
 **** Intro to the React Ecosystem
 ***** Declarative vs. Imperative
@@ -3762,5 +3944,3 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 ***** map props to a render helper...
 ***** react-sparklines
 ***** react-google-maps
-      
-      
