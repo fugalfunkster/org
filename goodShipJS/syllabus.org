@@ -427,7 +427,7 @@
 ***** http://speakingjs.com/es5/ch07.html
 **** Declaration Statements
 **** Blog Post: Most Popular JavaScript Statements
-
+     http://ariya.ofilabs.com/2012/04/most-popular-javascript-statements.html
 *** Automatic Semicolon Insertion
 **** http://www.2ality.com/2011/05/semicolon-insertion.html
 **** http://inimino.org/~inimino/blog/javascript_semicolons
