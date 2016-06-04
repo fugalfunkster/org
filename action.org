@@ -5,10 +5,9 @@ ACTION
 *** FreeCodeCamp BackEnd
 **** TODO Book Sharing
 **** Pinterest Clone
-*** Pluralsight Courses [0/4]
-    - [ ] React.js: Getting Started : Samer Buna (1:29)
+*** Pluralsight Courses [1/3]
+    - [X] React.js: Getting Started : Samer Buna (1:29)
     - [ ] Build Apps with React Native : Stephen Grider (8:00+)
-    - [ ] Build Web Apps with ReactJS and Flux : Stephen Grider (9:30+)
     - [ ] Docker Deep Dive : Nigel Poulton (5:38)
 *** JavaScript Allonge [0/3]
 **** TODO Review First Half
@@ -27,12 +26,7 @@ ACTION
 **** TODO Intro
 **** TODO Syntax
 *** Revisit Udemy Node Course
-<<<<<<< HEAD
 
-
-=======
-    
->>>>>>> 04f0c6c657a69463e858ed780d5fe6067cf0c2f9
 ** queue
 *** Write a little library
 *** YDKJS
@@ -70,7 +64,7 @@ ACTION
      - [ ] Node.js Testing Strategies : Rob Conery (2:39)
      - [ ] Node Application Patterns : Rob Conery (2:31)
 ***** React
-     - [ ] React.js: Getting Started : Samer Buna (1:29)
+     - [X] React.js: Getting Started : Samer Buna (1:29)
      - [ ] Building Applications with React and Flux : Cory House (5:08)
 ***** HTML / CSS
      - [ ] Intro to HTML5 and CSS3 : Christopher Schmitt (2:53)
@@ -240,13 +234,22 @@ ACTION
 *** Carbs
 ** Exercise and Massage
 *** Yard Projects
+**** Shed
+**** Concrete Fences
+**** Shop
 *** Cardio
 *** Massage
 ** Learning to Code
 *** Apps
 **** Soil Test
-**** Index Cards
+***** mongodb
+**** Ship's Log (searchable note taker) 
+***** dates
+***** string parsing
+***** relational db?
 **** SNAP
+**** Index Cards (a useful todo app in clojure and react)
+***** datomic
 *** Scheme
 **** Little Schemer / Seasoned Schemer
 **** HtDP [5/43]
@@ -308,6 +311,11 @@ ACTION
 **** Living Clojure
 **** Clojure for the Brave and True
 **** Clojure Applied
+*** Secondary Languages
+**** Java
+**** Elm
+**** Elixir
+**** Rust
 *** CompSci
 **** 6.01   - Intro to EE and CompSci
 **** 18.01  - Single Variable Calculus
