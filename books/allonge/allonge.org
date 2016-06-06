@@ -803,8 +803,7 @@ console.log(setter(2));
 **** Literals - [element, element, element]
 ***** Array literals are expressions that evaluate to an array
 **** Element References
-***** In JavaScript, arrays are 0 based
-***** You can extract an element within an array by using bracket notation
+     You can extract an element within an array by using bracket notation.
 ***** Example:
 
 #+BEGIN_SRC js
@@ -817,26 +816,26 @@ console.log(setter(2));
 : true
 : undefined
 
-***** As the previous example demonstrates, 
-***** arrays relate to their elements by reference
+***** Arrays relate to their elements by reference
 *** Destructuring Arrays
 **** New ES6 Syntax
-***** In addition to bracket notation, we can extract elements of an array
-***** by destructuring the array.
-***** Destructuring an array mirrors array declaration.
-***** On the left side of an assignment,
-***** we have brackers surrounding the name binding(s)
-***** And on the right, the array to destructure
+     In addition to bracket notation, we can extract elements of an array by
+     destructuring the array.  Destructuring an array mirrors array declaration. On
+     the left side of an assignment, we have brackers surrounding the name
+     binding(s). And on the right, the array to destructure
 **** Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
 // declare
   const container = ['goodies'];
+
 // destructure
   const unwrap = (wrapped) => { 
     const [something] = wrapped;
     return something; 
   }
+
   console.log(unwrap(container));
 
 #+END_SRC
@@ -847,24 +846,28 @@ console.log(setter(2));
 
 *** Gathering and Spreading
 **** Gathering (extracting an array from an array)
-***** We can also extract arrays from an array, for example extracting the head
-***** and the remaining elements of the array (the "rest")
-****** Recall our right and left variadiac functions
+     We can also extract arrays from an array, for example extracting the head
+     and the remaining elements of the array (the "rest") 
+       Recall our right and left variadiac functions...
 **** Gathering Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
   const [car, ...cdr] = [1, 2, 3, 4, 5];
   console.log(car);
   console.log(cdr);
+
 #+END_SRC
 
 #+RESULTS:
 : 1
 : [ 2, 3, 4, 5 ]
+
 **** Spreading (assembling an array with an array)
 **** Spreading Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
   const oneTwoThree = ['one', 'two', 'three'];
   console.log(['zero', ...oneTwoThree]);
 
@@ -875,12 +878,13 @@ console.log(setter(2));
 
 *** Application
 **** Destructuring is not Pattern Matching
-***** When destructuring, the sides of the assignment operator should align
-***** In other programming languages, a mismatched destructuring attempt will err
-***** JavaScript, however, simply assigns undefined when destructuring fails
+     When destructuring, the sides of the assignment operator should align
+     In other programming languages, a mismatched destructuring attempt will err
+     JavaScript, however, simply assigns undefined when destructuring fails
 ***** Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
   const [thistle, that, theOther] = ['duck feet', 'tiger tail'];
   console.log(theOther);
 
@@ -894,12 +898,13 @@ console.log(setter(2));
 : []
 
 **** Destructuring and Return Values
-***** Some languages support multiple return values, ie: a function can return
-***** several things at once, like a value and an error code. We can emulate that
-***** with destructuring
+     Some languages support multiple return values, ie: a function can return
+     several things at once, like a value and an error code. We can emulate that
+     with destructuring
 ***** Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
   const description = (nameAndOccupation) => { 
     if (nameAndOccupation.length < 2) {
       return ["", "occupation missing"] 
@@ -913,6 +918,7 @@ console.log(setter(2));
 
   console.log(reg);
   console.log(status);
+
 #+END_SRC
 
 #+RESULTS:
@@ -920,14 +926,15 @@ console.log(setter(2));
 : ok
 
 **** Destructuring parameters
-***** Consider that the parameters to a function are also a collection of elements
-***** We can destructure those too! permitting us to create functions that accept
-***** a variable number of arguments
+     Consider that the parameters to a function are also a collection of elements
+     We can destructure those too! permitting us to create functions that accept
+     a variable number of arguments
 ***** Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
- const theWholeShebang = (car, ...cdr) => [car, cdr];
- console.log(theWholeShebang('why', 'hello', 'there', 'little', 'droid'));
+
+  const theWholeShebang = (car, ...cdr) => [car, cdr];
+  console.log(theWholeShebang('why', 'hello', 'there', 'little', 'droid'));
 
 #+END_SRC
 
@@ -936,7 +943,7 @@ console.log(setter(2));
 
 ** Self-Similarity
 *** What is a list?
-    Lists are a collection composed of zero or more elements.
+    Lists are collections composed of zero or more elements.
       In the previous chapter, we created arrays through literal declaration
     and then destructured arrays into their constituent elements. These two
     operations are opposites.
@@ -949,6 +956,7 @@ console.log(setter(2));
 *** A process to determing whether a value is an empty list:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
   const isEmpty = ([first, ...rest]) => first === undefined; 
 
   console.log(isEmpty([]));
@@ -1019,6 +1027,7 @@ console.log(flatten(['foo', [3, 4, []]]));
 **** Recipe:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" 
+
   const mapWith = (fn, [first, ...rest]) => {
     first === undefined
       ? []
@@ -1026,9 +1035,11 @@ console.log(flatten(['foo', [3, 4, []]]));
   }
 
 #+END_SRC
+
 **** Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" 
+
   const mapMaker = (fn, [first, ...rest]) => 
     first === undefined ? [] : [fn(first), ...mapMaker(fn, rest)];
 
@@ -1046,6 +1057,7 @@ console.log(flatten(['foo', [3, 4, []]]));
 **** sumSquares Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
   const sumSquares = ([first, ...rest]) => 
     first === undefined 
       ? 0
@@ -1065,6 +1077,7 @@ console.log(flatten(['foo', [3, 4, []]]));
 **** foldWith, a moar general mapWith:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
   const foldWith = (fn, terminalValue, [first, ...rest]) => 
     first === undefined
       ? terminalValue
@@ -1119,6 +1132,7 @@ console.log(flatten(['foo', [3, 4, []]]));
 **** Example sans TCO:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
   const length = ([first, ...rest]) => 
     first === undefined
       ? 0
@@ -1129,6 +1143,7 @@ console.log(flatten(['foo', [3, 4, []]]));
 **** Example w/ TCO:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
   const lengthTCO = ([first, ...rest], counter) => 
     first === undefined
       ? counter
@@ -1200,6 +1215,7 @@ console.log(flatten(['foo', [3, 4, []]]));
 **** Example:
      
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
   const factorial = (n, work = 1) =>
     n === 1
       ? work
@@ -1215,6 +1231,7 @@ console.log(flatten(['foo', [3, 4, []]]));
 **** Length and mapWith Examples:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
+
   const length = ([first, ...rest], numberToBeAdded = 0) =>
     first === undefined
       ? numberToBeAdded
@@ -1288,6 +1305,7 @@ console.log(flatten(['foo', [3, 4, []]]));
     In JavaScript we can emulate the semantics of CONS, CAR, and CDR:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
+
   const cons = (a, d) => [a, d];
   const car =([a,d])=>a;
   const cdr =([a,d])=>d;
@@ -1296,8 +1314,9 @@ console.log(flatten(['foo', [3, 4, []]]));
 
 #+END_SRC
 
-    Although JavaScript would display out list as a series of nested arrays, because 
-    array's are reference types, oneToFive is more accutarely represented as:
+    Although JavaScript would display our list as a series of nested arrays,
+    because array's are reference types, oneToFive is more accutarely represented
+    as:
   
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015"
   const node5 = [5, null],
@@ -1381,7 +1400,7 @@ console.log(flatten(['foo', [3, 4, []]]));
     color: 'blue'
   }
 
-  const {name: {first: given, last: surname}, quest, color} = user;
+  const {name: {first: given, last: surname}, quest, color} = knight;
 
   console.log(given + ' ' + surname);
 
@@ -1947,9 +1966,9 @@ console.log(mapWith((x) => 1.0 / x, OneToFive));
 ** Functional Iterators
 *** Fold revisited
     Let's revisit folding. Remember that folding is a form of linear recursion.
-    foldWith accepts a function, a terminal value, and a data structure. Fold allows
-    us to the action that we wish to perform on the array (the function) from the
-    process of traversing that array via linear recursion.   
+    foldWith accepts a function, a terminal value, and a data structure. Fold
+    allows us to the action that we wish to perform on the array (the function)
+    from the process of traversing that array via linear recursion.   
 *** callLeft, foldArrayWith, and arraySum Example:
 
 #+BEGIN_SRC js :cmd "org-babel-node --presets es2015" :results output
@@ -4219,7 +4238,7 @@ console.log(fibonacci(45)); // its fast!
 :   [ 7.99, 4.99, 7.99, 10.99, 9.99, 9.99 ] ]
 
 
-* The Coffee Factory: "Object-Oriented Programming"
+* The Coffee Factory: "Object-Oriented Programming" (copy)
   Programming with objects and classes began in Norway in the late 1960s with the
   Simula programming language. Its creators, Ole-Johan Dahl and Kristen Nygaard,
   did not use those words to describe what would eventually become the dominant

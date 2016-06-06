@@ -2,30 +2,7 @@
 
 NOTES
 
-* command line
-
-** Navigation
-
-*** pwd
-**** print name of current working dir
-*** cd
-**** change dir / default to home dir / accepts a relative path
-*** cd -
-**** changes working dir to previours working dir
-*** cd ~username
-**** changes the working dir to the home dir of username
-*** cd ..
-**** changes the working dir to the parent dir
-*** .
-**** refers to the working dir
-
-
-** Exploring the Filesystem
-*** ls
-**** list directory contents
-
-     
-* emacs
+* TODO emacs
 ** TODO avr mode please
 ** TODO now using eslint with flycheck
 ** TODO .el requires org-bullets, but no hook to auto-install from melpa
@@ -353,1121 +330,21 @@ NOTES
 ***** http://capitaomorte.github.io/yasnippet/index.html
 ***** https://www.youtube.com/watch?v=-4O-ZYjQxks
 ***** http://github.com/capitaomorte/yasnippet
-** Workflow Abstract
-*** emacs
-**** IDO
-**** SMEX
-**** neotree
-*** Org Mode
-**** Doing Stuff
-**** Notes
-*** Shell
-**** Init Scripts
-**** NPM
-**** jscs
-**** multiple-eshells
-**** exec-path-from-shell
-*** Editing
-**** Web Mode?
-***** JS Modes
-****** js2-mode
-****** js2-refactor?
-***** JS autocompletion
-***** JS templating
-****** yasnippet
-***** JS checking
-****** flycheck
-******* jslint
-******* jscs
-***** HTML, CSS, jsX, Sass Support
-**** Key Chords
-***** Navigation
-***** Kill Ring
-***** Undo Tree
-**** Tricks
-***** emmet-mode
-***** expand-region
-***** multiple-cursors
-*** Magit
-*** nodejs-repl
 
 
-* Books
-** HtDP
-
-*** I. Processing Simple Forms of Data
- 
-**** Programming Languages
-***** Data
-****** Compound Data is composed of Atomic Data
-***** Operations
-****** Programs are composed of Primitive Operations
-
-
-**** Primitive Operations in Scheme
-   - ( + - * / sqrt sqr expt remainder log sin tan )
-
-
-**** Errors
-   - Syntax Errors
-   - Runtime-Errors
-   - Logical Errors
-
-
-**** THE DESIGN RECIPE
-  
-***** An Example:
-
-   ;; CONTRACT: area-of-ring : number number -> number
-   ;; PURPOSE: to compute the area of a ring whose radius is OUTER and whose hole has a radius of INNER
-   ;; EXAMPLE: (area-of ring 5 3) should produce 50.24
-   ;; DEFINITION [refines the header]
-      (define (area-of-ring outer inner)
-        (- (area-of-disk outer)
-           (area-of-disk inner)))
-   ;; TESTS:
-      (area-of-ring 5 3)
-   ;; expected value
-   50.24
-
-***** Problem Analysis & Data Definition
-
-****** DATA ANALYSIS: After we determine that a problem statement deals with distinct situations, we must identify all of them. 
-***** Understand the Program's Purpose 
-
-****** CONTRACT: What a program consumes and produces - Input and Output
-****** PURPOSE STATEMENT: A brief comment of what the program is to compute  
-****** HEADER: Restates the programs name and gives each input a distinct name
-
-***** Examples - Characterize the I/O relationship with examples
-
-****** Before creating the program body, make up examples; what would a given invocation of the header return?
-****** This forces us to think about the computational process, which will help when developing the function body
-
-***** Template - Function Template
-***** Body - Define the Function
-
-****** Compute the answer from the parameters using primitive operations or operations that we must define
-****** Domain Knowledge - you must understand the domain knowledge for the problem to describe the process
-
-***** Tests - Discover Errors
-****** Ensure that the program computes the expected outputs from the examples
-
-
-**** Function Composition 
-***** Formulate auxiliary function definitions for every dependency between quantities mentioned in the problem statement or discovered with example calculations.
-***** Define constants instead of repeating them - DRY
-
-
-**** Conditionals and Relational Operators
-
-***** (if / cond / else / = / < / > / and / or)
-
-
-**** of 'symbols and "strings"
-
-***** 'symbols
-
-****** 'symbols are atomic data
-****** Scheme provides only one basic operation on symbols: symbol=? - A comparison operation
-****** symbol=? consumes two symbols and produces true only if the two symbols are identical
-
-***** "strings
-
-****** "strings" are compound data
-****** string=? consumes two strings and produces true only if the two strings are identical
-
-    
-* Video Courses
-** Pluralsight Courses
-*** PAUSED Intro to Node.js (Paul O'Fallon)
-**** Accessing the Local System
-
-***** The Process Object - a way for node to manage itself and other processes on your system
-****** https://nodejs.org/api/process.html
-****** a collection of streams
-       - process.stdin
-       - process.stdout
-       - process.stderr
-****** attributes of the current process
-       - process.env
-       - processargv
-       - process.pid
-       - process.title
-       - process.uptime()
-       - process.memoryUsage()
-       - process.cwd()
-       - etc...
-****** Process-related actions
-       - process.abort()
-       - process.chdir()
-       - process.kill()
-       - process.setgid()
-       - process.setuid()
-       - ...etc...
-****** An Instance of Event Emitter
-       - event:'exit'
-       - event:'uncaughtException'
-       - POSIX signal events ('SIGINT',etc.)
-
-
-***** The File System
-****** built in fs module; async is default, "Sync" specified
-****** https://nodejs.org/api/fs.html
-****** Wrappers around POSIX functions
-       - ex: fs.readdir(path, cb) / fs.readDirSync(path)
-       - also: rename, truncate, chown, fchown, lchown, chmod, fchmod, lchmod, stat, fstat, lstat
-         link, symlink, readlink, realpath, unlink, rmdie, mkdir, readdir, close, open, utimes, futimes, 
-         fsync, write, read, readFile, writeFile, and appendFile
-****** Stream oriented functions
-       - fs.createReadStream() = returns an fs.ReadStream (a readable stream)
-       - fs createWriteStream() = | | 
-****** Watch a file or dir for changes
-       - fs.watch() - returns an fs.FSWatcher (an event emitter)
-       - 'change' event: the type of change and the filename that changed
-       - 'error' event: emitted when an error occurs
-
-
-***** Buffers
-****** the return value from a fs call is a buffer
-****** the buffer class provides a raw memory allocation for dealing with binary data directly
-****** to get at it's value, we can .toString() the result from a fs call
-
-
-***** "os" module
-****** provides info about the currently running system
-
-**** Testing and Debugging
-
-**** Scaling Your Node Application
-*** TODO Docker Deep Dive
-*** TODO Tools for REST APIs
-
-**** Collaborative Design
-
-***** Apiary - Blueprint for APIS
-****** help manage design between three interests
-******* architects or engineers of the API client
-******* the data provider
-******* the API itself
-****** makes documentation accessible
-****** 
-
-**** Testing
-
-**** HTTP
-
-**** Performance Testing
-
-**** Monito
-*** TODO Chrome Dev Tools
-*** DONE Intro to NPM as a build tool
-
-**** Basics
-
-***** Scripts are stored in the package.json file
-***** npm init
-****** runs wizard to create package.json
-****** skip test command for now
-****** "scripts" lets us execute scripts with npm 
-
-***** Installing Scripts
-****** npm install
-****** --save-dev
-****** --save
-***** running scripts with npm
-****** npm run-script <name-of-script>
-****** npm run <name-of-script>
-****** npm test == npm t == npm tst == npm run test
-
-***** npm stop
-****** runs stop script
-
-***** npm restart
-****** runs stop script, then start script
-****** unless you make a script named restart
-
-***** adding custom scripts
-****** simply name a new key:value in script object
-
-***** the value of a script, is just a unix command
-****** ex: "node server.js"
-
-***** check out koa
-****** minimalist framework works with generators?
-     
-
-**** Pre and Post Hooks
-
-***** Hooks are scripts that contain pre- or -post; ex: pretest/posttest
-****** hooks run automatically before and after the base script
-****** order of appearance in package.json doesn't matter
-****** hooks can be run on their own
-***** scripts can be chained by using a post-hook to "npm run next script"
-
-
-**** Scripts for Development and Test
-   
-***** you can run multiple scripts with && 
-****** "npm run this && npm run that"
-****** if the first fails, the second is not run
-***** you can ignore errors by combining with ; instead of &&
-
-***** Bundling with browserify
-****** lets you require modules client side
-****** npm install browserify --save-dev
-****** "browserify <targetpath> -o <bundlepath> 
-****** -o tells browserify to bundle the first file to the second
-
-***** minifying with uglify
-****** npm install uglify --save-dev
-****** we want to pipe the result from the browserify to the uglify
-****** "browserify <app.js> | uglify -mc > <endpath>"
-****** -mc (flag to mangle and compress the file)
-****** > redirection operator to output result
-
-***** chaining && piping | redirection >
-
-***** npm run <without any more arguments>
-****** lists scripts at our disposal
-
-
-**** Scripts for Development: Watching
-
-***** mocha can watch tests, rerun if test change
-
-***** " -- " lets us pass arguments into another script
-****** EX: "npm run test -- -w -R min"
-
-***** watch
-****** takes a command and files to run as arguments
-
-***** nodemon
-****** when a file/folder changes, restarts app
-****** "nodemon --ignore client --ignore public index.js"
-****** starts index.js file
-
-***** client side watching 
-****** coffeescript and typescript have built in options
-****** watchify ! from browserify
-******* "watchify <from> -o <to> -dv"
-******** -v verbose logging
-******** -d delay (doesn't run processor at 100%
-****** gotta trigger a bundling if you bundle/minify 
-****** but then make changes to base files
-
-***** live browser reload
-****** npm install live-reload --save-dev
-******* in html, you must serve live-reload client
-******* <script src="//localhost:8080" />
-****** see npm for more details...
-
-***** run tasks concurrently with &
-
-
-**** Versioning, Pushing, and Deploying
-
-***** increment version number
-****** Semantic Versioning x.y.z
-******* major.minor.patch
-******* breaking.feature.fix
-****** npm version --help
-****** npm version <major/minor/patch>
-****** this can be scripted!
-
-***** versoning code to git
-****** we can use npm version to set git tag
-****** in package.sjon, repository, and repo url
-****** npm version affects both package.json and git tag in repo
-***** pushing code to repo
-****** git push --tags 
-
-***** deploy the app
-****** as long as there's a command line interface for your provider
-***** heroku toolbelt
-****** heroku create <name>
-******* sets up a git remote
-****** deploying is as simple as pushing to the heroku git remote
-***** launching the app
-
-
-**** Deploy Script and Additional Tricks
-
-***** Example process:
-  - compile, bundle, & minify serverside javascript
-  - bundle & minify client side JS
-  - compile CSS
-  - new version
-  - push to github
-  - deploy to heroku
-  - open to verify success
-*** DONE Weback Fundamentals (Joe Eames)
-**** Intro
-***** Why do we need a build?
-****** By bunding the files the client needs, the client makes fewer requests to the server
-****** reduce code size with minification, compression, etc.
-****** file order dependencies: use modules instead of relying on script order
-****** transpilation
-****** linting / style
-***** other solutions
-****** server side tools (specific)
-****** task runners (grunt, gulp, npm - generic)
-***** webpack is a specialized task runner that specialized on file transformation
-****** webpack uses npm
-****** uses module system(s)
-***** module systems express dependencies between files
-****** no circular dependencies
-****** explicit dependencies permit you to load file dependencies in the right order
-**** Basic Builds
-***** CLI basics
-****** $ npm install webpack
-****** webpack takes .js files and bundles them into a bundle
-****** to bundle from the CLI : $ webpack ./input.js output.js
-***** adding a config file
-      The webpack.config.js file exports a Common.js module, an object with keys that tell
-      webpack how to do its job. Once we have a config file, we can run webpack from the CLI
-      w/o other arguments.At a minimum, the exported object must contain an entry key (the
-      path to the entry .js file), and an output property, with a nested filename property
-      (the path for the bundle.js)
-***** watch mode and the webpack dev server
-****** watch mode automatically rebuilds every time a file changes
-******* from CLI: webpack --watch
-******* in config file add key watch: true
-****** webpack has a webserver for us (hotloading)
-******* $ npm install webpack-dev-server -g
-******* $ webpack-dev-server
-******* localhost:8080/webpack-dev-server/ (for auto reload and status bar)
-******* localhost:8080/ (for app w/o hot reloading or status bar)
-******* if you use --inline when running webpack-dev-server, you can get reloading @ 8080/
-***** Bundling multiple files
-      Webpack understands the common.js module system, and bundles all dependencies of the
-      entry file. In the config, you declare the entry file(s) explicitly, and the entry key
-      can be an array of files.
-        You must restart the webpack-dev-server to reify changes to the config.
-***** using loaders
-      By default, webpack can combine and minify files. Loaders let us add functionality. 
-      For example, we can use babel to help us support ES6, and jshint for linting. Loaders
-      are supplemental modules, npm installed, and saved to package.json. To include loaders
-      in our config, we use the 'module.loaders' key. 
-****** keys:
-******* test: a regex to figure out which files to run through the loader
-******* exclude: files to exclude
-******* loader: the name of the loader module
-******* resolve: an array of file extensions that webpack must process
-****** example:
-
-#+BEGIN_SRC js
-
-  module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'jshint-loader'
-      }
-    ],
-    loaders: [
-      {
-        test: /\.es6$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      }
-    ]
-  },
-  resolve: {
-    extensions: ['', '.js', '.es6']
-  },
-
-#+END_SRC
-
-***** using preloaders
-      Preloaders run before loaders. The preLoader key takes the same format as loader.
-***** creating a start script with npm
-      "start": "webpack-dev-server"
-***** Production v. Development Builds
-      Before deploying our code,  we should minimize the code to save space. Additionally,
-      there are some things we might weant to strip out during production, console.logs ex.
-****** minimize with the -p CLI flag: 
-******* webpack -p
-****** the strip-loader lets us strip out code
-******* console.log, perfLog, etc.
-****** use a separate config file just for production
-       We can make a production specific config file, using js modules to require in the
-       primary config. Because loaders is an array, we can make an object and push the new
-       loader onto the array.
-******* Example:
-
- #+BEGIN_SRC js
-
- var WebpackStrip = require('strip-loader');
- var devConfig = require('./webpack.config.js');
-
- var stripLoader = {
-   test: [/\.js$/, /\.es6$/],
-   exclude: /node-modules/,
-   loader: WebpackStrip.loader('console.log')
- }
-
- devConfig.module.loaders.push(stripLoader);
-
- module.exports = devConfig;
-
- #+END_SRC
-
-******* We can specify a a config file other than the default from the CLI
-******** $ webpack --config webpack-production.config.js -p
-******* $ http-server is a node module that lets us instantiate an http-server w/o webpack
-**** Advanced Builds
-***** organizing our files and folders
-****** We usually organize files in subdirectories of our root directory
-       For example, it's common to create root/js/ for all .js files, and a public dir for
-       all .html and .css. To facilitate this, we need to give our webpack notice that our
-       files reside within a directory within our root directory.
-****** We want to exclude our bundles from version control
-       So, we will configure webpack to store our bundles in root/build/js/
-****** index.html must reference our bundle.js with a logical and accurate path
-******* Ex: <script src="/public/assets/js/bundle.js"></script>
-****** So we can configure webpack to facilitate the above:
-******* Node's path module helps us work with paths
-******** var path = require('path');
-******* context key tells webpack where to find the entry files, a relative root dir path
-******** context: path.resolve('js')
-******* output.path key tells webpack where to place bundled files, a relative root dir path
-******** path: path.resolve('build/js')
-******* output.publicPath key tells webpack where to serve the bundle for the web server
-******** publicPath: '/public/assets/js/'
-******** this must match the path in our index.html file
-******** allows us to redirect requests to public/ into build/
-******* devServer key tells webpack where root requests should be directed to
-******** contentBase: 'public'
-******** this would redirect root requests to the public dir
-****** when using the dev-server, the bundle isn't produced and saved to disk
-***** working with ES6 modules is easy with babel-loader
-      
-      Using babel for transpilation allows us to use the ES6 syntax for modules.
-      
-#+BEGIN_SRC js
-
-  import{login} from './login';
-
-  login('admin', 'radical');
-
-#+END_SRC
-
-***** source map support is built in to webpack
-      Source mapping allows us to view our individual and unminified .js files even after
-      they have been bundled and minified. This lets us use debugger statements in our dev
-      tools (pauses execution).
-****** We can generate the source maps for our .js files from the cli:
-******* $ webpack -d
-******* $ webpack-dev-server -d
-
-***** TODO creating multiple bundles for multiple pages or lazy loading
-      We can configure webpack to automatically generate a unique bundle for a set of entry
-      files.
-****** We need to use the webpack commonsPlugin plugin
-**** TODO Adding CSS to your build
-**** TODO Adding Images and Fonts to your build
-**** TODO Webpack Tools
-***** Using the Connect Middleware - a web server
-***** Creating a Custom Loader
-***** Using Plugins
-**** Webpack and Front End Frameworks
-***** Webpack React Build
-****** babel-preset-react is a loader that processes JSX
-****** we refer to babel-preset-react in our .babelrc presets
-****** babel-loader is all we need in our webpack config!
-
-*** DONE Git Fundamentals
-
-**** Configure Git
-
-***** Git provides three levels of configuration
-****** git config --system
-******* stored in /etc/gitconfig
-******* applies to entire computer git is installed on
-******* not common to modify
-****** git config --global
-******* user-level config
-******* stored in ~/.gitconfig
-****** git config
-******* Repository Level configuration
-******* stored in .git/config in each repo
-
-
-***** Global Options
-****** git config --global user.name "Matthew Hoselton"
-****** git config --global user.email "mtthwhsltn@gmail.com"
-****** git config --global core.editor emacs
-****** git config --global help.autocorrect 1
-******* waits a number before executing? helps autocorrect mispelled commands
-****** git config --global color.ui auto
-******* lets colors help for diffing, status, etc.
-****** git config --global core.autocrlf (true|false|input)
-******* Not necessary for mac - carriage return line feed - use input
-****** git config --global list
-******* display global settings
-
-
-***** Repo Options
-******* Overrides global settings for a repo
-****** git config user.name
-****** git config list
-****** git config --unset user.name 
-******* unsets a config, reverts to global
-
-
-**** Working Locally
-
-***** Creating a Local Repo, Adding Files, and Committing Changes
-****** git init
-******* makes the current working directory a repo
-******* creates a .git fir containing the repo and its metadata
-****** git status
-******* tells you what files are in repo
-******* and which of those files have been changed
-****** git add
-******* stages a file to be added to the repo
-******* -u (for updated) adds tracked & modifed files to staging area
-******* -A includes all files, including untracked files
-****** git commit
-******* commits all staged files
-******* opens default text editor to input a message
-******* -m "" lets you put message inline instead of in text editor
-******* git identifies commits with a SHA1 hash
-
-
-***** Viewing History and Diffs
-****** git log
-******* shows the history of commits and SHAs
-****** git diff <initial-commit-sha-hash> <later-commit-sha-hash>
-******* shows what's different betwen two commits
-******* the latest commit is the HEAD
-******* if you do not specify a SHA, git assumes that you mean HEAD
-******* thus "git diff HEAD~1" diffs the HEAD against the commit b/f HEAD
-******* ~ just beack back from HEAD, ~3 means back 3,
-
-
-***** Staging Changes as Multiple Commits
-****** Multiple Adds / Multiple Commits
-******* You can break commits up into logical units
-******* after adding related files, commit them; Repeat
-
-
-***** Delete and remanimg files
-****** git add -u
-******* also stages deletions
-****** git add -A
-******* if you change a file name, git thinks you deleted it and added a new file 
-******* upon adding the untracked file, git will recognize the rename operation
-
-
-***** Undoing Changes to the Working Copy
-****** git checkout <filename>
-******* grabs head version out of repo and reverts any changes made to file since
-****** git reset --hard
-******* resets working copy back to HEAD
-
-
-***** Undoing/Redoing Changes in the Repo
-****** git reset --soft HEAD~1
-******* rolls back working cpoy to stage before commit?
-******* helps to fix things in local repo before pushing to remote repo
-
-
-***** Cleaning the Working Copy
-****** git clean
-******* lets you remove files
-******* -n tells you what it would do
-******* -f (force) actually makes it happen
-
-
-***** Ignoring Files with .gitignore
-****** .gitignore in root dir
-******* ignores files in file 
-******* list relative to root of repo
-******* good for anything that shouldn't be part of repo
-****** git add .gitignore
-******* so you don't have to edit .gitignore via text editor
-
-
-**** Working Remotely
-
-***** Cloning a Remote Repo
-****** git clone <repo-url>
-******* downloads all commits for repo
-******* pretty fast
-****** git log -oneline
-******* one commit per line
-
-
-***** Basic Repo Stats
-****** git log --oneline | wc -l
-******* word count (wc) line by line (l) 
-******* -graph gives a graph of banches and merges
-****** git shortlog
-******* lists authors and messages from each commit
-******** organized by authors
-******* -s (summary) -n(numberofcommits) -e(email) // 
-******* -sne organized by number of commits
-****** githup proves a graphs option
-******* more interactive and visual
-
-
-***** Viewing Commits
-****** git show HEAD
-******* shows you the last commit
-****** git show HEAD~6
-****** git show <SHA>
-****** git remote -v
-******* shows number of remotes
-******* ORIGIN is the default name for where the source came from
-******* -verbose shows url for remote
-
-
-***** Git Protocols
-****** http / https
-******* default ports 80/443
-******* permits read / write access (can demand password)
-******* on github, read is allowed, but password for auth to make changes
-******* firewall friendly
-****** git 
-******* different ballgame
-****** ssh
-******* port 22, secure, standard in unix env's
-******* read/write
-******* ssh keys for auth
-****** file
-******* local only
-******* read / write
-******* path name for repo on system
-
-
-***** Viewing Branches and Tags
-****** git branch
-******* what branch are we on?
-****** git branch -r
-******* lists branches for repo
-******* branches are used to separate mainline dev. from bug fixes, features, etc.
-
-
-***** Fetching from a Remote
-****** git remote -v
-******* on a local repo, there is no remote
-****** git remote add origin <repo-url>
-******* permits you to add a remote to a local repo
-******* you can add multiple remotes, to facilitate merges, patching, etc
-****** git fetch
-******* pulls down changes from remote repo
-******* if you have multiple remotes, you can spefic the remote to fetch from
-******* if you fetch, you have to merge to bring remote diffs into local repo
-****** git merge origin/master
-******* this merges changes in from the origin/master
-******* this is a fast-forward: no conflicts, just add a new HEAD
-******* local branch was up-to-date except for one commit
-
-
-***** Pulling from a Remote
-****** git branch -r
-******* this shows the branch of remote you just used
-******* git has a shortcut for git fetch & git merge
-****** git pull
-******* combines git branch -t & git merge
-****** git branch --set-upstream master origin/master
-******* sets remote tracking branch, from where should git pull
-******* master (local) to origin/master (remote)
-******* not you can git pull automatically from the origin./master
-******* cloning sets upstream branch automatically
-
-
-***** Pushing to a Remote
-****** git push
-******* do after committing
-****** git remote nm origin
-******* removes origin
-******* re-add origin as the ssh version to avoid password repetition
-******* ssh lets you use ssh key, see above
-
-
-***** Creating and Verifying Tags
-****** git tag <name>
-******* tag HEAD of remo
-******* -a -m to add a "message"
-******* -s (signed) requires a passphrase to unlock signing key
-******* -v (verifies a signed tag)
-****** git tag
-******* displays the current tag of repo
-******* you can get back to a past state by following the tag to the tagged 
-
-
-***** Pushing Tags to a Remote
-****** git push --tags
-******* git push does not push tags by default, you must use --tags
-
-
-**** Branching, Merging, and Rebasing with Git
-
-***** Visualizing branches
-****** git log --graph --online
-******* produces list of commits w/ graph of commits
-******* --all allows us to visualize all branches, not jus tthe current one
-******* --decorate adds labels like ;tags;HEAD;remote branches;local branches;
-****** We can add these options in git gonfig
-******* git config --global alias.lga "log --graph --oneline --all --decorate"
-
-****** git lga (custom command see above)
-
-
-***** Creating local branches
-****** git branch <branch-name>
-******* creates local branch called branch-name
-****** git checkout <branch-name>
-******* switches to branch-name branch
-
-
-***** Difference between branches and tags
-****** branches follow commits, new commits extend a branch
-****** tags stay on a particular commit, a friendly name for the SHA1 hash
-****** NOTE: branches are labels on the SHA1 hashes of individual commits
-
-
-***** Renaming and deleting branches
-****** git branch -m <oldname> <newname> ;;rename branch
-****** git branch -d <branchname> ;;delete branch
-******* only deletes if the branch has been merged into master, otherwise you have to use -D
-****** git checkout -b <branch-name> ;;create new branch
-
-
-***** Recovering deleted commits
-****** git reflog ;;log of all refrences, where HEAD has pointed, even deleted
-****** git branch <branchname> <commit-SHA> ;;reapplies branch label to commit
-******* git doesn't keep dangling commits forever, 30days
-
-
-***** Stashing changes
-****** you can stash changes that you're not ready to commit
-****** git stash ;;rolls back changes, puts changes into holding area
-****** git stash apply ;;reapplies changes from stash
-****** git stash list
-****** git stash pop ;;reapplies changes from stash, and removes changes from stash list
-****** git reset --hard HEAD
-****** git stash branch <new-branch-name>
-
-
-***** Merging branches
-****** git merge <branch-name>
-****** "fast-forward"
-******* doesn't require resolving conflicts between files
-****** "merge-conflicts"
-******* git has a standard way to display conflicts
-******* merge conflicts can be resolved in a text editor, other tools are available
-******* git merge-tool ;;KDiff3 3-way merge tool, app for MacOS
-****** git diff --cached ;;compares repo to staging area
-
-
-***** Rebasing changes
-****** git rebase master ;;relocates current branch to master (fast-forward only)
-****** if there's a merge conflict:
-******* gotta resolve conflict, see "merge-conflicts"
-******* git rebase continue
-
-
-***** Cherry-picking changes
-****** git cherry-pick ;;allows you to apply a simgle commit to master
-******* useful to apply patches without baggage
-
-
-***** Creating a remote branch
-****** git fetch origin master
-****** git push origin <name-of-local-branch> ;;creates new remote branch of same name of local
-****** git branch -r ;;lists remote branches
-
-
-***** Deleting a remote branch
-****** git branch -r
-****** git push :<branch-name-to-delete>
-
-*** DONE RESTful Web Services with Node.js and Express (see c9 for notes)
-
-*** DONE Building Web Applications with node.js and Express 4.0 (see c9 for notes)
-
-*** DONE Advanced Javascript (no notes)
-
-*** DONE Meet Emacs (no notes)
-
-*** DONE Javascript Objects and Prototypes (no notes)
-
-*** DONE Real Time Web w/ Node
-**** HTMl5 Facades
-     - Facade is a thin layer of abstraction over an API
-       a layer between the native API and your production code
-       insulates your code from changes in the native API
-       permits a single change in the facade, instead of changes throught your code
-       ex: don't use canvas directly, use a facade
-     - h5ive gethub repo
-***** Storage API
-     - local storage and session storage
-     - permit persistent storage on client's browser
-     - cookies were old-school way, but transmitted data with every request, limiging
-       because bogged down requests
-       - session cookies persisted for the length of the browser instance
-       - shared cookie across windows and tabs
-       - ends on logout or browser exit
-     - Session storage persists for lifetime of session
-       - based upon the tab session
-       - each tab permits a new session
-       - basically  key-value pairs
-       - use for session IDs, etc.
-       - doesn't transmit session IDs
-     - Local storage persists FOREVER
-       - Few people know about deleting cache, cookies, etc.
-       - Doesn't delete local storage
-       - Doesn't have a mechanism for  expiration, must delete manually
-       - Have migration scripts in place to keep local storage clean
-       - useful for username, preferences, etc.
-     - h5.storage (facade)
-       - you decide at construction time, how long you want the data to persist
-         - if you want it to expire with the session, it'll use session storage
-         - no expiration, works like local storage
-         - if you give it a timeline, it will store it in localsotrage with a timestamp wrapper
-         - the api will automatically clean up local storage based on the timestamp of requests
-     - storage events
-       - as soon as you change session or local storage, it will fire an event
-       - you can listen to in the browser, and any other browsers attached to the store
-       - cross-window messaging
-
-***** Canvas API
-      - annoying things
-        - two different coordinate systems
-          - addressable space (num of pixels)
-          - physical display space (css size of space, width and height)
-          - rarely useful (zooming maybe?)
-          - facade matches dimensions
-        - no chainability
-          - api implements chainability
-        - Paths
-          - if you don't give it an initial starting point for a path
-          - it might assume 0, 0
-          - or it might assume the first point you give it
-          - api assumes 0, 0
-        - rotate (also scaling, skewing)
-          - you're not rotating the drawing
-          - you're rotating the coordinate system
-          - clockwise in one is countercloskwise in the other
-          - facade fixes this
-
-***** getUserMedia
-      - allowes us to use JS to get user media streams
-      - take the stream and set it as the sorce element to a video tag,
-      - and that lets us display the stream to the user
-      - h5.userMedia - supersimple facade
-      - same object we wound transport across WebRTC to stream to another user
-
-***** requestAnimationFrame
-      - not just about animation
-      - basically an API that says permits any visual changes, usually in css, you can 
-        tell the browser to run that function when it's convienent for the update to occur
-      - browser is good at keeping itself in sync with the monitor
-      - css updates could be out of sync with the prior two
-      - requestAnimationFrame permits the css to sync optimally by letting the browser
-        schedule the repaint
-      - helps ensure fast transitions occur correctly
-      - h5.animationFrame - facade
-
-***** Web Sockets
-      - websockets
-        - 500-800 ms per ajax request, gotta have http requests
-        - websockets keep sockets open, so only one initial http connection
-        - 50-100 ms latency - much faster than ajax
-        - still might be too slow for games
-      - real-time (misnomer)
-        - we're not talking sub microsecond response times
-      - socket.io
-        - few people use the native API
-        - socket.io is well known, and common
-        - API is basically identical between client and server
-          - it's evented!
-        - servers can broadcast to all clients
-      - it's different to scale, limited number of server ports, etc.
-      - what's next?
-
-**** Node.js
-***** Node.js Observations
-****** What does node do well?
-******* really good at communication: i/o
-******* no so good at stadic serving of big files
-****** "middle end"
-******* middleend.com
-******* theres a certain core set of tasks that always happens
-******* the front end needs control, but the back end has it deeply embedded
-******* ex: validation rules, templating, url writing, data formatting, routing, etc.
-
-***** Hello World
-****** There's no environment, ther's no dom, no browser, no doctype, etc.
-****** how does node do i/o? where does that capability come from?
-****** V8, the javascript engine, has no concept of I/O
-****** V8 could run in any environment... on a browser, on a phone, in a arduino, etc.
-****** Node provides a hosting env. for V8
-****** the C wrapper handles this
-****** we could also do stdout;
-
-***** Accepting Input
-****** what if we wanted to accept input from the cmd line
-****** ex: when we write node 1.js --name=matthew
-****** --name= is an argument to node 1.js
-****** the syntax is very c like
-****** that argument data is available in our JS via minimist
-******* minimist allows us to store these arguments in an array: process.argv
-******* the first element of an array from the previous example would be "node", second "1.js", 3rd "matthew"
-****** minimist - OUR FIRST HELPER MODULE
-******* parses our arguments
-******* instead of manipluating the argv array directly,
-******* we're going to pull the name property from argv
-******* we could now $ node 1.js --name=World > Hello World
-******* documentation describes all helper methods
-     - NOTE you can add a header to a .js file that tells the terminal to run the file with node
-       then you can directly invoke that filename in bash, as if it were a shell script
-
-***** Adding Help
-****** our own print help
-
-***** File IO and Modules
-****** node has a standard, built-in module for reading files: fs
-******* fs.fileReadSync(filename)
-****** everything in data transfer is done in an array buffer
-******* an efficient binary representation of our data
-******* we can parse our buffer with .toString()
-     
-***** Asynchronous File IO
-****** most natural path is the module pattern and the require system, 
-******* vs. prototypal inheritance & classes
-****** In general you usually want to write non-blocking APIS, 
-****** node usually procides a default and a sync option
-****** to use the async function, we use CALLBACKS
-******* node uses err first callback, the first param is always reserved for an error
-******* whe using node modules, like fs, we assume that the first argument passed to a call back is an error, if any
-******* the next argument is going to be the 
-****** The setTimeout demonstrates the async-ity
-******* for some reason setTimeout will execute a function passed to it by reference right away?
-******* why is there a difference when it's wrapped in a function?
-
-***** Asynquence
-****** We can express our callbacks as a sequence
-******* We must require both asynquence and asynquence-contrib
-******* we instantiate a sq from ASQ, and pass it as the callback to the node function - which expects (err, callback)
-******* the readFile returns the contents to sq
-******* the then, done, val, and or methods are from asynquence
-******* later
-******* when I call hello.say I pass it a file name and I either get the content or an error.
-
-***** Creating NPM Modules
-****** we need to do configuration outsied of our file, we need a package.json file
-****** npm init will build it for you
-****** name: must be unique
-****** version: follow good semantic versioning
-******* verions can only increment, must be changed upon update, no overwrites
-****** description: not required
-****** main: main point of entry to the file 
-******* what's require going to pull in?
-****** dependencies: what and what version?
-
-***** Publishing NPM Modules
-****** npm publish and use the name of the module! easy
-****** then we can npm install and require('name')
-
-***** Extending Modules
-****** Browserify will include necessary functionality so that a node module will run in the browser
-******* our module relies on the fs, not going to work natively in browser
-******* common JS in node
-****** UMD: Universal Module Definition
-*******  one module format, available in all environments!
-
-***** Grunt and Gulp
-****** build process tools
-****** make files, bash scripts
-****** grunt is a configuration based approach, declare steps for build process
-****** gulp is more node-like, no config, 
-****** npm!
-
-***** File Streams (3b)
-****** Streams are an abstraction on IO, using buffers, which are highly memory efficient
-******* req and res are input and output streams
-****** fs.readFile reads the file in one big chunk, the entire file loads then proceeds to output
-****** creating a stream
-******* we can swap out this part of our code with a stream, w/o modifying the rest of our code.
-******* we can create a stream variable and assign it a read stream and corresponding filename
-******* anytime we get a chunk of data, a 'data' event fires
-******* each time it does this, we'll concat our return var
-******* when the stream is finished, it will emit an 'end' event
-******* node has a default buffer size, each chunk is this buffer size, so there might be many data events emitted
-
-***** Piping Streams
-****** we can pipe the output of one stream into the input of another stream
-****** our code creates a new file!
-****** checkout node stream playground @ www.nodestreams.com
-****** 
-
-***** Node as a Webserver (4.server.js)
-****** node is at it's best when its serving http requests
-****** the http module lets us deal with inbound and outbound http requests
-****** we can create an http server with:
-****** http.createServer(httpRequestHandlingFunction).listen(port, host);
-****** our handler takes two arguments: (req, res)
-****** executing our 4.server.js file sets up an infinite event loop
-****** it'll listen forever
-****** we can also install the "forever" module
-******* a process manager, if the process dies, it restarts it immediately
-
-***** Handling Requests
-****** we can control our response headers
-******* res.writeHead(<statusCode>, <content-type>)
-****** and we can see the type of request method, url, etc
-****** this allows us to rool our own routing, url requests, etc.
-****** we can do all of the query string manip that express provides with RegExs
-
-***** Simulating Asyncronicity (5)
-****** let's simulate some async!
-****** putting in some setTimeouts
-
-***** Adding Asyquence
-****** using ASQ
-
-***** Serving Static Files (6)
-****** node-static
-******* lets us create a static file server
-******* the first variable we pass to the static_server instance is a directory name
-******* this is the directory we want to serve our static files from
-******* .serve passes control to the static server to sniff the req, and form the res
-******* req.resume gives control back to the http server
-****** the regexs are designed to only recognize only urls that contain a number ex: /6 but !/foo
-****** the second regex makes that number translate to num.html, ex: /6 becomes 6.html
-****** static fileserver gzips stuff, sometimes automatically
-
-**** socket.io
-***** sockets!
-****** initial http request, handshake, and upgrade to persistent connection
-****** you want to be using SSL on your websockets
-****** socket.io is an extension on websockets
-****** we're going to use 0.9.16 version
-
-*** DONE Intro to Mongoose for node.js and MongoDB
-**** Validation
-***** Built in Validators
-****** All Types: required
-****** String: 
-******* enum - 
-******* match - allows regex validation
-****** Number: min, max
 ***** 
-**** Tools
-***** RoboMongo
-***** MongoView
-***** 3T Products
-*** DONE JavaScript Best Practices (no notes)
-*** DONE Docker and Containers: The Big Picture (no notes)
 
 
-* Learning React
+
+
+
+* JavaScript
+
+* Node & Express
+
+* MongoDB
+
+* React
 ** React Big Picture
 *** Following Pete Hunt's : https://github.com/petehunt/react-howto
 **** React
@@ -1522,7 +399,7 @@ NOTES
 ***** React.createClass
 ***** this.props.children
 
-** Videos
+** Talks
 *** react-router
 **** https://www.youtube.com/watch?v=XZfvW1a8Xac
 *** Immutability
@@ -1673,6 +550,93 @@ var CommentList = React.createClass({
 **** Optimization: optimistic updates
      Instead of relying on our server to handle updating data, we can add the user
      submitted data to our view optimistically, to make the app feel faster.
+*** React Fundamentals (egghead)
+**** JSX
+     JSX: an HTML-like syntax
+     all JXS is transpiled into JS
+     it's all React.createElement('h1', null, 'inner html') under the hood
+**** Stateless Functional Component
+     different than a class that extends React.Component
+     classes components can have state
+     stateless function components do not have state
+     props are passed into SFCs as argument
+**** The Render Method
+     The Render method is only allowed to return a single node. Adjacent JSX
+     elements must be wrapped in an enclosing tag. 
+       Be careful with wrapping our return statement, in the render method.
+**** Intro to Props
+     A lot like setting an attribute on an html element, or passing arguments to a 
+     function. we access props on our component as this.props.whatever.
+**** interpolating in JSX <tag>{JS expressions go in here}</tag>
+**** propTypes
+     type checking for props.
+     a property of any react component
+     an object where the name is the prop name
+     and the value is a React.PropTypes.Type
+     - .string
+     - .number
+     - *.isrequired (makes the prop required)
+**** default Props
+     follows same pattern as propTypes
+     key is prop name
+     value is default value for prop
+**** constructor method
+     super(); provides context for this within component when using ES6 class syntax
+     this.state initializes state
+**** binding this in the constructor method
+     you can bind this for any method by using .bind(this) in the constructor method
+     
+#+BEGIN_SRC js
+
+this.update = this.update.bind(this);
+
+#+END_SRC
+
+**** State Basics
+     state is a collection of value that a component will manage itself     
+     this.state ={} lets us create state
+     accessed throughout the class as this.state.txt
+     we only ever set state with this.setState
+     setState lets us update only what we specify
+**** Owner Ownee Relationship
+     when one component renders another component
+     react calles this owner onee relationship
+     parent component is called a composite component
+     
+**** TODO Using Refs to Access Components (not encouraged)
+     refs let you reference an instance of a component within our application
+     refs won't work with SFCs
+     When you are using React components you need to be able to access specific
+     references to individual components. This is done by defining a ref.
+**** TODO Accessing Child Properties {this.props.children}
+     When you're building your React components, you'll probably want to access
+     child properties of the markup. to get at innerHTML or nested components
+***** parent innerhtml
+***** nested components
+**** Component Lifecycle - Mounting Basics
+     React components have a lifecycle, and you are able to access specific phases
+     of that lifecycle. This lesson will introduce mounting and unmounting of your
+     React components. When a component is added or removed, this is called mounting
+     and unmounting the component.
+       These lifecycle events occur in a specific order, and we can hook into them.
+***** componentWillMount
+***** render
+***** componentDidMount
+***** componentWillUnmount
+**** Component Lifecycle - Mounting Usage
+     The previous lesson introduced the React component lifecycle mounting and
+     unmounting. In this lesson you will learn some simple uses for these hooks.
+**** Component Lifecycle - Updating
+     The React component lifecycle will allow you to update your components at
+     runtime. This lesson will explore how to do that.
+     
+**** Higher Order Components (replaces mixins)
+**** Composable Components
+**** Dynamically Generated Components
+**** Build a JSX Live Compiler
+**** JSX Deep Dive
+**** Precompile JSX
+**** Developer Tools
 *** React.js Fundamentals Course
 **** Intro to the React Ecosystem
 ***** Declarative vs. Imperative
@@ -2508,8 +1472,7 @@ React.cloneElement(FriendList, {friends: ['Jake', 'Joe']})
 ****** $ npm install --save react-addons-css-transition-group
 ****** Webpack loaders for css
        $ npm install --save-dev css-loader style-loader
-***** keys properties
-      
+***** keys properties      
 *** Notes on react-router tutorial
 **** Rendering a Route
   
@@ -3482,94 +2445,6 @@ app.get('*', (req, res) => {
      Server rendering is really new. There aren't really "best practices" yet,
      especially when it comes to data loading, so this tutorial is done, dropping
      you off at the bleeding edge.
-
-*** React Fundamentals (egghead)
-**** JSX
-     JSX: an HTML-like syntax
-     all JXS is transpiled into JS
-     it's all React.createElement('h1', null, 'inner html') under the hood
-**** Stateless Functional Component
-     different than a class that extends React.Component
-     classes components can have state
-     stateless function components do not have state
-     props are passed into SFCs as argument
-**** The Render Method
-     The Render method is only allowed to return a single node. Adjacent JSX
-     elements must be wrapped in an enclosing tag. 
-       Be careful with wrapping our return statement, in the render method.
-**** Intro to Props
-     A lot like setting an attribute on an html element, or passing arguments to a 
-     function. we access props on our component as this.props.whatever.
-**** interpolating in JSX <tag>{JS expressions go in here}</tag>
-**** propTypes
-     type checking for props.
-     a property of any react component
-     an object where the name is the prop name
-     and the value is a React.PropTypes.Type
-     - .string
-     - .number
-     - *.isrequired (makes the prop required)
-**** default Props
-     follows same pattern as propTypes
-     key is prop name
-     value is default value for prop
-**** constructor method
-     super(); provides context for this within component when using ES6 class syntax
-     this.state initializes state
-**** binding this in the constructor method
-     you can bind this for any method by using .bind(this) in the constructor method
-     
-#+BEGIN_SRC js
-
-this.update = this.update.bind(this);
-
-#+END_SRC
-
-**** State Basics
-     state is a collection of value that a component will manage itself     
-     this.state ={} lets us create state
-     accessed throughout the class as this.state.txt
-     we only ever set state with this.setState
-     setState lets us update only what we specify
-**** Owner Ownee Relationship
-     when one component renders another component
-     react calles this owner onee relationship
-     parent component is called a composite component
-     
-**** TODO Using Refs to Access Components (not encouraged)
-     refs let you reference an instance of a component within our application
-     refs won't work with SFCs
-     When you are using React components you need to be able to access specific
-     references to individual components. This is done by defining a ref.
-**** TODO Accessing Child Properties {this.props.children}
-     When you're building your React components, you'll probably want to access
-     child properties of the markup. to get at innerHTML or nested components
-***** parent innerhtml
-***** nested components
-**** Component Lifecycle - Mounting Basics
-     React components have a lifecycle, and you are able to access specific phases
-     of that lifecycle. This lesson will introduce mounting and unmounting of your
-     React components. When a component is added or removed, this is called mounting
-     and unmounting the component.
-       These lifecycle events occur in a specific order, and we can hook into them.
-***** componentWillMount
-***** render
-***** componentDidMount
-***** componentWillUnmount
-**** Component Lifecycle - Mounting Usage
-     The previous lesson introduced the React component lifecycle mounting and
-     unmounting. In this lesson you will learn some simple uses for these hooks.
-**** Component Lifecycle - Updating
-     The React component lifecycle will allow you to update your components at
-     runtime. This lesson will explore how to do that.
-     
-**** Higher Order Components (replaces mixins)
-**** Composable Components
-**** Dynamically Generated Components
-**** Build a JSX Live Compiler
-**** JSX Deep Dive
-**** Precompile JSX
-**** Developer Tools
 *** Getting Started with Redux (egghead)
 *** Getting Started with React Router (egghead)
 *** Modern React with Redux (Udemy)
@@ -3914,3 +2789,945 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 ***** map props to a render helper...
 ***** react-sparklines
 ***** react-google-maps
+
+
+* Video Courses
+** Pluralsight Courses
+*** PAUSED Intro to Node.js (Paul O'Fallon)
+**** Accessing the Local System
+
+***** The Process Object - a way for node to manage itself and other processes on your system
+****** https://nodejs.org/api/process.html
+****** a collection of streams
+       - process.stdin
+       - process.stdout
+       - process.stderr
+****** attributes of the current process
+       - process.env
+       - processargv
+       - process.pid
+       - process.title
+       - process.uptime()
+       - process.memoryUsage()
+       - process.cwd()
+       - etc...
+****** Process-related actions
+       - process.abort()
+       - process.chdir()
+       - process.kill()
+       - process.setgid()
+       - process.setuid()
+       - ...etc...
+****** An Instance of Event Emitter
+       - event:'exit'
+       - event:'uncaughtException'
+       - POSIX signal events ('SIGINT',etc.)
+
+
+***** The File System
+****** built in fs module; async is default, "Sync" specified
+****** https://nodejs.org/api/fs.html
+****** Wrappers around POSIX functions
+       - ex: fs.readdir(path, cb) / fs.readDirSync(path)
+       - also: rename, truncate, chown, fchown, lchown, chmod, fchmod, lchmod, stat, fstat, lstat
+         link, symlink, readlink, realpath, unlink, rmdie, mkdir, readdir, close, open, utimes, futimes, 
+         fsync, write, read, readFile, writeFile, and appendFile
+****** Stream oriented functions
+       - fs.createReadStream() = returns an fs.ReadStream (a readable stream)
+       - fs createWriteStream() = | | 
+****** Watch a file or dir for changes
+       - fs.watch() - returns an fs.FSWatcher (an event emitter)
+       - 'change' event: the type of change and the filename that changed
+       - 'error' event: emitted when an error occurs
+
+
+***** Buffers
+****** the return value from a fs call is a buffer
+****** the buffer class provides a raw memory allocation for dealing with binary data directly
+****** to get at it's value, we can .toString() the result from a fs call
+
+
+***** "os" module
+****** provides info about the currently running system
+
+**** Testing and Debugging
+
+**** Scaling Your Node Application
+*** DONE Intro to NPM as a build tool
+
+**** Basics
+
+***** Scripts are stored in the package.json file
+***** npm init
+****** runs wizard to create package.json
+****** skip test command for now
+****** "scripts" lets us execute scripts with npm 
+
+***** Installing Scripts
+****** npm install
+****** --save-dev
+****** --save
+***** running scripts with npm
+****** npm run-script <name-of-script>
+****** npm run <name-of-script>
+****** npm test == npm t == npm tst == npm run test
+
+***** npm stop
+****** runs stop script
+
+***** npm restart
+****** runs stop script, then start script
+****** unless you make a script named restart
+
+***** adding custom scripts
+****** simply name a new key:value in script object
+
+***** the value of a script, is just a unix command
+****** ex: "node server.js"
+
+***** check out koa
+****** minimalist framework works with generators?
+     
+
+**** Pre and Post Hooks
+
+***** Hooks are scripts that contain pre- or -post; ex: pretest/posttest
+****** hooks run automatically before and after the base script
+****** order of appearance in package.json doesn't matter
+****** hooks can be run on their own
+***** scripts can be chained by using a post-hook to "npm run next script"
+
+
+**** Scripts for Development and Test
+   
+***** you can run multiple scripts with && 
+****** "npm run this && npm run that"
+****** if the first fails, the second is not run
+***** you can ignore errors by combining with ; instead of &&
+
+***** Bundling with browserify
+****** lets you require modules client side
+****** npm install browserify --save-dev
+****** "browserify <targetpath> -o <bundlepath> 
+****** -o tells browserify to bundle the first file to the second
+
+***** minifying with uglify
+****** npm install uglify --save-dev
+****** we want to pipe the result from the browserify to the uglify
+****** "browserify <app.js> | uglify -mc > <endpath>"
+****** -mc (flag to mangle and compress the file)
+****** > redirection operator to output result
+
+***** chaining && piping | redirection >
+
+***** npm run <without any more arguments>
+****** lists scripts at our disposal
+
+
+**** Scripts for Development: Watching
+
+***** mocha can watch tests, rerun if test change
+
+***** " -- " lets us pass arguments into another script
+****** EX: "npm run test -- -w -R min"
+
+***** watch
+****** takes a command and files to run as arguments
+
+***** nodemon
+****** when a file/folder changes, restarts app
+****** "nodemon --ignore client --ignore public index.js"
+****** starts index.js file
+
+***** client side watching 
+****** coffeescript and typescript have built in options
+****** watchify ! from browserify
+******* "watchify <from> -o <to> -dv"
+******** -v verbose logging
+******** -d delay (doesn't run processor at 100%
+****** gotta trigger a bundling if you bundle/minify 
+****** but then make changes to base files
+
+***** live browser reload
+****** npm install live-reload --save-dev
+******* in html, you must serve live-reload client
+******* <script src="//localhost:8080" />
+****** see npm for more details...
+
+***** run tasks concurrently with &
+
+
+**** Versioning, Pushing, and Deploying
+
+***** increment version number
+****** Semantic Versioning x.y.z
+******* major.minor.patch
+******* breaking.feature.fix
+****** npm version --help
+****** npm version <major/minor/patch>
+****** this can be scripted!
+
+***** versoning code to git
+****** we can use npm version to set git tag
+****** in package.sjon, repository, and repo url
+****** npm version affects both package.json and git tag in repo
+***** pushing code to repo
+****** git push --tags 
+
+***** deploy the app
+****** as long as there's a command line interface for your provider
+***** heroku toolbelt
+****** heroku create <name>
+******* sets up a git remote
+****** deploying is as simple as pushing to the heroku git remote
+***** launching the app
+
+
+**** Deploy Script and Additional Tricks
+
+***** Example process:
+  - compile, bundle, & minify serverside javascript
+  - bundle & minify client side JS
+  - compile CSS
+  - new version
+  - push to github
+  - deploy to heroku
+  - open to verify success
+*** DONE Webpack Fundamentals (Joe Eames)
+**** Intro
+***** Why do we need a build?
+****** By bunding the files the client needs, the client makes fewer requests to the server
+****** reduce code size with minification, compression, etc.
+****** file order dependencies: use modules instead of relying on script order
+****** transpilation
+****** linting / style
+***** other solutions
+****** server side tools (specific)
+****** task runners (grunt, gulp, npm - generic)
+***** webpack is a specialized task runner that specialized on file transformation
+****** webpack uses npm
+****** uses module system(s)
+***** module systems express dependencies between files
+****** no circular dependencies
+****** explicit dependencies permit you to load file dependencies in the right order
+**** Basic Builds
+***** CLI basics
+****** $ npm install webpack
+****** webpack takes .js files and bundles them into a bundle
+****** to bundle from the CLI : $ webpack ./input.js output.js
+***** adding a config file
+      The webpack.config.js file exports a Common.js module, an object with keys that tell
+      webpack how to do its job. Once we have a config file, we can run webpack from the CLI
+      w/o other arguments.At a minimum, the exported object must contain an entry key (the
+      path to the entry .js file), and an output property, with a nested filename property
+      (the path for the bundle.js)
+***** watch mode and the webpack dev server
+****** watch mode automatically rebuilds every time a file changes
+******* from CLI: webpack --watch
+******* in config file add key watch: true
+****** webpack has a webserver for us (hotloading)
+******* $ npm install webpack-dev-server -g
+******* $ webpack-dev-server
+******* localhost:8080/webpack-dev-server/ (for auto reload and status bar)
+******* localhost:8080/ (for app w/o hot reloading or status bar)
+******* if you use --inline when running webpack-dev-server, you can get reloading @ 8080/
+***** Bundling multiple files
+      Webpack understands the common.js module system, and bundles all dependencies of the
+      entry file. In the config, you declare the entry file(s) explicitly, and the entry key
+      can be an array of files.
+        You must restart the webpack-dev-server to reify changes to the config.
+***** using loaders
+      By default, webpack can combine and minify files. Loaders let us add functionality. 
+      For example, we can use babel to help us support ES6, and jshint for linting. Loaders
+      are supplemental modules, npm installed, and saved to package.json. To include loaders
+      in our config, we use the 'module.loaders' key. 
+****** keys:
+******* test: a regex to figure out which files to run through the loader
+******* exclude: files to exclude
+******* loader: the name of the loader module
+******* resolve: an array of file extensions that webpack must process
+****** example:
+
+#+BEGIN_SRC js
+
+  module: {
+    preLoaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'jshint-loader'
+      }
+    ],
+    loaders: [
+      {
+        test: /\.es6$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['', '.js', '.es6']
+  },
+
+#+END_SRC
+
+***** using preloaders
+      Preloaders run before loaders. The preLoader key takes the same format as loader.
+***** creating a start script with npm
+      "start": "webpack-dev-server"
+***** Production v. Development Builds
+      Before deploying our code,  we should minimize the code to save space. Additionally,
+      there are some things we might weant to strip out during production, console.logs ex.
+****** minimize with the -p CLI flag: 
+******* webpack -p
+****** the strip-loader lets us strip out code
+******* console.log, perfLog, etc.
+****** use a separate config file just for production
+       We can make a production specific config file, using js modules to require in the
+       primary config. Because loaders is an array, we can make an object and push the new
+       loader onto the array.
+******* Example:
+
+ #+BEGIN_SRC js
+
+ var WebpackStrip = require('strip-loader');
+ var devConfig = require('./webpack.config.js');
+
+ var stripLoader = {
+   test: [/\.js$/, /\.es6$/],
+   exclude: /node-modules/,
+   loader: WebpackStrip.loader('console.log')
+ }
+
+ devConfig.module.loaders.push(stripLoader);
+
+ module.exports = devConfig;
+
+ #+END_SRC
+
+******* We can specify a a config file other than the default from the CLI
+******** $ webpack --config webpack-production.config.js -p
+******* $ http-server is a node module that lets us instantiate an http-server w/o webpack
+**** Advanced Builds
+***** organizing our files and folders
+****** We usually organize files in subdirectories of our root directory
+       For example, it's common to create root/js/ for all .js files, and a public dir for
+       all .html and .css. To facilitate this, we need to give our webpack notice that our
+       files reside within a directory within our root directory.
+****** We want to exclude our bundles from version control
+       So, we will configure webpack to store our bundles in root/build/js/
+****** index.html must reference our bundle.js with a logical and accurate path
+******* Ex: <script src="/public/assets/js/bundle.js"></script>
+****** So we can configure webpack to facilitate the above:
+******* Node's path module helps us work with paths
+******** var path = require('path');
+******* context key tells webpack where to find the entry files, a relative root dir path
+******** context: path.resolve('js')
+******* output.path key tells webpack where to place bundled files, a relative root dir path
+******** path: path.resolve('build/js')
+******* output.publicPath key tells webpack where to serve the bundle for the web server
+******** publicPath: '/public/assets/js/'
+******** this must match the path in our index.html file
+******** allows us to redirect requests to public/ into build/
+******* devServer key tells webpack where root requests should be directed to
+******** contentBase: 'public'
+******** this would redirect root requests to the public dir
+****** when using the dev-server, the bundle isn't produced and saved to disk
+***** working with ES6 modules is easy with babel-loader
+      
+      Using babel for transpilation allows us to use the ES6 syntax for modules.
+      
+#+BEGIN_SRC js
+
+  import{login} from './login';
+
+  login('admin', 'radical');
+
+#+END_SRC
+
+***** source map support is built in to webpack
+      Source mapping allows us to view our individual and unminified .js files even after
+      they have been bundled and minified. This lets us use debugger statements in our dev
+      tools (pauses execution).
+****** We can generate the source maps for our .js files from the cli:
+******* $ webpack -d
+******* $ webpack-dev-server -d
+
+***** TODO creating multiple bundles for multiple pages or lazy loading
+      We can configure webpack to automatically generate a unique bundle for a set of entry
+      files.
+****** We need to use the webpack commonsPlugin plugin
+**** TODO Adding CSS to your build
+**** TODO Adding Images and Fonts to your build
+**** TODO Webpack Tools
+***** Using the Connect Middleware - a web server
+***** Creating a Custom Loader
+***** Using Plugins
+**** Webpack and Front End Frameworks
+***** Webpack React Build
+****** babel-preset-react is a loader that processes JSX
+****** we refer to babel-preset-react in our .babelrc presets
+****** babel-loader is all we need in our webpack config!
+
+*** DONE Git Fundamentals
+
+**** Configure Git
+
+***** Git provides three levels of configuration
+****** git config --system
+******* stored in /etc/gitconfig
+******* applies to entire computer git is installed on
+******* not common to modify
+****** git config --global
+******* user-level config
+******* stored in ~/.gitconfig
+****** git config
+******* Repository Level configuration
+******* stored in .git/config in each repo
+
+
+***** Global Options
+****** git config --global user.name "Matthew Hoselton"
+****** git config --global user.email "mtthwhsltn@gmail.com"
+****** git config --global core.editor emacs
+****** git config --global help.autocorrect 1
+******* waits a number before executing? helps autocorrect mispelled commands
+****** git config --global color.ui auto
+******* lets colors help for diffing, status, etc.
+****** git config --global core.autocrlf (true|false|input)
+******* Not necessary for mac - carriage return line feed - use input
+****** git config --global list
+******* display global settings
+
+
+***** Repo Options
+******* Overrides global settings for a repo
+****** git config user.name
+****** git config list
+****** git config --unset user.name 
+******* unsets a config, reverts to global
+
+
+**** Working Locally
+
+***** Creating a Local Repo, Adding Files, and Committing Changes
+****** git init
+******* makes the current working directory a repo
+******* creates a .git fir containing the repo and its metadata
+****** git status
+******* tells you what files are in repo
+******* and which of those files have been changed
+****** git add
+******* stages a file to be added to the repo
+******* -u (for updated) adds tracked & modifed files to staging area
+******* -A includes all files, including untracked files
+****** git commit
+******* commits all staged files
+******* opens default text editor to input a message
+******* -m "" lets you put message inline instead of in text editor
+******* git identifies commits with a SHA1 hash
+
+
+***** Viewing History and Diffs
+****** git log
+******* shows the history of commits and SHAs
+****** git diff <initial-commit-sha-hash> <later-commit-sha-hash>
+******* shows what's different betwen two commits
+******* the latest commit is the HEAD
+******* if you do not specify a SHA, git assumes that you mean HEAD
+******* thus "git diff HEAD~1" diffs the HEAD against the commit b/f HEAD
+******* ~ just beack back from HEAD, ~3 means back 3,
+
+
+***** Staging Changes as Multiple Commits
+****** Multiple Adds / Multiple Commits
+******* You can break commits up into logical units
+******* after adding related files, commit them; Repeat
+
+
+***** Delete and remanimg files
+****** git add -u
+******* also stages deletions
+****** git add -A
+******* if you change a file name, git thinks you deleted it and added a new file 
+******* upon adding the untracked file, git will recognize the rename operation
+
+
+***** Undoing Changes to the Working Copy
+****** git checkout <filename>
+******* grabs head version out of repo and reverts any changes made to file since
+****** git reset --hard
+******* resets working copy back to HEAD
+
+
+***** Undoing/Redoing Changes in the Repo
+****** git reset --soft HEAD~1
+******* rolls back working cpoy to stage before commit?
+******* helps to fix things in local repo before pushing to remote repo
+
+
+***** Cleaning the Working Copy
+****** git clean
+******* lets you remove files
+******* -n tells you what it would do
+******* -f (force) actually makes it happen
+
+
+***** Ignoring Files with .gitignore
+****** .gitignore in root dir
+******* ignores files in file 
+******* list relative to root of repo
+******* good for anything that shouldn't be part of repo
+****** git add .gitignore
+******* so you don't have to edit .gitignore via text editor
+
+
+**** Working Remotely
+
+***** Cloning a Remote Repo
+****** git clone <repo-url>
+******* downloads all commits for repo
+******* pretty fast
+****** git log -oneline
+******* one commit per line
+
+
+***** Basic Repo Stats
+****** git log --oneline | wc -l
+******* word count (wc) line by line (l) 
+******* -graph gives a graph of banches and merges
+****** git shortlog
+******* lists authors and messages from each commit
+******** organized by authors
+******* -s (summary) -n(numberofcommits) -e(email) // 
+******* -sne organized by number of commits
+****** githup proves a graphs option
+******* more interactive and visual
+
+
+***** Viewing Commits
+****** git show HEAD
+******* shows you the last commit
+****** git show HEAD~6
+****** git show <SHA>
+****** git remote -v
+******* shows number of remotes
+******* ORIGIN is the default name for where the source came from
+******* -verbose shows url for remote
+
+
+***** Git Protocols
+****** http / https
+******* default ports 80/443
+******* permits read / write access (can demand password)
+******* on github, read is allowed, but password for auth to make changes
+******* firewall friendly
+****** git 
+******* different ballgame
+****** ssh
+******* port 22, secure, standard in unix env's
+******* read/write
+******* ssh keys for auth
+****** file
+******* local only
+******* read / write
+******* path name for repo on system
+
+
+***** Viewing Branches and Tags
+****** git branch
+******* what branch are we on?
+****** git branch -r
+******* lists branches for repo
+******* branches are used to separate mainline dev. from bug fixes, features, etc.
+
+
+***** Fetching from a Remote
+****** git remote -v
+******* on a local repo, there is no remote
+****** git remote add origin <repo-url>
+******* permits you to add a remote to a local repo
+******* you can add multiple remotes, to facilitate merges, patching, etc
+****** git fetch
+******* pulls down changes from remote repo
+******* if you have multiple remotes, you can spefic the remote to fetch from
+******* if you fetch, you have to merge to bring remote diffs into local repo
+****** git merge origin/master
+******* this merges changes in from the origin/master
+******* this is a fast-forward: no conflicts, just add a new HEAD
+******* local branch was up-to-date except for one commit
+
+
+***** Pulling from a Remote
+****** git branch -r
+******* this shows the branch of remote you just used
+******* git has a shortcut for git fetch & git merge
+****** git pull
+******* combines git branch -t & git merge
+****** git branch --set-upstream master origin/master
+******* sets remote tracking branch, from where should git pull
+******* master (local) to origin/master (remote)
+******* not you can git pull automatically from the origin./master
+******* cloning sets upstream branch automatically
+
+
+***** Pushing to a Remote
+****** git push
+******* do after committing
+****** git remote nm origin
+******* removes origin
+******* re-add origin as the ssh version to avoid password repetition
+******* ssh lets you use ssh key, see above
+
+
+***** Creating and Verifying Tags
+****** git tag <name>
+******* tag HEAD of remo
+******* -a -m to add a "message"
+******* -s (signed) requires a passphrase to unlock signing key
+******* -v (verifies a signed tag)
+****** git tag
+******* displays the current tag of repo
+******* you can get back to a past state by following the tag to the tagged 
+
+
+***** Pushing Tags to a Remote
+****** git push --tags
+******* git push does not push tags by default, you must use --tags
+
+
+**** Branching, Merging, and Rebasing with Git
+
+***** Visualizing branches
+****** git log --graph --online
+******* produces list of commits w/ graph of commits
+******* --all allows us to visualize all branches, not jus tthe current one
+******* --decorate adds labels like ;tags;HEAD;remote branches;local branches;
+****** We can add these options in git gonfig
+******* git config --global alias.lga "log --graph --oneline --all --decorate"
+
+****** git lga (custom command see above)
+
+
+***** Creating local branches
+****** git branch <branch-name>
+******* creates local branch called branch-name
+****** git checkout <branch-name>
+******* switches to branch-name branch
+
+
+***** Difference between branches and tags
+****** branches follow commits, new commits extend a branch
+****** tags stay on a particular commit, a friendly name for the SHA1 hash
+****** NOTE: branches are labels on the SHA1 hashes of individual commits
+
+
+***** Renaming and deleting branches
+****** git branch -m <oldname> <newname> ;;rename branch
+****** git branch -d <branchname> ;;delete branch
+******* only deletes if the branch has been merged into master, otherwise you have to use -D
+****** git checkout -b <branch-name> ;;create new branch
+
+
+***** Recovering deleted commits
+****** git reflog ;;log of all refrences, where HEAD has pointed, even deleted
+****** git branch <branchname> <commit-SHA> ;;reapplies branch label to commit
+******* git doesn't keep dangling commits forever, 30days
+
+
+***** Stashing changes
+****** you can stash changes that you're not ready to commit
+****** git stash ;;rolls back changes, puts changes into holding area
+****** git stash apply ;;reapplies changes from stash
+****** git stash list
+****** git stash pop ;;reapplies changes from stash, and removes changes from stash list
+****** git reset --hard HEAD
+****** git stash branch <new-branch-name>
+
+
+***** Merging branches
+****** git merge <branch-name>
+****** "fast-forward"
+******* doesn't require resolving conflicts between files
+****** "merge-conflicts"
+******* git has a standard way to display conflicts
+******* merge conflicts can be resolved in a text editor, other tools are available
+******* git merge-tool ;;KDiff3 3-way merge tool, app for MacOS
+****** git diff --cached ;;compares repo to staging area
+
+
+***** Rebasing changes
+****** git rebase master ;;relocates current branch to master (fast-forward only)
+****** if there's a merge conflict:
+******* gotta resolve conflict, see "merge-conflicts"
+******* git rebase continue
+
+
+***** Cherry-picking changes
+****** git cherry-pick ;;allows you to apply a simgle commit to master
+******* useful to apply patches without baggage
+
+
+***** Creating a remote branch
+****** git fetch origin master
+****** git push origin <name-of-local-branch> ;;creates new remote branch of same name of local
+****** git branch -r ;;lists remote branches
+
+
+***** Deleting a remote branch
+****** git branch -r
+****** git push :<branch-name-to-delete>
+
+*** DONE Real Time Web w/ Node
+**** HTMl5 Facades
+     - Facade is a thin layer of abstraction over an API
+       a layer between the native API and your production code
+       insulates your code from changes in the native API
+       permits a single change in the facade, instead of changes throught your code
+       ex: don't use canvas directly, use a facade
+     - h5ive gethub repo
+***** Storage API
+     - local storage and session storage
+     - permit persistent storage on client's browser
+     - cookies were old-school way, but transmitted data with every request, limiging
+       because bogged down requests
+       - session cookies persisted for the length of the browser instance
+       - shared cookie across windows and tabs
+       - ends on logout or browser exit
+     - Session storage persists for lifetime of session
+       - based upon the tab session
+       - each tab permits a new session
+       - basically  key-value pairs
+       - use for session IDs, etc.
+       - doesn't transmit session IDs
+     - Local storage persists FOREVER
+       - Few people know about deleting cache, cookies, etc.
+       - Doesn't delete local storage
+       - Doesn't have a mechanism for  expiration, must delete manually
+       - Have migration scripts in place to keep local storage clean
+       - useful for username, preferences, etc.
+     - h5.storage (facade)
+       - you decide at construction time, how long you want the data to persist
+         - if you want it to expire with the session, it'll use session storage
+         - no expiration, works like local storage
+         - if you give it a timeline, it will store it in localsotrage with a timestamp wrapper
+         - the api will automatically clean up local storage based on the timestamp of requests
+     - storage events
+       - as soon as you change session or local storage, it will fire an event
+       - you can listen to in the browser, and any other browsers attached to the store
+       - cross-window messaging
+
+***** Canvas API
+      - annoying things
+        - two different coordinate systems
+          - addressable space (num of pixels)
+          - physical display space (css size of space, width and height)
+          - rarely useful (zooming maybe?)
+          - facade matches dimensions
+        - no chainability
+          - api implements chainability
+        - Paths
+          - if you don't give it an initial starting point for a path
+          - it might assume 0, 0
+          - or it might assume the first point you give it
+          - api assumes 0, 0
+        - rotate (also scaling, skewing)
+          - you're not rotating the drawing
+          - you're rotating the coordinate system
+          - clockwise in one is countercloskwise in the other
+          - facade fixes this
+
+***** getUserMedia
+      - allowes us to use JS to get user media streams
+      - take the stream and set it as the sorce element to a video tag,
+      - and that lets us display the stream to the user
+      - h5.userMedia - supersimple facade
+      - same object we wound transport across WebRTC to stream to another user
+
+***** requestAnimationFrame
+      - not just about animation
+      - basically an API that says permits any visual changes, usually in css, you can 
+        tell the browser to run that function when it's convienent for the update to occur
+      - browser is good at keeping itself in sync with the monitor
+      - css updates could be out of sync with the prior two
+      - requestAnimationFrame permits the css to sync optimally by letting the browser
+        schedule the repaint
+      - helps ensure fast transitions occur correctly
+      - h5.animationFrame - facade
+
+***** Web Sockets
+      - websockets
+        - 500-800 ms per ajax request, gotta have http requests
+        - websockets keep sockets open, so only one initial http connection
+        - 50-100 ms latency - much faster than ajax
+        - still might be too slow for games
+      - real-time (misnomer)
+        - we're not talking sub microsecond response times
+      - socket.io
+        - few people use the native API
+        - socket.io is well known, and common
+        - API is basically identical between client and server
+          - it's evented!
+        - servers can broadcast to all clients
+      - it's different to scale, limited number of server ports, etc.
+      - what's next?
+
+**** Node.js
+***** Node.js Observations
+****** What does node do well?
+******* really good at communication: i/o
+******* no so good at stadic serving of big files
+****** "middle end"
+******* middleend.com
+******* theres a certain core set of tasks that always happens
+******* the front end needs control, but the back end has it deeply embedded
+******* ex: validation rules, templating, url writing, data formatting, routing, etc.
+
+***** Hello World
+****** There's no environment, ther's no dom, no browser, no doctype, etc.
+****** how does node do i/o? where does that capability come from?
+****** V8, the javascript engine, has no concept of I/O
+****** V8 could run in any environment... on a browser, on a phone, in a arduino, etc.
+****** Node provides a hosting env. for V8
+****** the C wrapper handles this
+****** we could also do stdout;
+
+***** Accepting Input
+****** what if we wanted to accept input from the cmd line
+****** ex: when we write node 1.js --name=matthew
+****** --name= is an argument to node 1.js
+****** the syntax is very c like
+****** that argument data is available in our JS via minimist
+******* minimist allows us to store these arguments in an array: process.argv
+******* the first element of an array from the previous example would be "node", second "1.js", 3rd "matthew"
+****** minimist - OUR FIRST HELPER MODULE
+******* parses our arguments
+******* instead of manipluating the argv array directly,
+******* we're going to pull the name property from argv
+******* we could now $ node 1.js --name=World > Hello World
+******* documentation describes all helper methods
+     - NOTE you can add a header to a .js file that tells the terminal to run the file with node
+       then you can directly invoke that filename in bash, as if it were a shell script
+
+***** Adding Help
+****** our own print help
+
+***** File IO and Modules
+****** node has a standard, built-in module for reading files: fs
+******* fs.fileReadSync(filename)
+****** everything in data transfer is done in an array buffer
+******* an efficient binary representation of our data
+******* we can parse our buffer with .toString()
+     
+***** Asynchronous File IO
+****** most natural path is the module pattern and the require system, 
+******* vs. prototypal inheritance & classes
+****** In general you usually want to write non-blocking APIS, 
+****** node usually procides a default and a sync option
+****** to use the async function, we use CALLBACKS
+******* node uses err first callback, the first param is always reserved for an error
+******* whe using node modules, like fs, we assume that the first argument passed to a call back is an error, if any
+******* the next argument is going to be the 
+****** The setTimeout demonstrates the async-ity
+******* for some reason setTimeout will execute a function passed to it by reference right away?
+******* why is there a difference when it's wrapped in a function?
+
+***** Asynquence
+****** We can express our callbacks as a sequence
+******* We must require both asynquence and asynquence-contrib
+******* we instantiate a sq from ASQ, and pass it as the callback to the node function - which expects (err, callback)
+******* the readFile returns the contents to sq
+******* the then, done, val, and or methods are from asynquence
+******* later
+******* when I call hello.say I pass it a file name and I either get the content or an error.
+
+***** Creating NPM Modules
+****** we need to do configuration outsied of our file, we need a package.json file
+****** npm init will build it for you
+****** name: must be unique
+****** version: follow good semantic versioning
+******* verions can only increment, must be changed upon update, no overwrites
+****** description: not required
+****** main: main point of entry to the file 
+******* what's require going to pull in?
+****** dependencies: what and what version?
+
+***** Publishing NPM Modules
+****** npm publish and use the name of the module! easy
+****** then we can npm install and require('name')
+
+***** Extending Modules
+****** Browserify will include necessary functionality so that a node module will run in the browser
+******* our module relies on the fs, not going to work natively in browser
+******* common JS in node
+****** UMD: Universal Module Definition
+*******  one module format, available in all environments!
+
+***** Grunt and Gulp
+****** build process tools
+****** make files, bash scripts
+****** grunt is a configuration based approach, declare steps for build process
+****** gulp is more node-like, no config, 
+****** npm!
+
+***** File Streams (3b)
+****** Streams are an abstraction on IO, using buffers, which are highly memory efficient
+******* req and res are input and output streams
+****** fs.readFile reads the file in one big chunk, the entire file loads then proceeds to output
+****** creating a stream
+******* we can swap out this part of our code with a stream, w/o modifying the rest of our code.
+******* we can create a stream variable and assign it a read stream and corresponding filename
+******* anytime we get a chunk of data, a 'data' event fires
+******* each time it does this, we'll concat our return var
+******* when the stream is finished, it will emit an 'end' event
+******* node has a default buffer size, each chunk is this buffer size, so there might be many data events emitted
+
+***** Piping Streams
+****** we can pipe the output of one stream into the input of another stream
+****** our code creates a new file!
+****** checkout node stream playground @ www.nodestreams.com
+****** 
+
+***** Node as a Webserver (4.server.js)
+****** node is at it's best when its serving http requests
+****** the http module lets us deal with inbound and outbound http requests
+****** we can create an http server with:
+****** http.createServer(httpRequestHandlingFunction).listen(port, host);
+****** our handler takes two arguments: (req, res)
+****** executing our 4.server.js file sets up an infinite event loop
+****** it'll listen forever
+****** we can also install the "forever" module
+******* a process manager, if the process dies, it restarts it immediately
+
+***** Handling Requests
+****** we can control our response headers
+******* res.writeHead(<statusCode>, <content-type>)
+****** and we can see the type of request method, url, etc
+****** this allows us to rool our own routing, url requests, etc.
+****** we can do all of the query string manip that express provides with RegExs
+
+***** Simulating Asyncronicity (5)
+****** let's simulate some async!
+****** putting in some setTimeouts
+
+***** Adding Asyquence
+****** using ASQ
+
+***** Serving Static Files (6)
+****** node-static
+******* lets us create a static file server
+******* the first variable we pass to the static_server instance is a directory name
+******* this is the directory we want to serve our static files from
+******* .serve passes control to the static server to sniff the req, and form the res
+******* req.resume gives control back to the http server
+****** the regexs are designed to only recognize only urls that contain a number ex: /6 but !/foo
+****** the second regex makes that number translate to num.html, ex: /6 becomes 6.html
+****** static fileserver gzips stuff, sometimes automatically
+
+**** socket.io
+***** sockets!
+****** initial http request, handshake, and upgrade to persistent connection
+****** you want to be using SSL on your websockets
+****** socket.io is an extension on websockets
+****** we're going to use 0.9.16 version
