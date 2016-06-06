@@ -1,0 +1,82 @@
+* I. Processing Simple Forms of Data
+ 
+** Programming Languages
+*** Data
+**** Compound Data is composed of Atomic Data
+*** Operations
+**** Programs are composed of Primitive Operations
+
+
+** Primitive Operations in Scheme
+ - ( + - * / sqrt sqr expt remainder log sin tan )
+
+
+** Errors
+ - Syntax Errors
+ - Runtime-Errors
+ - Logical Errors
+
+
+** THE DESIGN RECIPE
+  
+*** An Example:
+
+ ;; CONTRACT: area-of-ring : number number -> number
+ ;; PURPOSE: to compute the area of a ring whose radius is OUTER and whose hole has a radius of INNER
+ ;; EXAMPLE: (area-of ring 5 3) should produce 50.24
+ ;; DEFINITION [refines the header]
+    (define (area-of-ring outer inner)
+      (- (area-of-disk outer)
+         (area-of-disk inner)))
+ ;; TESTS:
+    (area-of-ring 5 3)
+ ;; expected value
+ 50.24
+
+*** Problem Analysis & Data Definition
+
+**** DATA ANALYSIS: After we determine that a problem statement deals with distinct situations, we must identify all of them. 
+*** Understand the Program's Purpose 
+
+**** CONTRACT: What a program consumes and produces - Input and Output
+**** PURPOSE STATEMENT: A brief comment of what the program is to compute  
+**** HEADER: Restates the programs name and gives each input a distinct name
+
+*** Examples - Characterize the I/O relationship with examples
+
+**** Before creating the program body, make up examples; what would a given invocation of the header return?
+**** This forces us to think about the computational process, which will help when developing the function body
+
+*** Template - Function Template
+*** Body - Define the Function
+
+**** Compute the answer from the parameters using primitive operations or operations that we must define
+**** Domain Knowledge - you must understand the domain knowledge for the problem to describe the process
+
+*** Tests - Discover Errors
+**** Ensure that the program computes the expected outputs from the examples
+
+
+** Function Composition 
+*** Formulate auxiliary function definitions for every dependency between quantities mentioned in the problem statement or discovered with example calculations.
+*** Define constants instead of repeating them - DRY
+
+
+** Conditionals and Relational Operators
+
+*** (if / cond / else / = / < / > / and / or)
+
+
+** of 'symbols and "strings"
+
+*** 'symbols
+
+**** 'symbols are atomic data
+**** Scheme provides only one basic operation on symbols: symbol=? - A comparison operation
+**** symbol=? consumes two symbols and produces true only if the two symbols are identical
+
+*** "strings
+
+**** "strings" are compound data
+**** string=? consumes two strings and produces true only if the two strings are identical
+
