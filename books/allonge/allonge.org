@@ -4353,25 +4353,3 @@ console.log(fibonacci(45)); // its fast!
 
 * Served by the Pot: Collections
 
-t
-
-
-
-#+BEGIN_SRC js :results output
-
-var exec = require('child_process').exec;
-console.log('Node Version ' + process.version);
-console.log('Node Path: ' + process.env.NODE_PATH);
-exec("org-babel-node --version", function (error, stdout, stderr) {
-console.log('Babel Version: ' + stdout);
-});
-
-#+END_SRC
-
-#+RESULTS:
-: Node Version v4.1.1
-: Node Path: /Users/fugalfunkster/code/org/node_modules:
-: Babel Version: 6.7.5
-: 
-
-
