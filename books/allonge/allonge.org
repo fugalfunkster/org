@@ -2374,7 +2374,7 @@ const fibIter = () => {
 
 ** Making Data Out Of Functions
 *** The kestrel and the idiot : backwardness
-    A constant function is a function that alwaus returns the same thing, no
+    A constant function is a function that always returns the same thing, no
     matter what you give it. The kestrel - aka the K combinator - is a function
     that makes constant functions. The Idiot Bird - aka the identity function or 
     I combinator - is a function that evaluates to whatever parameter you pass it.
@@ -2534,7 +2534,7 @@ const fibIter = () => {
 
  console.log(length(l123));
 
- console.log(doubled(first), doubled(rest)(first), doubled(rest)(rest)(first));
+ console.log(doubled(first), doubled(rest)(first), doubled(rest)(rest)(first);
 
 #+END_SRC
 
