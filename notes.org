@@ -2,10 +2,7 @@
 
 NOTES
 
-* TODO emacs
-** TODO avr mode please
-** TODO now using eslint with flycheck
-** TODO .el requires org-bullets, but no hook to auto-install from melpa
+* emacs
 ** Chords by Package
 *** emacs
 **** files
@@ -269,7 +266,7 @@ NOTES
 ***** see docs in pkg mgr
 **** exec-path-from-shell
 ***** https://github.com/purcell/exec-path-from-shell
-**** flycheck (jshint jscs)
+**** flycheck (eslint)
 ***** https://www.flycheck.org/
 **** git-commit
 ***** https://github.com/magit/magit
@@ -340,9 +337,12 @@ NOTES
 
 * JavaScript
 
+
 * Node & Express
 
+
 * MongoDB
+
 
 * React
 ** React Big Picture
