@@ -79,4 +79,3 @@
 
 **** "strings" are compound data
 **** string=? consumes two strings and produces true only if the two strings are identical
-

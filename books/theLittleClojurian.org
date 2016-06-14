@@ -54,6 +54,20 @@ The primitive null? is defined only for lists.
 ** The Law of Eq?
 The primitive eq? takes two arguments. Each must be a non-numeric atom.
 * 1. Toys
+** What is an atom?
+*** (hint, not a seq)
+** What is a list?
+** What is an symbolic expression?
+** Mix it up!
+** Baby you can drive my car
+*** what is the first of (a b c)
+#+BEGIN_SRC clojure
+  (car (a b c))
+#+END_SRC
+** cdr? I hardly know her
+** true
+** or false
+** or null
 * 2. Do it, Do it Again, and Again, and Again...
 * 3. Cons the Magnificent)
 * 4. Numbers Games
