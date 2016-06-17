@@ -3,21 +3,21 @@
 NOTES
 
 * emacs
-** Chords by Package
-*** emacs
+** TODO Chords by Package
+*** TODO emacs
 **** files
 ***** C-x b *name* (switch to buffer named name)
 ***** C-x C-f *name* (open file named name)
 ***** C-x C-s (save buffer to file)
 ***** C-x C-w (save buffer to file as)
-**** windows and frames
+**** TODO windows and frames
 ***** C-x 0 (delete current window)
 ***** C-x 1 (delete all windows except the window containing the point)
 ***** C-x 2 (split horizontal)
 ***** C-x 3 (split vertical)
 ***** C-x o (cycle cursor to next window)
 ***** C-M-v (scroll other window)
-**** movement
+**** TODO movement
 ***** M-< (top of document)
 ***** M-v (top of screen)
 ***** C-p (previous line)
@@ -47,7 +47,7 @@ NOTES
 **** eshell
 ***** M-x eshell
 ***** C-u M-x eshell
-**** modes
+**** TODO modes
 ***** M-x (set major mode)
 ****** clojure-mode
 ****** js2-mode
@@ -195,52 +195,93 @@ NOTES
     lets you send code to REPL
 **** C-= (select/expand)
 **** TAB (format)
-** Magit (Howard's talk through 8:21)
-*** Magit popups allow you to toggle switches, options, etc. 
-**** default options (C-t)
-**** actions complete the popup process
-**** popups
-***** Commit (c)
-****** commit w/o switches or options (c)
+** TODO Magit 
+*** TODO Howard's talk (through 8:21) https://www.youtube.com/watch?v=vQO7F2Q9DwA
+**** Magit popups allow you to toggle switches, options, etc. 
+***** default options (C-t)
+***** actions complete the popup process
+***** popups
+****** Commit (c)
+******* commit w/o switches or options (c)
        this opens two windows, one one side, the commit message
        on the other side the diff for staged files
-****** to submit commit message (C-c C-c)
-***** Push (P)
-***** Pull / Fetch (F)
-***** Log (l l)
-*** Create Repository (M-x magit-init) -- git init
-*** Main interface (M-x magit-status) -- git status
-**** Head: local branch info
-**** Upstream: primary remote
-**** Files can be Untracked, Unstaged, Staged
-***** refresh (g)
-**** When the cursor is over a particular file
-***** stage file (s)
-***** stage All (S)
-***** discard file (k)
-***** add to gitignore (i)
-***** expand file contents (<tab>)
-****** this lets you see the file contents
-****** (<return>) on a particular line allows you to edit that file
-**** Commit Popup (c c)
-**** Push Popup (P P)
-**** Status message ($)
-**** Pull /Fetch Popup (F F)
-**** log (l)
-*** Movement
-**** next line (n)
-**** previous line (p)
-**** forward sibling (M-n)
-**** backward sibling (M-p)
-**** bury buffer (q)
-*** ediff message (e)
-**** next (first) diff (n)
-**** A or B for what you want to keep
-**** Or edit C
-*** On Merging and rebasing
-**** gerrit requires a straight history, no twigs
-**** to achieve this you must rebase, which magit makes easy
-** Packages
+******* to submit commit message (C-c C-c)
+****** Push (P)
+****** Pull / Fetch (F)
+****** Log (l l)
+**** Create Repository (M-x magit-init) -- git init
+**** Main interface (M-x magit-status) -- git status
+***** Head: local branch info
+***** Upstream: primary remote
+***** Files can be Untracked, Unstaged, Staged
+****** refresh (g)
+***** When the cursor is over a particular file
+****** stage file (s)
+****** stage All (S)
+****** discard file (k)
+****** add to gitignore (i)
+****** expand file contents (<tab>)
+******* this lets you see the file contents
+******* (<return>) on a particular line allows you to edit that file
+***** Commit Popup (c c)
+***** Push Popup (P P)
+***** Status message ($)
+***** Pull /Fetch Popup (F F)
+***** log (l)
+**** Movement
+***** next line (n)
+***** previous line (p)
+***** forward sibling (M-n)
+***** backward sibling (M-p)
+***** bury buffer (q)
+**** Handling merge conflicts
+***** ediff message (e)
+****** next (first) diff (n)
+****** A or B for what you want to keep
+****** Or edit C
+***** rebasing
+****** gerrit requires a straight history, no twigs
+****** to achieve this you must rebase, which magit makes easy
+****** move to parent (in log) rebase parent before twig, use i...
+****** put lst commit at the top of the list...?
+***** stash (z?)
+****** pop puts it to staged
+***** squashing commits (combine multiple commits that are unpushed
+****** r - rebase popup
+****** l
+****** s - squash newer commit into older commit
+****** 
+**** DEMO CODE from howards magit demo repo
+*** TODO Howard's Blog
+**** Need for Rebasing http://www.howardism.org/Technical/Git/rebasing.html
+**** Squashing Commits http://www.howardism.org/Technical/Emacs/magit-squashing.html
+*** TODO Intro to Magit https://www.youtube.com/watch?v=LDafmAJa-4w
+** org!
+*** Harry Schwartz https://www.youtube.com/watch?v=SzA2YODtgK4
+**** Outliner
+***** C-c l : insert link
+***** tables
+***** #+ : props?
+****** TITLE:
+****** OPTIONS:
+**** literate programming
+***** source code blocks
+**** todos
+***** C-c C-d : deadline!
+***** C-c a : agenda
+***** archive file for DONE stuff
+**** ox (org export!)
+***** C-c C-e : export to other formats 
+****** ex: to latex, html, etc.
+***** beemer is for pdf presentations
+***** ox-twbs : twitter bootstrap
+***** ox-gfm : github flavored markdown
+**** publishing from org mode
+***** org2blog : lets you publish to a wordpress site!
+***** org-publish : lets you process a dir structure into a website
+**** org-drill : flashcards! maybe for litle clojurian?
+**** org google calendar (org g cal?)
+** TODO Packages
 *** currently installed
 **** async
 ***** http://elpa.gnu.org/packages/async.html

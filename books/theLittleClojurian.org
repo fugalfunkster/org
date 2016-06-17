@@ -56,15 +56,90 @@ The primitive eq? takes two arguments. Each must be a non-numeric atom.
 * 1. Toys
 ** What is an atom?
 *** (hint, not a seq)
-** What is a list?
-** What is an symbolic expression?
-** Mix it up!
-** Baby you can drive my car
-*** what is the first of (a b c)
-#+BEGIN_SRC clojure
-  (car (a b c))
+#+BEGIN_SRC clojure :session
+(def atom? 
+  (fn [x] 
+    (not (seq? x))))
 #+END_SRC
-** cdr? I hardly know her
+#+RESULTS:
+: #'user/atom?
+*** what about a string?
+#+BEGIN_SRC clojure :session
+(atom? "string")
+#+END_SRC
+*** what about a number?
+#+BEGIN_SRC clojure :session
+(atom? 1337)
+#+END_SRC
+*** what about a keyword?
+#+BEGIN_SRC clojure :session
+(atom? :keywords)
+#+END_SRC
+** What is a list?
+*** hint, not an atom!
+*** an atom enclosed by parentheses
+#+BEGIN_SRC clojure :session
+(list? ("string"))
+#+END_SRC
+*** what if a ' precedes the open paren?
+#+BEGIN_SRC clojure :session
+(list? '("string"))
+#+END_SRC
+*** can lists nest?
+#+BEGIN_SRC clojure :session
+(list? '((one) two (((three)))))
+#+END_SRC
+** What is an symbolic expression?
+*** (hint, lists are flexible)
+#+BEGIN_SRC clojure :session
+(def sexp?
+  (fn [x]
+    (or (seq? x) (atom? x))))
+#+END_SRC
+#+RESULTS:
+: #'user/sexp?
+*** an atom?
+#+BEGIN_SRC clojure :session
+(sexp? "string")
+#+END_SRC
+*** an empty list?
+#+BEGIN_SRC clojure :session
+(sexp? '("string"))
+#+END_SRC
+** Baby you can drive my car
+*** what is the first of (a b c)?
+#+BEGIN_SRC clojure
+  (first '(a b c))
+#+END_SRC
+*** What is the first of the first of ((a b) c)?
+#+BEGIN_SRC clojure :session
+(first (first '((a b) c)))
+#+END_SRC
+*** What is the first of an empty list?
+#+BEGIN_SRC clojure :session
+(first '())
+#+END_SRC
+*** The first rule is the law of car!
+** cdr? I barely know her
+*** what is the rest of (a b c)?
+#+BEGIN_SRC clojure :session
+(rest '(a b c))
+#+END_SRC
+*** what is the rest of the first of ((a b) c (d))?
+#+BEGIN_SRC clojure :session
+(rest (first '((a b) c (d))))
+#+END_SRC
+*** what is the rest of a?
+#+BEGIN_SRC clojure :session
+(rest 'a)
+#+END_SRC
+*** The second rule is the law of cdr!
+** cons
+*** What is the cons of the atom "peanut" and the list ("butter" "and" "jelly)?
+#+BEGIN_SRC clojure :session
+(cons "peanut" '("butter" "and" "jelly"))
+#+END_SRC
+*** 
 ** true
 ** or false
 ** or null
