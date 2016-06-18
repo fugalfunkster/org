@@ -448,52 +448,52 @@ NOTES
 ** Courses
 *** React Tutorial (official)
 **** Components
-     React is all about modular, composable components. Note that native HTML element
-     names start with a lowercase letter, while custom React class names begin with an
-     uppercase letter.
+React is all about modular, composable components. Note that native HTML element
+names start with a lowercase letter, while custom React class names begin with an
+uppercase letter.
 **** JSX
-     XML in our JS! Don't worry, it's there for our convienence; it's ultimately
-     transpiled to javascript. For more info:
-     https://facebook.github.io/react/docs/jsx-in-depth.html
+XML in our JS! Don't worry, it's there for our convienence; it's ultimately
+transpiled to javascript. For more info:
+https://facebook.github.io/react/docs/jsx-in-depth.html
 **** React.createClass({})
-     We pass an object containing methods to React.createClass to create a new React
-     component. 
+We pass an object containing methods to React.createClass to create a new React
+component. 
 ***** The render method is super important!
-      The render method returns a tree of React components that will eventually
-      render to HTML. Component tags look just like html elements, but these markers
-      are not transpiled to HTML strings. Additionally, these tags don't need to be
-      HTML tags, we can return a tree of components that you (or someone else) built.
-      This is what makes React composable.
+The render method returns a tree of React components that will eventually
+render to HTML. Component tags look just like html elements, but these markers
+are not transpiled to HTML strings. Additionally, these tags don't need to be
+HTML tags, we can return a tree of components that you (or someone else) built.
+This is what makes React composable.
 ***** HTML Tags are regular React Components
-      The only difference between HTML components and defined React components is
-      is that HTML components are rewritten to React.createElement(tagName)
-      expressions, which avoids polluting the global namespace with defined
-      components.
+The only difference between HTML components and defined React components is
+is that HTML components are rewritten to React.createElement(tagName)
+expressions, which avoids polluting the global namespace with defined
+components.
 **** ReactDOM.render()
-     ReactDOM.render() instantiates the root component, starts the framework, and
-     injects the markup into a raw DOM element, provided as the second argument.
-     ReactDOM.render() should only be called once all of the composite components
-     have been defined.
-       The ReactDOM module exposes DOM-specific method, but React can also target
-     different platforms, such as React Native.
+ReactDOM.render() instantiates the root component, starts the framework, and
+injects the markup into a raw DOM element, provided as the second argument.
+ReactDOM.render() should only be called once all of the composite components
+have been defined.
+  The ReactDOM module exposes DOM-specific method, but React can also target
+different platforms, such as React Native.
 **** Composing Components
 **** Using props
-     Data passed from a parent component to a child component is available as a
-     property on the child component. These properties are accessed through
-     this.props.
+Data passed from a parent component to a child component is available as a
+property on the child component. These properties are accessed through
+this.props.
 **** JS in our render tree
-     By surrounding a JS expression in braces inside JSX (as either an attribute or
-     child of a component) you can drop text or React Components into the tree. We
-     access named attributes passed to the component as keys on this.props and any
-     nested elements as this.props.children.
+By surrounding a JS expression in braces inside JSX (as either an attribute or
+child of a component) you can drop text or React Components into the tree. We
+access named attributes passed to the component as keys on this.props and any
+nested elements as this.props.children.
 **** Component Properties (attributes and this.props.children)
-     We can pass data from a parent component to a child component in two ways:
-     1. We can pass data as an attribute. Attributes look like traditional html
-        attributes: name="value". The value is then available on the child component
-        as this.props.name
-     2. The other way is to put data in between the opening and closing tags of a
-        component: <Button>Some Text</Button>. The data is available to the child
-        component as this.props.children.
+We can pass data from a parent component to a child component in two ways:
+1. We can pass data as an attribute. Attributes look like traditional html
+   attributes: name="value". The value is then available on the child component
+   as this.props.name
+2. The other way is to put data in between the opening and closing tags of a
+   component: <Button>Some Text</Button>. The data is available to the child
+   component as this.props.children.
 **** Adding Markdown with the marked library
      Markdown lets us format text inline. Ex: surrounding text with asterisks will
      add emphasis. To use markup we can bring in a third party library: marked,
@@ -2830,8 +2830,6 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 ***** map props to a render helper...
 ***** react-sparklines
 ***** react-google-maps
-
-
 * Video Courses
 ** Pluralsight Courses
 *** PAUSED Intro to Node.js (Paul O'Fallon)
