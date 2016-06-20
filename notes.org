@@ -2830,6 +2830,7 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 ***** map props to a render helper...
 ***** react-sparklines
 ***** react-google-maps
+
 * Video Courses
 ** Pluralsight Courses
 *** PAUSED Intro to Node.js (Paul O'Fallon)
