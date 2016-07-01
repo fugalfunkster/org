@@ -1,22 +1,10 @@
 ACTION
 
 * TODO list
-** FreeCodeCamp
-*** Book Sharing
-*** Pinterest Clone
-*** React
-**** Recipe Box
-**** Game of Life
-**** Rogue Like
-** Video Courses
-   - [ ] Modern React with Redux
-   - [ ] Docker Deep Dive : Nigel Poulton (5:38)
-** JavaScript Allonge
-*** Review First Half
-*** Tangle library
-*** refactor portfolio
-** Emacs: avr mode
-** Learn & Understand Node.js Anthony (12:00+)
+** Soil Test App : Design Recipe
+** FreeCodeCamp : React Recipe Box
+** Udemy : Modern React with Redux
+** JavaScript Allonge : Review and Refactor Portfolio
 
 
 * queue
@@ -26,13 +14,14 @@ ACTION
     - [ ] Building Applications with React and Redux in ES6: Cory House (6:14)
     - [ ] Build Cross Platform React Native Apps with Exponent and Redux : Hendrick(3:21)
     - [ ] Building a Full-Stack App with React and Express : Daniel Stern (3:24)
-    - [ ] Clojure Fundamentals - Part 1 : Alan Dipert (3:08)
+    -  [ ] Docker Deep Dive : Nigel Poulton (5:38)
 *** Udemy
     - [ ] Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:00)
     - [ ] Build Apps with React Native : Stephen Grider (8:00+)
     - [ ] Build Web Apps with ReactJS and Flux : Stephen Grider (9:30+)
     - [ ] Build Apps with React Native : Stephen Grider (8:00+)
     - [ ] Advanced React and Redux
+    - [ ] Learn & Understand Node.js Anthony (12:00+)
 *** FrontEnd Masters
     - [ ] API Design with Node.js using Express : Scott Moss (10:18)
     - [ ] Organizing Javascript Functionality : Kyle Simpson (5:11)
@@ -40,7 +29,7 @@ ACTION
     - [ ] Rethinking Async JS : Kyle Simpson (6:22)
     - [ ] Asynchronous Programming in Javascript : Jafar Husain (9:36)
 *** Egghead IO
-    - [ ] React Fundamentals : Joe Maddalon
+    - [X] React Fundamentals : Joe Maddalon
     - [ ] Build Your First React.js App : Tyler McGinnise
     - [ ] Getting Started with Redux : Dan Abramov
     - [ ] React Native Fundamentals : Tyler McGinnis
@@ -155,6 +144,5 @@ ACTION
 **** 18.02  - MultiVariable Calculus
 **** 6.046  - Algorithms
 **** 18.310 - Principles of Discrete Applied Math
-*** Learning Emacs Talk
 ** Nebraska Trip
     
