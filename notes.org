@@ -3824,7 +3824,6 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 ***** Resolution Based Selection (most common use case)
 ****** We want to deliver the same image to devices with different resolutions
 ****** Low Resolution devices avoid wasting bandwith, time, memory
-****** 
 ***** Art Direction
 ***** Pixel Ratio Based Selection
 ***** Image Types
