@@ -1,0 +1,86 @@
+* Fixed Positioning
+
+#+BEGIN_SRC css
+div {
+  position: fixed;
+}
+#+END_SRC
+
+Fixed positioning 'fixes' the position of an element relative to the browser window.
+The element always stays fixed in place, even when scrolling.
+
+top:, bottom:, left:, right:,
+
+you can't have conflicting values on an axis (left OR right; top OR bottom)
+
+* Absolute Positioning
+
+#+BEGIN_SRC css
+div {
+  position: absolute
+}
+#+END_SRC
+
+Absolute positioning takes an element out of the document flow, meaning the browser
+acts as if the element has no width and height, and the other elements on the page move 
+up as if it was never there. 
+
+The position of the element is then fixed relative to the top level container, or the 
+closest parent with a set positioning. 
+
+Thus, absolute positioned elements scroll with the document.
+
+* Relative Positioning
+
+#+BEGIN_SRC css
+div {
+  position: relative;
+}
+#+END_SRC
+
+Relative positioning sets the position of an element relative to its original position. 
+The element's original width and height is retained in document flow and other elements 
+behave as if it was in its original position.
+
+* Static, Inherit, and Z-Index
+
+Static positiong is the default behavior of elements. Elements in static position will
+not respond to top, bottom, left, or right property values.
+
+Inherited positioning tells an element to inherit its positioning from its parent 
+element.
+
+Z-Index controls the vertical stacking order of elements. Elements must have a set positioning for z-index to work. Higher numbers appear topmost.
+
+* Floating Elements
+
+Floating left removes an element from normal document flow. It then takes that element
+and pushes it as far left as possible. Other elements will move up as far as possible to flow around the element and take its original space.
+
+Floating right removes an element from normal document flow. It then takes that element
+and pushes it as far right as possible. Other elements will move up as far as possible to flow around the element and take its original space.
+
+* Floating Multiple Elements and Using the Clear Property
+
+Floating position an element according to document flow, and then moves it to the fat 
+left or right as possible. Elements following a floated element will move up as far as 
+possible.
+
+The clear property permits you to position elements below floated elements.
+
+* Methods for Centering Elements
+
+One of the most commonly asked questions is how to center elements since there is no 
+option to float center. But by thinking about how elements behave, we can use 
+positioning to achieve the same result.
+
+** horizontal:
+If the containing element has a set width, you can center an element horizontally 
+using 'margin: 0 auto;' which applies equal margins on both sides of an element.
+
+** vertical
+If the containing element has a height, you can set an elements position to absolute,
+set its top to 50% (of the parent), and the margin-top to -x(half the height of the element)
+
+** both
+To center an element both vertically and horizontally, we need to give the element a fixed width and height, and give it the horizontal centering propertys and values. Then wrap the element in a container that can have a width of 100%, and the vertical centering property values.

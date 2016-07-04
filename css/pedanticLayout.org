@@ -1,0 +1,189 @@
+* Learn CSS Layout - the pedantic way 
+* 1. Box Positioning in CSS
+The highest level abstraction for CSS layout is the positioning scheme. Once a positioning 
+scheme has been determined, it can be further modified by specific layout modes.
+  There are two aspects to layout:
+  1: how the box of an element is sized and aligned, which is primarily controlled by the
+     display property (and height, width, and margin)
+  2: how elements within a particular parent element are positioned relative to each other
+This chapter focuses on the latter: relative positioning
+** Positioning Schemes
+*** CSS 2.1 defined three positioning schemes:
+All elements belong to the normal flow by default, unless they are specifically removed
+from normal flow - typically by setting the float property or the position property.
+**** Normal Flow
+Consists of three formatting contexts: block, inline, and relative.
+**** Floats
+Which interact with normal flow and form the basis of most grid frameworks.
+**** Absolute Positioning
+Deals with absolute and fixed elements relative to the normal flow.
+*** Formatting Contexts
+Parent elements set the formatting context for their immediate child elements. Boxes in the 
+normal flow belong to a formatting context, which may be block or inline, but not both 
+simultaneously. Block-level boxes participate in a block formatting context. Inline-level 
+boxes participate in an inline formating context.
+  Blocks with a display property other than inline or block will still map to one of the 
+two formatting contexts within normal flow.
+  You can roughly think of the two formatting contexts in normal flow to correspond to
+vertical stacking (when in a block formatting context) and horizontal stacking (when in an
+inline formatting context).
+**** Block Level Elements
+Elements that are formatted visually as blocks. These elements occupies the entire space
+of its parent element. 
+  Block-level elements always start on a newline. Browsers typically display block-level 
+elements with a newline both before and after the element.
+  Block level elements may contain inline elements and other block-level elements. These
+elements are called block container boxes.
+***** Display values: 'block', 'list-item', 'table'
+**** Inline Level Elements
+Elements that do not form new blocks of content: the content (data or other inline elements) is distributed in lines.
+  By default, inline elements fo not begin with a newline.
+***** Display values: 'inline', 'inline-table', 'inline-block' 
+**** Anonymous Boxes
+Anonymous box generation is used to deal with two common cases.
+***** where a parent element contains a mix of inline-level and block-level child elements 
+in which case "anonymous block boxes" are generated
+****** EX: a div containing an img and p tags
+***** where the markup contains inline-level elements mixed with surrounding text 
+in which case anonymous inline boxes are generated
+****** Ex: a p tag containing text and an em or i tag
+***** Anonymous block boxes
+If a block container box has a block-level box inside it, then we force all other inner 
+boxes to be block-level boxes, by wrapping any inline boxes in block-level boxes.
+***** Anonymous inline boxes
+If a block container element contains text that is not enclosed within an inline-level 
+element, that text will be wrapped in anonymous inline boxes.
+***** Summary
+Anonymous box generation determines the formatting context for elements in normal flow
+that have both block- and inline-level siblings, by ensuring that all inline- siblings 
+are wrapped as block-level boxes, and thus are laid out relative to other boxes as if 
+they were block-level boxes.
+** Normal Flow Positioning
+In normal flow, the boxes are laid out based on the formatting context. The two formatting contexts in normal flow roughly correspond to vertical stacking and horizontal stacking.
+*** Normal Flow: Block Formatting
+Boxes are laid out vertically, beginning at the top of a containg block, and progressing
+along the left, outer edge of the containg block (even in the presence of floats).
+  The vertical distance between two sibling boxes is determined by the 'margin' properties.
+Vertical margins between adjacent block-level boxes in a block formatting context collapse.
+*** Normal Flow: Inline Formatting
+Boxes are laid out horizontally, into one or more line boxes. Line boxes are generated as
+needed, with a width equal to the containing block (minus floats) and height being sufficient
+for all of the boxes it contains.
+  In an inline box is too large for its line box, the content will be split if possible. If
+the content cannot be split (like a image or video, it will overflow the line box. 
+**** Horizontal Alignment: 'text-align'
+The text-align property controlls how inline-level boxes are positioned in a line box.
+After the inline content has been distributed across line boxes, and if the total width
+of the content is less than the width of the containing box, the text-align property
+can be used to align the content with respect to the containing boxes left and right sides.
+***** text-align: 'left', 'right', 'center', 'justify', 'initial', 'inherit'
+**** Vertical Alignment: 'vertical-align' & 'line-height'
+The vertical align property controls the vertical alignment of inline boxes within line boxes, not the vertical alignment of the line boxes themselves.
+  A line box element's height is determined by two factors:
+1. the height of the inline boxes contained within it
+     inline box height = font height * line-height property
+2. the alignment of the inline boxes contained within it.
+***** line-height
+line-height can be relative to the font height or absolute, in which case the font
+height is not used to calculate the height of the inline box.
+  line-height is not at all related to the parent element, even when specified as a %
+****** line-height: 'normal', <length>, <number>, <percentage>
+***** vertical-align
+the alignment of the inline boxes is determined by the vertical-align property. This
+property responds to two sets of values:
+****** values relative to the parent's font baseline, content area, or font-defined positions
+- baseline
+- middle * gets wacky
+- sub
+- super
+- text-top
+- -text-bottom
+- <percentage>
+- <length>
+****** values relative to the parent's line box (set by the vertical align of other elements)
+- top
+- bottom
+***** RECAP
+****** Inline boxes are wrapped by line boxes
+****** Inline boxes have:
+- a font size: which determines the size of the text glyphs
+- a line height: which determines the height of the inline box
+    inline box height = font height * line height
+- a baseline: a position defined by the font, and on which the bottom edges of most
+              glyphs are alighed (excluding q, or g, etc.)
+****** Line boxes have:
+- a font size: inherited from the parent
+- a height: defined by the heights and alignments of inline elements in the line box
+- a baseline
+****** text-align determines the alignment of the inline box inside the line box
+*** Normal Flow: Relative Positioning
+Relatively positioned elements are positioned as normal, then offset from their normal
+position  based on the top, left, bottom, and right property values.
+
+** Float Positioning Scheme
+Floated elements exhibit several special behaviors:
+- Floats are taken out of the normal flow during layout, and hence they do not affect the 
+  vertical positioning of block-level elements.
+- Floats are aligned to either the left or right outer edge of their container.
+- Floats are stacked starting from either the left or right edge, and are stacked in the order 
+  they appear in markup. In other words, for right-floated boxes, the first right-floated box 
+  is positioned on the right edge of the box that contains it and the second right-floated box 
+  is positioned immediately left of the first box.
+- Floats that would not fit horizontally are shifted downward.
+- Floats can, however, affect the current and subsequent elements' inline-level content's line 
+  boxes. Specifically, any current and subsequent line boxes are shortened to make space for 
+  the float.
+- But, floats do not affect the line boxes inside elements in normal flow that establish new block formatting contexts. Instead, such elements are either placed to the side of the float, or cleared by placing them below any preceding floats. (this is how grids work)
+- Because floats are not in the normal flow, they do not normally affect parent height. This is 
+  one reason why the "clearfix" technique was developed.
+- Floats can be cleared using the clear property.
+*** Float clearing
+The clear property determines whether an element interacts with preceeding floats.
+**** clear: 'left', 'right', 'both', 'none'
+*** Two variants of 'content-based' height calculation:
+1. overflow: visible
+2. overflow (other) or explicitly clearning floats
+*** The clearfix
+A clearfix is a CSS snippet that:
+- prevents floats withing the clearfixed parent element from affecting line boxes
+  in other elements that follow the clearfixed element
+- causes the floats within the clearfixed parent element to be taken into account when
+  calculating that element's height.
+
+There are three ways to accomplish this:
+
+- explicitly adding an element with clear: both at the end of the parent
+- adding an element with clear: both using pseudo-elements at the end of the parent
+#+BEGIN_SRC css
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#+END_SRC
+- making the parent element establish a new formatting context using a property such as 
+  overflow: hidden or overflow: auto, We can use the :after property to add content to the
+  end of a .clearfix element
+#+BEGIN_SRC css
+.clearfix {
+  overflow: auto;
+}
+#+END_SRC
+
+The most commonly used option is the second, because the third can cause scrollbar
+creation on overflow.
+** Absolute / Fixed Positioning Scheme
+Boxes are positioned in terms of an absolute offset with respect to the containing block.
+Absolutely positioned elements are ignored for purposes of calculating normal flow
+positioning, and do not interact with sibling floating elements. 
+  Fixed positioning is relative to the viewport
+  Absolute positioning is relative to the containing block
+The position of these boxes is based on the width, height, top, left, bottom, and right properties. 
+*** position: 'absolute', 'fixed'
+
+* 2. Box Sizing in CSS
+* 3. Additional properties that influence positioning
+* 4. Flexbox
+* 5. CSS layout - tips and layout techniques

@@ -1,47 +1,71 @@
-* Designing Your Portfolio
-** chat with jeena
-*** check out openfarm project, 
-**** openfarm.cc
-** Jack from Planet Argon
-*** Designing Your Portfolio
-**** See blog post by Jack
-***** http://www.jackbouba.com/
-***** http://blog.planetargon.com/jack-bouba
-*** Format
-**** Build
-***** Bootstrap
-***** Bootstrap Templates
-****** TODO http://www.startbootstrap.com
-****** We Used creative template
-****** 
-***** codepen
-***** google fonts
-****** free type delivery system
-***** beautiful-web-type shows great combinations
-***** font-awesome
-****** icon font
-**** Modify
-***** inspiration!
-****** dribble
-****** the best designs
-****** awwwards
-****** site inspire
-****** css winner
-****** muzli
-***** alistapart : a design blog 
-***** the 6 principles of design : fundamentals of design
-***** graphic burder : mockups
-***** the nound project : icon resource
-***** unsplash : a free resource for stock photos
-***** gravit : web based svg tool
-**** Deploy
-***** TODO githubpages
-****** free way to deploy a site
-****** connects to your repo
-****** auto updates upon commit
-****** use a custom domain name to link to github page
-****** SWEET!
-***** ftploy
-****** lets you link a repo with an ftp only sitemag
-* tesseract - optical recognition, maybe for soilt est app
-* flexbox
+* Portfolio
+** Designing Your Portfolio
+*** chat with jeena
+**** check out openfarm project, 
+***** openfarm.cc
+*** Jack from Planet Argon
+**** Designing Your Portfolio
+***** See blog post by Jack
+****** http://www.jackbouba.com/
+****** http://blog.planetargon.com/jack-bouba
+**** Format
+***** Build
+****** Bootstrap
+****** Bootstrap Templates
+******* TODO http://www.startbootstrap.com
+******* We Used creative template
+******* 
+****** codepen
+****** google fonts
+******* free type delivery system
+****** beautiful-web-type shows great combinations
+****** font-awesome
+******* icon font
+***** Modify
+****** inspiration!
+******* dribble
+******* the best designs
+******* awwwards
+******* site inspire
+******* css winner
+******* muzli
+****** alistapart : a design blog 
+****** the 6 principles of design : fundamentals of design
+****** graphic burder : mockups
+****** the nound project : icon resource
+****** unsplash : a free resource for stock photos
+****** gravit : web based svg tool
+***** Deploy
+****** TODO githubpages
+******* free way to deploy a site
+******* connects to your repo
+******* auto updates upon commit
+******* use a custom domain name to link to github page
+******* SWEET!
+****** ftploy
+******* lets you link a repo with an ftp only sitemag
+** tesseract - optical recognition, maybe for soilt est app
+** flexbox
+
+* June
+** heroku by @thejonanshow
+*** think like a git - an explanation of how git works
+*** tim pope - how to write a good commit message
+*** heroku
+**** heroku toolbelt
+**** create a heroku app from the cli
+**** build packs analyze your app, and determine how to deploy your code
+**** github has a build pack for a static page (open source)
+***** configure with a json file
+***** sets up basic routes
+**** you can sdtup a pipeline, containing staging and production environments
+***** each env is an instance, so you have to create two apps (one for each instance)
+**** when you're using heroku git cli commands you have to manually set remote
+***** so that heroku knows which remote (staging or production) you are using
+**** tl;dr focus on using git as part of a work flow
+***** pull requests
+***** creating branches
+***** merging
+***** rebasing
+***** IMPORTANT ALL THESE THINGS
+**** 

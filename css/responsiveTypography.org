@@ -1,0 +1,74 @@
+* Responsive Typography: An Introduction
+** Intro
+*** files for course: http://github.com/jpamental/workshop-rt
+** Art and Technology
+*** Our canvas is fluid, we can't be sure how our content will be viewed.
+** A Make-Believe Place
+*** We can't make assumptions about context of use
+**** screen size
+**** device capabilities
+**** user's concurrent activities
+**** depth of user's focus
+**** users purpose for visiting the site
+*** Type conveys meaning and importance, anyone can recognize the new yorker from Type
+*** Four Steps
+1. PErformance: select fonts with care, load what you need and don't block the page draw
+2. Progressive: plan for failure, tunr up the loading process & fallback fonts to minimize 
+   FOUT
+3. Proportion: small screens demans subtle scale
+4. Polish: Design is the details: OpenType & then some...
+** Performance
+*** Load only what you need
+**** don't load all weights, styles, and variants for every font you want to use
+*** FOUT: Flash of unstyled text
+**** web font loader lets us style our content with css hooks for whether web fonts have loaded 
+**** .wf-inactive / .wf-active
+**** this css results in a blank screen during load
+#+BEGIN_SRC css
+body {
+  font-family: "Trade Gothic", helvetica, arial;
+}
+#+END_SRC
+**** This shows content straight away
+#+BEGIN_SRC css
+.wf-inactive body {
+  font-family: helvetica, arial;
+}
+#+END_SRC
+**** adjust font-size, line-height, and letter spacing to avoid render jumps when fonts load
+** Progressive Enhancement
+*** movement is distracting, text styling is not
+** Proportion
+*** Modern scale:
+**** http://bit.ly/jprwt
+*** dont' change body size, scale around it
+*** use ems, they work everywhere
+*** Measure and Sale
+**** Use max-width on elements to keep text readable.
+*** Dont' use loren ipsum
+** Polish
+*** don't forget fit and finish
+*** enable OpenType enabled fonts
+*** adding multi-colums to break up monotony
+*** Use media queries to keep things in proportion
+*** dont' leave orphans behind (single words on the last line of a p) typogrify!
+** Responsive Web Typography Review
+*** Adapt to screen size, network speed, & device capabilities
+* Typography Basics: Anatomy, Picking, and Pairing
+** What is Typography
+** Anatomy
+** Type Selection
+** Type Pairing
+** Print and Pixel Parity
+** From Paper to Pixels Teaser
+* Performance & Progressive Enhancement: Getting it On-screen, Fast
+* Proportion: One Size Won't Rule Them All
+* Polish: Sweating the Small Stuff
+* A Perfect Page
+* Q&A
+* Links
+** typecast
+** fonts.com
+** typekit
+** fontspring
+** 
