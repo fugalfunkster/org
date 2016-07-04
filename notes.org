@@ -3771,3 +3771,60 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 ****** you want to be using SSL on your websockets
 ****** socket.io is an extension on websockets
 ****** we're going to use 0.9.16 version
+*** Responsive Web Images
+**** What are responsive web images?
+***** What is responsive web design?
+1. Fluid Grid
+2. Media Queries (CSS3)
+3. Flexible Images
+***** Images make up 63% of webpage size! Most pages are > 2 Mbs!
+***** We want to deliver the most appropriate/performant image for the design and device.
+***** Mediaqueries let the site know how large the viewport is
+****** arc direction images let you crop images for different sized displays
+**** Image Types
+***** Raster v. Vector
+
+|-----------------------------------------+----------------------------|
+| Raster (don't scale well)               | Vector                     |
+|-----------------------------------------+----------------------------|
+| Rectangular grid of single color pixels | Mathematical equations     |
+| specific width and height               | zoom or scale without loss |
+| Photos                                  | Logos or Icons             |
+| JPEG, GIF, PNG, WEBP                    | SVG                        |
+|-----------------------------------------+----------------------------|
+
+***** JPEG (Best for Photos)
+****** uses lossy compression: trades off quality vs. file size
+******* 
+****** progressive JPEG
+******* appear fuzzy at first, then gradually increase in quality
+******* remember the early web, modems
+***** GIF (animations)
+****** 8 bit / 256 colors
+****** lossless compression
+****** used for animation (otherwise not performant)
+***** PNG (transparency)
+****** 8 - 32 bits per pixel
+****** Lossless or lossy compression (not as strong of JPEG)
+****** transparency!
+***** WEBP (low browser support, like gif and png)
+****** animation and transparency
+****** potential size advantages
+****** limited browser support
+***** SVG (best for responsive design!)
+****** XML Vector image format
+****** points, lines, shapes
+****** resolution independent
+***** icons, fonts, and gradients
+****** Icon fonts (vector based replacement for raster icons)
+******* fontawesome has good examples
+****** Web Fonts (vector based replacement for raster fonts)
+****** CSS3 gradients (traditionally done as background images)
+**** Responsive Image Use Cases
+***** Resolution Based Selection (most common use case)
+****** We want to deliver the same image to devices with different resolutions
+****** Low Resolution devices avoid wasting bandwith, time, memory
+****** 
+***** Art Direction
+***** Pixel Ratio Based Selection
+***** Image Types
