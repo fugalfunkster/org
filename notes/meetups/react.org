@@ -1,0 +1,147 @@
+* 5/24
+** is postres right for me? toby fee @ todyfee.com FullStack Labs
+  Data modeling is getting further up the stack, more and more front-end developers
+  are dealing with data in increasing quantities.
+*** TODO What is Postgres? (check our bazel tutorial on tobyfee.com)
+   a relational database, this will follow bazels tutorial
+   a SQL like database that is open source, competes with MySQL
+   out of the box, postres is permissive, you have to manually apply restrictions
+   black-box: no user interface, cannot directly view data
+*** What is SQL?
+   Structured Query Language
+   the uery language doesn't just help you access the database, it reflects how the 
+   database is architechtected... sp
+*** postgres clients
+   pgadmin / psql /pgxcli / postico* (costs but worth it)
+*** why a db?
+   persistence
+   delegate
+   concurrency
+*** setting up postgres
+   gotta compile you own c source or find an installer package (postgres.app)
+   enterprisedb.com provides installers as courtesty to community
+   practice setting up postgres in a VM, you want to intereact with postgres as
+     an admin. you also want to be able to delete it (the vm) or transfer it 
+     instead of having it root on your system
+   postgres docs are great! http://www.postgresql.org/docs/
+*** data types
+   the usual, and lots of numbers, plus array - you can store multiple values in the
+     same column
+   array seems convienent but if you try to map over a null array it suck
+   BUT why use an array instead of making another table
+   usually you'd just make another table instead of an array
+
+   | arrays                                         | new table      |
+   |------------------------------------------------+----------------|
+   | makes table readable                           | faster         |
+   | no special query o find rows w/ no asociations | better         |
+   | simplified permissions                         | not a headache |
+   |------------------------------------------------+----------------|
+
+   indexes speed queries, auto on primary and foreign keys, hard to do on arrays
+*** safety
+   don't put raw data into the database
+   can foil injection attacks with "stored parameters" (a standard way)
+   you can also whitelist characters (bad idea) or whitelist terms (better idea)
+*** other superpowers
+   triggers: evented updating
+   security: 
+** redux middleware
+*** why middelware?
+   we end up using middleware a lot in redux, because the flux architecture has us
+   cramming all of our busines logic in our actions
+   middleware gets between the action and reducer
+   it stops the action and "handles" it
+   middleware can fire actions itself
+*** the smallest middleware
+
+#+BEGIN_SRC js
+
+  export default store => next => action => {
+  // do stuff
+    return next(action);
+  }
+
+#+END_SRC
+
+*** TODO get a code block f the parts needed to set up middleware
+*** we're going to look at using middleware for routing logic
+   https://github.com/reactjs/react-router-redux
+**** so they're basically using actions to let the user navigate through routes
+    instead of using an action to change state, an action notifies the app of a
+    change in url, the middleware intercepts that action and the middleware
+    redirects the user to the right url.
+**** when the user clicks an <a> element, it fires an action
+    a different way of notifying the app that the user is trying to navigate than
+    using react router
+**** the routing logic isn't in the middleware itself
+    instead the middleware is recieving some payload in the action that informs where
+    the user wants to go
+**** this is basically hijacking the one-way data flow model for routing purposes
+** lightning talks
+*** camlistore
+   a personal storage system
+*** modular web board game platform
+   vassal - a board game platform
+   ubiquitous spoon - new way to do it
+
+* 6/28 
+** redux/saga
+*** react-redux Provider component (connected components)
+*** reducers don't help manage async. manip of data and side effects
+**** ex: ajax
+*** sagas
+**** based on generators, help you manage async in a sync way
+*** generators
+**** a generator is a function that returns an iterator
+
+#+BEGIN_SRC js
+
+console.log('refresh');
+
+function* stepper() {
+  console.log("generator");
+  yield 'step one';
+  yield 1;
+}
+
+var gen = stepper();
+
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+
+#+END_SRC
+
+#+RESULTS:
+
+****  generators can yield infinitely, using an infinite loop
+
+#+BEGIN_SRC js
+function* idMaker() {
+  var x = 0;
+  while(true) {
+  console.log(x);
+  yield x++;
+}
+
+var gen = idMaker();
+
+gen.next();
+#+END_SRC
+
+#+RESULTS:
+*** redux sagas
+**** redux and saga work through middleware
+***** createSagaMiddleware is a function that accepts a generator function
+***** this will call next one time!
+***** makes something happen
+**** redux-saga effects
+***** use put to emit an action
+***** take: commanding the application beyond that first iterable?
+***** take requires an event to trigger the reducer
+*** provides a nice workflow
+*** makes testing easy because effects ('put') returns a data object - easy to dif
+** How to survive the front end: (front) end (of the) world
+*** 
