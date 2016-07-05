@@ -1,7 +1,6 @@
 Intro to NPM as a build tool
 
 * Basics
-
 ** Scripts are stored in the package.json file
 ** npm init
 *** runs wizard to create package.json
@@ -34,7 +33,6 @@ Intro to NPM as a build tool
 *** minimalist framework works with generators?
      
 * Pre and Post Hooks
-
 ** Hooks are scripts that contain pre- or -post; ex: pretest/posttest
 *** hooks run automatically before and after the base script
 *** order of appearance in package.json doesn't matter
@@ -42,7 +40,6 @@ Intro to NPM as a build tool
 ** scripts can be chained by using a post-hook to "npm run next script"
 
 * Scripts for Development and Test
-   
 ** you can run multiple scripts with && 
 *** "npm run this && npm run that"
 *** if the first fails, the second is not run
@@ -67,7 +64,6 @@ Intro to NPM as a build tool
 *** lists scripts at our disposal
 
 * Scripts for Development: Watching
-
 ** mocha can watch tests, rerun if test change
 
 ** " -- " lets us pass arguments into another script
@@ -99,7 +95,6 @@ Intro to NPM as a build tool
 ** run tasks concurrently with &
 
 * Versioning, Pushing, and Deploying
-
 ** increment version number
 *** Semantic Versioning x.y.z
 **** major.minor.patch
@@ -124,7 +119,6 @@ Intro to NPM as a build tool
 ** launching the app
 
 * Deploy Script and Additional Tricks
-
 ** Example process:
   - compile, bundle, & minify serverside javascript
   - bundle & minify client side JS

@@ -1,4 +1,5 @@
-React.js Fundamentals Course
+React.js Fundamentals Course : By Tyler McGinnis
+http://courses.reactjsprogram.com/courses/reactjsfundamentals
 
 * Intro to the React Ecosystem
 *** Declarative vs. Imperative
