@@ -23,9 +23,13 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ** OPEN Responsive Typography : Jason Pamental (5:55)
 ** OPEN Learn CSS Layout: the Pendatic Way
 
+** NEXT NPM Playbook : Joe Eames (0:58)
+
 
 * queue (next, open, view-only)
 ** OPEN Webpack Fundamentals : Joe Eames (2:23) 
+** TODO Babel: Get Started : Craig McKeachie (2:03)
+** TODO Advanced Git : Ben Hoskings (1:00)
 ** OPEN React Fundamentals : Joe Maddaloe
 ** OPEN Udemy : Modern React with Redux
 ** OPEN Learn & Understand Node.js : Anthony Alicea (12:00+)
@@ -53,13 +57,13 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** WATCHED JS Best Practices : Jonathan Mills (2:39)
 ***** WATCHED JS.Next: ES6 : Aaron Frost (5:24)
 ***** OPEN jQuery-free JS : Elijah Manor (2:26)
-***** WEbRTC FUndamentals : Lisa Larson-Kelly (1:40)
+***** TODO JS Module Fundamentals : (2:16)
+***** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
+***** TODO Reasoning About Async JS : Wes Higbee (2:05)
+***** Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
 ***** JavaScript Design Patterns : Aaron Powell (2:02)
 ***** JS Templating w/ Handlebars: Ryan Lewis (2:19)
-***** Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
-***** JS Module Fundamentals : (2:16)
-***** Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
-***** Reasoning About Async JS : Wes Higbee (2:05)
+***** WEbRTC FUndamentals : Lisa Larson-Kelly (1:40)
 **** Egghead
 ***** Asynchronous Programming: The End of the Loop : Jafar Husain
 ***** Regex in JavaScript : Joe Maddalone
@@ -73,12 +77,12 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Rethinking Async JS : Kyle Simpson (6:22)
 ***** Asynchronous Programming in Javascript : Jafar Husain (9:36)
 *** databases
-**** WATCHED Intro to Mongoose for Node.js & MongoDB : Mark Scott (1:41)
+**** WATCHEDONLY Intro to Mongoose for Node.js & MongoDB : Mark Scott (1:41)
 *** design
 **** Pluralsight
 ***** OPEN Responsive Typography : Jason Pamental (5:55)
 ***** OPEN Responsive Web Images : Robert Boedigheimer (1:55)
-***** Web Accessibility: Getting Started (1:30)
+***** TODO Web Accessibility: Getting Started (1:30)
 ***** Making a Web Form Accessible (1:47)
 ***** Intro to Building Website Layouts : Susan Simkins (5:04)
 ***** Responsive In-Browser Design... : Karen Menezes (3:22)
@@ -87,12 +91,12 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** OPEN pendaticLayout
 **** Pluralsight
 ***** DONE CSS Positioning : Susan Sumkins (0:50)
+***** TODO Responsive Web Design : Ben Callahan (4:31)
+***** TODO CSS3 In-Depth : Estelle Weyl (6:10)
+***** TODO CSS Flexbox Fundamentals : Gary Simon (1:28)
+***** TODO Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
+***** TODO Styling React Components : Jake Trent (1:29)
 ***** CSS3 : Michael Palermo (2:46)
-***** Responsive Web Design : Ben Callahan (4:31)
-***** CSS3 In-Depth : Estelle Weyl (6:10)
-***** Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
-***** CSS Flexbox Fundamentals : Gary Simon (1:28)
-***** Styling React Components : Jake Trent (1:29)
 ***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
 ***** Creating Elegant Nav. Using CSS# Transitions : Susam Simkins (1:02)
 ***** A Better CSS: LESS and SASS : Shawn Wildermuth (1:56)
@@ -100,11 +104,9 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** HTML5 Browser Caching : Ben Schwarz (1:01)
 *** linux
 **** pluralsight
-***** WATCHED Docker and Containers: The Big Picture : Nigel Poulton (1:47)
+***** WATCHEDONLY Docker and Containers: The Big Picture : Nigel Poulton (1:47)
 ***** Docker Deep Dive : Nigel Poulton (5:38)
 ***** Meet The Command Line : Dan Benjamin (1:53)
-*** meetups
-**** TODO Where did the emacs org docs go? and that css org doc?
 *** node
 **** Pluralsight
 ***** DONE Real-Time Web w/ Node.js : Kyle Simpson (5:23)
@@ -112,7 +114,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE Build Web Apps with Node.js and Express 4.0 : Jonathan Mills (4:43)
 ***** DONE Securing Yours App w/ OAuth and Passport : Jonathan Mills
 ***** OPEN Intro to Node JS : Paul O'Fallon (2:48)
-***** Five Essential tools for REST APIs : Elton Stoneman (2:56)
+***** TODO Five Essential tools for REST APIs : Elton Stoneman (2:56)
 ***** HTTP Fundamentals : Scott Allen (2:50)
 ***** Node Application Patterns : Rob Conery (2:30)
 ***** FullStack NodeJS : Geoffrey Grosenbach (2:35)
@@ -130,20 +132,20 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** DONE Facebook Official React Tutorial
 **** DONE React Router Tutorial
 **** Pluralsight
-***** Building iOS Apps with React Native : Hendrik Swanepoel (1:59)
-***** Building Applications with React and Flux : Cory House (5:08)
-***** Building Applications with React and Redux in ES6: Cory House (6:14)
+***** TODO Building Applications with React and Flux : Cory House (5:08)
+***** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
+***** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 ***** React Native Apps with Exponent and Redux : Hendrick(3:21)
-***** Building a Full-Stack App with React and Express : Daniel Stern (3:24)
+***** Building iOS Apps with React Native : Hendrik Swanepoel (1:59)
 **** Egghead
 ***** OPEN React Fundamentals : Joe Maddalon
-***** Getting Started with Redux (egghead)
-***** Getting Started with React Router (egghead)
-***** Build Your First React.js App : Tyler McGinnise
+***** TODO Getting Started with Redux (egghead)
+***** TODO Getting Started with React Router (egghead)
+***** TODO Build Your First React.js App : Tyler McGinnise
 ***** React Native Fundamentals : Tyler McGinnis
 **** Udemy
 ***** OPEN Modern React with Redux : Stephen Girder (?)
-***** Advanced React and Redux : Stephen Girder (?)
+***** TODO Advanced React and Redux : Stephen Girder (?)
 ***** Build Apps with React Native : Stephen Grider (8:00+)
 ***** Build Web Apps with ReactJS and Flux : Stephen Grider (9:30+)
 *** testing
@@ -160,11 +162,11 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE Git Fundamentals : James Kovacs (1:51)
 ***** WATCHEDONLY Meet Emacs : Phil Hagelberg (0:58)
 ***** OPEN Webpack Fundamentals : Joe Eames (2:23)
-***** Advanced Git : Ben Hoskings (1:00)
+***** TODO NPM Playbook : Joe Eames (0:58)
+***** TODO Advanced Git : Ben Hoskings (1:00)
+***** TODO Babel: Get Started : Craig McKeachie (2:03)
 ***** Using the Chrome Dev. Tools : John Sonmez (2:50)
 ***** Getting Started with Emmet : Kristian Freeman (0:55)
-***** Babel: Get Started : Craig McKeachie (2:03)
-***** NPM Playbook : Joe Eames (0:58)
 
 
 * App Ideas

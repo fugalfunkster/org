@@ -1,4 +1,6 @@
-* Learn CSS Layout - the pedantic way 
+Learn CSS Layout - the pedantic way 
+http://book.mixu.net/css/
+
 * 1. Box Positioning in CSS
 The highest level abstraction for CSS layout is the positioning scheme. Once a positioning 
 scheme has been determined, it can be further modified by specific layout modes.
@@ -59,7 +61,8 @@ that have both block- and inline-level siblings, by ensuring that all inline- si
 are wrapped as block-level boxes, and thus are laid out relative to other boxes as if 
 they were block-level boxes.
 ** Normal Flow Positioning
-In normal flow, the boxes are laid out based on the formatting context. The two formatting contexts in normal flow roughly correspond to vertical stacking and horizontal stacking.
+In normal flow, the boxes are laid out based on the formatting context. The two formatting 
+contexts in normal flow roughly correspond to vertical stacking and horizontal stacking.
 *** Normal Flow: Block Formatting
 Boxes are laid out vertically, beginning at the top of a containg block, and progressing
 along the left, outer edge of the containg block (even in the presence of floats).
@@ -119,7 +122,6 @@ property responds to two sets of values:
 *** Normal Flow: Relative Positioning
 Relatively positioned elements are positioned as normal, then offset from their normal
 position  based on the top, left, bottom, and right property values.
-
 ** Float Positioning Scheme
 Floated elements exhibit several special behaviors:
 - Floats are taken out of the normal flow during layout, and hence they do not affect the 
@@ -133,9 +135,11 @@ Floated elements exhibit several special behaviors:
 - Floats can, however, affect the current and subsequent elements' inline-level content's line 
   boxes. Specifically, any current and subsequent line boxes are shortened to make space for 
   the float.
-- But, floats do not affect the line boxes inside elements in normal flow that establish new block formatting contexts. Instead, such elements are either placed to the side of the float, or cleared by placing them below any preceding floats. (this is how grids work)
-- Because floats are not in the normal flow, they do not normally affect parent height. This is 
-  one reason why the "clearfix" technique was developed.
+- But, floats do not affect the line boxes inside elements in normal flow that establish new 
+  block formatting contexts. Instead, such elements are either placed to the side of the 
+  float, or cleared by placing them below any preceding floats. (this is how grids work)
+- Because floats are not in the normal flow, they do not normally affect parent height. This 
+  is one reason why the "clearfix" technique was developed.
 - Floats can be cleared using the clear property.
 *** Float clearing
 The clear property determines whether an element interacts with preceeding floats.
@@ -152,8 +156,8 @@ A clearfix is a CSS snippet that:
 
 There are three ways to accomplish this:
 
-- explicitly adding an element with clear: both at the end of the parent
-- adding an element with clear: both using pseudo-elements at the end of the parent
+1. explicitly adding an element with clear: both at the end of the parent
+2. adding an element with clear: both using pseudo-elements at the end of the parent
 #+BEGIN_SRC css
 
 .clearfix:after {
@@ -163,7 +167,7 @@ There are three ways to accomplish this:
 }
 
 #+END_SRC
-- making the parent element establish a new formatting context using a property such as 
+3. making the parent element establish a new formatting context using a property such as 
   overflow: hidden or overflow: auto, We can use the :after property to add content to the
   end of a .clearfix element
 #+BEGIN_SRC css
@@ -182,8 +186,90 @@ positioning, and do not interact with sibling floating elements.
   Absolute positioning is relative to the containing block
 The position of these boxes is based on the width, height, top, left, bottom, and right properties. 
 *** position: 'absolute', 'fixed'
+** In Practice
+*** The display property (block, inline, flex, ...):
+Specifies the type of rendering box useed for an element.
+This property is not inherited by an elements children.
+*** The position property (relative, absolute, fixed, ...): 
+Chooses alternate rules for positioning elements.
+*** Three Positioning Schemes:
+1. Normal Flow (block, inline, relative)
+2. Floats
+3. Absolute Positioning (Fixed & Absolute)
+*** Normal Flow Positioning Scheme
+In normal flow, the boxes are laid out based on the formatting context. The two main 
+formatting contexts in normal flow roughly correspond to vertical stacking (block) and 
+horizontal (inline) stacking.
+*** How to determine the formatting context for an element's children (in normal flow):
+If any of the children are block-level elements, block formatting context applies.
+*** Anonymous Box Wrappers:
+- If a parent contains a block-level element, any inline level elements will be wrapped
+  in block container boxes.
+- If a parent contains text and inline-level elements, the text is wrapped in an anonymous
+  inline box.
+*** Block Formatting
+Boxes are laid out vertically, beginning at the top of a containg block, and progressing
+along the left, outer edge of the containg block (even in the presence of floats).
+*** Inline Formatting
+Boxes are laid out horizontally, into one or more line boxes. Line boxes are generated as
+needed, with a width equal to the containing block (minus floats) and height being sufficient
+for all of the boxes it contains.
+**** Horizontal Alignment = text-align property ('left', 'right', 'center', ...)
+**** Vertical Alignment = vertical-align property (relative to parent properties)
+**** Inline box height = font size * line height
+*** Relative Formatting
+Relatively positioned elements are positioned as normal, then offset from their normal
+position  based on the top, left, bottom, and right property values.
+*** Floats
+The float CSS property specifies that an element should be taken from the normal flow and 
+placed along the left or right side of its container, where text and inline elements will 
+wrap around it.
+*** Clearfix
+#+BEGIN_SRC css
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#+END_SRC
+*** overflow property
+The overflow property specifies whether to clip content, render scrollbars or just display 
+content when it overflows its block level container.
+  Using the overflow property with a value different to visible (its default) will create a 
+new block formatting context. This is technically necessary — if a float intersected with 
+the scrolling element it would forcibly rewrap the content. The rewrap would happen after 
+each scroll step, leading to a slow scrolling experience.
+  In order for the overflow property to have an effect, the block level container must 
+either have a bounding height (height or max-height) or have white-space set to nowrap.
+
+#+BEGIN_SRC css
+
+/* Content is not clipped */
+overflow: visible;
+
+/* Content is clipped, with no scrollbars */
+overflow: hidden;
+
+/* Content is clipped, with scrollbars */
+overflow: scroll;
+
+/* Let the browser decide */
+overflow: auto;
+
+#+END_SRC
 
 * 2. Box Sizing in CSS
+
+** Content Dimensions and Margins
+** Box Model Calculations for Inline Elements
+** "Content-Based" Height for Blocks, Floats, and Inline-Blocks
+** Width Calculations
+*** Block-Level Elements (Constraint-Based)
+*** Floating Blocks and Inline-Block Elements (Shrink-To-Fit)
+** Margins for Floating Blocks and Inline-Block Elements
+** Absolutely Positione, Non-Replaced Elements
 * 3. Additional properties that influence positioning
 * 4. Flexbox
 * 5. CSS layout - tips and layout techniques
