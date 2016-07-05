@@ -3,11 +3,11 @@ ACTION
 * TODO list
 ** Soil Test App : Design Recipe
 ** FreeCodeCamp : React Recipe Box
-** Udemy : Modern React with Redux
-** JavaScript Allonge : Review and Refactor Portfolio
 
 
 * queue
+** Udemy : Modern React with Redux
+** JavaScript Allonge : Review and Refactor Portfolio
 ** Online Courses
 *** Pluralsight 
     - [ ] Building Applications with React and Flux : Cory House (5:08)
@@ -43,36 +43,22 @@ ACTION
 
 
     
-    
-* horizon
-** Food
-*** Salads
-*** Soups
-*** Summer Vegetables
-*** Meats
-*** Fruits
-*** Carbs
-** Body
-*** Yard Projects
-**** Shed
-**** Concrete Fences
-**** Shop
-*** Cardio
-*** Massage
-** Code
-*** Apps
-**** Soil Test
-***** mongodb
-**** Ship's Log (searchable note taker) 
-***** dates
-***** string parsing
-***** relational db?
-**** SNAP
-**** Index Cards (a useful todo app in clojure and react)
-***** datomic
-*** Scheme
-**** Little Schemer / Seasoned Schemer
-**** HtDP [5/43]
+   
+* App Ideas
+** Soil Test
+** Ship's Log (searchable note taker) 
+*** dates
+*** string parsing
+*** relational db?
+** SNAP
+** Index Cards
+*** datomic
+
+
+* Learning Horizons
+** Scheme
+*** Little Schemer / Seasoned Schemer
+*** HtDP [5/43]
     I. Processing Simple Forms of Data
  - [X] Students, Teachers, Computers
  - [X] Numbers, Expressions, Simple Programs
@@ -126,23 +112,22 @@ ACTION
  - [ ] Changing Structures, Vectors, and Objects
  Epilogue
 
-**** SICP
-*** Clojure
-**** Living Clojure
-**** Clojure for the Brave and True
-**** Clojure Applied
-*** Secondary Languages
-**** Java
-**** Elm
-**** Elixir
-**** Rust
-*** CompSci
-**** 6.01   - Intro to EE and CompSci
-**** 18.01  - Single Variable Calculus
-**** 6.042  - Mathematics for Computer Science
-**** 6.006  - Intro to Algorithms
-**** 18.02  - MultiVariable Calculus
-**** 6.046  - Algorithms
-**** 18.310 - Principles of Discrete Applied Math
-** Nebraska Trip
+*** SICP
+** Clojure
+*** Living Clojure
+*** Clojure for the Brave and True
+*** Clojure Applied
+** Secondary Languages
+*** Java
+*** Elm
+*** Elixir
+*** Rust
+** MIT OpenCourseware
+*** 6.01   - Intro to EE and CompSci
+*** 18.01  - Single Variable Calculus
+*** 6.042  - Mathematics for Computer Science
+*** 6.006  - Intro to Algorithms
+*** 18.02  - MultiVariable Calculus
+*** 6.046  - Algorithms
+*** 18.310 - Principles of Discrete Applied Math
     
