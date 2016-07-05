@@ -1,17 +1,38 @@
-#+TODO: VIEW TODO OPEN | WATCHED DONE CANCELED
+#+TODO: VIEWONLY TODO NEXT OPEN | WATCHEDONLY DONE CANCELED
 
-ACTION
+* Notes Readme Orientation
+
+Welcome to my notes. Each document or directory in this repo represetns a video course,
+blog post (or series of posts), book, tutorial, etc. for which I decided to take notes.
+
+This readme is composed of five major headings, which manage different aspects of my
+notes.
+
+1. The TODO list is what I'm currently taking notes on.
+2. The Queue is a staging area from the larger directory
+3. The Directory lists all past, present and future notes.
+4. App Ideas is pretty self explanatory
+5. Horizons are the things I want to learn in the future,
+   but can't plan into the queue or directory.
+
+My notes are formatted as org docs, but I only use headings, tables, TODOs, and org-babel
+source blocks extensively. For more information on org-mode see: http://orgmode.org/
+
 
 * TODO list
-** Soil Test App : Design Recipe
-** FreeCodeCamp : React Recipe Box
-** Unfinished Videos!!!!!!!!!!!!!!!!!!!!!
-*** Webpack Fundamentals
-*** Udemy : Modern React with Redux
-*** React Fundamentals (Egghead)
+** OPEN Responsive Typography : Jason Pamental (5:55)
+** OPEN Learn CSS Layout: the Pendatic Way
 
 
-* queue
+* queue (next, open, view-only)
+** OPEN Webpack Fundamentals : Joe Eames (2:23) 
+** OPEN React Fundamentals : Joe Maddaloe
+** OPEN Udemy : Modern React with Redux
+** OPEN Learn & Understand Node.js : Anthony Alicea (12:00+)
+** OPEN Intro to Node JS : Paul O'Fallon (2:48)
+
+
+* directory
 ** Notes
 *** Books
 **** JavaScript Allonge : Review and Refactor Portfolio
@@ -27,8 +48,8 @@ ACTION
 ***** Geospatial mapping with D3 : Ben Sullins (2:39)
 *** JS
 **** Pluralsight
-***** WATCHED Advanced Javascript : Kyle Simpson ()
-***** WATCHED JS Objects and Prototypes
+***** WATCHEDONLY Advanced Javascript : Kyle Simpson ()
+***** WATCHEDONLY JS Objects and Prototypes
 ***** WATCHED JS Best Practices : Jonathan Mills (2:39)
 ***** WATCHED JS.Next: ES6 : Aaron Frost (5:24)
 ***** OPEN jQuery-free JS : Elijah Manor (2:26)
@@ -55,12 +76,15 @@ ACTION
 **** WATCHED Intro to Mongoose for Node.js & MongoDB : Mark Scott (1:41)
 *** design
 **** Pluralsight
+***** OPEN Responsive Typography : Jason Pamental (5:55)
+***** OPEN Responsive Web Images : Robert Boedigheimer (1:55)
 ***** Web Accessibility: Getting Started (1:30)
 ***** Making a Web Form Accessible (1:47)
 ***** Intro to Building Website Layouts : Susan Simkins (5:04)
 ***** Responsive In-Browser Design... : Karen Menezes (3:22)
 *** goodShipJS
 *** htmlcss
+**** OPEN pendaticLayout
 **** Pluralsight
 ***** DONE CSS Positioning : Susan Sumkins (0:50)
 ***** CSS3 : Michael Palermo (2:46)
@@ -87,7 +111,7 @@ ACTION
 ***** DONE RESTful Web Services with Node.js and Express (2:04)
 ***** DONE Build Web Apps with Node.js and Express 4.0 : Jonathan Mills (4:43)
 ***** DONE Securing Yours App w/ OAuth and Passport : Jonathan Mills
-***** OPEN Intro to Node JS
+***** OPEN Intro to Node JS : Paul O'Fallon (2:48)
 ***** Five Essential tools for REST APIs : Elton Stoneman (2:56)
 ***** HTTP Fundamentals : Scott Allen (2:50)
 ***** Node Application Patterns : Rob Conery (2:30)
@@ -102,11 +126,11 @@ ACTION
 ***** Web Performance : Robert Boedigheimer (2:51)
 ***** Using Google PageSpeed for Perf. : David Berry (3:19)
 *** react
-**** DONE React.js Program: Fundamentals : Tyler McGinnis ()
+**** DONE React.js Program: Fundamentals : Tyler McGinnis
 **** DONE Facebook Official React Tutorial
 **** DONE React Router Tutorial
 **** Pluralsight
-***** Building iOS Apps with react Native : Hendrik Swanepoel (1:59)
+***** Building iOS Apps with React Native : Hendrik Swanepoel (1:59)
 ***** Building Applications with React and Flux : Cory House (5:08)
 ***** Building Applications with React and Redux in ES6: Cory House (6:14)
 ***** React Native Apps with Exponent and Redux : Hendrick(3:21)
@@ -130,28 +154,24 @@ ACTION
 ***** Node.js Testing Strategies : Rob Conery (2:39)
 ***** Mastering React Testing with Jest : Daniel Stern (1:57)
 *** tools
+**** emacsHelp
 **** Pluralsight
 ***** DONE Intro to NPM as a Build Tool : Marcus Hammarberg (1:37)
 ***** DONE Git Fundamentals : James Kovacs (1:51)
-***** WATCHED Meet Emacs : Phil Hagelberg (0:58)
+***** WATCHEDONLY Meet Emacs : Phil Hagelberg (0:58)
+***** OPEN Webpack Fundamentals : Joe Eames (2:23)
 ***** Advanced Git : Ben Hoskings (1:00)
 ***** Using the Chrome Dev. Tools : John Sonmez (2:50)
 ***** Getting Started with Emmet : Kristian Freeman (0:55)
 ***** Babel: Get Started : Craig McKeachie (2:03)
 ***** NPM Playbook : Joe Eames (0:58)
-** Projects
-** Complete Mongo Certification
 
 
 * App Ideas
 ** Soil Test
 ** Ship's Log (searchable note taker) 
-*** dates
-*** string parsing
-*** relational db?
 ** SNAP
 ** Index Cards
-*** datomic
 
 
 * Horizon
