@@ -1,0 +1,837 @@
+React.js Fundamentals Course
+
+* Intro to the React Ecosystem
+*** Declarative vs. Imperative
+**** Imperative Code tells the program how to do something
+***** Example: for loops describe how to iterate over an array
+**** Declarative Code tells the program what to do
+***** Example: map iterates over an array under the hood
+**** Benefits of declarative code
+***** Reduces side effects
+***** minimize mutability
+***** more readable code
+***** less bugs
+**** React is mostly declarative
+***** TODO Instead of storing state in the DOm, we internalize it to each component?
+***** We still have to have imperative state modifications
+*** Unidirectional Dataflow
+*** Composition
+**** Everything is a component
+**** In react, we compose components into compositions
+*** Explicit Mutations
+**** With React you need to explicitly call set state to change state
+*** It's Just JavaScript
+*** Piecing the Puzzle
+**** React
+**** React Router
+***** Applications are made of components
+***** React router allows us to map components to specific URLs
+**** Webpack
+***** bundles code into a single file
+****** uses loaders that transform code
+***** frustrating b/c documentation is poor
+**** Babel
+***** does the transformation from jsx to JS
+***** works as loader for webpack
+**** Axios
+***** make http requests
+*** Example App: Github Battle
+* Setting up your first React component with NPM, Babel, and Webpack
+** using NPM
+*** npm init
+**** makes our pacjage.json file
+*** npm install
+**** --save react react-dom
+***** react-dom is separate from react because react has other targets than just the dom
+****** ex: we might render to react-native
+**** --save-dev html-webpack-plugin webpack-dev-server webpack
+**** --save-dev babel-core babel-loader babel-preset-react
+*** npm scripts
+**** production - triggers preprocessing and outputs to ./dist/ 
+**** start - triggers the webpack-dev-server, which hosts the app/index.html
+** using webpack
+      Webpack allows you to preprocess files as you require or load them. In order to do
+      so, webpack needs:
+      1. Where is the starting point of the application, or the route javascript file.
+      2. What transformation to make on the code.
+      3. Where to put the code, post-transformation.
+*** the webpack.config.js
+**** exports an object that represents ur config
+**** properties include:
+***** entry (an array containing the root .js file for our app, room for more files...)
+***** output (a path to a directory, and the filename for our new root .js file)
+***** module (the loaders property contains an array for each transformation)
+****** each loader is composed of three things:
+******* which file type to run the transformation on (typically a regex)
+******* directories to exclude from transformation
+******* the loader to use
+******* Example:
+******** {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
+***** plugins
+         Some files don't need to be transformed, but do need to be included in the
+         production dist/ directory. the html-webpack-plugin, let's us grab our html
+         files, use them as a template, inject our transformed root.js, and output a new
+         index.html into the dist/ dir.
+*** webpack CLI and webpack-dev-server
+       In the root dir of our app, we can run webpack from the cmd line
+**** webpack (run through transformation)
+**** webpack -w (watch: auto transform on update)
+**** webpack -p (run through transformations and minify)
+** using babel
+      Babel is a tool for transpiling / compiling JavaScript. Here, we use babel to
+      transform our JSX to JS. 
+*** .babelrc (instruct babel which transformationf to make)
+*** babel-preset-react (presets, referenced in .babelrc)
+*** babel-loader (loader for webpack)
+* React components
+     Data is either recieved from a component's parent component, or it's contained
+     in the component itself. In order for a child component to access the state of a
+     parent component, we must explicitly pass the data to our child component as an
+     attribute.
+** Creating a new React Component
+      Every component is required to have a render method: the component's template.
+*** var componentName  = React.createClass({});
+** Rendering a react component to the DOM
+      Because of the parent/child relationships, you usually only have to render once,
+      the most parent component will render all of its child components. If you want
+      your whole app to be react, you would render the parent component to
+      document.body.
+** React.DOM takes two arguments, the component and the DOM node to render to
+*** ReactDOM.render(<componentName'>, document.getElementById('anchor');
+** Diffing and the Virtual Dom
+      The virtual DOM is a JS representation of the actual DOM. React keeps track of
+      changes between the current virtual DOM and the previous virtual DOM, and
+      updates the real DOM as necessary. This conserves DOM changes, and helps us
+      reason about the state of ourapplication. 
+* Pure functions. f(d)=v. Props and Nesting Components
+** Nested Components and Props
+      This section is about how React can nest components and how we can pass data from
+      parent components to child components.
+*** Props are to components what arguments are to functions
+**** treat props as immutable
+*** When we invoke a component, we can pass in an attribute
+**** Example: <ProfilePic imageUrl={this.props.user.image} />
+*** Attributes are accessable inside the component via this.props
+**** Example: Inside the ProfilePic component, this.props.imageUrl
+** Building UIs with Pure Functions and Function Composition
+*** a function takes in some data and returns a view : f(d) => v
+*** instead of composing functions to get data, we compose components to get a UI
+*** we use pure functions, which have the following properties:
+**** Pure functions always return the same result given the same arguments
+**** Pure function's execution doesn't depend on the state of the application.
+**** Pure functions don't modify the variables aoutside of their scope
+*** see .slice vs. .splice
+*** The render method is a pure function 
+** FIRST (a helpful acronym when thinking about components)
+*** Focused
+*** Independent
+*** Reusuable
+*** Small
+*** Testable
+* this.props.children, getting started with React Router, and className
+** this.props.children
+      this.props.children refers to the contents of an html element. Sort of like .innerHTMl
+      refers to the contents of an HTML tag. this.props.children could be text, another html
+      element, etc.
+        For example:
+          <Clock> 12:49 AM </Clock>
+        this.props.children of the Clock component === "12:49 AM"
+*** Using this.props.children
+       When invoking a component, we can place data in between the opening and closing tag,
+       that data will be available to the component as this.props.children.
+         In the following example, the Home component is this.props.children to the Main
+       component. Thus, when this.props.children appears within the Main component, it renders
+       the Home component:
+
+#+BEGIN_SRC js
+
+// './app/config/routes.js'
+
+var routes = (
+  <Router history={hashHistory}>
+    <Route path='/' component={Main}>
+      <IndexRoute component={Home}/>
+    </Route>
+  </Router>
+);
+
+// './components/Main.js'
+
+var Main = React.createClass({
+   render: function () {
+     return (
+       <div className='main-container'>
+      {this.props.children}
+       </div>
+     )
+   }
+});
+
+// './components/Home.js'
+
+var Home = React.createClass({
+   render: function () {
+     return (
+       <div> Hello from Home! </div>
+     )
+   }
+});
+
+
+#+END_SRC
+
+*** another example, passing props via this.props.children:
+
+#+BEGIN_SRC js
+
+var Link = React.createClass({
+  changeURL: function () {
+    window.location.replace(this.props.href)
+  },
+  render: function () {
+    return (
+      <span style={{color: 'blue', cursor: 'pointer'}}
+            onClick={this.changeURL}>
+        {this.props.children}
+      </span>
+    )
+  }
+});
+
+
+var ProfileLink = React.createClass({
+  render: function () {
+    return (
+      <div>
+        <Link href={'https://www.github.com/' + this.props.username}>
+          {this.props.username}
+        </Link>
+      </div>
+    )
+  }
+});
+
+#+END_SRC
+
+** React Router (see also react-router tutorial notes below)
+      react-router gives us a declarative way to map components to URLs.
+*** $ npm install react-router
+*** the Router component
+       The Router component is required from react-router.
+
+#+BEGIN_SRC js
+
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+
+#+END_SRC
+
+       In our app, the Router Component is the highest level component, and encapsulates
+       Route components.
+
+#+BEGIN_SRC js
+
+var routes = (
+  <Router history={hashHistory}>
+    <Route path='/' component={Main}>
+      <IndexRoute component={Home}/>
+    </Route>
+  </Router>
+);
+
+#+END_SRC
+
+       The history attribute on the Router component provides means for a browser to navigate
+       within the app using the defined route paths.
+
+*** the Route component
+       Each route component has two attributes. First, the component attribute determines what
+       component will be rendered, and the path component defines where (at what path) that
+       component will be rendered.
+
+#+BEGIN_SRC js
+
+var React = require('react');
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route =  ReactRouter.Route;
+var IndexRoute =  ReactRouter.IndexRoute;
+var hashHistory = ReactRouter.hashHistory;
+var Main = require('../components/Main');
+var Home = require('../components/Home');
+
+var routes = (
+  <Router history={hashHistory}>
+    <Route path='/' component={Main}>
+      <IndexRoute component={Home}/>
+    </Route>
+  </Router>
+);
+
+module.exports = routes;
+
+#+END_SRC
+
+*** main, a component that is always active
+       Sometimes we want a header or nav-bar that is always going to be active. We can
+       declare such a component as the sole direct child of our Router component, and assign
+       the main component a path='/' and render other route components as children of the
+       main component.
+         The Main component thus must be responsible for rendering its child components, and
+       we use this.props.children to make that happen. react-router will keep track of which
+       child component is active, thus which component is displayed as this.props.children.
+
+#+BEGIN_SRC js
+
+var React = require('react');
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route =  ReactRouter.Route;
+var IndexRoute =  ReactRouter.IndexRoute;
+var hashHistory = ReactRouter.hashHistory;
+var Main = require('../components/Main');
+var Home = require('../components/Home');
+
+var routes = (
+  <Router history={hashHistory}>
+    <Route path='/' component={Main}>
+      <IndexRoute component={Home}/>
+    </Route>
+  </Router>
+);
+
+module.exports = routes;
+
+#+END_SRC
+
+*** the IndexRoute component
+       An IndexRoute component is the 'default' 'active' child component. The IndexRoute is
+       active when a Route component has multiple children but none of those children are
+       active. 
+
+#+BEGIN_SRC js
+
+var React = require('react');
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route =  ReactRouter.Route;
+var IndexRoute =  ReactRouter.IndexRoute;
+var hashHistory = ReactRouter.hashHistory;
+var Main = require('../components/Main');
+var Home = require('../components/Home');
+
+var routes = (
+  <Router history={hashHistory}>
+    <Route path='/' component={Main}>
+      <IndexRoute component={Home}/>
+    </Route>
+  </Router>
+);
+
+module.exports = routes;
+
+#+END_SRC
+
+** className
+      In JS class is a reserved word, so within a react component, we must use className to
+      refer to the component's class atrributes for CSS styling. 
+* Container vs. Presentational Components, Stateless Functional Components, & PropTypes
+** Route component props
+      Just like we can pass props to a normal component, we can pass props to a router
+      component. These props are available on this.route.propName within the component the
+      route renders.
+
+#+BEGIN_SRC js
+
+var routes = (
+  <Router history={hashHistory}>
+    <Route path='/' component={Main}>
+      <IndexRoute component={Home}/>
+      <Route path='playerOne' header='Player One' component={PromptContainer} />
+      <Route path='playerTwo/:playerOne' header='Player Two' component={PromptContainer} />
+    </Route>
+  </Router>
+);
+
+#+END_SRC
+#+BEGIN_SRC js
+
+var Prompt = React.createClass({
+  return (
+    <div>
+      <h1>{this.route.header}</h1>
+    <div>
+  ) 
+});
+
+#+END_SRC
+
+** Link components
+      Link components render this.props.children, and makes it clickable like an <a> element.
+
+#+BEGIN_SRC js 
+
+var Link = ReactRouter.Link;
+
+var Home = React.createClass({
+   render: function () {
+     return (
+       <div style={blueBg}>
+         <h1>Github Battle</h1>
+         <p>Some fancy motto</p>
+         <Link to='/playerOne'>
+           <button>Get Started</button>
+         </Link>
+       </div>
+     )
+   }
+});
+
+#+END_SRC
+
+** Styles
+      We can import styles inside a javascript file, which exports style objects we can
+      import and use in our components.
+*** styles file example:
+ #+BEGIN_SRC js
+
+ // './styles/index.js'
+ var styles = {
+   transparentBg: {
+     background: 'lightblue'
+   }
+ }
+
+ module.exports = styles;
+
+ #+END_SRC
+
+*** use example:
+
+#+BEGIN_SRC js
+
+var transparentBg = require('../styles').transparentBg;
+
+function Prompt (props) {
+   return (
+   <div style={transparentBg} >
+//....
+
+#+END_SRC
+
+** getInitialState
+      The way you give React components state, is by using the getInitialState method.
+      getInitialState is a function that returns an object containing name:value pairs
+      that represent the component's state. 
+
+#+BEGIN_SRC js
+  getInitialState: function (){
+    return {
+      username: ''
+    }
+  },
+
+  // this.state.username is now available within the component
+
+#+END_SRC
+      
+** setState
+      We can change the state of the component using setState.
+
+#+BEGIN_SRC js
+
+  handleUpdateUser:  function (e) {
+    this.setState({
+      username: e.target.value
+        
+    })
+  },
+
+#+END_SRC
+
+** hooks
+      - onChange (input)
+      - onSubmit (form submit button)
+** context and dynamic routes
+      We can dynamically change routes within react-router. Within a component, we can access
+      data without having to pass the data as props using context. This isn't a good habit,
+      but We can pull in router using contextTypes, and use the react-router object to
+      dynamically change routes without having to ensure that router is passed to each 
+      component that needs to affect dynamic routing.
+        Once we have the router object, we can 'push' a route onto the router to cause a
+      re-render to a specified route.
+*** contextTypes and router.push example:
+
+ #+BEGIN_SRC js
+
+ var PromptContainer = React.createClass({
+   contextTypes: {
+     router: React.PropTypes.object.isRequired
+   },
+
+ //...
+
+   handleSubmitUser: function (e) {
+     e.preventDefault();
+     var username = this.state.username;
+     this.setState({
+       username: ''
+     });
+
+     if (this.props.routeParams.playerOne) {
+       this.context.router.push({
+         pathname: '/battle',
+         query: {
+           playerOne: this.props.routeParams.playerOne,
+           playerTwo: this.state.username
+         }
+       })
+     } else {
+       this.context.router.push('/playerTwo/' + this.state.username)
+     }
+   },
+
+ #+END_SRC 
+
+*** using push
+       There are two ways to use this.context.router.push. The first way is to push a route
+       string and add data as if it were part of the route. This data will be available to
+       the next rendered component (which will have a parameter(s) defined in its route
+       component path) as this.props.routeParams.paramName.
+         The second way to use push is with query and state, which essentially passes state
+       to the next component via a route query string.
+** separating container components from presentational components
+*** the component that handles logic renders another component that renders the UI
+** Stateless Functional Components
+      Our components can be classified into two categories:
+        1. Container Components, and
+        2. Presentational Components. 
+      Presentational components simply take in some data via props and output some UI: IE
+      components that just have a render method.
+        As of React v0.14, we can write presentational components with function
+      shorthand!
+*** Example:
+
+#+BEGIN_SRC js 
+
+// this:
+
+var HelloWorld = React.createClass({
+  render: function () {
+    return (
+      <div>Hello {this.props.name}</div>
+    )
+  }
+})
+
+ReactDOM.render(<HelloWorld name='Tyler' />, document.getElementById('app'))
+
+// can be written like this:
+      
+function HelloWorld (props) {
+  return (
+    <div>Hello {props.name}</div>
+  )
+}
+
+ReactDOM.render(<HelloWorld name='Tyler' />, document.getElementById('app'))
+
+// and with arrow notation!
+
+const HelloWorld = props => (<div>Hello {props.name}</div>);
+
+ReactDOM.render(<HelloWorld name='Tyler' />, document.getElementById('app'))
+
+#+END_SRC      
+
+*** Stateless Functional components don't support shouldComponentUpdate
+** PropTypes
+      PropTypes are a component property that enforces a sort of type checking for the props
+      that the component accepts. If the component is passed a value for a property that is 
+      not of the type specified in that component's PropTypes, the compiler will throw an
+      error. This feature helps detect bugs and self-documents components by specifying what
+      values the component requires to render properly.
+*** Example Component Invocation:
+
+#+BEGIN_SRC js
+
+<Icon
+  name='fontawesome|facebook-square'
+  size={70}
+  color='#3b5998'
+  style={styles.facebook} />
+
+#+END_SRC
+
+*** Example PropTypes for Above Component:
+#+BEGIN_SRC js
+
+var React = require('react')
+var PropTypes = React.PropTypes
+var Icon = React.createClass({
+  propTypes: {
+    name: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
+    style: PropTypes.object
+  },
+  render: ...
+});
+
+#+END_SRC
+
+*** Using PropTypes with functions
+       A few things to note that you won't be expecting with the API:
+         To use PropTypes with functions the API is propTypes.func rather than
+       propTypes.function. Also to use booleans, the API is propTypes.bool not
+       propTypes.boolean. I'm not 100% sure why but I assume it's because with ES6 you can
+       use named imports to do
+
+#+BEGIN_SRC js 
+
+var { array, object, number, function, boolean } = React.PropTypes
+
+#+END_SRC
+
+       and both function and boolean are reserved words so that would break. Instead use
+       func and bool and you'd be good.
+*** Deep Background on the PropTypes API: https://facebook.github.io/react/docs/reusable-components.html
+* Life Cycle Events and Conditional Rendering
+     Every component has a render method, which needs to be a pure function, IE, the render
+     method just receives state and props and returns a UI. But, in an app, we need to do
+     other stuff, like make ajax requests for data to populate props. 
+       Lifecycle methods are special methods each component can have that allow us to hook
+     into the views when specific events fire. There are two major categories of lifecycle
+     events:
+       1. When a component gets mounted to the DOM (or unmounted)
+       2. When a component recieves new data
+** Mounting / Unmounting
+      A handful of lyfecycle methods are called when a component is initialized and added
+      to the DOM (mounting), and when the component is removed from the DOM (unmounting). By
+      definition, these methods will be invoked only once during the life of the component.
+        What might we want to do when a componnent mounts or unmounts?
+        - Establish some default props in our component
+        - Set some initial state in our component
+        - Make an Ajax request to fetch some data needed for this component
+        - Set up any listeners (ie websockets or Firebase listeners)
+        - Remove any listeners you initially set up (when unmounting)
+** getInitialState
+       To establish a components state before rendering it we must use getInitialState. To
+       change the components state, we must call thissetState, passing in a new object which
+       overwrites the prior state object.
+
+#+BEGIN_SRC js
+
+var Login = React.createClass({
+  getInitialState: function () {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  render: function () {
+    ...
+  }
+})
+
+#+END_SRC
+** getDefaultprops
+       If we want to ensure that a component has a default value for a prop, even is that prop
+       is not passed in by the comsuner of our component, we can use getDefaultProps.
+
+#+BEGIN_SRC js
+
+var Loading = React.createClass({
+  getDefaultProps: function () {
+    return {
+      text: 'Loading'
+    }
+  },
+  render: function () {
+    ...
+  }
+})
+
+#+END_SRC
+
+** componentWillMount
+** componentDidMount
+      We can fetch data using an ajax request immediately after the component mounts to the
+      DOM with componentDidMount
+*** Ajax request Example:
+#+BEGIN_SRC js
+
+var FriendsList = React.createClass({
+  componentDidMount: function () {
+    return Axios.get(this.props.url).then(this.props.callback)
+  },
+  render: function () {
+    ...
+  }
+})
+
+#+END_SRC
+
+*** listeners example:
+
+#+BEGIN_SRC js
+
+var FriendsList = React.createClass({
+  componentDidMount: function () {
+    ref.on('value', function (snapshot) {
+      this.setState({
+        friends: snapshot.val()
+      })
+    })
+  },
+  render: function () {
+    ...
+  }
+})
+
+#+END_SRC
+** componentWillUnmount
+       Removing listeners, to avoid memory leaks, should occur when the component is about
+       to be removed from the DOM.
+
+#+BEGIN_SRC js
+
+var FriendsList = React.createClass({
+  componentWillUnmount: function () {
+    ref.off()
+  },
+  render: function () {
+    ...
+  }
+})
+
+#+END_SRC
+
+** componentWillReceiveProps
+      There will be time when you'll want to execute some code whenever your component
+      receives new props from its parent component.
+** shouldComponentUpdate
+      React avoids rerendering unless something has changed. This method returns a boolean,
+      and if true, will cause the component, and all of its child components, will rerender.
+** MOAR INFO: https://gist.github.com/fay-jai/fc8a5093c0b5124d4b2d#file-react-lifecycle-parent-child-jsx
+* Axios, Promises, and the github API
+** Axios 
+*** abstracts http requests
+*** uses promises
+**** .all takes an array of promises, .then runs after all of those promises are resolved
+**** .then
+**** .catch is for error handling
+** this keyword
+      Context is important with calling React component methods, ex: .setState. To ensure
+      you have the right this, you can this/that or .bind().
+** puke
+* Rendering UI
+** this.context.router.push and state
+      We can push data through to our next route by placing a state property on the object we
+      pass to router.push.
+
+#+BEGIN_SRC js
+
+handleInitiateBattle: function () {
+  this.context.router.push({
+    pathname: '/results',
+    state: {
+      playersInfo: this.state.playersInfo
+    }
+  })
+},
+
+#+END_SRC
+
+** Wrappers
+* More Container vs. Presentational Components
+** Reduce
+* Private Functional Stateless Components
+     React is all about modularity. When a render method gets big, you usually want to create
+     abstract pieces into sub-components. There's no need to create a separate file and
+     export the function, we can create sub-components using stateless function components
+     within the same file.
+       Stateless functional components have the added benefit of not having to deal with the
+     'this' keyword.
+** Example:
+
+#+BEGIN_SRC js
+
+var React = require('react');
+function FriendsList (props) {
+  return (
+    <h1>Friends:</h1>
+    <ul>
+      {props.friends.map((friend, index) => {
+        return (
+          <li key={friend}>{friend}</li>
+        )
+      })}
+    </ul>
+  )
+}
+module.exports = FriendsList
+
+#+END_SRC     
+
+** Refactored Example:
+
+#+BEGIN_SRC js
+
+var React = require('react');
+function FriendItem (props) {
+  return <li>{props.friend}</li>
+}
+function FriendsList (props) {
+  return (
+    <h1>Friends:</h1>
+    <ul>
+      {props.friends.map((friend, index) => <FriendItem friend={friend} key={friend} />)}
+    </ul>
+  )
+}
+module.exports = FriendsList
+
+#+END_SRC
+** You must require react when using stateless functional components
+* Building a Highly Reusuable React Component
+** getDefaultProps
+      Sometimes you don't want to have to pass props to modular, reusuable components. With 
+      getDefaultProps, you can specify default props in the absence of that component's
+      consumer passing props in. The default props are always overwritten should a component's
+      consumer pass props in.
+*** Example:
+
+#+BEGIN_SRC js
+
+var Loading = React.createClass({
+  getDefaultProps: function () {
+    return {
+      text: 'loading',
+      styles: {color: 'red'}
+    }
+  },
+  render: function () {
+    ...
+  }
+})
+
+#+END_SRC
+* React Router Transition Animation and Webpack's CSS Loader
+** React.cloneElement
+      A React Element is "a plain object describing a component instance or DOM node and its
+      desired properties". That may sound very similar to what JSX is used for and that's
+      because a React element is what JSX gets transpiled into.
+        Though not used a whole lot, there are times when you'll need to clone a React
+      element and attach new props to it.
+
+#+BEGIN_SRC js
+
+React.cloneElement(FriendList, {friends: ['Jake', 'Joe']})
+
+#+END_SRC
+** Animations b/t route transitions
+*** $ npm install --save react-addons-css-transition-group
+*** Webpack loaders for css
+       $ npm install --save-dev css-loader style-loader
+** keys properties      

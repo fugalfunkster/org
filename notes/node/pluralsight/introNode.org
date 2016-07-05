@@ -1,0 +1,61 @@
+Intro to Node.js (Paul O'Fallon)
+
+* Accessing the Local System
+
+** The Process Object - a way for node to manage itself and other processes on your system
+*** https://nodejs.org/api/process.html
+*** a collection of streams
+       - process.stdin
+       - process.stdout
+       - process.stderr
+*** attributes of the current process
+       - process.env
+       - processargv
+       - process.pid
+       - process.title
+       - process.uptime()
+       - process.memoryUsage()
+       - process.cwd()
+       - etc...
+*** Process-related actions
+       - process.abort()
+       - process.chdir()
+       - process.kill()
+       - process.setgid()
+       - process.setuid()
+       - ...etc...
+*** An Instance of Event Emitter
+       - event:'exit'
+       - event:'uncaughtException'
+       - POSIX signal events ('SIGINT',etc.)
+
+
+** The File System
+*** built in fs module; async is default, "Sync" specified
+*** https://nodejs.org/api/fs.html
+*** Wrappers around POSIX functions
+       - ex: fs.readdir(path, cb) / fs.readDirSync(path)
+       - also: rename, truncate, chown, fchown, lchown, chmod, fchmod, lchmod, stat, fstat, lstat
+         link, symlink, readlink, realpath, unlink, rmdie, mkdir, readdir, close, open, utimes, futimes, 
+         fsync, write, read, readFile, writeFile, and appendFile
+*** Stream oriented functions
+       - fs.createReadStream() = returns an fs.ReadStream (a readable stream)
+       - fs createWriteStream() = | | 
+*** Watch a file or dir for changes
+       - fs.watch() - returns an fs.FSWatcher (an event emitter)
+       - 'change' event: the type of change and the filename that changed
+       - 'error' event: emitted when an error occurs
+
+
+** Buffers
+*** the return value from a fs call is a buffer
+*** the buffer class provides a raw memory allocation for dealing with binary data directly
+*** to get at it's value, we can .toString() the result from a fs call
+
+
+** "os" module
+*** provides info about the currently running system
+
+* Testing and Debugging
+
+* Scaling Your Node Application

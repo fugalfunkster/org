@@ -1,0 +1,343 @@
+Modern React with Redux (Udemy)
+
+* Intro
+** Setting up our environment
+      Install the ReduxSimpleStarter boilerplate repo from:
+      https://github.com/StephenGrider/ReduxSimpleStarter
+** Export Statements 
+*** export default FunctionName;
+** Functional Components
+*** start with functional components, refactor to classes when necessary 
+** Class Components
+*** class Name extends React.Component {}
+*** every react class must have a render method 
+**** shorthand
+** import {property}
+** events
+*** onChange - a vanilla event
+*** always called with an event object, describes context of event
+*** attributes / props
+** arrow functions w/o ()
+** State
+      an object describting state
+      when state changes, react rerenders
+      only class components have state
+*** constructor
+       constructor method sets up state, getInitialState?
+       constructor is the first, and only function called automatically, 
+       reserve for initializing state, variables, etc
+       only inside constructor do we this.state =
+*** super
+       React.component has its own constructor method
+       we call parent constructor method with super()
+*** this.state
+       new state object with properties we want for our component, and initial state      
+*** updating state
+       we only change state this way:
+       this.setState({ ... });
+       this is how we maintain continuity
+       we can change one prop at a time, or whole state obj
+*** state is how we update our components/views
+** controlled component
+      has it's value set by state, value changes only when state changes
+      controlled input ex: 
+        input: value = state, onchange setsState, react rerenders
+      lets us avoid manipulating the dom to sync state and ui
+** Review
+*** jsx
+*** components
+**** functional components
+**** class-based components
+*** state
+*** ES6
+**** classes
+***** constructor
+***** super
+**** arrow functions
+**** import / export
+*** youtube API
+* AJAX with React
+** downwards data flow
+      the most parent component should be responsible for fetching data
+** ES6 lets us write {videos} instead of {videos: videos}
+** className
+** passing data from parent to child, define property on tag, attributeish PROPS
+      anytime the app rerenders, props are re-passed, updated!
+      props arrive as arguments to function components, aka props.etc
+      in a class component, props are available anywhere as this.props.etc
+** for a split second we see initial state, then state can be set
+* Making lists with map
+** react is good at rendering an array of components
+** but each chld in an arrat or iterator should have a unique key prop
+      when we render multiple items of the same type, react will optimize rendering a list
+      optimizes better with a key
+      adding a key is easy, use an id for each item to make it unique, a unique key!
+** using object destructuring in function arguments
+      see video-list-items.js
+** Do I expect this component to need to maintain any state?
+      a question to ask each time you create a component
+** handling null props
+      some parents cant fetch data fast enough to pas that data to childs before render
+      use control flow to render a loading component
+      on set state, it'll rerender, passing down actual props.
+** callback passing down
+      pass components down from the stateful component that has state to a presentational component
+      pass down a setState function as props through each nested child
+      rarely go further than two deep
+** css styling
+** refactoring
+      important to refactor carefully
+      when you're passing down a state changing function to a component that has it's own state
+      be sure to keep state stright
+** throttling search term input (throttling re-renders)
+      debounce from lo-dash
+      $ npm install lo-dash
+** wrapup big ideas
+*** class v. functional component
+       class if for when we need state
+       func. comps. whenever our component is static
+*** state
+       createclass is older, getinitialstate is an artifact
+       we now use es6
+       create state in constructor
+       state is component level
+       redux makes state application level
+*** import and export statements
+       local vs. node_module
+*** callbacks
+       parent child communication
+       redux reduces callbacks, and passing...
+* Modeling Application State
+** Redux
+      A collection of all the data that describes the app
+      all state of app (data and ui state)
+      all allplications data is in one object
+* Managing App State with Redux
+     In Redux, there is one state, one object that contains all stateful data for
+     the application. This state is accessed through reducers. 
+       Redux constructs the application state, and React provides views that display
+     that state. These two libraries are separate, and connect to each other through
+     a third library, react-redux.
+** TODO What's are provider, createStore, applyMiddleware?
+** Reducers
+      Our application state is generated by reducer functions. A reducer function is
+      a function that returns data which represents a piece of the application
+      state. We can have many reducers, each of which returns different pieces of
+      the application state.
+** moar on reducers
+      Every reducers get two arguments (state, action). The state argument does not
+      refer broadly - ie. to application state - instead, state refers only to that
+      part of the application state that the reducer is responsible for.
+        Reducers are only ever called when any action occurs. Most of these actions
+      mave nothing to do with our reducer, so reducers default to returning the
+      state originally passed in.
+        Reducers are usually written with a JS switch statement to determine whether
+      the reducer needs to do anything based on the type property of the action
+      object. In the event that the case is such that the reducer is relevant,
+      it will return the action's payload (which becomes the new state for that
+      reducer).
+        Note that we need to default the value of the state argument to null.
+
+      NEVER MUTATE STATE INSIDE THE REDUCER! USE THE PAYLOAD!
+** combineReducers ({reducers})=> atomicGlobalState
+      An application's atomic state is composed from the data returned by the app's
+      reducer functions. We assemble this atomicGlobalState with Redux's
+      combineReducers method, by passing in an object assembled from the data that
+      our reducers return.
+** container
+      Containers are normal React components that we designate to have a direct
+      relation to the state managed by Redux; Containers are the point where we 
+      inject state into our components. Because state can be passed to child
+      components as props, containers should be the parent-most component of a
+      constellation of components that consume a related state. We aim to match our
+      Containers tightly to the components that truly need access to state.
+** connect(ing) react-redux/components-state
+      How do our components access state? Via react-router(s) connect method.
+      connect is a function that takes multiple arguments, and returns a function.
+        connect's first argument is a function, usually called something helpful,
+      like mapStateToProps; predictably this function's job is to take the
+      application state, or, at least part of it, and return an object,
+      containg select data from the application state.
+
+#+BEGIN_SRC js
+
+function mapStateToProps (state) {
+  return {
+    books: state.books
+  };
+}
+
+#+END_SRC
+
+        We then invoke the function returned from connect with the component that
+      will consume the data returned from mapStateToProps. Our component recieves
+      the returned object and exposes this data as its props. NOTE the props
+      properties referenced in our component must match the keys defined in
+      mapStateToProps's returned object.
+        Whenever our application state changes, our containers will automatically
+      rerender.
+** Actions and Action Creators Let us Change State
+      1. An event, usually triggered by a user, can call an action creator. An
+         action creator is a function that returns an action object.
+      2. That action object is automatically sent to all of the reducers within our
+         application.
+      3. Reducers can choose, depending on the type of action, whether to return the
+         current state, or a new state (based on the action object's contents).
+      4. Once all of the reducers handle the action, the reducers then re-populate
+         the application state.
+      5. The state change causes all of the components to re-render.
+** Action Creators are functions that return an Action Object
+      Action objects typically have two properties:
+      1. type (required) exact spelling is IMPORTANT, we typically import the
+         strings from another file.
+      2. payload - the data we want to use to update application state
+** We bindActionCreators to Containers using mapDispatchToProps via connect
+      Much like we connect container components to the application state by passing
+      mapStateToProps to connect, and invoking the returned function by passing it
+      our container; we can connect containers to action creators by passing
+      matchDispatchToProps as a second argument to our invocation of connect.
+        matchDispatchToProps is a function that returns props for the component.
+      Inside of matchDispatchToProps, we call a function imported from redux called
+      bindActionCreators.
+        bindActionCreators is what ensures that our actions - generated from our
+      action creator, are presented to our reducers. The dispatch function is
+      responsible for doing the actual work of handling the action object. Note 
+      that the dispatch object is called within connect, we don't fuss with it.
+        bindActionCreators takes two arguments:
+        1. An object, containg a key:value that relate to an action creator, and
+        2. the dispatch that was originally passed to mapDispatchToProps.
+
+#+BEGIN_SRC js
+
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({selectBook: selectBook}, dispatch);
+
+#+END_SRC
+
+** Conditional Rendering
+      When our application boots up, our reducers may populate our application state
+      with null values. We need to have reasonable default states or we will see a
+      lot of typeErrors.
+        We can use control flow to detmine whether the state is non-null:
+
+#+BEGIN_SRC js
+
+//...
+
+class BookDetail extends Component {
+  render() {
+    if (!this.props.book) {
+      return <div>Select a book to get started!</div>;
+    }
+    return (
+      <div>
+
+//...
+
+#+END_SRC
+
+** Big Ideas
+*** Redux is in charge of managing our application state: a single POJO
+*** Application state is completely separate from react components state
+*** Our application state is formed by combining reducers
+*** Reducers are in control of changing application state over time
+*** Action creators are functions that return action objects
+*** Actions alert reducers to opportunities to return a new state
+*** Connect populates our container with props for managing state
+* Intermediate Redux: Middleware
+** Making a weather app
+      Challenges
+      1. Making AJAX requests with Redux
+      2. Making a line chart within react
+      3. Handing extensive state changes
+** Setting up our components and context
+*** onChange callbacks and this
+       When we hand off a callback and that callback has a reference to this,
+       we need to be clear about what the context is, typically by binding the
+       callback's context. We can do that in the constructor method of an ES6 class:
+
+#+BEGIN_SRC js
+
+export default class SearchBar extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {term: '' };
+    this.onInputChange = this.onInputChange.bind(this);
+  }
+  onInputChange(event) {
+    this.setState({ term: event.target.value });
+  }
+  render() {
+    return (
+      <form className='input-group'>
+        <input
+          placeholder='Get your five-day forecast'
+          className='form-control'
+          value={this.state.term}
+          onChange={this.onInputChange}
+        />
+        <span className='input-group-btn'>
+          <button type='submit' className='btn btn-secondary'>Submit</button>
+        </span>
+      </form>
+    );
+  }
+}
+
+#+END_SRC
+
+*** form elements in React
+       Form elements have automatic behavior, ex: enter or clicking submit
+       clear out an input field. To prevent this behavior, we need to intercept
+       the form's onSubmit behavior, to a function that prevent's the default
+       behavior. 
+
+#+BEGIN_SRC js
+
+//...
+  onFormSubmit(event) {
+    event.preventDefault();
+  }
+  render() {
+    return (
+      <form onSubmit={this.onFormSubmit} className='input-group'>
+        <input
+//...
+
+#+END_SRC
+
+       Why use form's anyway? We can intercept one event, onSubmit on the form tag,
+       instead of having to intercept both submit button clicks and enter key
+       presses.
+
+** Middleware
+      Middleware are functions that accept an action and return an action. Middleware
+      might let an action passs through unchanged, log the action, stop the action,
+      etc. This lets us manipulate actions before they hit our reducers. 
+*** redux-promise
+       npm installed, and included in our app as middleware. 
+
+#+BEGIN_SRC js
+
+//...
+import ReduxPromise from 'redux-promise';
+//...
+const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+//...
+
+#+END_SRC
+
+*** AJAX with axios
+       we return the promise as the payload of the action, the action goes to the
+       reducer with the promise's response. redux-promise doesn't pass an action on
+       to a reducer until the promise resolves. if the payload is a promise,
+       redux-promise stops the action, once the request finishes, it emits an action
+       of the same type, passsing the data on.
+         AKA react-router unwraps promises that appear in the payload of an action
+       before the action hits reducers.   
+** Avoiding Mutating State in Reducers
+      use the spread operator
+** map props to a render helper...
+** react-sparklines
+** react-google-maps

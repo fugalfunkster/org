@@ -1,0 +1,53 @@
+REACT
+
+* Following Pete Hunt's : https://github.com/petehunt/react-howto
+** React
+** React Routing
+     react-router is handy for single-page applications, a page that loads once,
+     and when the user clicks on a link or button, JS running on the page updates
+     the address bar, but the webpage is not refreshed. Management of the address
+     bar is done by something called a router. Thus, if you aren't making a single
+     page web app, you have little reason to sue a router.
+** Flux Architecture Pattern (Redux)
+     "Flux architecture should only be added once many components have already 
+     been built. /n React components are arranged in a heirarchy. Most of the time
+     your data model also follows a heirarchy. When your React components start to
+     recieve props that feel extraneous, or you have a small number of components 
+     starting to get very complex, then you might want to look into flux.
+** Inline Styling*
+** Server Rendering*
+     "Server rendering is often called "universal" or "isomorphic" JS. It means
+     that you can take your React components and render them to static HTML on the
+     server. This improves initial startup performance because the user does not
+     need to wait for JS to download in order to see the initial UI, and React can
+     re-use the server-rendered HTML so it doesn't need to generate it client-side.
+       You need server rendering if you notice that your initial render is too
+     slow or if you want to improve your search engine ranking."
+** Immutable JS*
+     "Immutable.js provides a set of data structures that can help to solve
+     certain performance issues when building React apps. It's a great library,
+     and you'll probably use it a lot in your apps moving forward, but it's
+     completely unnecessary until you have an appreciation of the performance
+     implications."
+** Relay & Falcor*
+     "These are technologies that help you reduce the number of AJAX requests.
+     They’re still very cutting-edge, so if you don’t have a problem with too many
+     AJAX requests, you don’t need Relay or Falcor."
+
+* Docs
+** React Facebook docs
+*** getting started: https://facebook.github.io/react/docs/getting-started.html
+*** tutorial: https://facebook.github.io/react/docs/tutorial.html
+*** Thinking in React https://facebook.github.io/react/docs/thinking-in-react.html
+** react-router docs
+*** tutorial: https://github.com/reactjs/react-router-tutorial
+*** introduction: https://github.com/reactjs/react-router/blob/master/docs/Introduction.md
+*** guides: https://github.com/reactjs/react-router/tree/master/docs/guides
+*** API: https://github.com/reactjs/react-router/blob/master/docs/API.md
+*** examples: https://github.com/reactjs/react-router/tree/master/example
+
+* Talks
+** react-router
+*** https://www.youtube.com/watch?v=XZfvW1a8Xac
+** Immutability
+*** Immutable Data & React: https://www.youtube.com/watch?v=I7IdS-PbEgI

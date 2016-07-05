@@ -1,0 +1,87 @@
+* React Fundamentals (egghead)
+** JSX
+     JSX: an HTML-like syntax
+     all JXS is transpiled into JS
+     it's all React.createElement('h1', null, 'inner html') under the hood
+** Stateless Functional Component
+     different than a class that extends React.Component
+     classes components can have state
+     stateless function components do not have state
+     props are passed into SFCs as argument
+** The Render Method
+     The Render method is only allowed to return a single node. Adjacent JSX
+     elements must be wrapped in an enclosing tag. 
+       Be careful with wrapping our return statement, in the render method.
+** Intro to Props
+     A lot like setting an attribute on an html element, or passing arguments to a 
+     function. we access props on our component as this.props.whatever.
+** interpolating in JSX <tag>{JS expressions go in here}</tag>
+** propTypes
+     type checking for props.
+     a property of any react component
+     an object where the name is the prop name
+     and the value is a React.PropTypes.Type
+     - .string
+     - .number
+     - *.isrequired (makes the prop required)
+** default Props
+     follows same pattern as propTypes
+     key is prop name
+     value is default value for prop
+** constructor method
+     super(); provides context for this within component when using ES6 class syntax
+     this.state initializes state
+** binding this in the constructor method
+     you can bind this for any method by using .bind(this) in the constructor method
+     
+#+BEGIN_SRC js
+
+this.update = this.update.bind(this);
+
+#+END_SRC
+
+** State Basics
+     state is a collection of value that a component will manage itself     
+     this.state ={} lets us create state
+     accessed throughout the class as this.state.txt
+     we only ever set state with this.setState
+     setState lets us update only what we specify
+** Owner Ownee Relationship
+     when one component renders another component
+     react calles this owner onee relationship
+     parent component is called a composite component
+     
+** TODO Using Refs to Access Components (not encouraged)
+     refs let you reference an instance of a component within our application
+     refs won't work with SFCs
+     When you are using React components you need to be able to access specific
+     references to individual components. This is done by defining a ref.
+** TODO Accessing Child Properties {this.props.children}
+     When you're building your React components, you'll probably want to access
+     child properties of the markup. to get at innerHTML or nested components
+*** parent innerhtml
+*** nested components
+** Component Lifecycle - Mounting Basics
+     React components have a lifecycle, and you are able to access specific phases
+     of that lifecycle. This lesson will introduce mounting and unmounting of your
+     React components. When a component is added or removed, this is called mounting
+     and unmounting the component.
+       These lifecycle events occur in a specific order, and we can hook into them.
+*** componentWillMount
+*** render
+*** componentDidMount
+*** componentWillUnmount
+** Component Lifecycle - Mounting Usage
+     The previous lesson introduced the React component lifecycle mounting and
+     unmounting. In this lesson you will learn some simple uses for these hooks.
+** Component Lifecycle - Updating
+     The React component lifecycle will allow you to update your components at
+     runtime. This lesson will explore how to do that.
+     
+** Higher Order Components (replaces mixins)
+** Composable Components
+** Dynamically Generated Components
+** Build a JSX Live Compiler
+** JSX Deep Dive
+** Precompile JSX
+** Developer Tools

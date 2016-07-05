@@ -1,0 +1,10 @@
+#+TODO: TODO PAUSED ACTIVE | DONE
+
+TODOS
+* react
+** React Fundamentals (Egghead)
+** Getting Started with Redux (egghead)
+** Getting Started with React Router (egghead)
+
+
+

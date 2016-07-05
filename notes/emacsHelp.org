@@ -1,0 +1,371 @@
+EMACS
+
+* Chords by Package
+** emacs
+*** files
+**** C-x b *name* (switch to buffer named name)
+**** C-x C-f *name* (open file named name)
+**** C-x C-s (save buffer to file)
+**** C-x C-w (save buffer to file as)
+*** windows and frames
+**** C-x 0 (delete current window)
+**** C-x 1 (delete all windows except the window containing the point)
+**** C-x 2 (split horizontal)
+**** C-x 3 (split vertical)
+**** C-x o (cycle cursor to next window)
+**** C-M-v (scroll other window)
+*** movement
+**** M-< (top of document)
+**** M-v (top of screen)
+**** C-p (previous line)
+**** C-l (center on cursor)
+**** C-n (next line)
+**** C-v (bottom of screen)
+**** M-> (bottom of document)
+**** C-a (beginning of line)
+**** M-b (back one word)
+**** C-b (back one character)
+**** C-f (forward one character)
+**** M-f (forward one word)
+**** C-e (end of line)
+**** M-g g (go to line)
+**** C-s (regex search)
+**** C-r (regex search reverse)
+*** editing
+**** killing
+***** C-SPACE (set mark)
+***** C-w (kill region)
+***** C-k (kill line)
+***** M-d (kill word)
+***** M-w (copy region to kill ring)
+***** C-y (yank)
+***** M-y (yank, then cycle through kill ring)
+***** C-_ (undo)
+*** eshell
+**** M-x eshell
+**** C-u M-x eshell
+*** modes
+**** M-x (set major mode)
+***** clojure-mode
+***** js2-mode
+***** org-mode
+***** mit-scheme
+**** C-h m (describe mode)
+*** package manager
+**** M-x package-list-packages
+**** M-x package-refresh-contents
+**** M-x package-install
+** js2-mode
+*** C-c C-e (hide element)
+*** C-c C-s (show element)
+** js2-refactor
+** REPLs
+*** M-x nodejs-repl
+*** M-x run-sheme
+** Magit
+*** M-x magit-init (create repo)
+*** M-x magit-status
+*** TAB (expand file contents)
+*** RET (edit file)
+*** s (stage)
+*** S (stage all)
+*** u (unstage)
+*** U (unstage all)
+*** k (discard file)
+*** i (add to gitignore)
+*** g (refresh)
+*** c (commit popup)
+*** P (push popup)
+*** F (fetch/pull popup)
+*** l (log popup)
+*** n (next line)
+*** p (previous line)
+*** M-n (forward sibling)
+*** M-p (backward sibling)
+*** q (bury buffer)
+*** e (ediff message)
+**** n (next)
+**** A / B 
+*** C-h k <key> (describe function bound to <key>)
+** Emmet Mode
+*** a (element, default div)
+*** . (class)
+*** # (id)
+*** / (empty tags)
+*** + (siblings)
+*** > (child)
+*** ^ (climb up)
+*** * (multiply)
+*** $ (numbering, ex: ul>li$*3
+*** {} (text)
+** IDO Mode
+*** C-f / C-b (toggle IDO off after C-x C-f / C-x C-b
+** neoTree
+*** n (next)
+*** p (previous)
+*** H (show hidden)
+*** g (refresh)
+*** A (min/max)
+*** TAB/SPC/RET (fold/unfold)
+*** C-c C-n (create a file (or dir if name ends with /)
+*** C-c C-d (delete a file or dir)
+*** C-c C-r (rename a file or dir)
+*** C-c C-c (change root dir)
+** org-mode
+*** navigation
+**** C-c C-n (next heading)
+**** C-c C-p (previous heading)
+**** C-c C-u (up to higher level heading)
+**** C-c C-f (next heading at same level)
+**** C-c C-b (previous heading at same level)
+*** Headings
+**** M-S-arrow (move/promote/demote current subtree)
+**** M-RET (create bullet at same level of indentation)
+**** C-x n s (narrow to subtree)
+**** C-x n w (widen to full tree)
+*** TODO!
+**** C-C C-t (cycle todo ring)
+**** M-S-RET (insert new TODO @ same level)
+** flycheck
+*** C-c ! l (list all errors)
+*** C-c ! n (goto next error)
+*** C-c ! p (goto previous error)
+*** C-c ! v (verify flychecker works)
+*** C-c ! x (disable flycheck in buffer)
+*** if in node, paste at top: /* jslint node: true */
+** yasnippet snippets (tab)
+*** variable declarations
+     c - const
+     v - var
+     l - let
+*** functions
+     f - anonymous function
+     f* - generator function
+     fn - named function
+     rt - return
+     iife - iife
+     *() - arrow func
+*** Control flow
+     *bl - block
+     *br - break
+     if - if
+     *else - else
+     switch
+     *throw
+     *? - ternary
+     *try
+     *catch
+     *finally
+*** Iterations
+     *for
+     *while
+*** module
+     req - require
+     *imp - import
+     *exp = module.export
+     *exps - module.exports = ;
+*** console
+     console.log
+     *console.warn
+     *console.error
+     *console.debug
+*** objects
+     *method w/ trailing comma
+*** react
+     *gis - getInitialState
+     *gdp - getDefaultProps
+     *cdm - componentDidMount
+     *cwu - component will unmount
+     *rrea - require react
+     *rdom - require reactDOM
+     *ren - ReactDOM.render ()
+     *rrm - render
+     *rr  - react router
+     *rrr - react router route
+     *rrl - react router link
+     *tss - this.setState ({});
+     *ptm - propTypes method
+     *rcc - react createClass
+
+*** http://capitaomorte.github.io/yasnippet/index.html
+** expand regions
+    lets you send code to REPL
+*** C-= (select/expand)
+*** TAB (format)
+* Magit 
+** TODO Howard's talk (through 8:21) https://www.youtube.com/watch?v=vQO7F2Q9DwA
+*** Magit popups allow you to toggle switches, options, etc. 
+**** default options (C-t)
+**** actions complete the popup process
+**** popups
+***** Commit (c)
+****** commit w/o switches or options (c)
+       this opens two windows, one one side, the commit message
+       on the other side the diff for staged files
+****** to submit commit message (C-c C-c)
+***** Push (P)
+***** Pull / Fetch (F)
+***** Log (l l)
+*** Create Repository (M-x magit-init) -- git init
+*** Main interface (M-x magit-status) -- git status
+**** Head: local branch info
+**** Upstream: primary remote
+**** Files can be Untracked, Unstaged, Staged
+***** refresh (g)
+**** When the cursor is over a particular file
+***** stage file (s)
+***** stage All (S)
+***** discard file (k)
+***** add to gitignore (i)
+***** expand file contents (<tab>)
+****** this lets you see the file contents
+****** (<return>) on a particular line allows you to edit that file
+**** Commit Popup (c c)
+**** Push Popup (P P)
+**** Status message ($)
+**** Pull /Fetch Popup (F F)
+**** log (l)
+*** Movement
+**** next line (n)
+**** previous line (p)
+**** forward sibling (M-n)
+**** backward sibling (M-p)
+**** bury buffer (q)
+*** Handling merge conflicts
+**** ediff message (e)
+***** next (first) diff (n)
+***** A or B for what you want to keep
+***** Or edit C
+**** rebasing
+***** gerrit requires a straight history, no twigs
+***** to achieve this you must rebase, which magit makes easy
+***** move to parent (in log) rebase parent before twig, use i...
+***** put lst commit at the top of the list...?
+**** stash (z?)
+***** pop puts it to staged
+**** squashing commits (combine multiple commits that are unpushed
+***** r - rebase popup
+***** l
+***** s - squash newer commit into older commit
+***** 
+*** DEMO CODE from howards magit demo repo
+** TODO Howard's Blog
+*** Need for Rebasing http://www.howardism.org/Technical/Git/rebasing.html
+*** Squashing Commits http://www.howardism.org/Technical/Emacs/magit-squashing.html
+** Intro to Magit https://www.youtube.com/watch?v=LDafmAJa-4w
+* org!
+** Harry Schwartz https://www.youtube.com/watch?v=SzA2YODtgK4
+*** Outliner
+**** C-c l : insert link
+**** tables
+**** #+ : props?
+***** TITLE:
+***** OPTIONS:
+*** literate programming
+**** source code blocks
+*** todos
+**** C-c C-d : deadline!
+**** C-c a : agenda
+**** archive file for DONE stuff
+*** ox (org export!)
+**** C-c C-e : export to other formats 
+***** ex: to latex, html, etc.
+**** beemer is for pdf presentations
+**** ox-twbs : twitter bootstrap
+**** ox-gfm : github flavored markdown
+*** publishing from org mode
+**** org2blog : lets you publish to a wordpress site!
+**** org-publish : lets you process a dir structure into a website
+*** org-drill : flashcards! maybe for litle clojurian?
+*** org google calendar (org g cal?)
+* Packages
+** currently installed
+*** async
+**** http://elpa.gnu.org/packages/async.html
+*** auto-complete
+*** cider
+**** http://www.github.com/clojure-emacs/cider
+*** clojure-mode
+**** http://github.com/clojure-emacs/clojure-mode
+*** clojure-mode-ex
+**** http://github.com/clojure-emacs/clojure-mode
+*** dash
+*** emmet-mode
+**** fork of zencoding mode
+**** https://www.youtube.com/watch?v=p7qore_HpC4
+**** README: https://github.com/rooney/zencoding/blob/master/README.md
+**** https://github.com/smihica/emmet-mode
+*** epl
+**** Emacs Package Library
+**** EPL provides a convenient high-level API for various package.el versions
+**** http://github.com/cask/epl
+*** PAUSED expand-region
+**** http://emacsrocks.com/e09.html
+**** see docs in pkg mgr
+*** exec-path-from-shell
+**** https://github.com/purcell/exec-path-from-shell
+*** flycheck (eslint)
+**** https://www.flycheck.org/
+*** git-commit
+**** https://github.com/magit/magit
+*** ido-completing
+**** https://github.com/DarwinAwardWinner/ido-ubiquitous
+*** id-ubiquitous
+**** https://github.com/DarwinAwardWinner/ido-ubiquitous
+*** TODO js-comint
+**** https://github.com/redguardtoo/js-comint
+*** TODO js2-mode
+**** https://github.com/mooz/js2-mode/
+*** TODO js2-refactor
+**** see docs in pkg mgr
+*** TODO magit
+**** https://github.com/magit/magit
+*** magit-popup
+****  https://github.com/magit/magit
+*** multi-eshell
+**** http://cims.nyu.edu/~stucchio
+*** TODO multiple-cursors
+**** https://www.youtube.com/watch?v=jNa3axo40qM
+**** https://www.youtube.com/watch?v=4wvLGJQxEjQ
+**** see docs in pkg mgr
+*** neotree
+**** https://github.com/jaypei/emacs-neotree
+*** nodejs-repl
+**** https://github.com/abicky/nodejs-repl.el 
+*** org
+*** org-bullets
+**** https://github.com/sabof/org-bullets
+*** TODO org-beautify-theme
+**** https://github.com/jonnay/emagicians-starter-kit/blob/master/themes/org-beautify-theme.org
+*** paredit ???
+*** pkg-info
+**** https://github.com/lunaryorn/pkg-info.
+*** TODO ??? projectile
+**** https://github.com/bbatsov/projectile
+*** queue ???
+*** rainbow-delimiters
+**** https://github.com/Fanael/rainbow-delimiters
+*** s ???
+*** seq
+**** http://elpa.gnu.org/packages/seq.html
+*** smart-forward
+**** see docs in pkg mgr
+*** smex
+**** http://github.com/nonsequitur/smex/
+*** spinner
+**** https://github.com/Malabarba/spinner.el
+*** tagedit ???
+*** TODO DELETE tern
+**** http://ternjs.net/
+*** TODO undo-tree
+**** http://www.dr-qubit.org/emacs.php#undo-tree
+*** with-editor
+**** https://github.com/magit/with-editor
+*** TODO yasnippet
+**** http://capitaomorte.github.io/yasnippet/index.html
+**** https://www.youtube.com/watch?v=-4O-ZYjQxks
+**** http://github.com/capitaomorte/yasnippet
+
+
+
+

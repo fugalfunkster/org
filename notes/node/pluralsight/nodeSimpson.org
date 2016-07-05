@@ -1,0 +1,253 @@
+Real Time Web w/ Node
+
+* HTMl5 Facades
+     - Facade is a thin layer of abstraction over an API
+       a layer between the native API and your production code
+       insulates your code from changes in the native API
+       permits a single change in the facade, instead of changes throught your code
+       ex: don't use canvas directly, use a facade
+     - h5ive gethub repo
+** Storage API
+     - local storage and session storage
+     - permit persistent storage on client's browser
+     - cookies were old-school way, but transmitted data with every request, limiging
+       because bogged down requests
+       - session cookies persisted for the length of the browser instance
+       - shared cookie across windows and tabs
+       - ends on logout or browser exit
+     - Session storage persists for lifetime of session
+       - based upon the tab session
+       - each tab permits a new session
+       - basically  key-value pairs
+       - use for session IDs, etc.
+       - doesn't transmit session IDs
+     - Local storage persists FOREVER
+       - Few people know about deleting cache, cookies, etc.
+       - Doesn't delete local storage
+       - Doesn't have a mechanism for  expiration, must delete manually
+       - Have migration scripts in place to keep local storage clean
+       - useful for username, preferences, etc.
+     - h5.storage (facade)
+       - you decide at construction time, how long you want the data to persist
+         - if you want it to expire with the session, it'll use session storage
+         - no expiration, works like local storage
+         - if you give it a timeline, it will store it in localsotrage with a timestamp wrapper
+         - the api will automatically clean up local storage based on the timestamp of requests
+     - storage events
+       - as soon as you change session or local storage, it will fire an event
+       - you can listen to in the browser, and any other browsers attached to the store
+       - cross-window messaging
+
+** Canvas API
+      - annoying things
+        - two different coordinate systems
+          - addressable space (num of pixels)
+          - physical display space (css size of space, width and height)
+          - rarely useful (zooming maybe?)
+          - facade matches dimensions
+        - no chainability
+          - api implements chainability
+        - Paths
+          - if you don't give it an initial starting point for a path
+          - it might assume 0, 0
+          - or it might assume the first point you give it
+          - api assumes 0, 0
+        - rotate (also scaling, skewing)
+          - you're not rotating the drawing
+          - you're rotating the coordinate system
+          - clockwise in one is countercloskwise in the other
+          - facade fixes this
+
+** getUserMedia
+      - allowes us to use JS to get user media streams
+      - take the stream and set it as the sorce element to a video tag,
+      - and that lets us display the stream to the user
+      - h5.userMedia - supersimple facade
+      - same object we wound transport across WebRTC to stream to another user
+
+** requestAnimationFrame
+      - not just about animation
+      - basically an API that says permits any visual changes, usually in css, you can 
+        tell the browser to run that function when it's convienent for the update to occur
+      - browser is good at keeping itself in sync with the monitor
+      - css updates could be out of sync with the prior two
+      - requestAnimationFrame permits the css to sync optimally by letting the browser
+        schedule the repaint
+      - helps ensure fast transitions occur correctly
+      - h5.animationFrame - facade
+
+** Web Sockets
+      - websockets
+        - 500-800 ms per ajax request, gotta have http requests
+        - websockets keep sockets open, so only one initial http connection
+        - 50-100 ms latency - much faster than ajax
+        - still might be too slow for games
+      - real-time (misnomer)
+        - we're not talking sub microsecond response times
+      - socket.io
+        - few people use the native API
+        - socket.io is well known, and common
+        - API is basically identical between client and server
+          - it's evented!
+        - servers can broadcast to all clients
+      - it's different to scale, limited number of server ports, etc.
+      - what's next?
+
+* Node.js
+** Node.js Observations
+*** What does node do well?
+**** really good at communication: i/o
+**** no so good at stadic serving of big files
+*** "middle end"
+**** middleend.com
+**** theres a certain core set of tasks that always happens
+**** the front end needs control, but the back end has it deeply embedded
+**** ex: validation rules, templating, url writing, data formatting, routing, etc.
+
+** Hello World
+*** There's no environment, ther's no dom, no browser, no doctype, etc.
+*** how does node do i/o? where does that capability come from?
+*** V8, the javascript engine, has no concept of I/O
+*** V8 could run in any environment... on a browser, on a phone, in a arduino, etc.
+*** Node provides a hosting env. for V8
+*** the C wrapper handles this
+*** we could also do stdout;
+
+** Accepting Input
+*** what if we wanted to accept input from the cmd line
+*** ex: when we write node 1.js --name=matthew
+*** --name= is an argument to node 1.js
+*** the syntax is very c like
+*** that argument data is available in our JS via minimist
+**** minimist allows us to store these arguments in an array: process.argv
+**** the first element of an array from the previous example would be "node", second "1.js", 3rd "matthew"
+*** minimist - OUR FIRST HELPER MODULE
+**** parses our arguments
+**** instead of manipluating the argv array directly,
+**** we're going to pull the name property from argv
+**** we could now $ node 1.js --name=World > Hello World
+**** documentation describes all helper methods
+     - NOTE you can add a header to a .js file that tells the terminal to run the file with node
+       then you can directly invoke that filename in bash, as if it were a shell script
+
+** Adding Help
+*** our own print help
+
+** File IO and Modules
+*** node has a standard, built-in module for reading files: fs
+**** fs.fileReadSync(filename)
+*** everything in data transfer is done in an array buffer
+**** an efficient binary representation of our data
+**** we can parse our buffer with .toString()
+     
+** Asynchronous File IO
+*** most natural path is the module pattern and the require system, 
+**** vs. prototypal inheritance & classes
+*** In general you usually want to write non-blocking APIS, 
+*** node usually procides a default and a sync option
+*** to use the async function, we use CALLBACKS
+**** node uses err first callback, the first param is always reserved for an error
+**** whe using node modules, like fs, we assume that the first argument passed to a call back is an error, if any
+**** the next argument is going to be the 
+*** The setTimeout demonstrates the async-ity
+**** for some reason setTimeout will execute a function passed to it by reference right away?
+**** why is there a difference when it's wrapped in a function?
+
+** Asynquence
+*** We can express our callbacks as a sequence
+**** We must require both asynquence and asynquence-contrib
+**** we instantiate a sq from ASQ, and pass it as the callback to the node function - which expects (err, callback)
+**** the readFile returns the contents to sq
+**** the then, done, val, and or methods are from asynquence
+**** later
+**** when I call hello.say I pass it a file name and I either get the content or an error.
+
+** Creating NPM Modules
+*** we need to do configuration outsied of our file, we need a package.json file
+*** npm init will build it for you
+*** name: must be unique
+*** version: follow good semantic versioning
+**** verions can only increment, must be changed upon update, no overwrites
+*** description: not required
+*** main: main point of entry to the file 
+**** what's require going to pull in?
+*** dependencies: what and what version?
+
+** Publishing NPM Modules
+*** npm publish and use the name of the module! easy
+*** then we can npm install and require('name')
+
+** Extending Modules
+*** Browserify will include necessary functionality so that a node module will run in the browser
+**** our module relies on the fs, not going to work natively in browser
+**** common JS in node
+*** UMD: Universal Module Definition
+****  one module format, available in all environments!
+
+** Grunt and Gulp
+*** build process tools
+*** make files, bash scripts
+*** grunt is a configuration based approach, declare steps for build process
+*** gulp is more node-like, no config, 
+*** npm!
+
+** File Streams (3b)
+*** Streams are an abstraction on IO, using buffers, which are highly memory efficient
+**** req and res are input and output streams
+*** fs.readFile reads the file in one big chunk, the entire file loads then proceeds to output
+*** creating a stream
+**** we can swap out this part of our code with a stream, w/o modifying the rest of our code.
+**** we can create a stream variable and assign it a read stream and corresponding filename
+**** anytime we get a chunk of data, a 'data' event fires
+**** each time it does this, we'll concat our return var
+**** when the stream is finished, it will emit an 'end' event
+**** node has a default buffer size, each chunk is this buffer size, so there might be many data events emitted
+
+** Piping Streams
+*** we can pipe the output of one stream into the input of another stream
+*** our code creates a new file!
+*** checkout node stream playground @ www.nodestreams.com
+*** 
+
+** Node as a Webserver (4.server.js)
+*** node is at it's best when its serving http requests
+*** the http module lets us deal with inbound and outbound http requests
+*** we can create an http server with:
+*** http.createServer(httpRequestHandlingFunction).listen(port, host);
+*** our handler takes two arguments: (req, res)
+*** executing our 4.server.js file sets up an infinite event loop
+*** it'll listen forever
+*** we can also install the "forever" module
+**** a process manager, if the process dies, it restarts it immediately
+
+** Handling Requests
+*** we can control our response headers
+**** res.writeHead(<statusCode>, <content-type>)
+*** and we can see the type of request method, url, etc
+*** this allows us to rool our own routing, url requests, etc.
+*** we can do all of the query string manip that express provides with RegExs
+
+** Simulating Asyncronicity (5)
+*** let's simulate some async!
+*** putting in some setTimeouts
+
+** Adding Asyquence
+*** using ASQ
+
+** Serving Static Files (6)
+*** node-static
+**** lets us create a static file server
+**** the first variable we pass to the static_server instance is a directory name
+**** this is the directory we want to serve our static files from
+**** .serve passes control to the static server to sniff the req, and form the res
+**** req.resume gives control back to the http server
+*** the regexs are designed to only recognize only urls that contain a number ex: /6 but !/foo
+*** the second regex makes that number translate to num.html, ex: /6 becomes 6.html
+*** static fileserver gzips stuff, sometimes automatically
+
+* socket.io
+** sockets!
+*** initial http request, handshake, and upgrade to persistent connection
+*** you want to be using SSL on your websockets
+*** socket.io is an extension on websockets
+*** we're going to use 0.9.16 version
