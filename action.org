@@ -6,29 +6,30 @@ ACTION
 
 
 * queue
-** Udemy : Modern React with Redux
-** JavaScript Allonge : Review and Refactor Portfolio
-** Online Courses
-*** Pluralsight 
+** Notes
+*** Udemy : Modern React with Redux
+*** JavaScript Allonge : Review and Refactor Portfolio
+*** Online Courses
+**** Pluralsight 
     - [ ] Building Applications with React and Flux : Cory House (5:08)
     - [ ] Building Applications with React and Redux in ES6: Cory House (6:14)
     - [ ] Build Cross Platform React Native Apps with Exponent and Redux : Hendrick(3:21)
     - [ ] Building a Full-Stack App with React and Express : Daniel Stern (3:24)
     -  [ ] Docker Deep Dive : Nigel Poulton (5:38)
-*** Udemy
+**** Udemy
     - [ ] Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:00)
     - [ ] Build Apps with React Native : Stephen Grider (8:00+)
     - [ ] Build Web Apps with ReactJS and Flux : Stephen Grider (9:30+)
     - [ ] Build Apps with React Native : Stephen Grider (8:00+)
     - [ ] Advanced React and Redux
     - [ ] Learn & Understand Node.js Anthony (12:00+)
-*** FrontEnd Masters
+**** FrontEnd Masters
     - [ ] API Design with Node.js using Express : Scott Moss (10:18)
     - [ ] Organizing Javascript Functionality : Kyle Simpson (5:11)
     - [ ] Functional-Lite JS : Kyle Simpson (3:10)
     - [ ] Rethinking Async JS : Kyle Simpson (6:22)
     - [ ] Asynchronous Programming in Javascript : Jafar Husain (9:36)
-*** Egghead IO
+**** Egghead IO
     - [X] React Fundamentals : Joe Maddalon
     - [ ] Build Your First React.js App : Tyler McGinnise
     - [ ] Getting Started with Redux : Dan Abramov
@@ -37,13 +38,13 @@ ACTION
     - [ ] Asynchronous Programming: The End of the Loop : Jafar Husain
     - [ ] JavaScript Arrays in Depth : Shane Osbourne
     - [ ] Learn how to use Immutable JS : J.S. Leonard
+*** react
+**** React Fundamentals (Egghead)
+**** Getting Started with Redux (egghead)
+**** Getting Started with React Router (egghead)
+** Projects
 ** Complete Mongo Certification
-
-
-
-
-    
-   
+ 
 * App Ideas
 ** Soil Test
 ** Ship's Log (searchable note taker) 
@@ -55,7 +56,7 @@ ACTION
 *** datomic
 
 
-* Learning Horizons
+* Horizon
 ** Scheme
 *** Little Schemer / Seasoned Schemer
 *** HtDP [5/43]
