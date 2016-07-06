@@ -1,304 +1,288 @@
-Git Fundamentals
-
-* Configure Git
-
-** Git provides three levels of configuration
-*** git config --system
-**** stored in /etc/gitconfig
-**** applies to entire computer git is installed on
-**** not common to modify
-*** git config --global
-**** user-level config
-**** stored in ~/.gitconfig
-*** git config
-**** Repository Level configuration
-**** stored in .git/config in each repo
-
-
-** Global Options
-*** git config --global user.name "Matthew Hoselton"
-*** git config --global user.email "mtthwhsltn@gmail.com"
-*** git config --global core.editor emacs
-*** git config --global help.autocorrect 1
-**** waits a number before executing? helps autocorrect mispelled commands
-*** git config --global color.ui auto
-**** lets colors help for diffing, status, etc.
-*** git config --global core.autocrlf (true|false|input)
-**** Not necessary for mac - carriage return line feed - use input
-*** git config --global list
-**** display global settings
-
-
-** Repo Options
-**** Overrides global settings for a repo
-*** git config user.name
-*** git config list
-*** git config --unset user.name 
-**** unsets a config, reverts to global
-
-* Working Locally
-
-** Creating a Local Repo, Adding Files, and Committing Changes
-*** git init
-**** makes the current working directory a repo
-**** creates a .git fir containing the repo and its metadata
-*** git status
-**** tells you what files are in repo
-**** and which of those files have been changed
-*** git add
-**** stages a file to be added to the repo
-**** -u (for updated) adds tracked & modifed files to staging area
-**** -A includes all files, including untracked files
-*** git commit
-**** commits all staged files
-**** opens default text editor to input a message
-**** -m "" lets you put message inline instead of in text editor
-**** git identifies commits with a SHA1 hash
-
-
-** Viewing History and Diffs
-*** git log
-**** shows the history of commits and SHAs
-*** git diff <initial-commit-sha-hash> <later-commit-sha-hash>
-**** shows what's different betwen two commits
-**** the latest commit is the HEAD
-**** if you do not specify a SHA, git assumes that you mean HEAD
-**** thus "git diff HEAD~1" diffs the HEAD against the commit b/f HEAD
-**** ~ just beack back from HEAD, ~3 means back 3,
-
-
-** Staging Changes as Multiple Commits
-*** Multiple Adds / Multiple Commits
-**** You can break commits up into logical units
-**** after adding related files, commit them; Repeat
-
-
-** Delete and remanimg files
-*** git add -u
-**** also stages deletions
-*** git add -A
-**** if you change a file name, git thinks you deleted it and added a new file 
-**** upon adding the untracked file, git will recognize the rename operation
-
-
-** Undoing Changes to the Working Copy
-*** git checkout <filename>
-**** grabs head version out of repo and reverts any changes made to file since
-*** git reset --hard
-**** resets working copy back to HEAD
-
-
-** Undoing/Redoing Changes in the Repo
-*** git reset --soft HEAD~1
-**** rolls back working cpoy to stage before commit?
-**** helps to fix things in local repo before pushing to remote repo
-
-
-** Cleaning the Working Copy
-*** git clean
-**** lets you remove files
-**** -n tells you what it would do
-**** -f (force) actually makes it happen
-
-
-** Ignoring Files with .gitignore
-*** .gitignore in root dir
-**** ignores files in file 
-**** list relative to root of repo
-**** good for anything that shouldn't be part of repo
-*** git add .gitignore
-**** so you don't have to edit .gitignore via text editor
-* Working Remotely
-
-** Cloning a Remote Repo
-*** git clone <repo-url>
-**** downloads all commits for repo
-**** pretty fast
-*** git log -oneline
-**** one commit per line
-
-
-** Basic Repo Stats
-*** git log --oneline | wc -l
-**** word count (wc) line by line (l) 
-**** -graph gives a graph of banches and merges
-*** git shortlog
-**** lists authors and messages from each commit
-***** organized by authors
-**** -s (summary) -n(numberofcommits) -e(email) // 
-**** -sne organized by number of commits
-*** githup proves a graphs option
-**** more interactive and visual
-
-
-** Viewing Commits
-*** git show HEAD
-**** shows you the last commit
-*** git show HEAD~6
-*** git show <SHA>
-*** git remote -v
-**** shows number of remotes
-**** ORIGIN is the default name for where the source came from
-**** -verbose shows url for remote
-
-
-** Git Protocols
-*** http / https
-**** default ports 80/443
-**** permits read / write access (can demand password)
-**** on github, read is allowed, but password for auth to make changes
-**** firewall friendly
-*** git 
-**** different ballgame
-*** ssh
-**** port 22, secure, standard in unix env's
-**** read/write
-**** ssh keys for auth
-*** file
-**** local only
-**** read / write
-**** path name for repo on system
-
-
-** Viewing Branches and Tags
-*** git branch
-**** what branch are we on?
-*** git branch -r
-**** lists branches for repo
-**** branches are used to separate mainline dev. from bug fixes, features, etc.
-
-
-** Fetching from a Remote
-*** git remote -v
-**** on a local repo, there is no remote
-*** git remote add origin <repo-url>
-**** permits you to add a remote to a local repo
-**** you can add multiple remotes, to facilitate merges, patching, etc
-*** git fetch
-**** pulls down changes from remote repo
-**** if you have multiple remotes, you can spefic the remote to fetch from
-**** if you fetch, you have to merge to bring remote diffs into local repo
-*** git merge origin/master
-**** this merges changes in from the origin/master
-**** this is a fast-forward: no conflicts, just add a new HEAD
-**** local branch was up-to-date except for one commit
-
-
-** Pulling from a Remote
-*** git branch -r
-**** this shows the branch of remote you just used
-**** git has a shortcut for git fetch & git merge
-*** git pull
-**** combines git branch -t & git merge
-*** git branch --set-upstream master origin/master
-**** sets remote tracking branch, from where should git pull
-**** master (local) to origin/master (remote)
-**** not you can git pull automatically from the origin./master
-**** cloning sets upstream branch automatically
-
-
-** Pushing to a Remote
-*** git push
-**** do after committing
-*** git remote nm origin
-**** removes origin
-**** re-add origin as the ssh version to avoid password repetition
-**** ssh lets you use ssh key, see above
-
-
-** Creating and Verifying Tags
-*** git tag <name>
-**** tag HEAD of remo
-**** -a -m to add a "message"
-**** -s (signed) requires a passphrase to unlock signing key
-**** -v (verifies a signed tag)
-*** git tag
-**** displays the current tag of repo
-**** you can get back to a past state by following the tag to the tagged 
-
-
-** Pushing Tags to a Remote
-*** git push --tags
-**** git push does not push tags by default, you must use --tags
-
-* Branching, Merging, and Rebasing with Git
-
-** Visualizing branches
-*** git log --graph --online
-**** produces list of commits w/ graph of commits
-**** --all allows us to visualize all branches, not jus tthe current one
-**** --decorate adds labels like ;tags;HEAD;remote branches;local branches;
-*** We can add these options in git gonfig
-**** git config --global alias.lga "log --graph --oneline --all --decorate"
-
-*** git lga (custom command see above)
-
-
-** Creating local branches
-*** git branch <branch-name>
-**** creates local branch called branch-name
-*** git checkout <branch-name>
-**** switches to branch-name branch
-
-
-** Difference between branches and tags
-*** branches follow commits, new commits extend a branch
-*** tags stay on a particular commit, a friendly name for the SHA1 hash
-*** NOTE: branches are labels on the SHA1 hashes of individual commits
-
-
-** Renaming and deleting branches
-*** git branch -m <oldname> <newname> ;;rename branch
-*** git branch -d <branchname> ;;delete branch
-**** only deletes if the branch has been merged into master, otherwise you have to use -D
-*** git checkout -b <branch-name> ;;create new branch
-
-
-** Recovering deleted commits
-*** git reflog ;;log of all refrences, where HEAD has pointed, even deleted
-*** git branch <branchname> <commit-SHA> ;;reapplies branch label to commit
-**** git doesn't keep dangling commits forever, 30days
-
-
-** Stashing changes
-*** you can stash changes that you're not ready to commit
-*** git stash ;;rolls back changes, puts changes into holding area
-*** git stash apply ;;reapplies changes from stash
-*** git stash list
-*** git stash pop ;;reapplies changes from stash, and removes changes from stash list
-*** git reset --hard HEAD
-*** git stash branch <new-branch-name>
-
-
-** Merging branches
-*** git merge <branch-name>
-*** "fast-forward"
-**** doesn't require resolving conflicts between files
-*** "merge-conflicts"
-**** git has a standard way to display conflicts
-**** merge conflicts can be resolved in a text editor, other tools are available
-**** git merge-tool ;;KDiff3 3-way merge tool, app for MacOS
-*** git diff --cached ;;compares repo to staging area
-
-
-** Rebasing changes
-*** git rebase master ;;relocates current branch to master (fast-forward only)
-*** if there's a merge conflict:
-**** gotta resolve conflict, see "merge-conflicts"
-**** git rebase continue
-
-
-** Cherry-picking changes
-*** git cherry-pick ;;allows you to apply a simgle commit to master
-**** useful to apply patches without baggage
-
-
-** Creating a remote branch
-*** git fetch origin master
-*** git push origin <name-of-local-branch> ;;creates new remote branch of same name of local
-*** git branch -r ;;lists remote branches
-
-
-** Deleting a remote branch
-*** git branch -r
-*** git push :<branch-name-to-delete>
+* Git Fundamentals
+** Configure Git
+*** Git provides three levels of configuration
+**** git config --system
+***** stored in /etc/gitconfig
+***** applies to entire computer git is installed on
+***** not common to modify
+**** git config --global
+***** user-level config
+***** stored in ~/.gitconfig
+**** git config
+***** Repository Level configuration
+***** stored in .git/config in each repo
+
+*** Global Options
+**** git config --global user.name "Matthew Hoselton"
+**** git config --global user.email "mtthwhsltn@gmail.com"
+**** git config --global core.editor emacs
+**** git config --global help.autocorrect 1
+***** waits a number before executing? helps autocorrect mispelled commands
+**** git config --global color.ui auto
+***** lets colors help for diffing, status, etc.
+**** git config --global core.autocrlf (true|false|input)
+***** Not necessary for mac - carriage return line feed - use input
+**** git config --global list
+***** display global settings
+
+*** Repo Options
+***** Overrides global settings for a repo
+**** git config user.name
+**** git config list
+**** git config --unset user.name 
+***** unsets a config, reverts to global
+
+** Working Locally
+*** Creating a Local Repo, Adding Files, and Committing Changes
+**** git init
+***** makes the current working directory a repo
+***** creates a .git fir containing the repo and its metadata
+**** git status
+***** tells you what files are in repo
+***** and which of those files have been changed
+**** git add
+***** stages a file to be added to the repo
+***** -u (for updated) adds tracked & modifed files to staging area
+***** -A includes all files, including untracked files
+**** git commit
+***** commits all staged files
+***** opens default text editor to input a message
+***** -m "" lets you put message inline instead of in text editor
+***** git identifies commits with a SHA1 hash
+
+*** Viewing History and Diffs
+**** git log
+***** shows the history of commits and SHAs
+**** git diff <initial-commit-sha-hash> <later-commit-sha-hash>
+***** shows what's different betwen two commits
+***** the latest commit is the HEAD
+***** if you do not specify a SHA, git assumes that you mean HEAD
+***** thus "git diff HEAD~1" diffs the HEAD against the commit b/f HEAD
+***** ~ just beack back from HEAD, ~3 means back 3,
+
+*** Staging Changes as Multiple Commits
+**** Multiple Adds / Multiple Commits
+***** You can break commits up into logical units
+***** after adding related files, commit them; Repeat
+
+*** Delete and remanimg files
+**** git add -u
+***** also stages deletions
+**** git add -A
+***** if you change a file name, git thinks you deleted it and added a new file 
+***** upon adding the untracked file, git will recognize the rename operation
+
+*** Undoing Changes to the Working Copy
+**** git checkout <filename>
+***** grabs head version out of repo and reverts any changes made to file since
+**** git reset --hard
+***** resets working copy back to HEAD
+
+*** Undoing/Redoing Changes in the Repo
+**** git reset --soft HEAD~1
+***** rolls back working cpoy to stage before commit?
+***** helps to fix things in local repo before pushing to remote repo
+
+*** Cleaning the Working Copy
+**** git clean
+***** lets you remove files
+***** -n tells you what it would do
+***** -f (force) actually makes it happen
+
+*** Ignoring Files with .gitignore
+**** .gitignore in root dir
+***** ignores files in file 
+***** list relative to root of repo
+***** good for anything that shouldn't be part of repo
+**** git add .gitignore
+***** so you don't have to edit .gitignore via text editor
+** Working Remotely
+*** Cloning a Remote Repo
+**** git clone <repo-url>
+***** downloads all commits for repo
+***** pretty fast
+**** git log -oneline
+***** one commit per line
+
+*** Basic Repo Stats
+**** git log --oneline | wc -l
+***** word count (wc) line by line (l) 
+***** -graph gives a graph of banches and merges
+**** git shortlog
+***** lists authors and messages from each commit
+****** organized by authors
+***** -s (summary) -n(numberofcommits) -e(email) // 
+***** -sne organized by number of commits
+**** githup proves a graphs option
+***** more interactive and visual
+
+*** Viewing Commits
+**** git show HEAD
+***** shows you the last commit
+**** git show HEAD~6
+**** git show <SHA>
+**** git remote -v
+***** shows number of remotes
+***** ORIGIN is the default name for where the source came from
+***** -verbose shows url for remote
+
+*** Git Protocols
+**** http / https
+***** default ports 80/443
+***** permits read / write access (can demand password)
+***** on github, read is allowed, but password for auth to make changes
+***** firewall friendly
+**** git 
+***** different ballgame
+**** ssh
+***** port 22, secure, standard in unix env's
+***** read/write
+***** ssh keys for auth
+**** file
+***** local only
+***** read / write
+***** path name for repo on system
+
+*** Viewing Branches and Tags
+**** git branch
+***** what branch are we on?
+**** git branch -r
+***** lists branches for repo
+***** branches are used to separate mainline dev. from bug fixes, features, etc.
+
+*** Fetching from a Remote
+**** git remote -v
+***** on a local repo, there is no remote
+**** git remote add origin <repo-url>
+***** permits you to add a remote to a local repo
+***** you can add multiple remotes, to facilitate merges, patching, etc
+**** git fetch
+***** pulls down changes from remote repo
+***** if you have multiple remotes, you can spefic the remote to fetch from
+***** if you fetch, you have to merge to bring remote diffs into local repo
+**** git merge origin/master
+***** this merges changes in from the origin/master
+***** this is a fast-forward: no conflicts, just add a new HEAD
+***** local branch was up-to-date except for one commit
+
+*** Pulling from a Remote
+**** git branch -r
+***** this shows the branch of remote you just used
+***** git has a shortcut for git fetch & git merge
+**** git pull
+***** combines git branch -t & git merge
+**** git branch --set-upstream master origin/master
+***** sets remote tracking branch, from where should git pull
+***** master (local) to origin/master (remote)
+***** not you can git pull automatically from the origin./master
+***** cloning sets upstream branch automatically
+
+*** Pushing to a Remote
+**** git push
+***** do after committing
+**** git remote nm origin
+***** removes origin
+***** re-add origin as the ssh version to avoid password repetition
+***** ssh lets you use ssh key, see above
+
+*** Creating and Verifying Tags
+**** git tag <name>
+***** tag HEAD of remo
+***** -a -m to add a "message"
+***** -s (signed) requires a passphrase to unlock signing key
+***** -v (verifies a signed tag)
+**** git tag
+***** displays the current tag of repo
+***** you can get back to a past state by following the tag to the tagged 
+
+*** Pushing Tags to a Remote
+**** git push --tags
+***** git push does not push tags by default, you must use --tags
+
+** Branching, Merging, and Rebasing with Git
+*** Visualizing branches
+**** git log --graph --online
+***** produces list of commits w/ graph of commits
+***** --all allows us to visualize all branches, not jus tthe current one
+***** --decorate adds labels like ;tags;HEAD;remote branches;local branches;
+**** We can add these options in git gonfig
+***** git config --global alias.lga "log --graph --oneline --all --decorate"
+
+**** git lga (custom command see above)
+
+*** Creating local branches
+**** git branch <branch-name>
+***** creates local branch called branch-name
+**** git checkout <branch-name>
+***** switches to branch-name branch
+
+*** Difference between branches and tags
+**** branches follow commits, new commits extend a branch
+**** tags stay on a particular commit, a friendly name for the SHA1 hash
+**** NOTE: branches are labels on the SHA1 hashes of individual commits
+
+*** Renaming and deleting branches
+**** git branch -m <oldname> <newname> ;;rename branch
+**** git branch -d <branchname> ;;delete branch
+***** only deletes if the branch has been merged into master, otherwise you have to use -D
+**** git checkout -b <branch-name> ;;create new branch
+
+*** Recovering deleted commits
+**** git reflog ;;log of all refrences, where HEAD has pointed, even deleted
+**** git branch <branchname> <commit-SHA> ;;reapplies branch label to commit
+***** git doesn't keep dangling commits forever, 30days
+
+*** Stashing changes
+**** you can stash changes that you're not ready to commit
+**** git stash ;;rolls back changes, puts changes into holding area
+**** git stash apply ;;reapplies changes from stash
+**** git stash list
+**** git stash pop ;;reapplies changes from stash, and removes changes from stash list
+**** git reset --hard HEAD
+**** git stash branch <new-branch-name>
+
+*** Merging branches
+**** git merge <branch-name>
+**** "fast-forward"
+***** doesn't require resolving conflicts between files
+**** "merge-conflicts"
+***** git has a standard way to display conflicts
+***** merge conflicts can be resolved in a text editor, other tools are available
+***** git merge-tool ;;KDiff3 3-way merge tool, app for MacOS
+**** git diff --cached ;;compares repo to staging area
+
+*** Rebasing changes
+**** git rebase master ;;relocates current branch to master (fast-forward only)
+**** if there's a merge conflict:
+***** gotta resolve conflict, see "merge-conflicts"
+***** git rebase continue
+
+*** Cherry-picking changes
+**** git cherry-pick ;;allows you to apply a simgle commit to master
+***** useful to apply patches without baggage
+
+*** Creating a remote branch
+**** git fetch origin master
+**** git push origin <name-of-local-branch> ;;creates new remote branch of same name of local
+**** git branch -r ;;lists remote branches
+
+*** Deleting a remote branch
+**** git branch -r
+**** git push :<branch-name-to-delete>
+
+
+* Advanced Git Tips and Tricks : Enrico Campidoglio (2:38)
+
+* What is a Pull request?
+When working with a team, it's good to work on a branch off master, instead of working directly
+on the master branch. 
+- pull the most recent commit of the master branch
+- Create a new branch
+- Work on the branch
+- pull master branch (to make sure master has not changed)
+- merge master into the branch
+- resolve conflicts on branch
+- commit branch
+- push the branch
+- create a pull request (on github)
+- someone else merges the pull request into master
