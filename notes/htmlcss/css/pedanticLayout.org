@@ -261,15 +261,79 @@ overflow: auto;
 #+END_SRC
 
 * 2. Box Sizing in CSS
+The CSS box model is the basic sructure that defines the components of a box in CSS.
+The sizing of boxes is related to the box model, but it is strongly influenced by the
+positioning scheme used. Each box has several parts:
 
-** Content Dimensions and Margins
-** Box Model Calculations for Inline Elements
-** "Content-Based" Height for Blocks, Floats, and Inline-Blocks
-** Width Calculations
-*** Block-Level Elements (Constraint-Based)
-*** Floating Blocks and Inline-Block Elements (Shrink-To-Fit)
-** Margins for Floating Blocks and Inline-Block Elements
-** Absolutely Positione, Non-Replaced Elements
-* 3. Additional properties that influence positioning
+| a margin | a border | padding | the content width/height |
+
+** Padding and Borders
+The padding and border properties produce padding around the content-box, and a border 
+surrounding any padding and the content-box.
+  On inline elements (but not inline-block), the left and right borders are only drawn once, 
+rather than being drawn for each line box. Also, the top and bottom borders do not affect 
+vertical layout.
+** Content and Margins
+The mechanism by which content dimensions (width/height) and automatic margins (auto) are
+calculated differ based on whether a box is inline, block, floated, or absolutely positioned.
+In addition, 'display: inline-block' boxes have special behavior. The table below summarizes
+the methods used to calcualte values when width, height, or margin-* is set to 'auto'.
+
+|--------------+---------------+------------------+--------------+--------------|
+| Box Type     | Height        | Width            | Margin (L/R) | Margin (T/B) |
+|--------------+---------------+------------------+--------------+--------------|
+| Inline       | N/A           | N/A              | auto -> 0    | N/A          |
+|--------------+---------------+------------------+--------------+--------------|
+| Block        | auto ->       | auto ->          | auto ->      | auto -> 0    |
+|              | content-based | constraint-based | center       |              |
+|--------------+---------------+------------------+--------------+--------------|
+| Float        | auto ->       | auto ->          | auto -> 0    | auto -> 0    |
+|              | content-based | shrink-to-fit    |              |              |
+|--------------+---------------+------------------+--------------+--------------|
+| Inline-Block | auto ->       | auto ->          | auto -> 0    | auto -> 0    |
+|              | content-based | shrink-to-fit    |              |              |
+|--------------+---------------+------------------+--------------+--------------|
+| Absolute     | special       | special          | special      | special      |
+|--------------+---------------+------------------+--------------+--------------|
+
+*** Box Model Calculations for Inline Elements
+Width and Height are ignored, and are set by the text content dimensions. Remember that
+inline-level elements are positioned by placing them on line boxes, that have a height
+based on 'font-size' and 'line-height'.
+  Margin 'top' & 'bottom' are also ignored.
+But, margin 'right' & 'left' do work. 'auto' => 0
+*** "Content-Based" Height for Blocks, Floats, and Inline-Blocks
+- When 'height: auto' && 'overflow: visible', these blocks will have a height sufficient to
+  account for all non-floating children.
+- When 'height: auto" && 'overflow: !visible', these blocks will always expand to fit their 
+  content.
+Both of those calculations attempt to set the height of the element to account for the 
+contents, but the algorithm used for block-level elements when overflow: visible ignores 
+floating descendants. This is the reason why, by default, a block-level box with only 
+floating descendants has a height of 0 since visible is the default value for overflow.
+*** Width Calculations
+**** Block-Level Elements (Constraint-Based)
+When 'width: auto', the box always expands to use the full width of the parent element.
+When width is set, and 'margin's are auto, center the box.
+
+Otherwise, 'auto' values are calculated from the constrainct-based-equation:
+
+      margin-left + width + margin-right = width of containing block
+
+**** Floating Blocks and Inline-Block Elements (Shrink-To-Fit)
+The width value is set to:
+1. the preferred width (e.g. using as few line breaks as possible) if horizontal space is 
+   available, otherwise
+2. the width is set to the preferred minimum width (e.g. using as many line breaks as 
+   possible), and in the worst case to
+3. the available width with some potential overflow.
+
+'margin: auto' is always interpreted as margin: 0 for floating blocks and inline-block
+elements.
+
+*** Margins for Floating Blocks and Inline-Block Elements (auto -> 0)
+*** Absolutely Positioned, Non-Replaced Elements
+If the content dimensions are unspecified, they are calculated using the shrink-to-fit (for width) / content-based (for height) algorithm before attempting to fill in the rest of the values through the constraints specified by the box model.
+ * 3. Additional properties that influence positioning
 * 4. Flexbox
 * 5. CSS layout - tips and layout techniques
