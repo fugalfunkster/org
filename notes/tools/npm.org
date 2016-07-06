@@ -1,129 +1,275 @@
-Intro to NPM as a build tool
+* NPM Playbook : Joe Eames (0:58)
+** NPM Basics
+*** What is a package?
+A package is a directory with one or more modules inside of it, and a package.json file
+which has meta-data about the package. A module is a JS file with reusuably functionality.
+*** Flow
+clone a project
+npm install - to install dependencies
+npm start - if the package has a start script
+npm test - is the package has a test script
+*** npm help
+$ npm -h
+$ npm <cmd> -h
+$ npm help <cmd> (opens browser tab to official docs for <cmd>)
+$ npm help-search <search-term> (provides list of docs that contain that word)
+*** npm-config (and cli shorthand)
+https://docs.npmjs.com/misc/config
+*** Creating a package.json
+used to track dependencies, and create scripts as a build tool
+$ npm init
+already installed packages will appear in dependencies
+*** Setting Defaults (for init)
 
-* Basics
-** Scripts are stored in the package.json file
-** npm init
-*** runs wizard to create package.json
-*** skip test command for now
-*** "scripts" lets us execute scripts with npm 
+npm keeps a list of default values that auto populate package.json files on init, in the
+.npmrc file in your root user dir.
 
-** Installing Scripts
-*** npm install
-*** --save-dev
-*** --save
-** running scripts with npm
-*** npm run-script <name-of-script>
-*** npm run <name-of-script>
-*** npm test == npm t == npm tst == npm run test
+For a list of configurable defaults, go to https://docs.npmjs.com/misc/config and search for
+'init-'
 
-** npm stop
-*** runs stop script
+$ npm set <init-property> <value>
+$ npm get <init-property>
+$ npm config delete <init-property>
 
-** npm restart
-*** runs stop script, then start script
-*** unless you make a script named restart
+*** Installing Packages
+$ npm install <package-name>
+$ npm i <package-name>
+-- save || -S      (flag to add package to dependency section)
+-- save-dev || -D  (flag to add package to dev-dependency section)
+*** Listing Installed Packages
+$ npm list    (lists all packages and dependencies)
+$ npm list --global true
+-- depth <number>   (lists packages and deps at specific depth in tree)
+-- long true  (additional info)
+-- json true  (outpt in json)
+-- prod true  (list production dependencies (not dev))
+-- dev true   (list only dev deps)
+*** Installing Global Packages
+Usually used to install a package with a CLI interface, not to fulfill a dep
+$ npm install <package-name> -g
+this installs the package into a local dir
+$ npm list -g --depth 0
+*** Removing a Package
+$ npm uninstall <package-name>
+$ npm uninstall <package-name> --save   (removes from deps)
+$ npm rm
+$ npm r
+$ npm uninstall <package-name> -g
+*** Installing Specific Versions
 
-** adding custom scripts
-*** simply name a new key:value in script object
+|---------------------+----------------+--------------|
+| Semantic Versioning                                 |
+|---------------------+----------------+--------------|
+| Major-Version       | Minor-Version  | Patch-Number |
+|---------------------+----------------+--------------|
+| break functionality | features added | bug fixes    |
+|---------------------+----------------+--------------|
 
-** the value of a script, is just a unix command
-*** ex: "node server.js"
+$ npm i underscore                  (install latest version)
+$ npm i underscore@^1.4.3           (install latest version of major release)
+$ npm i underscore@1.4.3            (install specific version)
+$ npm i underscore@~1.4.3           (install latest version of minor release 1.4.*)
+$ npm i underscore@"1"              (install latest version of major)
 
-** check out koa
-*** minimalist framework works with generators?
+
+--save-exact   (flag saves dep without ^, ensuring that npm won't upgrade deps)
+
+*** Installing Existing Dependencies
+$ npm install   (uses package.json to install deps for a package/project)
+*** Updating Packages
+$ npm update
+$ npm update <package-name>
+$ npm update -g
+$ npm update -g <package-name>
+** Advanced NPM
+*** Installing from a Git Repo
+$ npm install <git-url>
+$ npm install <any-url-with-a-package>
+*** Installing from a Gist
+$ npm install gist:<gist-hash>
+*** Installing from a Folder (watchedonly)
+*** The NPM registry and Searching for Packages
+http://www.npmjs.com
+registry.npmjs.org/<package-name>         (package json)
+npm.im/<package-name>                     (package name)
+*** npm search
+slow from the command line, faster to search online
+*** Pruning (removing non-saved deps)
+if a package is not specified in our package.json, prune will remove it
+$ npm prune
+$ npm --prune --production   (also removes dev deps)
+*** $ npm repo <package-name>
+*** Upgrading NPM
+$ SUDO npm install npm -g
+*** Using Simple Scripts
+
+$ npm <script-name>   (common scripts: test, start)
+
+https://docs.npmjs.com/misc/scripts
+
+you can put your own scripts in package.json
+
+$ npm run <my-script-name>
+
+There are pre- and -post hooks for scripts, allowing you to use npm as a build tool.
+
+** Publishing Your Own package
+*** Preparing your Project for Publishing
+$ git init
+$ git remote add origin <url>
+$ npm init
+*** Publishing your Package
+$ npm publish
+$ git tag <version>   (after pushed to npm, to tag release)
+*** Publishing an Update
+change version number manually in package.json
+or
+after git commit
+$ npm version <patch/minor/major>
+(note the package.json changed after commit, but npm will make a commit for us)
+$ git push --tags
+$ git push
+$ npm publish
+$ git tag <version>   (after pushed to npm, to tag release)
+*** Releasing a Beta Version
+$ npm publish --tag beta
+
+
+* Intro to NPM as a build tool
+** Basics
+*** Scripts are stored in the package.json file
+*** npm init
+**** runs wizard to create package.json
+**** skip test command for now
+**** "scripts" lets us execute scripts with npm 
+
+*** Installing Scripts
+**** npm install
+**** --save-dev
+**** --save
+*** running scripts with npm
+**** npm run-script <name-of-script>
+**** npm run <name-of-script>
+**** npm test == npm t == npm tst == npm run test
+
+*** npm stop
+**** runs stop script
+
+*** npm restart
+**** runs stop script, then start script
+**** unless you make a script named restart
+
+*** adding custom scripts
+**** simply name a new key:value in script object
+
+*** the value of a script, is just a unix command
+**** ex: "node server.js"
+
+*** check out koa
+**** minimalist framework works with generators?
      
-* Pre and Post Hooks
-** Hooks are scripts that contain pre- or -post; ex: pretest/posttest
-*** hooks run automatically before and after the base script
-*** order of appearance in package.json doesn't matter
-*** hooks can be run on their own
-** scripts can be chained by using a post-hook to "npm run next script"
+** Pre and Post Hooks
+*** Hooks are scripts that contain pre- or -post; ex: pretest/posttest
+**** hooks run automatically before and after the base script
+**** order of appearance in package.json doesn't matter
+**** hooks can be run on their own
+*** scripts can be chained by using a post-hook to "npm run next script"
 
-* Scripts for Development and Test
-** you can run multiple scripts with && 
-*** "npm run this && npm run that"
-*** if the first fails, the second is not run
-** you can ignore errors by combining with ; instead of &&
+** Scripts for Development and Test
+*** you can run multiple scripts with && 
+**** "npm run this && npm run that"
+**** if the first fails, the second is not run
+*** you can ignore errors by combining with ; instead of &&
 
-** Bundling with browserify
-*** lets you require modules client side
-*** npm install browserify --save-dev
-*** "browserify <targetpath> -o <bundlepath> 
-*** -o tells browserify to bundle the first file to the second
+*** Bundling with browserify
+**** lets you require modules client side
+**** npm install browserify --save-dev
+**** "browserify <targetpath> -o <bundlepath> 
+**** -o tells browserify to bundle the first file to the second
 
-** minifying with uglify
-*** npm install uglify --save-dev
-*** we want to pipe the result from the browserify to the uglify
-*** "browserify <app.js> | uglify -mc > <endpath>"
-*** -mc (flag to mangle and compress the file)
-*** > redirection operator to output result
+*** minifying with uglify
+**** npm install uglify --save-dev
+**** we want to pipe the result from the browserify to the uglify
+**** "browserify <app.js> | uglify -mc > <endpath>"
+**** -mc (flag to mangle and compress the file)
+**** > redirection operator to output result
 
-** chaining && piping | redirection >
+*** chaining && piping | redirection >
 
-** npm run <without any more arguments>
-*** lists scripts at our disposal
+*** npm run <without any more arguments>
+**** lists scripts at our disposal
 
-* Scripts for Development: Watching
-** mocha can watch tests, rerun if test change
+** Scripts for Development: Watching
+*** mocha can watch tests, rerun if test change
 
-** " -- " lets us pass arguments into another script
-*** EX: "npm run test -- -w -R min"
+*** " -- " lets us pass arguments into another script
+**** EX: "npm run test -- -w -R min"
 
-** watch
-*** takes a command and files to run as arguments
+*** watch
+**** takes a command and files to run as arguments
 
-** nodemon
-*** when a file/folder changes, restarts app
-*** "nodemon --ignore client --ignore public index.js"
-*** starts index.js file
+*** nodemon
+**** when a file/folder changes, restarts app
+**** "nodemon --ignore client --ignore public index.js"
+**** starts index.js file
 
-** client side watching 
-*** coffeescript and typescript have built in options
-*** watchify ! from browserify
-**** "watchify <from> -o <to> -dv"
-***** -v verbose logging
-***** -d delay (doesn't run processor at 100%
-*** gotta trigger a bundling if you bundle/minify 
-*** but then make changes to base files
+*** client side watching 
+**** coffeescript and typescript have built in options
+**** watchify ! from browserify
+***** "watchify <from> -o <to> -dv"
+****** -v verbose logging
+****** -d delay (doesn't run processor at 100%
+**** gotta trigger a bundling if you bundle/minify 
+**** but then make changes to base files
 
-** live browser reload
-*** npm install live-reload --save-dev
-**** in html, you must serve live-reload client
-**** <script src="//localhost:8080" />
-*** see npm for more details...
+*** live browser reload
+**** npm install live-reload --save-dev
+***** in html, you must serve live-reload client
+***** <script src="//localhost:8080" />
+**** see npm for more details...
 
-** run tasks concurrently with &
+*** run tasks concurrently with &
 
-* Versioning, Pushing, and Deploying
-** increment version number
-*** Semantic Versioning x.y.z
-**** major.minor.patch
-**** breaking.feature.fix
-*** npm version --help
-*** npm version <major/minor/patch>
-*** this can be scripted!
+** Versioning, Pushing, and Deploying
+*** increment version number
+**** Semantic Versioning x.y.z
+***** major.minor.patch
+***** breaking.feature.fix
+**** npm version --help
+**** npm version <major/minor/patch>
+**** this can be scripted!
 
-** versoning code to git
-*** we can use npm version to set git tag
-*** in package.sjon, repository, and repo url
-*** npm version affects both package.json and git tag in repo
-** pushing code to repo
-*** git push --tags 
+*** versoning code to git
+**** we can use npm version to set git tag
+**** in package.sjon, repository, and repo url
+**** npm version affects both package.json and git tag in repo
+*** pushing code to repo
+**** git push --tags 
 
-** deploy the app
-*** as long as there's a command line interface for your provider
-** heroku toolbelt
-*** heroku create <name>
-**** sets up a git remote
-*** deploying is as simple as pushing to the heroku git remote
-** launching the app
+*** deploy the app
+**** as long as there's a command line interface for your provider
+*** heroku toolbelt
+**** heroku create <name>
+***** sets up a git remote
+**** deploying is as simple as pushing to the heroku git remote
+*** launching the app
 
-* Deploy Script and Additional Tricks
-** Example process:
+** Deploy Script and Additional Tricks
+*** Example process:
   - compile, bundle, & minify serverside javascript
   - bundle & minify client side JS
   - compile CSS
   - new version
   - push to github
   - deploy to heroku
-  - open to verify success
+  - open to verify
+
+
+
+* survivingTheFrontEnd [0/6]
+- [X] Dependencies
+- [X] Dev Dependencies
+- [ ] Peer Dependencies (NPM V2 vs. V3)
+- [X] How to use scripts
+- [X] How to use pre/post hooks
+- [ ] How to run private npm repos (sinopia/nexus)
