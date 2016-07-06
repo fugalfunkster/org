@@ -23,13 +23,13 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ** OPEN Responsive Typography : Jason Pamental (5:55)
 ** OPEN Learn CSS Layout: the Pendatic Way
 
-** NEXT NPM Playbook : Joe Eames (0:58)
-
 
 * queue (next, open, view-only)
 ** OPEN Webpack Fundamentals : Joe Eames (2:23) 
+** TODO Using Webpack for Production JS Apps
 ** TODO Babel: Get Started : Craig McKeachie (2:03)
 ** TODO Advanced Git : Ben Hoskings (1:00)
+** TODO Flexbox Fundamentals
 ** OPEN React Fundamentals : Joe Maddaloe
 ** OPEN Udemy : Modern React with Redux
 ** OPEN Learn & Understand Node.js : Anthony Alicea (12:00+)
@@ -102,6 +102,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** A Better CSS: LESS and SASS : Shawn Wildermuth (1:56)
 ***** HTML5 Advanced Topics : Craig Shoemaker (2:45)
 ***** HTML5 Browser Caching : Ben Schwarz (1:01)
+**** egghead
+***** TODO Flexbox Fundamentals
 *** linux
 **** pluralsight
 ***** WATCHEDONLY Docker and Containers: The Big Picture : Nigel Poulton (1:47)
@@ -141,7 +143,9 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** OPEN React Fundamentals : Joe Maddalon
 ***** TODO Getting Started with Redux (egghead)
 ***** TODO Getting Started with React Router (egghead)
-***** TODO Build Your First React.js App : Tyler McGinnise
+***** TODO Building React Apps w/ Idiomatic Redux
+***** React Testing Cookbook
+***** Build Your First React.js App : Tyler McGinnise
 ***** React Native Fundamentals : Tyler McGinnis
 **** Udemy
 ***** OPEN Modern React with Redux : Stephen Girder (?)
@@ -160,13 +164,15 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** Pluralsight
 ***** DONE Intro to NPM as a Build Tool : Marcus Hammarberg (1:37)
 ***** DONE Git Fundamentals : James Kovacs (1:51)
+***** DONE NPM Playbook : Joe Eames (0:58)
 ***** WATCHEDONLY Meet Emacs : Phil Hagelberg (0:58)
 ***** OPEN Webpack Fundamentals : Joe Eames (2:23)
-***** TODO NPM Playbook : Joe Eames (0:58)
 ***** TODO Advanced Git : Ben Hoskings (1:00)
 ***** TODO Babel: Get Started : Craig McKeachie (2:03)
 ***** Using the Chrome Dev. Tools : John Sonmez (2:50)
 ***** Getting Started with Emmet : Kristian Freeman (0:55)
+**** egghead
+***** TODO Using Webpack for Production JS Apps
 
 
 * App Ideas
