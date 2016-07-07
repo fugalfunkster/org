@@ -1,0 +1,64 @@
+Web Accessibility: Getting Started : Brian Treese (1:30)
+
+* Planning for Accessibility
+** Identify Goals
+- Get on the same page
+- Set a clear target
+** Put Someone In Charge
+- Everyone is responsible
+- One Person Ensures Goals Are Met
+** Evaluate Tools & Frameworks
+** Research
+- Best Practices
+- New Tools
+** Create Personas
+- Keep accessibility in mind
+- Common ground for discussion
+- Create empathy
+* Designing for Accessibility
+** Responsive Design
+** Color
+*** don't rely solely on color
+*** err on side of contrast, avoid subtle shades
+** Typography
+*** font-size (body 1em-1.25em)
+*** contrast between head and body type
+*** line-length (45-75 char)
+*** line-height (1.25 of font-size)
+*** don't justify test
+** Form Design
+*** Identify Required Fields
+*** Identify Special Formatting Requirements
+*** Clear form labels
+*** don't rely on placeholder text, which dissapears
+*** errors and warnings should be accompanied by text/icon not just color
+** Touch Targets
+*** small targets are more difficult to touch
+*** min (44-48px)
+*** put space between touch targets, to avoid*** 
+** Focus and Active Indicators
+*** text readers require browser focus/active behavior
+*** Need to exist
+*** Need to be unobstructed
+*** Need Contrast
+*** Do not remove with CSS or JS
+*** Don't rely solely on color
+** Motion & Vestibular Disorders
+*** transforms / animation / parallax 
+*** keep it simple, conserve motion
+*** allow users to disable animations
+** Designing for Crisis
+*** create a diverse set of personas, and diverse contexts
+*** provide information for different failure cases
+* Coding for Accessibility 
+** Proper Document Structure
+*** 
+** Images
+** Content
+** HTML Attributes
+** Web Forms
+** Accessible Keyboard Control
+** CSS & Accessibility
+** Performace
+** Progressive Enhancement
+* ARIA Roles & Attributes

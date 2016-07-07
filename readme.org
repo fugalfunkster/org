@@ -20,13 +20,13 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 
 * TODO list
+** OPEN Web Accessibility: Getting Started (1:30)
 ** OPEN Responsive Web Images : Robert Boedigheimer (1:55)
 ** OPEN Learn CSS Layout: the Pendatic Way
 ** TODO How to Contribute to an Open Source Project on Github
 
 
 * queue (next, open, view-only)
-** TODO Web Accessibility: Getting Started (1:30)
 ** TODO Making a Web Form Accessible (1:47)
 ** OPEN Webpack Fundamentals : Joe Eames (2:23) 
 ** TODO Using Webpack for Production JS Apps
