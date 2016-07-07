@@ -1,3 +1,5 @@
+#+TODO: VIEWONLY TODO NEXT OPEN | WATCHEDONLY DONE CANCELED
+
 Web Accessibility: Getting Started : Brian Treese (1:30)
 
 * Planning for Accessibility
@@ -52,13 +54,74 @@ Web Accessibility: Getting Started : Brian Treese (1:30)
 *** provide information for different failure cases
 * Coding for Accessibility 
 ** Proper Document Structure
-*** 
+*** headings
+**** heading provide the document outline
+**** dont skip around
+*** HTML Lists
+**** Use unordered lists when no order of sequence or important is needed
+**** Use ordered lists
+**** Use description Lists when items require descriptions
+*** Keyboard Nav.
+**** Have main content appear in code before sidebars, to facilitate keyboard nav.
 ** Images
+*** Provide descriptions for any image providing informational content
+**** alt 
+an attribute that briefly conveys an images content
+an empty value is ignored by screen readers
+**** aria-describedby
+an attribute that can be used to provide a link to extended description of an image's content
 ** Content
+*** provide transcripts and captions for audio and video
+*** provide descriptive links // ex: read more vs. read more about our products
 ** HTML Attributes
+*** language attributes
+*** img alt text
+*** abbreviations need titles
+*** forms (see below)
+*** tabindex ensures that an element can be tabbed to
 ** Web Forms
+*** groud logical fields together in a field set
+*** use legends
+*** label input and for attribute
+*** don't rely on placeholder text
+*** tab order
 ** Accessible Keyboard Control
+*** focus and active indicators, don't remove this (display: none)
+*** use focus
+*** the structure of markup determines tab order
+*** avoid non-navigable items (created w/ js events) with tabindex=0
+*** 'skip navigation' link to main content
 ** CSS & Accessibility
-** Performace
+*** End user settings override browser and developer CSS styles
+*** use relative units like ems and rems
+*** use proper semantic markup, don't rely on 
+*** enhance active and focus styling
+** Performance
+*** keep file sizes small
+*** limit http requests
+*** optimize images (jpeg mini, tiny png)
+*** image sprites
+*** use SVG
+*** critical CSS (by addi osmani)
 ** Progressive Enhancement
-* ARIA Roles & Attributes
+* WATCHEDONLY ARIA Roles & Attributes
+* WATCHEDONLY Accesssibility Guidelines and Standards
+* Accesssibility Testing, Tools, & Resources
+** Testing for Accessibility
+*** try to navigate the page without a mouse
+*** use a screenreader (JAWS)
+*** mac's have a voiceover feature builtin
+*** WCAG checklist from WC3
+** Accessibility Tools
+*** WAVE evaluation tool
+*** colour contrast analyzer
+*** accessibility dev tools chrome extension
+*** tenon.io integrates accessibility testing into development process
+*** no replacement for human testing
+** Accessibility Resources
+*** WebAIM.org
+*** The Accessibility Project (a11yproject.com)
+*** the accessibility cheatsheet
+*** kahn academy tota11y tester
+*** accessibility wins (a11ywins.tumblr.com)
+*** Periodic table of ARIA roles / ARIA attributes
