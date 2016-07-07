@@ -20,12 +20,11 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 
 * TODO list
-** OPEN Responsive Web Images : Robert Boedigheimer (1:55)
-** OPEN Web Accessibility: Getting Started (1:30)
 ** OPEN Learn CSS Layout: the Pendatic Way
 ** NEXT Styling React Components : Jake Trent (1:29)
 ** TODO How to Contribute to an Open Source Project on Github
 ** TODO Survive JS - Webpack
+
 
 * queue (next, open, view-only)
 ** OPEN Webpack Fundamentals : Joe Eames (2:23)
@@ -83,8 +82,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** design
 **** Pluralsight
 ***** DONE Responsive Typography : Jason Pamental (5:55)
-***** OPEN Responsive Web Images : Robert Boedigheimer (1:55)
-***** TODO Web Accessibility: Getting Started (1:30)
+***** DONE Responsive Web Images : Robert Boedigheimer (1:55)
+***** DONE Web Accessibility: Getting Started (1:30)
 ***** TODO Making a Web Form Accessible (1:47)
 ***** Intro to Building Website Layouts : Susan Simkins (5:04)
 ***** Responsive In-Browser Design... : Karen Menezes (3:22)

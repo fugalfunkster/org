@@ -23,7 +23,6 @@ Responsive Web Images
 
 ** JPEG (Best for Photos)
 *** uses lossy compression: trades off quality vs. file size
-**** 
 *** progressive JPEG
 **** appear fuzzy at first, then gradually increase in quality
 **** remember the early web, modems
@@ -53,5 +52,82 @@ Responsive Web Images
 *** We want to deliver the same image to devices with different resolutions
 *** Low Resolution devices avoid wasting bandwith, time, memory
 ** Art Direction
+*** Use different images, or different crops, based on features of the display (typically width).
 ** Pixel Ratio Based Selection
+*** Higher pixel density displays require a higher res image to retain quality.
 ** Image Types
+*** Target image types based on device support
+**** WEBP fallback to JPEG
+**** SVG fallback to PNG
+* Responsive Image Techniques
+** <img>
+the standard html element
+*** src attribute can only reference one images at a time
+*** use CSS max-width: 100%, b/c we want the image to stay constrained within it's parent container
+** JavaScript
+*** using an elements data- attribute (usually width) you can programatically insert images based on their size
+*** This doesn't work if JS is disabled, or the browser is preloading content
+*** source in video, also many JS libraries to handle this
+** <picture>
+an html element that ncontains multiple source elements, and an img element
+*** Use Cases
+**** different images based on display size
+**** art direction
+**** progressive enhancement of image types * only option for this
+**** pixel density query (not the best option)
+*** <img> required
+*** use media conditions 
+*** not supported below IE 11, fallback must be provided
+** Picturefill
+A polyfill for <picture> and srcset
+http://scottjehl.github.io/picturefill/
+** srcset
+*** value contains a list of physical images
+*** and sizes property
+*** browser analyzes the client's capacity
+*** browser pick the size to use 
+*** lets the browser make the best choice
+** Client Hints
+*** server advertises that it supports client hints in meta tag of html
+*** client then sends request headers w/ device info (DPR, width)
+*** relatively new, don't rely on exclusively
+** 'sizes' attribute
+*** indicates width to client
+*** can use calc (gets very complicated)
+** Choosing Physical Sizes
+*** Considerations
+**** Mostly about performance
+**** spectrum of sizes, more at larger widths (small changes in widths make a big difference in size
+*** Strategies
+**** set a performance budget and make it happen
+***** http://www.responsivebreakpoints.com
+**** Largest each breakpoint, then DPR
+**** Smallest, largest, some in-between
+** summary
+*** js is too slow
+*** srcset is good
+* Maximizing Perf
+** Image Optimization (lossless and lossy)
+*** always use the original image
+*** resize image to appropriate size
+*** keep aspect ratio...
+*** compresss w/ side-by-side preview
+** JPEG lossless removes meta-data
+** CDN
+*** used for static resources, saves bandwidth
+*** cost effective way to move static resources off of our server
+*** often faster for client, CSN may be closer to user
+** HTTP compression
+*** responses can be compressed for supported clients (nearly all these days)
+*** only SVG, for images
+*** look for compression module for http server
+** Expirations
+*** take advantage of caches
+*** set conditions for cache, "if-modified-since" and 304
+*** to override caching, just modify URL
+*** setup in web server
+** Lazy Loading
+*** pre-loading wastes bandwith on images that may never be seen
+*** only download images in viewport
+*** download additional iamges on scroll
+*** check out lazysizes JS lib
