@@ -21,7 +21,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 * TODO list
 ** OPEN Learn CSS Layout: the Pendatic Way
-** NEXT Styling React Components : Jake Trent (1:29)
+** NEXT Responsive Web Design : Ben Callahan (4:31)
+** TODO Styling React Components : Jake Trent (1:29)
 ** TODO How to Contribute to an Open Source Project on Github
 ** TODO Survive JS - Webpack
 
@@ -34,6 +35,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ** TODO Getting Started with React Router (egghead)
 ** TODO Building React Apps w/ Idiomatic Redux
 
+** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
 
 * directory
 ** Notes
@@ -92,9 +94,9 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** OPEN pendaticLayout
 **** Pluralsight
 ***** DONE CSS Positioning : Susan Sumkins (0:50)
+***** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
 ***** TODO Styling React Components : Jake Trent (1:29)
 ***** TODO Responsive Web Design : Ben Callahan (4:31)
-***** TODO CSS3 In-Depth : Estelle Weyl (6:10)
 ***** TODO Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
 ***** CSS3 : Michael Palermo (2:46)
 ***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)

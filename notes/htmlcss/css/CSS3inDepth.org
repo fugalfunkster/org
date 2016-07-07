@@ -1,0 +1,229 @@
+#+TODO: VIEWONLY TODO NEXT OPEN | WATCHEDONLY DONE CANCELED
+
+CSS3 InDepth : Estelle Weyl (6:10)
+http://estelle.github.com/CSS-Workshop
+
+* Selectors
+** Basic Selectors
+| #myId    | ID       |
+| .myClass | class    |
+| li       | tag name |
+** Relational Selectors
+| ul li           | descendant selector      |
+| ol > li         | (direct) child selector  |
+| li.myClass + li | adjacent  sibling        |
+| li.myClass ~ li | general sibling selector |
+** Attribute Selectors
+| element[attribute] Ex: img[alt] | select elements containing the named attribute wth any value |
+| form [type]                     | selects children elements with the named attribute           |
+| element[attr="val"]             | sel element that has attribute 'attr' with exact value 'val' |
+| element[attr(pipe)=val]         | element whose attr has a value val or begins with val-       |
+| element[attr~=val]              | element w/ attr value containg space-separated full word val |
+| element[attr^=val]              | element whose attr starts with val                           |
+| element[attr$=val]              | element whose attr ends in val                               |
+| element[attr*=val]              | element whose attr matches val anywhere                      |
+** UI Pseudo-Classes and Web Forms
+*** Based on Current State of UI
+:enabled
+:disabled
+:checked
+
+#+BEGIN_SRC css
+input[type=checkbox]:checked + label {
+  color: red;
+}
+#+END_SRC
+*** Form related Pseudo Classes
+| :valid    | :in-range     | :default |
+| :invalid  | :out-of-range |          |
+| :required | :read-only    |          |
+| :optional | :read-write   |          |
+
+This can be useful to style invalid, required, etc. form input to help users with web forms
+
+Also check out Estelle's talk on HTML5 web forms: https://vimeo.com/136246239
+
+** Structural UI Pseudo Classes (where in DOM)
+- Target elements on the page based on their relationships to other DOM elements
+- Updates dynamically if page updates
+- Reduced need for extra markup, classes, and IDs
+
+| :nth-child()        | :first-child   | :only-child   |
+| :nth-last-type()    | :last-child    | :only-of-type |
+| :nth-of-type()      | :first-of-type | :root         |
+| :nth-last-of-type() | :last-of-type  | :empty        |
+|                     |                | :not(:empty)  | 
+
+- of-type 
+- child
+- target element(s) based on argument passed to the selector
+  - :nth-of-type(even)  (2n) Every other starting at the second
+  - :nth-of-type(odd)   (2n+1) Every other starting at the first
+  - :nth-of-type(an+b) Ex: :nth-last-of-type(3n+1) Every third starting at the first
+
+** Negation and Empty Pseudo-Classes
+:not() - Negation Pseudo Class, can accept and simple selector (not relational)
+:empty - matches empty elements or elements with a comment
+** Link & User Action Pseudo-Classes
+:link
+:visited
+:hover
+:active
+:focus
+** Other Pseudo-Classes
+:lang
+:target
+:root - selects the document root, useful when working with rem units, can set font size on root
+** Pseudo-Elements
+Pseudo classes select elements that already exist
+Pseudo elements create 'faux' elements that you can style
+Use single colon because of IE....
+
+:first-line
+:first-letter - use for drop caps!
+:selection
+:after
+:before
+
+* Specificity
+** Understanding Specificity
+
+| !important (never put into production)              |       * |
+| inline styles                                       | 1-0-0-0 |
+| ID (use sparingly)                                  |   1-0-0 |
+| Class, attribute selectors, pseudo-selectors        |   0-1-0 |
+| element                                             |   0-0-1 |
+| * (universal selector), combinators (~, >, +), :not |   0-0-0 |
+
+* Generated Content
+** Generated Content
+
+You can style content using pseudo elements (:before and :after non-empty elements) as if they were divs but
+without actually creating an element that can be manipulated with JS or the user. You have to have the content property, it can be empty, but it must be present:
+
+#+BEGIN_SRC css
+
+element {
+  content : "";
+}
+
+#+END_SRC
+
+** Other Values for Generated Content
+
+none, normal, string, image, counter, open-quote/close-quote, no-open-quote/no-close-quote, attr(x)
+
+** Use-Cases for Generated Content
+
+hover link url tooltip
+block quotes!
+triangles on quote tooltips (using border and element w/ height 0, width 0
+thought bubbles
+
+be careful with position, pseudo element gotta be absolute & parent has to be relative
+
+** Generated Content Example by Chris Coyer
+
+https://css-tricks.com/examples/ShapesOfCSS/
+https://css-tricks.com/pseudo-element-roundup/
+
+** WATCHEDONLY Generated Content Code Example
+* Media Queries
+** Intro to Media Queries
+*** 10 Media queries (2.1)
+1. all
+2. aural
+3. handheld
+4. braille
+5. embossed
+6. print
+7. projection
+8. screen
+9. tty
+10. tv
+*** 5 ways to use media queries
+- <link media="screen" ...
+- <style> @import 'myCss.css"; ...
+- @ import url(myCss.css) screen; IE8+
+- @media screen {}
+<?xml-stylesheet media ="screen" ...
+*** Making media queries for RWD
+
+Set breakpoints based on your design, not based on device size.
+
+*** Media queries options
+- (min/max)-width: viewport width
+- (min/max)-height: viewport height
+- (min/max)-device-width: screen width
+- (min/max)-device-height: screen height
+- orientation: portrait(h>w) | landscape(w>h)
+- (min/max)-aspect-ratio: width/height
+- (min/max)-device-aspect-ratio: device-width/height
+
+*** Media Query Syntax / Punctuation
+**** only
+media="only print and (color)"
+**** and
+media="only screen and (orientation: portrait)"
+**** not
+media="not screen and (color)"
+**** ,
+media="print, screen and (min-width: 480px)"
+ 
+*** Code snippets
+
+#+BEGIN_SRC css
+
+<link rel='stylesheet' media='screen and (min-width: 320px) and (max-width: 480px)' href='css/smartphone.css' />
+
+#+END_SRC
+
+#+BEGIN_SRC css
+
+@media screen and (max-width: 480px){
+  a {
+    transition: background-color 200ms linear 50ms;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  a[href^="mailto:]:before {
+    content: url(icons/email.gif);
+  }
+}
+
+#+END_SRC
+
+** WATCHEDONLY The Viewport 
+* Debugging
+** Debugging in the Browser
+** Debugging Mobile Browsers
+* Colors
+** CSS Color Formats
+** Transparency and Color Tips
+* Fonts, Shadows, and Text Effects
+** CSS Fonts
+** Font Services
+** Text Shadows and Box Shadows
+* Borders and Backgrounds
+** Background Images
+** Background Repeat, Attachment, and Position
+** Background Clip, Origin and Size
+** Border Properties
+** Border Images
+* Gradients
+** Gradients
+** Prefixed, Linear Gradients
+** WC3 Standard Syntax
+** Radial Gradients
+* Transforms
+** Transforming Elements
+** 2D vs. 3D Transformations
+* Transitions and Animations
+** Transition Basics
+** Transition in the Real World
+** Animation Principles
+** Attaching Animations to Elements
+** Advanced Animation Properties
+* Other CSS Features
+** 
