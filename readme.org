@@ -20,32 +20,32 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 
 * TODO list
-** OPEN Web Accessibility: Getting Started (1:30)
 ** OPEN Responsive Web Images : Robert Boedigheimer (1:55)
+** OPEN Web Accessibility: Getting Started (1:30)
 ** OPEN Learn CSS Layout: the Pendatic Way
+** NEXT Styling React Components : Jake Trent (1:29)
 ** TODO How to Contribute to an Open Source Project on Github
-
+** TODO Survive JS - Webpack
 
 * queue (next, open, view-only)
-** TODO Making a Web Form Accessible (1:47)
-** OPEN Webpack Fundamentals : Joe Eames (2:23) 
-** TODO Using Webpack for Production JS Apps
-** TODO Babel: Get Started : Craig McKeachie (2:03)
-** TODO Advanced Git : Ben Hoskings (1:00)
+** OPEN Webpack Fundamentals : Joe Eames (2:23)
 ** OPEN React Fundamentals : Joe Maddaloe
 ** OPEN Udemy : Modern React with Redux
-** OPEN Learn & Understand Node.js : Anthony Alicea (12:00+)
-** OPEN Intro to Node JS : Paul O'Fallon (2:48)
+** TODO Getting Started with Redux (egghead)
+** TODO Getting Started with React Router (egghead)
+** TODO Building React Apps w/ Idiomatic Redux
 
 
 * directory
 ** Notes
 *** Books
+**** Survive JS - Webpack
+**** Survive JS - React
 **** JavaScript Allonge : Review and Refactor Portfolio
 *** CMS
 **** Pluralsight
 ***** Intro to WordPress : Chris Reynolds (1:22)
-***** Static Websites with Jekyll : Ryan Irelan (1:04)
+***** WATCHEDONLY Static Websites with Jekyll : Ryan Irelan (1:04)
 ***** Designing Custom Sites in WordPress : Jay Boucher (2:00)
 *** D3
 **** Pluralsight
@@ -93,10 +93,10 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** OPEN pendaticLayout
 **** Pluralsight
 ***** DONE CSS Positioning : Susan Sumkins (0:50)
+***** TODO Styling React Components : Jake Trent (1:29)
 ***** TODO Responsive Web Design : Ben Callahan (4:31)
 ***** TODO CSS3 In-Depth : Estelle Weyl (6:10)
 ***** TODO Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
-***** TODO Styling React Components : Jake Trent (1:29)
 ***** CSS3 : Michael Palermo (2:46)
 ***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
 ***** Creating Elegant Nav. Using CSS# Transitions : Susam Simkins (1:02)
