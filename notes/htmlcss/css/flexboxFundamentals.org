@@ -1,55 +1,52 @@
-Flexbox Fundamentals
-Garth Braithwaite
-Egghead
-
-* Introducing Flexbox 
+* Flexbox Fundamentals : Garth Braithwaite (Egghead)
+** Introducing Flexbox 
 Flexbox is a CSS3 (new) standard for layout. By default, content on a page flows vertically. 
-** Many flexbox properties require browser prefixes, checkout PostCSS autoprefixer
-* 'display'
+*** Many flexbox properties require browser prefixes, checkout PostCSS autoprefixer
+** 'display'
 The display property sets the type of rendering box used for an element. Display can accept two 
 new values:
 - flex (makes the element a block element container)
 - inline-flex 
-* 'flex-direction'
+** 'flex-direction'
 The flex-direction property allows you to easily change the layout on the children of an element without making any changes to the dom, which is particularly useful when combined with media queries.
   Flex-direction laysout child elements horizontally, vertically, and backwards. The 
 flex-direction property defaults to 'row'. Other values include:
 | column | row | column-reverse | row-reverse |
-* 'order'
+** 'order'
 Affects the ordern in which children are displayed. The default for each element is 'order: 0'.
 When child elements have the same order, they appear as written in source (or as realized in the 
 DOM).
   Setting the 'order' property permits rendering elements out of this default order. Positive and 
 negative values are allowed.
-* 'justify-content'
+** 'justify-content'
 This affects the alignment of children along the direction that content is flowing.
 | flex-start | flex-end | center | space-between | space-around |
 
-* 'align-items'
+** 'align-items'
 declares how to use the extra space perpindicular to the flex direction
 | stretch | flex-start | flex-end | center | baseline |
 
-* 'align-self'
+** 'align-self'
 applies to a specific flex-box child, not to the container
 | stretch | flex-start | flex-end | center | baseline |
 
-* 'flex-basis'
+** 'flex-basis'
 The flex-basis property allows us to define the dimension (along the flex-direction axis) that a 
 flexbox child should ideally have. Ex: 'flex-basis: 100px'
   The element will match flex-basis if there is adequate room. Flex-basis overrides a set width, 
 it's best to not use both. However, flex-basis will respect max/min-width/height
-* 'flex-grow'
+** 'flex-grow'
 Flex-basis lets us set the ideal dimensions for a flexbox child, but flex-shrink lets us define what should happen if there isn't enough room, and flex-grow can define what happens when there is too much room.
   'flex-grow' defaults to 0, meaning no child will exceed its flex-basis. If flex-grow is set for
 any element, that element will take up a fraction of the extra space equal to its flex-grow value divided by the sum of all flex-grow values of it's parent's children.
-* 'flex-shrink'
+** 'flex-shrink'
   'flex-shrink' defaults to 0, meaning no child will shrink disproportionately. The flex-shrink 
 defaults to 1, meaning all children shrink equally. If flex-shrink is set for any element, that 
 element will shrink in proportion to its flex-shrink value divided by the sum of all flex-shrink values of it's parent's children.
   Note that an element will not shrink below the size needed to display content so long as 
 other elements have non-content empty-space to cede.
   Setting flex-shrink: 0 can cause overflow if the flex-basis is larger than the available space
-* 'flex' shorthand
+** 'flex' shorthand
 The flex shorthand makes it easier to declare flex-shrink, flex-grow, and flex-basis, but it 
 sometimes has unexpected results because the defaults differ than the defaults from each separate
 property.
@@ -85,13 +82,13 @@ property.
 
 #+END_SRC
 
-* 'flex-wrap'
+** 'flex-wrap'
 Adding flex-wrap to a flexbox container allows the items to form a grid. Flex-wrap defaults to 
 'no-wrap'. 
 
 | no-wrap | wrap | wrap-reverse |
 
-* 'align-content'
+** 'align-content'
 Only used with multi-line content.
 
 | flex-start | flex-end | center | space-between | space-around | stretch |
