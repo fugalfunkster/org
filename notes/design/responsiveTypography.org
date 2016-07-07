@@ -1,3 +1,7 @@
+Responsive Typography : Jason Pamental (5:55)
+https://github.com/jpamental/workshop-rt
+https://github.com/jpamental/workshop-rt.git
+
 * Responsive Typography: An Introduction
 ** Intro
 *** files for course: http://github.com/jpamental/workshop-rt
@@ -111,7 +115,7 @@ body {
 *** 75% of mobile users in 5 seconds
 *** have fallback content in place and load enhancements afterward
 ** Performance is Design
-*** use asunc loading
+*** use async loading
 *** leverage web font loader to fix the unstyled part
 *** FOUT: Flash of unstyled text
 **** web font loader lets us style our content with css hooks for whether web fonts have loaded 
@@ -133,10 +137,79 @@ body {
 **** support for @font-face is more likely than JS
 **** tune for loading process
 **** include <noscript> as fallback
+** Performance Progression Exercise
+1. Use a CSS link to bring in a font (nest in a noscript tag)
+2. Use JS to bring in fonts via google's web font loader (auto when cp from google web fonts)
+   This puts .wf classes all over the place....
+3. style .wf-inactive elements to 'correct', prevent lost of movement and re-wrapping when font loads
+   focus on what's visible, the top of the page. Use line height, letter-spacing, font-size, margins, etc.
+** Testing
+Use the dev tools and toggle buttons to play around with the wf.inactive properties to 'correct' font load
+movement.
+** Code tl;dr
+*** javscript google's web-font-loader && css link in noscript tag
+*** use web font loader to correct unstyled content by element
+https://github.com/typekit/webfontloader
+*** see code sample and video re: toggle buttons for font and corrections
+@(7:14) Exercise 1 Questions Video
 * Proportion: One Size Won't Rule Them All
+** A More Modern Scale for Web Typography
+http://typecast.com/blog/a-more-modern-scale-for-web-typography
+** Typecast RWD Seminar
+http://www.typecast.com/seminars/rwd
+** Preserve Meaning, Not Pizel Size
+- Design is about communicating ideas & influencing bahavior
+- Use scale as a starting point & tweak for specific typefaces & usage scenarios
+- Much like the rgid: this is not religion, just a start
+** Proportion Exercise
+This is about setting up breakpoints, with media queries, to change the type scale
+@(7:20) Exercise 2 Proportion
+** Ems for media queries!
+Use ems instead of pixels for media queries.
+This gives us something that is relative to the size of the type, which scales.
+The design will retain integrity even when devices report non-standard display sizes.
+The base font size is set at 100% / ==16px / which is also 1em.
+To query for display sizes, convert to ems by dividing by 16px.
+786px in ems is 768/16 = ~ 44
 * Polish: Sweating the Small Stuff
-* A Perfect Page
+** Design is the Details
+*** OpenType Features
+**** Ligatures & Swashes
+**** Fractions
+**** Kerning
+**** Painless Fallback
+**** File Size Penalty (for now)
+*** Finish & Finesse
+**** Initial caps
+**** Better Blockquotes
+**** Multi-column Layouts
+**** All Fall-back gracefully
+*** Don't leave orphans behinds
+**** Typogrify Module
+http://drupal.org/project.typogrify
+**** WidowTamer for JS
+http://bit.ly/rt-widowtamer
+** A Little Abundance is a Lot
+*** background gradient instead of text-decoration underline...
+*** see 
+** Polish Exercise I
+*** @(5:35) OpenTypeFont features
+** Polish Exercise II
+*** Initial Caps @(0:00) (IE8 and below)
+*** Multi-column Layouts @(5:10)
+*** Better Blockquotes ?
+** Hypenation
+enable on smaller devices when justification is employed...
+* A Perfect Page: Exercise
+**  Features
+*** Oversize 2-level header
+*** stylized subhead
+*** Byline
+*** Large initial cap
+*** Inset Photo
+*** Pull Quote
 * Q&A
+
 * Links
 ** typecast (good for testing)
 ** fonts.com

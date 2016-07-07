@@ -2,7 +2,7 @@
 
 * Notes Readme Orientation
 
-Welcome to my notes. Each document or directory in this repo represetns a video course,
+Welcome to my notes. Each document or directory in notes/  represents a video course,
 blog post (or series of posts), book, tutorial, etc. for which I decided to take notes.
 
 This readme is composed of five major headings, which manage different aspects of my
@@ -20,16 +20,18 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 
 * TODO list
-** OPEN Responsive Typography : Jason Pamental (5:55)
+** OPEN Responsive Web Images : Robert Boedigheimer (1:55)
 ** OPEN Learn CSS Layout: the Pendatic Way
+** TODO How to Contribute to an Open Source Project on Github
 
 
 * queue (next, open, view-only)
+** TODO Web Accessibility: Getting Started (1:30)
+** TODO Making a Web Form Accessible (1:47)
 ** OPEN Webpack Fundamentals : Joe Eames (2:23) 
 ** TODO Using Webpack for Production JS Apps
 ** TODO Babel: Get Started : Craig McKeachie (2:03)
 ** TODO Advanced Git : Ben Hoskings (1:00)
-** TODO Flexbox Fundamentals
 ** OPEN React Fundamentals : Joe Maddaloe
 ** OPEN Udemy : Modern React with Redux
 ** OPEN Learn & Understand Node.js : Anthony Alicea (12:00+)
@@ -80,10 +82,10 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** WATCHEDONLY Intro to Mongoose for Node.js & MongoDB : Mark Scott (1:41)
 *** design
 **** Pluralsight
-***** OPEN Responsive Typography : Jason Pamental (5:55)
+***** DONE Responsive Typography : Jason Pamental (5:55)
 ***** OPEN Responsive Web Images : Robert Boedigheimer (1:55)
 ***** TODO Web Accessibility: Getting Started (1:30)
-***** Making a Web Form Accessible (1:47)
+***** TODO Making a Web Form Accessible (1:47)
 ***** Intro to Building Website Layouts : Susan Simkins (5:04)
 ***** Responsive In-Browser Design... : Karen Menezes (3:22)
 *** goodShipJS
@@ -93,7 +95,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE CSS Positioning : Susan Sumkins (0:50)
 ***** TODO Responsive Web Design : Ben Callahan (4:31)
 ***** TODO CSS3 In-Depth : Estelle Weyl (6:10)
-***** TODO CSS Flexbox Fundamentals : Gary Simon (1:28)
 ***** TODO Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
 ***** TODO Styling React Components : Jake Trent (1:29)
 ***** CSS3 : Michael Palermo (2:46)
@@ -102,8 +103,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** A Better CSS: LESS and SASS : Shawn Wildermuth (1:56)
 ***** HTML5 Advanced Topics : Craig Shoemaker (2:45)
 ***** HTML5 Browser Caching : Ben Schwarz (1:01)
-**** egghead
-***** TODO Flexbox Fundamentals
+**** DONE egghead
+***** DONE Flexbox Fundamentals
 *** linux
 **** pluralsight
 ***** WATCHEDONLY Docker and Containers: The Big Picture : Nigel Poulton (1:47)
@@ -173,6 +174,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Getting Started with Emmet : Kristian Freeman (0:55)
 **** egghead
 ***** TODO Using Webpack for Production JS Apps
+***** TODO How to Contribute to an Open Source Project on Github
 
 
 * App Ideas
