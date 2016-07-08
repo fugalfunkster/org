@@ -1,0 +1,183 @@
+#+TODO: VIEWONLY TODO NEXT OPEN | WATCHEDONLY DONE CANCELED
+
+Responsive Web Design : Ben Callahan (4:31)
+
+* Intro
+* RWD 101
+** A Fluid Foundation
+Use proportionate Thinking! Move away from pixels and to relative units of measure. Honor the proportions of
+the design by creating percentage-based grids instead of fixed-width, pixel-based grids.
+** IE Rounding
+Older versions of IE round up.
+** Semantic Grid Systems
+http://semantic.gs
+http://susy.oddbird.net
+** Flexible Content
+Content inside the layout must also be flexible.
+*** responsive images
+Use a max-width, or width, proportionate to the parent container. Width alone will permit the image to scale
+beyond its original size... Max-width 100%, prevents the image from overflowing its parent, and from scaling beyond its size.
+
+#+BEGIN_SRC css
+img {
+  max-width: 100%;
+}
+#+END_SRC
+
+*** videos
+**** video container that will maintain an aspect ratio of 2:1
+#+BEGIN_SRC css
+
+.video_container {
+  position: relative;
+  height: 0;
+  padding:bottom: 50%
+}
+
+#+END_SRC
+
+** Media Queries
+Make large layout adjustments when necessary.
+*** Media Types
+We usually just use all, screen, or print. All is the default.
+| all | braille | embossed | speech | handheld | print | projection | screen | tv | tty |
+
+*** Media Features
+Generally, features appear as name: value pairs. We predominately use width, and sometimes orientation.
+| width | height      | devide-width | orientation | aspect-ratio | device-aspect-ratio |
+| color | color-index | monochrome   | resolution  | scan         | grid                |
+Width is viewport width. Device width is the width of the viewport in its standard orientation, ex the
+device-width of an iPhone is 320px, even though it may be in landscape mode...
+
+*** Two approaches to writing queries
+
+|-------------------------------+----------------------------------------|
+| large first                   | small first                            |
+|-------------------------------+----------------------------------------|
+| Easy support for old IE       | more logical (build up, not tear down) |
+| small devices load all assets | old IE is tricky                       |
+| more work for the device      |                                        |
+|-------------------------------+----------------------------------------|
+
+**** Large Resolution First
+
+#+BEGIN_SRC css
+
+/* large resolution layouts here */
+
+  @media (max-width: 62em) {
+    /* styles for 62em and down go here */
+  }
+
+  @media (max-width: 40em) {
+    /* styles for 40em and down go here */
+  }
+
+#+END_SRC
+
+**** Small Resolution First
+
+#+BEGIN_SRC css
+
+/* smallest resolution layouts here */
+
+  @media (max-width: 28em) {
+    /* styles for 28em and down go here */
+  }
+
+  @media (max-width: 53em) {
+    /* styles for 53em and down go here */
+  }
+
+#+END_SRC
+
+*** Media Query Code Examples
+**** Head of HTML
+
+#+BEGIN_SRC css
+
+  /* stylesheet applies when the min-width is 30ems */
+  <link media="(min-width: 30em)" ...
+
+  /* stylesheet applies when the device is screen and the min-width is 30ems */
+  <link media="screen and (min-width: 30em)" ...
+
+#+END_SRC
+
+**** In Stylesheet
+
+#+BEGIN_SRC css
+
+  @media (min-width: 30em ) {...}
+
+  @media screen and (min-width: 30em) {...}
+
+#+END_SRC
+
+#+BEGIN_SRC css
+
+  @media (min-width: 600px) {
+    /* styles for 600px and up go here */
+  }
+
+  @media (max-width: 38em) {
+    /* styles for 38em and down go here */
+  }
+
+#+END_SRC
+
+** Other RWD Considerations
+*** Touch Target Areas
+**** Apple recommends minimum 44px x 44px (based on non-retina displays)
+**** Use padding instead of margin
+*** Hover States
+**** Don't hide content behind :hover (often happens in nav drop downs)
+**** Consider using modernizr to hide hover states behind a .no-touch class
+
+#+BEGIN_SRC css
+
+a {
+  /* standard styles */
+}
+
+.no-touch a:hover {
+  /* :hover styles */
+}
+
+#+END_SRC
+
+*** Contrast
+**** Try your site outside in the sun
+**** Try your site in bed when its dark
+**** Take it with you
+*** Readability
+**** Small screen != small type
+**** Consider increasing font-size
+* RWD Process
+** A Myth About Process
+** Content Priority Prototype
+** Style Prototype
+* Applying RWD Styles
+** The Basic Structure
+** CSS Files (using Sass)
+** Implementing RWD Styles
+** Using EM-Based Media Queries
+** RWD Patterns: Navigation
+** RWD Patterns: Tables and Images
+** RWD Patterns: Off-Canvas Layouts
+* RWD Retrofitting
+** From Fixed to Fluid
+** Retrofitting Twitter.com
+** Retrofitting Images
+** Retrofitting Tables
+** Retrofitting Media Queries
+** Client Interaction
+* JS to the Rescue
+** Media Queries
+** Conditional Loading
+* Lessons Learned
+** Pricing
+** Prioritization
+** Testing, Consistency, and Experimentation
+* What's Next in RWD?
+** The Responsive Dip
