@@ -3,7 +3,7 @@
 CSS3 InDepth : Estelle Weyl (6:10)
 http://estelle.github.com/CSS-Workshop
 
-* Selectors
+* DONE Selectors
 ** Basic Selectors
 | #myId    | ID       |
 | .myClass | class    |
@@ -85,7 +85,7 @@ Use single colon because of IE....
 :after
 :before
 
-* Specificity
+* DONE Specificity
 ** Understanding Specificity
 
 | !important (never put into production)              |       * |
@@ -95,7 +95,7 @@ Use single colon because of IE....
 | element                                             |   0-0-1 |
 | * (universal selector), combinators (~, >, +), :not |   0-0-0 |
 
-* Generated Content
+* DONE Generated Content
 ** Generated Content
 
 You can style content using pseudo elements (:before and :after non-empty elements) as if they were divs but
@@ -128,7 +128,7 @@ https://css-tricks.com/examples/ShapesOfCSS/
 https://css-tricks.com/pseudo-element-roundup/
 
 ** WATCHEDONLY Generated Content Code Example
-* Media Queries
+* DONE Media Queries
 ** Intro to Media Queries
 *** 10 Media queries (2.1)
 1. all
