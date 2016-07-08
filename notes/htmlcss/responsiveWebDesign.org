@@ -155,16 +155,133 @@ a {
 **** Consider increasing font-size
 * RWD Process
 ** A Myth About Process
-** Content Priority Prototype
+"Each client deliverable needs to look more liks a final, beautiful end-product than the previous one."
+Which results in pushing toward nearly-designed wireframes quickly, and completely designed comps soon
+after. A better mindset focuses on deliverables that best serve the organization and prioritization of content and function across multiple resolutions.
+*** Deliverables
+**** Research Deliverables
+- Brand analysis
+- Competitor analysis
+- Requirements gathering
+- Investigate current site (what works, what doesn't)
+- Stakeholder interviews
+**** Content Deliverables
+- Content inventory
+- Gap analysis
+**** Priority Deliverables
+- Information Architectures
+- Wireframes
+**** Style Deliverables
+- Layout
+- Typography
+- Color
+- Texture
+**** Functional Deliverables
+- Templates
+- CMS system / Datable integration
+- Custom integration
+** Content Priority Prototype (ideal for content based pages, not apps)
+Takes the place of a traditional wireframe. Includes real content, as much as possible. Order the content,
+the prototype should be linear in nature, so priority is implied. Always create it in HTML, so it must be 
+viewed in a browser, but don't be concerned with style. It's about the content, start by marking up the 
+content, worry about how it will look later. NO LAYOUT.
 ** Style Prototype
+Like style tiles, but in the browser (instead of photoshop). Very fast to build, can even be generated from a 
+template. We're just getting concepts down for colors, textures, typography, and maybe links, etc. Easy to 
+show web interaction. Client reqiews in their browser of preference, so expectations are set regarding what 
+it will look like when they view their website in the future.
+https://seesparkbox.com/foundry/our_new_responsive_design_deliverable_the_style_prototype
+http://www.alistapart.com/article/responsive-comping-obtaining-signoff-with-mockups/
+
+** !Priority
+Priority becomes critical wqith smaller displays
+
 * Applying RWD Styles
 ** The Basic Structure
+
+#+BEGIN_SRC html
+
+<head>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- necessary to get apple devices to report actual viewport size  -->
+
+  <link rel="stylesheet" href="c/base.css">
+  <link rel="stylesheet" media="not print" href="c/mq.css">
+  <!-- load base css styles, then load media query styles if not print -->
+
+  <!--  use Sass to run some logic on media features.
+        in this case, we're inserting a css file for
+        browsers that don't support media queries
+        [if (lte IE 8 )&)!IEMobile)]>
+    <link rel="stylesheet" media="screen" href="c/nomq.css">
+  <![endif]-->
+
+</head>
+
+#+END_SRC
+
 ** CSS Files (using Sass)
+You can use Sass to build up css styles from separate files.
+In the previous example, base.css might import a reset or normalize, then include the smallest width 
+stylesheet. The mq.css imports an additional stylesheet based on media queries. nomq.css imports the same 
+thing as mq.css but without media queries. This is an additive approach, relying on latter styles to
+override previous ones.
+  Note that without Sass, you might require the client download multiple styles, based on media queries. Sass 
+is just helping reduce the number of files loaded. 
+ 
+*** Ex sans Sass:
+
+#+BEGIN_SRC html
+
+<link rel="stylesheet" href="stylesheets/reset.css">
+<link rel="stylesheet" href="stylesheets/smallest.css">
+<link rel="stylesheet" href="stylesheets/450.css" media="(min-width: 450px)">
+<link rel="stylesheet" href="stylesheets/600.css" media="(min-width: 600px)">
+<link rel="stylesheet" href="stylesheets/950.css" media="(min-width: 950px)">
+
+#+END_SRC
+
 ** Implementing RWD Styles
+http://mediaqueri.es/
 ** Using EM-Based Media Queries
+Ems are relative, based on the initial font size declaration. Layouts adjust based on font-size. This
+better adheres to the principles of RWD.
 ** RWD Patterns: Navigation
+*** flavors
+**** top nav
+**** bottom nav (footer nav)
+**** slide down nav
+**** select box nav
+**** menu icon nav
+**** multi-level (tiered)
+*** examples
+**** http://siyelo.com
+**** http://contentsmagazine.com
+**** http://2012.dconstruct.org
+**** http://getbootstrap.com/
+**** http://www.msj.edu/
+**** https://www.dpandl.com/
+**** https://www.bostonglobe.com/
 ** RWD Patterns: Tables and Images
+"...performance is important, but access is more important. Mobile later is bettern than mobile never."
+- Kristofer Layton
+*** Responsive Tables
+https://css-tricks.com/examples/ResponsiveTables/responsive.php
+http://zurb.com/playground/responsive-tables
+https://css-tricks.com/accessible-simple-responsive-tables/
+old https://css-tricks.com/responsive-data-tables/
+*! very nice w/ js https://www.filamentgroup.com/examples/rwd-table-patterns/
+*** Responsive Images
+- picturefill - polyfill for a new image element : http://github.com/scottjehl/picturefill
+- sencha.io : http://docs.sencha.io
+- resrc.it : http://resrc.it
+- Adaptive images  : http://adaptive-images.com
+also see other org doc
 ** RWD Patterns: Off-Canvas Layouts
+http://www.lukew.com/ff/entry.asp?1569
+http://jasonweaver.name/lab/offcanvas/technical/
+
 * RWD Retrofitting
 ** From Fixed to Fluid
 ** Retrofitting Twitter.com
