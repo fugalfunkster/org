@@ -283,15 +283,115 @@ http://www.lukew.com/ff/entry.asp?1569
 http://jasonweaver.name/lab/offcanvas/technical/
 
 * RWD Retrofitting
+** What is a Retrofit?
+Finding the fastest and lowest-risk approach to creating a better experience on an existing site for users
+of any screen size.
+1. How to do it.
+2. Managing your client
+
 ** From Fixed to Fluid
-** Retrofitting Twitter.com
+1. Set width of the main element to 100% (but remember the old px value, for future math)
+   *. Use 'box-sizing: border-box' if padding and border make the width extend beyond the width of the 
+      screen. This property makes the width of an element reflect the content, padding, and border.
+2. Take secondary elements and convert the width to %ages. Ex. if parent was 1000 and child was 300,
+   set the child width to 30%.
 ** Retrofitting Images
-** Retrofitting Tables
+Tl;dr you can override inline styles, say those generated from a CMS, using max-width property, min-width, 
+etc. lots of options, but you have to get creative.
+
+https://timkadlec.com/2012/04/media-query-asset-downloading-results/
+- display: none on parent element
+- specify all background images inside media queries
+
+** WATCHEDONLY Retrofitting Tables
 ** Retrofitting Media Queries
+- Serve the original css to large viewports
+- Serve mobile-first css to small viewports
+- No changes to original CSS!
+*** Small resolution first, Capped
+#+BEGIN_SRC html
+
+<head>
+  <script src="/js/modernizr.js"></script>
+
+  /* test whether browser implements media queries... */
+  <script>
+    yepnope({
+      test : Modernizr.mg('(min-width: 0px)'),
+      yup  : 'base.css',
+      nope : 'original.css'
+    });
+  </script>
+
+  <noscript>
+    <link rel="stylesheet" href="original.css">
+  </noscript>
+
+</head>
+
+#+END_SRC
+
+*** Sass aggregate via imports
+#+BEGIN_SRC css
+
+@media (max-width: 979px) {
+  @import "small";
+}
+@media (min-width: 661px) and (max-width: 979px) {
+  @import "medium";
+}
+@media (min-width: 980px) {
+  @import "original";
+}
+
+#+END_SRC
 ** Client Interaction
+*** Evaluate the Project
+**** Solid UX at higher widths?
+**** Semantic markup?
+**** Can't start over?
+**** Immediate need?
+**** Real benefit for the user?
+*** Make sure you're capturing the analytics.
+*** Constantly remind them of the user.
+*** When you're done and they ask for more, push for even better experiences.
+*** 
 * JS to the Rescue
 ** Media Queries
+*** Polyfills for media queries
+**** respond.js (lean, focused on width)
+https://github.com/scottjehl/Respond
+**** css3-mediaqueries.js
+https://github.com/livingston/css3-mediaqueries-js
+*** matchMedia
+
+Part of the CSS Object Module
+
+#+BEGIN_SRC js
+
+if (window.matchMedia("(min-width: 400px)").matches) {
+  /* the viewport is >= 400px wide */
+} else {
+  /* the viewport is < 400px wide */
+}
+
+#+END_SRC
+
+*** Polyfills & Wrappers
+**** matchMedia.js
+https://github.com/paulirish/matchMedia.js/
+**** Harvey (by the team at harvest)
+https://github.com/harvesthq/harvey
+**** mediaCheck
+https://github.com/sparkbox/mediaCheck
 ** Conditional Loading
+*** Agressive Enhancement
+**** Ajax-Include-Pattern
+https://github.com/filamentgroup/Ajax-Include-Pattern
+**** Demo with Media Queries
+http://filamentgroup.github.com/Ajax-Include-Pattern/test/functional/media.html
+**** Live Example
+http://m.people.com
 * Lessons Learned
 ** Pricing
 ** Prioritization
