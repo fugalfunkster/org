@@ -2,7 +2,6 @@
 
 Responsive Web Design : Ben Callahan (4:31)
 
-* Intro
 * RWD 101
 ** A Fluid Foundation
 Use proportionate Thinking! Move away from pixels and to relative units of measure. Honor the proportions of

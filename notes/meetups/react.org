@@ -145,3 +145,9 @@ gen.next();
 *** makes testing easy because effects ('put') returns a data object - easy to dif
 ** How to survive the front end: (front) end (of the) world
 *** 
+* 7/12 
+** checkout react motion, cool transition diffing engine
+** when you need a job, talk to justin collum at CDK global
+*** justin.collum@cdkglobal.com
+*** send resume and portfolio
+* 
