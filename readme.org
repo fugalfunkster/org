@@ -21,14 +21,15 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 * TODO list
 ** OPEN Learn CSS Layout: the Pendatic Way
-** NEXT Responsive Web Design : Ben Callahan (4:31)
+** OPEN Responsive Web Design : Ben Callahan (4:31)
 ** TODO Styling React Components : Jake Trent (1:29)
 ** TODO How to Contribute to an Open Source Project on Github
-** TODO Survive JS - Webpack
+** OPEN Survive JS - Webpack
+
+** OPEN Webpack Fundamentals : Joe Eames (2:23)
 
 
 * queue (next, open, view-only)
-** OPEN Webpack Fundamentals : Joe Eames (2:23)
 ** OPEN React Fundamentals : Joe Maddaloe
 ** OPEN Udemy : Modern React with Redux
 ** TODO Getting Started with Redux (egghead)
@@ -41,9 +42,9 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 * directory
 ** Notes
 *** Books
-**** Survive JS - Webpack
+**** OPEN Survive JS - Webpack
 **** Survive JS - React
-**** JavaScript Allonge : Review and Refactor Portfolio
+**** OPEN JavaScript Allonge : Review and Refactor Portfolio
 *** CMS
 **** Pluralsight
 ***** Intro to WordPress : Chris Reynolds (1:22)
@@ -58,8 +59,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** Pluralsight
 ***** WATCHEDONLY Advanced Javascript : Kyle Simpson ()
 ***** WATCHEDONLY JS Objects and Prototypes
-***** WATCHED JS Best Practices : Jonathan Mills (2:39)
-***** WATCHED JS.Next: ES6 : Aaron Frost (5:24)
+***** WATCHEDONLY JS Best Practices : Jonathan Mills (2:39)
+***** WATCHEDONLY JS.Next: ES6 : Aaron Frost (5:24)
 ***** OPEN jQuery-free JS : Elijah Manor (2:26)
 ***** TODO JS Module Fundamentals : (2:16)
 ***** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
@@ -97,7 +98,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE CSS Positioning : Susan Sumkins (0:50)
 ***** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
 ***** TODO Styling React Components : Jake Trent (1:29)
-***** TODO Responsive Web Design : Ben Callahan (4:31)
+***** OPEN Responsive Web Design : Ben Callahan (4:31)
 ***** TODO Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
 ***** CSS3 : Michael Palermo (2:46)
 ***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
@@ -110,6 +111,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** linux
 **** pluralsight
 ***** WATCHEDONLY Docker and Containers: The Big Picture : Nigel Poulton (1:47)
+***** Play by Play: Docker for Web Developers with John Papa and Dan Wahlin (1:34))
 ***** Docker Deep Dive : Nigel Poulton (5:38)
 ***** Meet The Command Line : Dan Benjamin (1:53)
 *** node

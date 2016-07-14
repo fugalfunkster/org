@@ -1,58 +1,57 @@
-Webpack Fundamentals (Joe Eames)
-
-* Intro
-* Why do we need a build?
-** By bunding the files the client needs, the client makes fewer requests to the server
-** reduce code size with minification, compression, etc.
-** file order dependencies: use modules instead of relying on script order
-** transpilation
-** linting / style
-* other solutions
-** server side tools (specific)
-** task runners (grunt, gulp, npm - generic)
-* webpack is a specialized task runner that specialized on file transformation
-** webpack uses npm
-** uses module system(s)
-* module systems express dependencies between files
-** no circular dependencies
-** explicit dependencies permit you to load file dependencies in the right order
-* Basic Builds
-** CLI basics
-*** $ npm install webpack
-*** webpack takes .js files and bundles them into a bundle
-*** to bundle from the CLI : $ webpack ./input.js output.js
-** adding a config file
+* Webpack Fundamentals (Joe Eames)
+** Intro
+** Why do we need a build?
+*** By bunding the files the client needs, the client makes fewer requests to the server
+*** reduce code size with minification, compression, etc.
+*** file order dependencies: use modules instead of relying on script order
+*** transpilation
+*** linting / style
+** other solutions
+*** server side tools (specific)
+*** task runners (grunt, gulp, npm - generic)
+** webpack is a specialized task runner that specialized on file transformation
+*** webpack uses npm
+*** uses module system(s)
+** module systems express dependencies between files
+*** no circular dependencies
+*** explicit dependencies permit you to load file dependencies in the right order
+** Basic Builds
+*** CLI basics
+**** $ npm install webpack
+**** webpack takes .js files and bundles them into a bundle
+**** to bundle from the CLI : $ webpack ./input.js output.js
+*** adding a config file
       The webpack.config.js file exports a Common.js module, an object with keys that tell
       webpack how to do its job. Once we have a config file, we can run webpack from the CLI
       w/o other arguments.At a minimum, the exported object must contain an entry key (the
       path to the entry .js file), and an output property, with a nested filename property
       (the path for the bundle.js)
-** watch mode and the webpack dev server
-*** watch mode automatically rebuilds every time a file changes
-**** from CLI: webpack --watch
-**** in config file add key watch: true
-*** webpack has a webserver for us (hotloading)
-**** $ npm install webpack-dev-server -g
-**** $ webpack-dev-server
-**** localhost:8080/webpack-dev-server/ (for auto reload and status bar)
-**** localhost:8080/ (for app w/o hot reloading or status bar)
-**** if you use --inline when running webpack-dev-server, you can get reloading @ 8080/
-** Bundling multiple files
+*** watch mode and the webpack dev server
+**** watch mode automatically rebuilds every time a file changes
+***** from CLI: webpack --watch
+***** in config file add key watch: true
+**** webpack has a webserver for us (hotloading)
+***** $ npm install webpack-dev-server -g
+***** $ webpack-dev-server
+***** localhost:8080/webpack-dev-server/ (for auto reload and status bar)
+***** localhost:8080/ (for app w/o hot reloading or status bar)
+***** if you use --inline when running webpack-dev-server, you can get reloading @ 8080/
+*** Bundling multiple files
       Webpack understands the common.js module system, and bundles all dependencies of the
       entry file. In the config, you declare the entry file(s) explicitly, and the entry key
       can be an array of files.
         You must restart the webpack-dev-server to reify changes to the config.
-** using loaders
+*** using loaders
       By default, webpack can combine and minify files. Loaders let us add functionality. 
       For example, we can use babel to help us support ES6, and jshint for linting. Loaders
       are supplemental modules, npm installed, and saved to package.json. To include loaders
       in our config, we use the 'module.loaders' key. 
-*** keys:
-**** test: a regex to figure out which files to run through the loader
-**** exclude: files to exclude
-**** loader: the name of the loader module
-**** resolve: an array of file extensions that webpack must process
-*** example:
+**** keys:
+***** test: a regex to figure out which files to run through the loader
+***** exclude: files to exclude
+***** loader: the name of the loader module
+***** resolve: an array of file extensions that webpack must process
+**** example:
 
 #+BEGIN_SRC js
 
@@ -78,22 +77,22 @@ Webpack Fundamentals (Joe Eames)
 
 #+END_SRC
 
-** using preloaders
+*** using preloaders
       Preloaders run before loaders. The preLoader key takes the same format as loader.
-** creating a start script with npm
+*** creating a start script with npm
       "start": "webpack-dev-server"
-** Production v. Development Builds
+*** Production v. Development Builds
       Before deploying our code,  we should minimize the code to save space. Additionally,
       there are some things we might weant to strip out during production, console.logs ex.
-*** minimize with the -p CLI flag: 
-**** webpack -p
-*** the strip-loader lets us strip out code
-**** console.log, perfLog, etc.
-*** use a separate config file just for production
+**** minimize with the -p CLI flag: 
+***** webpack -p
+**** the strip-loader lets us strip out code
+***** console.log, perfLog, etc.
+**** use a separate config file just for production
        We can make a production specific config file, using js modules to require in the
        primary config. Because loaders is an array, we can make an object and push the new
        loader onto the array.
-**** Example:
+***** Example:
 
  #+BEGIN_SRC js
 
@@ -112,35 +111,35 @@ Webpack Fundamentals (Joe Eames)
 
  #+END_SRC
 
-**** We can specify a a config file other than the default from the CLI
-***** $ webpack --config webpack-production.config.js -p
-**** $ http-server is a node module that lets us instantiate an http-server w/o webpack
-* Advanced Builds
-** organizing our files and folders
-*** We usually organize files in subdirectories of our root directory
+***** We can specify a a config file other than the default from the CLI
+****** $ webpack --config webpack-production.config.js -p
+***** $ http-server is a node module that lets us instantiate an http-server w/o webpack
+** Advanced Builds
+*** organizing our files and folders
+**** We usually organize files in subdirectories of our root directory
        For example, it's common to create root/js/ for all .js files, and a public dir for
        all .html and .css. To facilitate this, we need to give our webpack notice that our
        files reside within a directory within our root directory.
-*** We want to exclude our bundles from version control
+**** We want to exclude our bundles from version control
        So, we will configure webpack to store our bundles in root/build/js/
-*** index.html must reference our bundle.js with a logical and accurate path
-**** Ex: <script src="/public/assets/js/bundle.js"></script>
-*** So we can configure webpack to facilitate the above:
-**** Node's path module helps us work with paths
-***** var path = require('path');
-**** context key tells webpack where to find the entry files, a relative root dir path
-***** context: path.resolve('js')
-**** output.path key tells webpack where to place bundled files, a relative root dir path
-***** path: path.resolve('build/js')
-**** output.publicPath key tells webpack where to serve the bundle for the web server
-***** publicPath: '/public/assets/js/'
-***** this must match the path in our index.html file
-***** allows us to redirect requests to public/ into build/
-**** devServer key tells webpack where root requests should be directed to
-***** contentBase: 'public'
-***** this would redirect root requests to the public dir
-*** when using the dev-server, the bundle isn't produced and saved to disk
-** working with ES6 modules is easy with babel-loader
+**** index.html must reference our bundle.js with a logical and accurate path
+***** Ex: <script src="/public/assets/js/bundle.js"></script>
+**** So we can configure webpack to facilitate the above:
+***** Node's path module helps us work with paths
+****** var path = require('path');
+***** context key tells webpack where to find the entry files, a relative root dir path
+****** context: path.resolve('js')
+***** output.path key tells webpack where to place bundled files, a relative root dir path
+****** path: path.resolve('build/js')
+***** output.publicPath key tells webpack where to serve the bundle for the web server
+****** publicPath: '/public/assets/js/'
+****** this must match the path in our index.html file
+****** allows us to redirect requests to public/ into build/
+***** devServer key tells webpack where root requests should be directed to
+****** contentBase: 'public'
+****** this would redirect root requests to the public dir
+**** when using the dev-server, the bundle isn't produced and saved to disk
+*** working with ES6 modules is easy with babel-loader
       
       Using babel for transpilation allows us to use the ES6 syntax for modules.
       
@@ -152,26 +151,797 @@ Webpack Fundamentals (Joe Eames)
 
 #+END_SRC
 
-** source map support is built in to webpack
+*** source map support is built in to webpack
       Source mapping allows us to view our individual and unminified .js files even after
       they have been bundled and minified. This lets us use debugger statements in our dev
       tools (pauses execution).
-*** We can generate the source maps for our .js files from the cli:
-**** $ webpack -d
-**** $ webpack-dev-server -d
+**** We can generate the source maps for our .js files from the cli:
+***** $ webpack -d
+***** $ webpack-dev-server -d
 
-** TODO creating multiple bundles for multiple pages or lazy loading
+*** TODO creating multiple bundles for multiple pages or lazy loading
       We can configure webpack to automatically generate a unique bundle for a set of entry
       files.
-*** We need to use the webpack commonsPlugin plugin
-* TODO Adding CSS to your build
-* TODO Adding Images and Fonts to your build
-* TODO Webpack Tools
-** Using the Connect Middleware - a web server
-** Creating a Custom Loader
-** Using Plugins
-* Webpack and Front End Frameworks
-** Webpack React Build
-*** babel-preset-react is a loader that processes JSX
-*** we refer to babel-preset-react in our .babelrc presets
-*** babel-loader is all we need in our webpack config!
+**** We need to use the webpack commonsPlugin plugin
+** TODO Adding CSS to your build
+** TODO Adding Images and Fonts to your build
+** TODO Webpack Tools
+*** Using the Connect Middleware - a web server
+*** Creating a Custom Loader
+*** Using Plugins
+** Webpack and Front End Frameworks
+*** Webpack React Build
+**** babel-preset-react is a loader that processes JSX
+**** we refer to babel-preset-react in our .babelrc presets
+**** babel-loader is all we need in our webpack config!
+
+
+
+* SurviveJS Webpack
+** I. Developing with Webpack
+*** Getting Started
+**** Installing webpack locally is recommended
+**** Executing webpack from the cli
+***** without a config in local dir
+You can display the exact path of executables with $ npm bin . Typically this will print 
+./node_modules/.bin so you could execute webpack with ./node_modules/.bin/webpack this will stdout a version, a link to the CLI guide, and a list of options.
+***** with a config in local dir
+You should see output, Ex:
+****** Hash: 2a7a7bccea1741de9447
+The hash of the build. You can use this to invalidate assets through [hash] 
+placeholder. We’ll discuss hashing in detail at the Adding Hashes to Filenames chapter.
+****** Version: webpack 1.13.0
+Webpack version.
+****** Time: 813ms
+Time it took to execute the build.
+****** app.js 1.69 kB 0 [emitted] app
+Name of the generated asset, size, the ids of the chunks into which it is related, status information 
+telling how it was generated, name of the chunk.
+****** [0] ./app/index.js 80 bytes {0} [built]
+The id of the generated asset, name, size, entry chunk id, the way it was generated.
+****** Child html-webpack-plugin for "index.html":
+This is plugin related output. In this case html-webpack-plugin is doing output of its own.
+******  + 3 hidden modules
+This tells you that Webpack is omitting some output, namely modules within node_modules and similar 
+directories. You can run Webpack using webpack -- display-modules to display this information. See 
+Stack Overflow for an expanded explanation.
+**** Setting up Webpack configuration
+the webpack.config.js exports a JS object
+***** the entry property 
+****** the entry path
+******* could be relative one (preffered, using node's path module)
+******* or a context field can be used to config the lookup
+**** adding a build shortcut in npm
+npm adds the executable path (via node_modules) to commands specified in npm scripts so that we don't have
+to write "./node_modules/.bin/webpack" we can just write "webpack"
+***** Ex: build script
+
+#+BEGIN_SRC js
+...
+"scripts": {
+  "build": "webpack"
+},
+...
+#+END_SRC
+
+***** Note: npm has shortcuts for npm start and npm test (sans npm run x)
+***** npm run can be executed from anywhere in the project, not just root dir
+*** Splitting the configuration
+You can contain your webpack config in a single file, but when it gets too big it can help to split it into
+multiple files, usually reflecting different environments. Here are a few ways to make that happen:
+**** Multiple files and point webpack to each through a --config parameter.
+This shares configuration through module imports. Ex: webpack/react-starter
+**** Push configuration to a library, which you then consume
+Ex: HenrikJoreteg/hjs-webpack
+**** Maintain config in a single file and branch there
+If we trigger a script through npm, npm sets this information in an env. var. We can match against it and
+return the config we want. Ex: webpack-merge
+***** Setting up webpack-merge
+We can assign our config object to semantically named variables, instead of module.exports. This permits
+us to switch on npm's env, and set the correct config to module.exports.
+****** Ex source:
+
+#+BEGIN_SRC js
+
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin'); const merge = require('webpack-merge');
+const PATHS = {
+  app: path.join(__dirname, 'app'),
+  build: path.join(__dirname, 'build')
+};
+module.exports = {
+const common = {
+  // Entry accepts a path or an object of entries.
+  // We'll be using the latter form given it's
+  // convenient with more complex configurations.
+  entry: {
+    app: PATHS.app
+  },
+  output: {
+    path: PATHS.build,
+    filename: '[name].js'
+}, plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Webpack demo'
+}) ]
+};
+var config;
+// Detect how npm is run and branch based on that
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, {});
+    break;
+  default:
+    config = merge(common, {});
+}
+module.exports = config;
+
+#+END_SRC
+
+*** Automatic Browser Refresh
+**** watch mode: $ webpack --watch
+Watch mode detects changes made to your files and recompiles automatically.
+**** webpack-dev-server
+webpack-dev-server is a dev server running in-memory. It refreshes content automatically in the
+browser while you develop your application. It also supports Hot Module Reloading (HMR), which provides
+a way for to patch the browser state without a full refresh.
+**** Attaching webpack-dev-server to a project
+webpack-dev-server defaults to serving the app at localhost:8080/webpack-dev-server/
+***** in package.json
+
+#+BEGIN_SRC js
+
+...
+"scripts": {
+  "start": "webpack-dev-server",
+  "build": "webpack"
+},
+...
+
+#+END_SRC
+
+**** Configuring Hot Module Reloading
+HMR builds on top of the WDS and lets you swap modules live. It's easy to do this with CSS, which has
+no state. But getting HMR to work with JS takes a bit of effort (covered in Configuring React)
+From the CLI we would use $ webpack-dev-server --inline --hot, however we can split off functionality like 
+HMR into a separate file, to promote keeping out webpack config simple, and promoting reuse of the 
+functionality by making it modular.
+***** in libs/parts.js
+
+#+BEGIN_SRC js
+
+const webpack = require('webpack');
+
+exports.devServer = function(options) {
+  return {
+    devServer: {
+      // Enable history API fallback so HTML5 History API based
+      // routing works. This is a good default that will come
+      // in handy in more complicated setups.
+      historyApiFallback: true,
+
+      // Unlike the cli flag, this doesn't set
+      // HotModuleReplacementPlugin!
+      hot: true,
+      inline: true,
+      
+      // Display only errors to reduce the amount of output.
+      stats: 'errors-only',
+
+      // Parse host and port from env to allow customization.
+      //
+      // If you use Vagrant or Cloud9, set
+      // host: options.host || '0.0.0.0';
+      //
+      // 0.0.0.0 is available to all network devices unlike default `localhost`.
+      host: options.host,  // Defaults to `localhost`
+      port: options.port   // Defaults to 8080
+    }, plugins: [
+      // Enable multi-pass compilation for enhanced performance in larger projects. Good default.
+      new webpack.HotModuleReplacementPlugin({
+        multiStep: true })
+    ]
+  };
+};
+
+#+END_SRC
+
+***** in webpack.config.js:
+
+#+BEGIN_SRC js
+
+const parts = require('./libs/parts');
+...
+// in switch statement
+  default:
+    config = merge(common,
+                   parts.devServer({
+                     // Customize host/port here if needed
+                     host: process.env.HOST,
+                     port: process.env.PORT
+                   })
+                  );
+#+END_SRC
+
+**** Accesing the Development Server from Network
+Is is possible to customize host and port settings through the env. in our setuo (ie: export PORT=3000 on
+Unix). To access your server, you'll need to figure out the ip of your maching. On Unix this can be
+achieved using: ifconfig | grep inet
+**** Alternative Ways to use webpack-dev-server
+We could have passed webpack-dev-server options through the CLI, but by tangling it out to another file,
+it keeps our package.json tidy. Alternatively, we could have set up an Express server of our own and used
+webpack-dev-server as middleware. There's also a Node.js API (with some differences from the CLI)
+*** Refreshing CSS
+**** Using css loaders
+We can specify that files ending in .css shoud invoke specific "loaders." In the webpack.config, the 'test'
+property on 'loaders' (itself on 'modules') matches against a JS regex. Loaders are evaluated left to right.
+***** in libs/parts.js
+#+BEGIN_SRC js
+exports.setupCSS = function(paths) {
+  return {
+    module: {
+      loaders: [
+        {
+          test: /\.css$/,
+          loaders: ['style', 'css'],
+          include: paths
+        }
+      ]
+    }
+  };
+};
+#+END_SRC
+***** in webpack.config.js
+#+BEGIN_SRC js
+
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, parts.setupCSS(PATHS.app) );
+    break;
+  default:
+    config = merge(common,
+                   parts.setupCSS(PATHS.app),
+                   parts.devServer({
+                     // Customize host/port here if needed
+                     host: process.env.HOST,
+                     port: process.env.PORT
+                   })
+                  );
+
+#+END_SRC
+**** Understanding CSS Scoping and CSS Modules
+When you require a css file into a JS file, Webpack will include it to the bundle where you require it.
+Assuming you're using the style-loader, webpack will write it to a style tag. This means it's going to be 
+global scope by default.
+  CSS Modules allows you to default to local scoping. Webpack's css-loader supports it. So if you want 
+local scope by default over a global one, enable them through the query syntax: "css?modules". After this 
+you'll need ot wrap your global styles within :global(body) {...} kind of declarations. 
+  In this case the require statement will give you the local classes you can then bind to elements.
+***** Ex:
+  
+#+BEGIN_SRC css
+  // app/main.css
+  :local(.redButton){
+    background: red;
+  }
+#+END_SRC
+
+could then bind the resulting class to a component like this:
+
+#+BEGIN_SRC js
+  //app/component.js
+  var styles = require('./main.css');
+  ...
+  // Attach the generated class name
+  element.className = styles.redButton;
+#+END_SRC
+
+*** Enabling Sourcemaps
+To improve debuggability, we can setup sourcemaps for both code and styling. Sourcemaps allow you to see 
+exactly where an error was raised. Webpack can generate both inline sourcemaps included within bundles or 
+separate sourcemap files. The former is useful during development dur to better perf while the latter is for 
+production as it will keep the bundle size small.
+  ALWAYS READ DOCUMENTATION FOR LOADERS!
+**** Sourcemap Types Supported by webpack
+***** Dev quality
+It's probably best to start from 'eval-source-map' and move to other options when it starts to feel slow
+
+| Sourcemap type               | Quality                       | Notes                               |
+|------------------------------+-------------------------------+-------------------------------------|
+| eval  e                      | generated code                | Each module is executed with eval   |
+|                              |                               | and //@ source URL.                 |
+| cheap-eval-source-map        | transformed code (lines only) | Each module is executed with eval   |
+|                              |                               | and a sourcemap is added as a       |
+|                              |                               | dataurl to the eval                 |
+| cheap-module-eval-source-map | original source (lines only)  | Same idea, but with higher quality  |
+|                              |                               | and more perf                       |
+| eval-source-map              | original source               | Same idea, but with highest quality |
+|                              |                               | and more perf                       |
+|------------------------------+-------------------------------+-------------------------------------|
+
+***** Production quality
+these end up in separate files and will be loaded by the browser only when required. This way your users
+get good perf while it's easier for you to debug the app. 
+
+| Sourcemap type          | Quality                       | Notes                                   |
+|-------------------------+-------------------------------+-----------------------------------------|
+| cheap-source-map        | transformed code (lines only) | Generated sourcemaps don't have         |
+|                         |                               | column mappings. Sourcemaps from        |
+|                         |                               | loaders are not used.                   |
+| cheap-module-source-map | original source (lines only)  | Same but srcmps from loaders are        |
+|                         |                               | simplified to a single mapping per line |
+| source-map              | original source               | Best quality, most complete result, but |
+|                         |                               | also the slowest                        |
+|-------------------------+-------------------------------+-----------------------------------------|
+**** Enabling sourcemaps during development
+#+BEGIN_SRC js
+
+// webpack.config.js
+...
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(
+      common,
+      {
+        devtool: 'source-map'
+      },
+      parts.setupCSS(PATHS.app)
+    );
+  default:
+    config = merge(common,
+      {
+        devtool: 'eval-source-map'
+      },
+      parts.setupCSS(PATHS.app),
+      ... 
+    );
+}
+
+module.exports = validate(config);
+
+#+END_SRC
+**** Enabe sourcemaps in your browser also!
+**** SourceMapDevToolPlugin
+If you want more control over sourcemap generation, it is possible to use the SourceMapDevTool-PLugin
+instead. 
+***** TODO page 26
+**** Sourcemaps for Styling
+You can add a query parameter to Loaders (css-loader, sass-loader, less-loader) "?sourceMap"
+Note that the css-loader docs document that relative paths within css declarations are known to be buggy
+and recommends using an absolute path resolving to the server url
+
+** II. Building with Webpack
+*** Minifying the Build
+We can minify our build ad generate sourcemaps through the devtool option.
+**** Generating A Baseline Build
+To make this demo worthwhile, we'll require React., bringin our app.js file to 373kB!
+**** Minifying the code
+The easiest way to enable minification is to call "webpack -p". the -p is sugar for "--optimize-minimize"
+We can also use a plugin that provides us with more control.
+***** in parts.js
+
+#+BEGIN_SRC js
+
+exports.minify = function() {
+  return {
+    plugins: [
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
+        }
+      })
+    ]
+   }; 
+}
+
+#+END_SRC
+***** in webpack.config.js
+
+#+BEGIN_SRC js
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, { devtool: 'source-map'}, parts.minify(), parts.setupCSS(PATHS.app) );
+    break;
+  default:
+    config = merge(common, { devtool: 'eval-source-map'},
+                   parts.setupCSS(PATHS.app),
+                   parts.devServer({
+                     // Customize host/port here if needed
+                     host: process.env.HOST,
+                     port: process.env.PORT
+                   })
+                  );
+};
+#+END_SRC
+**** Conrolling UglifyJS Through Webpack
+An UglifyJS feature known as mangling is enabled by default. The feature will reduce local function and
+variable names to a minimum, usually to a single char. It can also rewrite properties to a more compact
+format is configured specifically.
+  This can be incompatible with something like Angular 1, and its dependency injection system - which
+relies on strings.
+  If you do enable mangling, it's a good idea to set 'except:: ['webpackJsonp']' to avoid mangling
+the webpack runtime.
+***** Uglify Options
+
+#+BEGIN_SRC js
+
+new webpack.optimize.UglifyJsPlugin({
+  // Don't beautify output (enable for neater output) beautify: false,
+  // Eliminate comments
+  comments: false,
+  // Compression specific options
+  compress: { warnings: false,
+  // Drop `console` statements
+  drop_console: true },
+  // Mangling specific options
+  mangle: {
+  // Don't mangle $ except: ['$'],
+  // Don't care about IE8
+  screw_ie8 : true,
+  // Don't mangle function names
+  keep_fnames: true }
+})
+
+#+END_SRC
+*** Setting Environment Variables
+React relies on process.env.NODE_ENV based optimizations. If we force it to production, React will get
+built in an optimized manner. This will disable some checks (Eg. prop type checks). The return is in a
+smaller build and improved perf.
+**** The Basic Idea of DefinePlugin
+Webpack provides DefinePlugin. It is able to rewrite matching "free variables"
+**** Setting process.env.NODE_ENV
+In practice, we could have a declaration like 
+
+#+BEGIN_SRC js
+  if(process.env.NODE_ENV === 'development'){...}
+#+END_SRC
+
+Using DefinePlugin, we could replace process.env.NODE_ENV with 'development' to make our statement true.
+
+***** in parts.js
+#+BEGIN_SRC js
+exports.setFreeVariable = function(key, value) {
+  const env = {};
+  env[key] = JSON.stringify(value);
+  return {
+    plugins: [
+      new webpack.DefinePlugin(env)
+    ]
+  };
+}
+#+END_SRC
+
+***** in webpack.config.js
+
+#+BEGIN_SRC js
+
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, { devtool: 'source-map'},
+                   parts.setFreeVariable(
+                     'process.env.NODE_ENV',
+                     'production'
+                   ),
+                   parts.minify(),
+                   parts.setupCSS(PATHS.app) );
+    break;
+  default:
+    config = merge(common, { devtool: 'eval-source-map'},
+                   parts.setupCSS(PATHS.app),
+                   parts.devServer({
+                     // Customize host/port here if needed
+                     host: process.env.HOST,
+                     port: process.env.PORT
+                   })
+                  );
+};
+
+#+END_SRC
+
+*** Splitting Bunches
+Bundle splitting lets us push vendor dependencies to a bundle of its own and thereby benefit from client
+side caching. The size of the app remains the same, but now two http requests are necessary. Thankfully,
+caching more than compensates.
+  We will address cache invalidation later...
+**** Setting Up a Vendor Bundle
+We can define a vendor entry 'chunk'
+***** in webpack.config.js
+#+BEGIN_SRC js
+//webpack.config.js
+const common = {
+  // Entry accepts a path or an object of entries.
+  // We'll be using the latter form given it's
+  // convenient with more complex configurations.
+  entry: {
+    app: PATHS.app,
+    vendor: ['react']
+  }, output: {
+    path: PATHS.build,
+    filename: '[name].js'
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Webpack demo'
+    })
+  ]
+};
+
+#+END_SRC
+**** Setting Up CommonsChunkPlugin
+By default, the vendor chunk is included in the app.js chunk. CommonsChunkPlugin lets us alter this
+behavior.
+  We can have the plugin extract a "manifest", which contains the webpack runtime that starts the whole
+application and the apps dependency information. This helps us avoid an invalidation problem, but is 
+one more file to load. 
+  If we don't extract a manifest, wepack will generate the runtime to the vendor bundle. In case we
+modify the app code, the app bundle hash will change, which would prevent the implementation of the 
+runtime form finding the new app bundle. By keeping the manifest separate from the main bundles, we can
+avoid this prob.
+***** libs/parts.js
+#+BEGIN_SRC js
+exports.extractBundle = function(options) {
+  const entry = {};
+  entry[options.name] = options.entries;
+  return {
+    // Define an entry point needed for splitting.
+    entry: entry,
+    plugins: [
+      // Extract bundle and manifest files. Manifest is
+      // needed for reliable caching.
+      new webpack.optimize.CommonsChunkPlugin({
+        names: [options.name, 'manifest']
+      })
+    ]
+  };
+}
+#+END_SRC
+***** webpack.config.js
+#+BEGIN_SRC js
+const common = {
+  // Entry accepts a path or an object of entries.
+  // We'll be using the latter form given it's
+  // convenient with more complex configurations.
+  entry: {
+    app: PATHS.app
+  },
+  output: {
+    path: PATHS.build,
+    filename: '[name].js'
+  }, plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Webpack demo'
+    })
+  ]
+};
+...
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, { devtool: 'source-map'},
+                   parts.setFreeVariable(
+                     'process.env.NODE_ENV',
+                     'production'
+                   ),
+                   parts.extractBundle({
+                     name: 'vendor',
+                     entries: ['react']
+                   }),
+                   parts.minify(),
+                   parts.setupCSS(PATHS.app) );
+    break;
+  default:
+    config = merge(common, { devtool: 'eval-source-map'},
+                   parts.setupCSS(PATHS.app),
+                   parts.devServer({
+                     // Customize host/port here if needed
+                     host: process.env.HOST,
+                     port: process.env.PORT
+                   })
+                  );
+};
+#+END_SRC
+**** Loading Dependencies to a Vendor Bundle Automatically
+If you maintain strict separation b/t dependencies and dev-deps, you can make webpack pick your dependencies automatically using your package.json. This lets you avoid having to manage which 
+dependencies are destined for the vendor bundles!
+***** webpack.config.js
+#+BEGIN_SRC js
+const pkg = require('./package.json');
+... 
+const common = {
+  // Entry accepts a path or an object of entries.
+  // We'll be using the latter form given it's
+  // convenient with more complex configurations.
+  entry: {
+    app: PATHS.app,
+    vendor: Object.keys(pkg.dependencies)
+  },
+  output: {
+    path: PATHS.build,
+    filename: '[name].js'
+  }, plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Webpack demo'
+    })
+  ]
+};
+
+...  
+
+// Detect how npm is run and branch based on that
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, { devtool: 'source-map'},
+                   parts.setFreeVariable(
+                     'process.env.NODE_ENV',
+                     'production'
+                   ),
+                   parts.extractBundle({
+                     name: 'vendor',
+                     entries: Object.keys(pkg.dependencies)
+                   }),
+                   parts.minify(),
+                   parts.setupCSS(PATHS.app) );
+    break;
+  default:
+    config = merge(common, { devtool: 'eval-source-map'},
+                   parts.setupCSS(PATHS.app),
+                   parts.devServer({
+                     // Customize host/port here if needed
+                     host: process.env.HOST,
+                     port: process.env.PORT
+                   })
+                  );
+};
+#+END_SRC
+*** Adding Hashes to Filenames
+When using hashes, if a chunk's contents change, the hash will change as well, causing the client's browser 
+to request the new file. 
+**** Setting Up Hashing
+Once the manifest exists, we merely need to generate hashes.
+***** webpack.config.js
+#+BEGIN_SRC js
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, {devtool: 'source-map',
+                            output: {
+                              path: PATHS.build,
+                              filename: '[name].[chunkhash].js',
+                              // This is used for require.ensure. The setup
+                              // will work without but this is useful to set
+                              chunkFilename: '[chunkhash].js'
+                             }
+                           },
+                   parts.setFreeVariable(
+                     'process.env.NODE_ENV',
+                     'production'
+                   ),
+                   parts.extractBundle({
+                     name: 'vendor',
+                     entries: Object.keys(pkg.dependencies)
+                   }),
+                   parts.minify(),
+                   parts.setupCSS(PATHS.app) );
+    break;
+  default:
+    config = merge(common, { devtool: 'eval-source-map'},
+                   parts.setupCSS(PATHS.app),
+                   parts.devServer({
+                     // Customize host/port here if needed
+                     host: process.env.HOST,
+                     port: process.env.PORT
+                   })
+                  );
+};
+#+END_SRC
+**** Other options
+One more way to improve the build would be to load popular dependencies via a CDN.
+*** Cleaning the Build
+Now that we have hashing, when a has changes, we still have possible older files within our build dir. To 
+eliminate this problem, we can set up a little plugin to clean it up for us. (instead of a script)
+**** Setting Up clean-webpack-plugin
+***** in libs/parts.js
+#+BEGIN_SRC js
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+...
+exports.clean = function(path) {
+  return {
+    plugins: [
+      new CleanWebpackPlugin([path], {
+        // Without `root` CleanWebpackPlugin won't point to our
+        // project and will fail to work.
+        root: process.cwd()
+      })
+    ]
+  };
+}
+#+END_SRC
+***** in webpack.config.js
+#+BEGIN_SRC js
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, {devtool: 'source-map',
+                            output: {
+                              path: PATHS.build,
+                              filename: '[name].[chunkhash].js',
+                              // This is used for require.ensure. The setup
+                              // will work without but this is useful to set
+                              chunkFilename: '[chunkhash].js'
+                             }
+                           },
+                   parts.clean(PATHS.build),
+                   parts.setFreeVariable(
+                     'process.env.NODE_ENV',
+                     'production'
+                   ),
+                   parts.extractBundle({
+                     name: 'vendor',
+                     entries: Object.keys(pkg.dependencies)
+                   }),
+                   parts.minify(),
+                   parts.setupCSS(PATHS.app) );
+    break;
+  default:
+    config = merge(common, { devtool: 'eval-source-map'},
+                   parts.setupCSS(PATHS.app),
+                   parts.devServer({
+                     // Customize host/port here if needed
+                     host: process.env.HOST,
+                     port: process.env.PORT
+                   })
+                  );
+};
+#+END_SRC
+**** Preserving dotfiles
+If you want to preserve possible dotfiles within your build directory, you can use
+path.join(PATHS.build, '*') instead of PATHS.build.
+*** Separating CSS
+**** Setting Up extract-text-webpack-plugin
+**** Separating Application Code and Styling
+**** Eliminating Unused CSS
+*** Analyzing Build Stats
+**** Configuring Webpack
+**** Webpack Stats Plugin
+*** Hosting on Github Pages
+**** Setting Up gh-pages
+** III. Loading Assets
+*** Formats Supported
+*** Loader Definitions
+*** Loading Styles
+*** Loading Images
+*** Loading Fonts
+** IV. Advanced Techniques
+*** Understanding Chunks
+*** Linting in Webpack
+*** Authoring Packages
+*** Writing Loaders
+*** Configuring React
+
+
+* Plugins
+** html-webpack-plugin
+*** automatically generates an index.html for our application and wires generated assets with it
+** favicons-webpack-plugin
+*** makes it easy to deal with favicons with Webpack, compatible with html-webpack-plugin
+
+* Loaders
+loaders are transformations that are applied to source files, and return the new source. Loader can be chained
+together, like using a pipe in Unix. See webpacks "What are Loaders" and "list of loaders". Loaders are 
+evaluated left to right.
+** css-loader
+resolves @import and url statements in out css files
+** style-loader
+deals with require statements in our JS
+
+* Modules
+* other tools
+** webpack-validator
+validate the config against a schema and warns us if we are trying to do something insensible
+
+#+BEGIN_SRC js
+
+const validate = require('webpack-validator');
+...
+module.exports = validate(config);
+
+#+END_SRC
+
+** serve (npm module that serves a dir)
