@@ -177,7 +177,7 @@
 
 
 
-* SurviveJS Webpack
+* TODO SurviveJS Webpack
 ** I. Developing with Webpack
 *** Getting Started
 **** Installing webpack locally is recommended
@@ -894,29 +894,414 @@ switch(process.env.npm_lifecycle_event) {
 If you want to preserve possible dotfiles within your build directory, you can use
 path.join(PATHS.build, '*') instead of PATHS.build.
 *** Separating CSS
+So far, all of our CSS is inlined to JS, which is not ideal for development: WE can't cache our CSS, we 
+might see FOUC (Flash of unstyled content), and provides an attack vector. But, webpack lets us generate a separate CSS bundle using the ExtractTextPlugin - unfortunately it comes with some overhead during the compilation phase, and won't work with HMR by design.
 **** Setting Up extract-text-webpack-plugin
+Using this setup, we can still benefit from HMR during development. For a production build, we generate a separate CSS. html-webpack-plugin will pick it up automatically and injext it into our index.html.
+  Note that definitions, such as loaders [ExtractTextPlugin.extract('style','css')], won't work and will cause the build to err. So when using ExtractTextPlugin, use the loader form instead. If you want to pass more loaders to the ExtractTextPLugin, you should use ! syntax. Ex: ExtractTextPlugin.extract('style', 'css!postcss').
+***** libs/parts.js
+#+BEGIN_SRC js
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+...
+exports.extractCSS = function(paths) {
+  return {
+    module: {
+      loaders: [
+        // Extract CSS during build
+        {
+          test: /\.css$/,
+          loader: ExtractTextPlugin.extract('style', 'css'),
+          include: paths
+        }
+      ]
+    }, plugins: [
+      // Output extracted CSS to a file
+      new ExtractTextPlugin('[name].[chunkhash].css')
+    ]
+  };
+}
+#+END_SRC
+***** webpack.config.js
+#+BEGIN_SRC js
+...
+//parts.setupCSS(PATHS.app)
+parts.extractCSS(PATHS.app)
+...
+#+END_SRC
 **** Separating Application Code and Styling
-**** Eliminating Unused CSS
+Now, if you modify either index.js or main .css, the hash of both files (app.js and app.css) will change. This is because they belong to the same entry chunk due to the require at app/index.js.
+  We can chunk app code and styles separately. However, there is one glitch, the build will produce a style%#^&*.js file that is redundant and can be excluded through a check at the HtmlWebpackPLugin template... See pg. 56 and webpack issue #672.
+***** in app/index.js
+#+BEGIN_SRC js
+require('react');
+//require('./main.css');
+#+END_SRC
+***** in webpack.config.js
+#+BEGIN_SRC js
+
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin'); const merge = require('webpack-merge');
+const validate = require('webpack-validator');
+const parts = require('./libs/parts');
+const pkg = require('./package.json');
+
+const PATHS = {
+  app: path.join(__dirname, 'app'),
+  style: path.join(__dirname, 'app', 'main.css'),
+  build: path.join(__dirname, 'build')
+};
+
+const common = {
+  // Entry accepts a path or an object of entries.
+  // We'll be using the latter form given it's
+  // convenient with more complex configurations.
+  entry: {
+    style: PATHS.style,
+    app: PATHS.app,
+    vendor: Object.keys(pkg.dependencies)
+  },
+  output: {
+    path: PATHS.build,
+    filename: '[name].js'
+  }, plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Webpack demo'
+    })
+  ]
+};
+  
+var config;
+
+// Detect how npm is run and branch based on that
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, {devtool: 'source-map',
+                            output: {
+                              path: PATHS.build,
+                              filename: '[name].[chunkhash].js',
+                              // This is used for require.ensure. The setup
+                              // will work without but this is useful to set
+                              chunkFilename: '[chunkhash].js'
+                             }
+                           },
+                   parts.clean(PATHS.build),
+                   parts.setFreeVariable(
+                     'process.env.NODE_ENV',
+                     'production'
+                   ),
+                   parts.extractBundle({
+                     name: 'vendor',
+                     entries: Object.keys(pkg.dependencies)
+                   }),
+                   parts.minify(),
+                   parts.extractCSS(PATHS.style)
+                  );
+    break;
+  default:
+    config = merge(common, { devtool: 'eval-source-map'},
+                   parts.setupCSS(PATHS.style),
+                   parts.devServer({
+                     // Customize host/port here if needed
+                     host: process.env.HOST,
+                     port: process.env.PORT
+                   })
+                  );
+};
+
+module.exports = validate(config);
+
+#+END_SRC
+**** Eliminating Unused CSS with purifycss-webpack-plugin
+This plugin provides dead-code elimination in our styles. We'll $ npm i -D purecss, to add some weight 
+to show the benefit.
+***** webpack.config.js (requiring purecss)
+#+BEGIN_SRC js
+const PATHS = {
+  app: path.join(__dirname, 'app'),
+  style: [
+    path.join(__dirname, 'node_modules', 'purecss'),
+    path.join(__dirname, 'app', 'main.css')
+    ],
+  build: path.join(__dirname, 'build')
+};
+#+END_SRC
+***** app/component.js (using purecss)
+#+BEGIN_SRC js
+  element.className = 'pure-button';
+#+END_SRC
+***** libs/parts.js (purifycssplugin)
+#+BEGIN_SRC js
+const PurifyCSSPlugin = require('purifycss-webpack-plugin');
+...
+exports.purifyCSS = function(paths) {
+  return {
+    plugins: [
+      new PurifyCSSPlugin({
+        basePath: process.cwd(),
+        // `paths` is used to point PurifyCSS to files not
+        // visible to Webpack. You can pass glob patterns
+        // to it.
+        paths: paths
+      }),
+    ]
+  };
+};
+#+END_SRC
+***** webpack.config.js(purifycss plugin)
+#+BEGIN_SRC js
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, {devtool: 'source-map',
+                            output: {
+                              path: PATHS.build,
+                              filename: '[name].[chunkhash].js',
+                              // This is used for require.ensure. The setup
+                              // will work without but this is useful to set
+                              chunkFilename: '[chunkhash].js'
+                             }
+                           },
+                   parts.clean(PATHS.build),
+                   parts.setFreeVariable(
+                     'process.env.NODE_ENV',
+                     'production'
+                   ),
+                   parts.extractBundle({
+                     name: 'vendor',
+                     entries: Object.keys(pkg.dependencies)
+                   }),
+                   parts.minify(),
+                   parts.extractCSS(PATHS.style),
+                   parts.purifyCSS([PATHS.app])
+                  );
+    break;
+  default:
+...
+#+END_SRC
 *** Analyzing Build Stats
+Analyzing build stats is a food step toward understanding webpack better. We can get stats from it easily and visualize them to show us the composition of our bundles.
 **** Configuring Webpack
+First we need to tweak our config, by enabling two flags:
+--profile : to capture timing related info
+--json : to make webpack output those stats we want
+***** in package.json
+#+BEGIN_SRC js
+  "scripts": {
+    "stats" : "webpack --profile --json > stats.json",
+    "start": "webpack-dev-server",
+    "build": "webpack"
+  },
+#+END_SRC
+***** in webpack.config.js
+#+BEGIN_SRC js
+...
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+  case 'stats':
+    config = merge(common, {devtool: 'source-map',
+...
+module.exports = validate(config, {
+  quiet: true
+});
+#+END_SRC
+***** analyzing the stats.json file
+****** the official analyze tool - recommendations and dependency graph https://webpack.github.io/analyse/
+****** webpack visualizer - pie chart showing bundle composition 
+https://chrisbateman.github.io/webpack-visualizer/
+****** webpack chart - another, similar viz https://alexkuz.github.io/webpack-chart
+****** robertknight/webpack-bundle-size-analyzer - for text-based composition
+https://github.com/robertknight/webpack-bundle-size-analyzer
 **** Webpack Stats Plugin
+If you want to manage stats through a plugin, check out stats-webpack-plugin. It gives you a bit more 
+control over the output. You can use it to exclude certain dependencies from the output.
 *** Hosting on Github Pages
 **** Setting Up gh-pages
-** III. Loading Assets
+$ npm i -D gh-pages 
+To make the aset paths work on GHPages, we also need to tweak a webpack setting knowns as output.publicPath. It gives us control over the resulting urls you see at index.html for instance. If you are hosting your assets on a CDN, this would be the palce to tweak. In this case, it's enough to set it to point the GitHub project in our webpack config.
+  This should host your application at https://<name>.github.io/.<project>
+***** in package.json
+#+BEGIN_SRC js
+  "scripts": {
+    "deploy": "gh-pages -d build",
+    "stats" : "webpack --profile --json > stats.json",
+    "start": "webpack-dev-server",
+    "build": "webpack"
+  },
+#+END_SRC
+***** in webpack.config.js
+#+BEGIN_SRC js
+const common = {
+  // Entry accepts a path or an object of entries.
+  // We'll be using the latter form given it's
+  // convenient with more complex configurations.
+  entry: {
+    style: PATHS.style,
+    app: PATHS.app,
+    vendor: Object.keys(pkg.dependencies)
+  },
+  output: {
+    path: PATHS.build,
+    // Tweak this to match your Github project name
+    publicPath: '/webpack-demo/',
+    filename: '[name].[chunkhash].js',
+    // This is used for require.ensure. The setup will work w/o, but it is useful
+    chunkFilename: '[chunkhash].js'
+  }, plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Webpack demo'
+    })
+  ]
+};
+#+END_SRC
+** TODO III. Loading Assets
+In addition to .js files and .css files, webpack can use loaders to slurp in other common assets, like 
+styling files, images, and fonts.
 *** Formats Supported
+Webpack supports a large variety of formats through loaders that connext with your directory structure.  Webpack also supports a variety of JS module formats out of the box. 
+**** Idealized loader module:
+#+BEGIN_SRC js
+...
+module.exports = {
+  ...
+  module: {
+    loaders: [
+      {
+        // Match files against RegExp
+        test: /\.css$/,
+
+        // Apply loaders against it. These need to
+        // be installed separately. In this case our
+        // project would need *style-loader* and *css-loader*.
+        loaders: ['style', 'css'],
+
+        // Restrict matching to a directory. This also accepts an array of paths.
+        // Although optional, I prefer to set this (better performance,
+        // clearer configuration).
+        include: path.join(__dirname, 'app')
+      }
+    ]
+  } 
+};
+#+END_SRC
+**** JS Module Formats supported by Webpack
+Webpack allows you to use different module formats, but under the hood they all work the same way. Most importantly you get CommonJS and AMD support out of the box. Webpack 2 will support ES6 module definition as well. For now, you have to stick with Babel and babel-loader to attain ES6 support.
 *** Loader Definitions
+Generally you either use loader (accepts string) or loaders field (accepts array of strings) and then pass 
+possible query parameters using one of the available methods.
+  I recommend maintaining an include definition per each loader definition. This will restrict its search 
+path, improve performance, and make your configuration easier to follow. include accepts either a path or an 
+array of paths.
+  It can be a good idea to prefer absolute paths here as it allows you to move configuration without 
+breaking assumptions. Ideally you have to tweak just a single place during restructuring.
+**** Loader Evaluation Order
+It is good to keep in mind that Webpack’s loaders are always evaluated from right to left and from bottom 
+to top (separate definitions). The right to left rule is easier to remember when you think about it in 
+terms of functions.
+**** Passing (query) Parameters to a Loader
+***** using a query string (works for multiple loaders per declaration)
+#+BEGIN_SRC js
+
+{
+  test: /\.jsx?$/,
+  loaders: [
+    'babel?cacheDirectory,presets[]=react,presets[]=es2015'
+  ],
+  include: PATHS.app
+}
+
+#+END_SRC
+***** using a query field (only one loader per declaration)
+#+BEGIN_SRC js
+
+{
+  test: /\.jsx?$/,
+  loader: 'babel',
+  query: {
+    cacheDirectory: true,
+    presets: ['react', 'es2015']
+  },
+  include: PATHS.app
+}
+
+#+END_SRC
 *** Loading Styles
-*** Loading Images
-*** Loading Fonts
+**** Loading CSS
+First, webpack  uses a regex to identify all of the .css files in the given include path (accepts an 
+array too). Next, css-loader parses @import and url() statements within the matched files and treats them 
+as require <module> statements. Then, style-loader bundles the output, inlining it into your js file by 
+default. the ExtractTextPlugin lets you create a separate css bundle.
+***** Example CSS Loader Usage:
+#+BEGIN_SRC js
+
+const common = { ...
+  module: {
+    loaders: [
+      {
+        test: /\.css$/,
+        loaders: ['style', 'css'],
+        include: PATHS.style
+      }
+    ]
+  },
+... 
+};
+
+#+END_SRC
+***** Other Loaders (file-loader, url-loader)
+file-loader generates files, whereas url-loader can create inline data URLs for small resources. This can be useful for optimizing application loading. You avoid unnecessary requests while providing aslightly bigger payload. Small improvements can yield large benefits if you depend on a lot of small resources in your style definitions.
+**** PostCSS
+***** webpack.config.js
+#+BEGIN_SRC js
+const autoprefixer = require('autoprefixer');
+const precss = require('precss');
+...
+exports.setupCSS = function(paths) {
+  return {
+    module: {
+      loaders: [
+        {
+          test: /\.css$/,
+          loaders: ['style', 'css', 'postcss'],
+          include: paths
+        }
+      ]
+    },
+    // PostCSS plugins go here, make sure you required them up top!
+    postcss: function () {
+      return [autoprefixer, precss];
+    }
+  };
+};
+#+END_SRC
+*** TODO Loading Images
+**** Setting Up url-loader
+**** Setting UP file-loader
+**** Loading SVGs
+**** Compressing Images
+*** TODO Loading Fonts
+**** Choosing One Format
+**** Supporting Multiple Formats
 ** IV. Advanced Techniques
 *** Understanding Chunks
-*** Linting in Webpack
-*** Authoring Packages
-*** Writing Loaders
+**** Chunk Types
+**** Lazy Loading with Webpack
+**** Dynamic Loading with Webpack
+*** TODO Linting in Webpack
+*** TODO Authoring Packages
+*** TODO Writing Loaders
 *** Configuring React
+**** Setting up Babel with React
+**** Setting up Hot Loading
+**** Using react-lite Instead of React for Production
+**** Exposing React Perf Utilities to 
+**** Optimizing Rebundling Speed During Development
+**** TODO Setting Up Flow
+**** TODO Setting Up Typescript
 
 
 * Plugins
+** DedupePlugin
+If you have a complex project with a lot of dependencies, it is likely a good idea to use Dedupe, which finds
+duplicate files and deduplicates them. Use new webpack.optimize.DedupePLugin() in your plugins definition to enable it. (comes standard?)
 ** html-webpack-plugin
 *** automatically generates an index.html for our application and wires generated assets with it
 ** favicons-webpack-plugin
