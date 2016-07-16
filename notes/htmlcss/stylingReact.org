@@ -1,5 +1,9 @@
+Inline Styles are Cool Again
 
-* IS are About to Kill CSS : Colin Megill (36:10) Jun 24, 2015
+* Christopher Chedeau's: React CSS in JS
+https://speakerdeck.com/vjeux/react-css-in-js
+
+* DONE IS are About to Kill CSS : Colin Megill (36:10) Jun 24, 2015
 ** Who's still writing vanilla CSS? No one...
 *** Things have changed
 **** The ecosystem is better since 1998
@@ -58,7 +62,7 @@ State styles the component, but they're decoupled in a way that prevents seeing 
 *** Serverside rendering makes it happen
 
 
-* IS: themes, media queries, contexts & when it's best to use CSS : Michael Chan (30:42) Jul 6, 2016
+* DONE IS: themes, media queries, contexts & when it's best to use CSS : Michael Chan (30:42) Jul 6, 2016
 ** Fashion
 *** Check out vjeux slide deck
 *** If learning CSS is one of the hurdles to shipping an app, that's a huge hurdle
@@ -114,9 +118,11 @@ Make components that do one thing and compose components. Don't make components 
 *** layout
 *** distributed components - check our react-soundplayer
 
-* The Case for CSS Modules : Mark Dalgleish (45:08) Nov 16, 2015
 
-* Styling React Components in JS : Michael Chan (29.15) Dec 4, 2015
+* TODO The Case for CSS Modules : Mark Dalgleish (45:08) Nov 16, 2015
+
+
+* DONE Styling React Components in JS : Michael Chan (29.15) Dec 4, 2015
 ** Using BEM to wrangle large stylesheets across multiple apps
 ** What if we manage our styles in JS with React?
 *** Squeaky Clean CSS
@@ -160,7 +166,8 @@ ex: "padding-right": 1rem => .pr-1r
 *** stop using JS and CSS to create the same component
 *** hope for abstractions w/o side effects
 
-* Component Design with React, Postcss, Webpack, and CSS Modules : Chris Keathley (55:25) Feb 22, 2016
+
+* DONE Component Design with React, Postcss, Webpack, and CSS Modules : Chris Keathley (55:25) Feb 22, 2016
 http://keathley.io/component_design/#1
 ** Why Components?
 *** MVC gets the separation of concerns wrong
@@ -253,8 +260,19 @@ export const ButtonContainer = React.createClass({
 *** cssnext -  everything that's coming up in css...
 **** variables
 **** like babel for css
-** On Conclusion
+** In Conclusion
 *** focus on composition
 
 
-* React Inline Styles and the Future of CSS : ??? (36:38) Feb 25, 2016
+* TODO React IS and the Future of CSS : ??? (36:38) Feb 25, 2016
+
+* Links
+** http://stackoverflow.com/questions/26882177/react-js-inline-style-best-practices
+** https://github.com/FormidableLabs/radium/blob/master/docs/comparison/README.md
+
+
+* Reasons to tangle out your css into another file (problems with 'pure' inline styles)
+** caching
+** CSP Policy
+*** https://github.com/facebook/react/issues/5878
+

@@ -148,6 +148,6 @@ gen.next();
 * 7/12 
 ** checkout react motion, cool transition diffing engine
 ** when you need a job, talk to justin collum at CDK global
-*** justin.collum@cdkglobal.com
+*** justin.collum@cdk.com
 *** send resume and portfolio
 * 
