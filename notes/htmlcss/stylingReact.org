@@ -1,0 +1,260 @@
+
+* IS are About to Kill CSS : Colin Megill (36:10) Jun 24, 2015
+** Who's still writing vanilla CSS? No one...
+*** Things have changed
+**** The ecosystem is better since 1998
+***** Templates rather than .html files
+***** Node modules ... require()
+***** Share packages with NPM
+***** Immediate mode UIs*
+**** Declarative is no longer an asset
+***** Selector model
+***** Declarative CSS is bad for dynamic behavior (Style is now coupled with state)
+***** IN the wild, styling is dependent on application state AND user state
+***** Medicine now worse than disease (Massive semantic frameworks)
+***** Changing state means changing styles
+****** User INteractions (forms, buttons)
+****** User privileges (authentication)
+****** Real-time async remote data changes on server
+****** Data changes on client in response to interactions
+****** Devices
+***** WE NEED COMPUTATION!
+**** There are now better ways to solve styling apps with JS
+***** Javascript is the future
+Styles computes and recompined in the browser, on the fly, with full access to the JS runtime
+** Immediate Mode UIs (D3 and react)
+*** D3 : a Model for coupling state and style 
+*** change data => rerender
+The UI is always a reflection of data, so styles are recomputed every time the data changes
+*** When our UI is a function of state, use functions that recieve state and return UI
+**** Declarative, static CSS classes are in the way of computation on the client
+These can't be recomputed a la carte. CSS and HTML are coupled. To change UI dynamically, you have
+to use JS to change an elements classes to change that elements style.
+***** Doing this with jQuery is a pain! You have to wire up two way databinding via event listeners
+***** Same with event-binding in backbone
+***** Computation on the client is what we really need, it solves everything
+**** To get around this, we've used naming conventions to specify UI style-states
+But it's not apparent from our CSS what state leads to what style for which component
+State styles the component, but they're decoupled in a way that prevents seeing dependencies
+** What JavaScript Offers
+*** In JS, we can have computation with properties, functions, conditionals, booleans
+*** JS lets us modularize styles using POJOs
+*** Edge Cases
+**** Pseudo Elements - JS event listeners (ugly but easy to abstract away) or lodash
+**** Specificity : The end of cascade & globals (which 
+*** CSS is pretty over
+**** Sass was a coming home to logic, but that logic is JavaScript
+*** Reactive State == Reactive Style
+**** Truly reactive styles
+**** Examples:
+***** color & font state tied to an html form
+***** line height state tied to width
+***** slider and ajax
+***** tweening elements and transitioning
+** A place for vanilla CSS?
+*** reset / normalize
+*** globals, static styles that apply across a site
+** Progressive Enhancement?
+*** Serverside rendering makes it happen
+
+
+* IS: themes, media queries, contexts & when it's best to use CSS : Michael Chan (30:42) Jul 6, 2016
+** Fashion
+*** Check out vjeux slide deck
+*** If learning CSS is one of the hurdles to shipping an app, that's a huge hurdle
+*** There's never been a better time to not learn css
+** Themes
+*** Style is not "CSS"
+*** State changes are UI changes*
+*** Components should be reused, not repurposed
+Make components that do one thing and compose components. Don't make components do more than one thing.
+** In the beginning
+*** HTML: Inline styles in HTML
+*** CSS: Allowed us to make a selection style across a page
+*** The Semantic Web: Namespacing let us achieve specificity
+*** Web 2.0: HTML and CSS became entangled as presentation, HTML and JS became entangled as behavior
+**** class selectors and namespacing became necessary
+*** The Interactive Web: Stateful UI
+**** Interface and Behavior - JS, HTML, and State (React!)
+**** Presentation - CSS and State
+**** We want to bring statefulness into JS, with react
+** CSS in JS
+*** We can internalize our presentational state to our react components
+*** Stateful classes removed from DOM and CSS (.is-active, .is-open, .is-complete)
+*** CSS is just about appearance
+*** Styles can be overriden at the call site
+*** Better specs
+** What does it cost us?
+*** We have to write our styles in JS as POJOs
+** Capability
+*** Variables => POJO
+*** Themes => modular classes
+*** Pseudo Classes (use conditionals)
+
+|--------------------------------+---------------------|
+| common pseudo-class cheatsheet |                     |
+|--------------------------------+---------------------|
+| :first-child                   | i === 0             |
+| :last-child                    | i === arr.length -1 |
+| :only-child                    | i === arr.length    |
+| :nth-child(even)               | i % 2               |
+| :nth-child(odd)                | !(i%2)              |
+| :nth-child(n)                  | i === n-1           |
+| :nth-last-child(n)             | i === arr.length -n |
+| :nth-child(-n+3)               | i < 3               |
+|--------------------------------+---------------------|
+
+*** Pseudo Elements (use actual elements in your component...)
+** Hard Parts
+*** hover
+*** media queries
+*** Radium is a library that help solve this problem
+** Grab Bag
+*** colors library - manipulate colors in JS dynamically
+*** layout
+*** distributed components - check our react-soundplayer
+
+* The Case for CSS Modules : Mark Dalgleish (45:08) Nov 16, 2015
+
+* Styling React Components in JS : Michael Chan (29.15) Dec 4, 2015
+** Using BEM to wrangle large stylesheets across multiple apps
+** What if we manage our styles in JS with React?
+*** Squeaky Clean CSS
+*** Precision
+*** Testability
+*** Less Policing Stylesheet Patterns
+** CSS in JS
+Problems articulated
+*** Global Namespace
+*** Dependencies
+*** Dead Code Elimination
+*** Minification
+*** Sharing Constants
+*** Non-deterministic Resolution
+*** Isolation
+** Solved by Inline Styles?
+*** browser events? hover
+*** media queries 
+*** NOT BETTER
+*** Radium - SCSS in JS
+*** Great for JS heavy teams
+** The rolling eyes approach to react components
+*** The component consists of a style file and a jsx file
+*** "sufficiently local css is indistinguishable from inline styles" - Jed Schmidt
+*** why bother separating the two? you're not going to reuse the css...
+** Atomic.css?
+*** Highly modular, classes that relate to specific properties
+*** Composable
+*** There's no html to style in react...
+*** Tachyons / Gravitons
+*** Minions.CSS
+ex: "padding-right": 1rem => .pr-1r
+**** Lots of media query support
+*** We still need abstractions...
+** CSS Modules
+*** takes care of namespacing and scoping for you
+
+** Prepare for the Future!
+*** Inline state styles - biggest gain for CSS maintainability
+*** Embrace immutable selectors
+*** stop using JS and CSS to create the same component
+*** hope for abstractions w/o side effects
+
+* Component Design with React, Postcss, Webpack, and CSS Modules : Chris Keathley (55:25) Feb 22, 2016
+http://keathley.io/component_design/#1
+** Why Components?
+*** MVC gets the separation of concerns wrong
+It takes a ton of work to test components, have to set up a template to represent the DOM
+*** Components are the atomic unit of concern.
+** Why Are Styles Hard? (and what can we do about that?)
+*** The box model
+**** Why is it hard?
+**** Flexbox to the Rescue
+***** Flexbox is Declarative!
+***** Allows us to decopule presentational design from layout
+***** Enables component based design
+*** Global Scope
+**** Naming things is hard - grab quote elsewhere...
+***** So we've created CSS methodologies (BEM, OOCSS, SMACSS, Atomic CSS)
+***** But these require dicipline, not something we're good at...
+**** CSS Modules to the rescue
+***** Each component has unique styling needs, style and html/jsx are coupled! Embrace it!
+***** Keep it Local (Co-locate styles, and tests)
+****** Store a component's unique styles in a dir with the component, and import the styles
+***** Modularity facilitates composition
+****** 'composes: dark-theme' allows us to inherit styles from another css class
+***** Get more re-use
+****** When style and state are coupled, use functional components that accept style-state as an argument
+We can just use presentational styles in our stateless components
+
+#+BEGIN_SRC js
+
+import React from 'react'
+import styles from './button.css'
+
+export const Button = ({state, text} => (
+  <button role="button" className={styles[state]}>
+    {text}
+  </button>
+)
+
+<Button state="error" text="Error" />
+<Button state="normal" text="Normal" />
+<Button state="in-progress" text="In-Progress" />
+
+#+END_SRC
+
+****** This is testable! A function that accepts state and returns a UI w/ style-state
+****** Stateful Components are a great place to use layout styles
+
+#+BEGIN_SRC js
+
+import React from 'react'
+import { Button } from './shared/Button.js'
+import { flex } from './shared/layout.css'
+
+export const ButtonContainer = React.createClass({
+  render () {
+    return (
+      <div className={ flex }>
+        <Button state="error" text="Error" />
+        <Button state="normal" text="Normal" />
+        <Button state="in-progress" text="In-Progress" />
+      </div>
+    )
+  }
+})
+
+#+END_SRC
+
+***** CSS Modules Automatically enforces OOCSS naming conventions by hashing class names
+
+*** Encapsulation is hard
+*** Styles are coupled to your HTML Structure
+*** Browser Inconsistency
+** React
+*** Functional Stateless Components
+*** Class Components
+** CSS Modules
+** Webpack
+*** Webpack is hard - super complicated...
+*** Let's you load different types of assets
+*** Code splitting -  vendor/manifest/app/styles...
+*** chunks optimize perf by taking advantage of browser caching
+*** npm modules - couples with your package.json
+*** Hot Reloading - better than live reload (you get to keep state) - Hard to get working correctly
+*** Loaders
+** PostCSS
+*** AST
+*** Plugins (they're all written in JS! so you can roll your own)
+**** autoprefixer* (I'm using cssnext isntead)
+**** mqpacker (auto group media queries?)
+**** csswring (minification)
+*** cssnext -  everything that's coming up in css...
+**** variables
+**** like babel for css
+** On Conclusion
+*** focus on composition
+
+
+* React Inline Styles and the Future of CSS : ??? (36:38) Feb 25, 2016
