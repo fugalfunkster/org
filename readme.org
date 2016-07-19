@@ -22,20 +22,20 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 * TODO list
 ** OPEN Learn CSS Layout: the Pendatic Way
 ** OPEN Responsive Web Design : Ben Callahan (4:31)
-** TODO Styling React Components : Jake Trent (1:29)
-** TODO How to Contribute to an Open Source Project on Github
+** TODO Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
 ** OPEN Survive JS - Webpack
-
 ** OPEN Webpack Fundamentals : Joe Eames (2:23)
+
+
 
 
 * queue (next, open, view-only)
 ** OPEN React Fundamentals : Joe Maddaloe
-** OPEN Udemy : Modern React with Redux
+** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 ** TODO Getting Started with Redux (egghead)
-** TODO Getting Started with React Router (egghead)
 ** TODO Building React Apps w/ Idiomatic Redux
-
+** OPEN Udemy : Modern React with Redux
+** TODO Getting Started with React Router (egghead)
 ** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
 
 
@@ -45,11 +45,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** OPEN Survive JS - Webpack
 **** Survive JS - React
 **** OPEN JavaScript Allonge : Review and Refactor Portfolio
-*** CMS
-**** Pluralsight
-***** Intro to WordPress : Chris Reynolds (1:22)
-***** WATCHEDONLY Static Websites with Jekyll : Ryan Irelan (1:04)
-***** Designing Custom Sites in WordPress : Jay Boucher (2:00)
 *** D3
 **** Pluralsight
 ***** Interactive Data Visualization with D3.js : Ian Johnson (5:30)
@@ -68,7 +63,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
 ***** JavaScript Design Patterns : Aaron Powell (2:02)
 ***** JS Templating w/ Handlebars: Ryan Lewis (2:19)
-***** WEbRTC FUndamentals : Lisa Larson-Kelly (1:40)
 **** Egghead
 ***** Asynchronous Programming: The End of the Loop : Jafar Husain
 ***** Regex in JavaScript : Joe Maddalone
@@ -88,24 +82,19 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE Responsive Typography : Jason Pamental (5:55)
 ***** DONE Responsive Web Images : Robert Boedigheimer (1:55)
 ***** DONE Web Accessibility: Getting Started (1:30)
-***** TODO Making a Web Form Accessible (1:47)
-***** Intro to Building Website Layouts : Susan Simkins (5:04)
-***** Responsive In-Browser Design... : Karen Menezes (3:22)
+***** Making a Web Form Accessible (1:47)
 *** goodShipJS
 *** htmlcss
 **** OPEN pendaticLayout
 **** Pluralsight
 ***** DONE CSS Positioning : Susan Sumkins (0:50)
 ***** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
-***** TODO Styling React Components : Jake Trent (1:29)
 ***** OPEN Responsive Web Design : Ben Callahan (4:31)
 ***** TODO Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
-***** CSS3 : Michael Palermo (2:46)
-***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
-***** Creating Elegant Nav. Using CSS# Transitions : Susam Simkins (1:02)
-***** A Better CSS: LESS and SASS : Shawn Wildermuth (1:56)
 ***** HTML5 Advanced Topics : Craig Shoemaker (2:45)
 ***** HTML5 Browser Caching : Ben Schwarz (1:01)
+***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
+***** Creating Elegant Nav. Using CSS# Transitions : Susam Simkins (1:02)
 **** DONE egghead
 ***** DONE Flexbox Fundamentals
 *** linux
@@ -139,6 +128,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** DONE Facebook Official React Tutorial
 **** DONE React Router Tutorial
 **** Pluralsight
+***** WATCHEDONLY Styling React Components : Jake Trent (1:29)
 ***** TODO Building Applications with React and Flux : Cory House (5:08)
 ***** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
 ***** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
@@ -146,8 +136,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Building iOS Apps with React Native : Hendrik Swanepoel (1:59)
 **** Egghead
 ***** OPEN React Fundamentals : Joe Maddalon
-***** TODO Getting Started with Redux (egghead)
 ***** TODO Getting Started with React Router (egghead)
+***** TODO Getting Started with Redux (egghead)
 ***** TODO Building React Apps w/ Idiomatic Redux
 ***** React Testing Cookbook
 ***** Build Your First React.js App : Tyler McGinnise
@@ -171,96 +161,12 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE Git Fundamentals : James Kovacs (1:51)
 ***** DONE NPM Playbook : Joe Eames (0:58)
 ***** WATCHEDONLY Meet Emacs : Phil Hagelberg (0:58)
-***** OPEN Webpack Fundamentals : Joe Eames (2:23)
 ***** TODO Advanced Git : Ben Hoskings (1:00)
 ***** TODO Babel: Get Started : Craig McKeachie (2:03)
 ***** Using the Chrome Dev. Tools : John Sonmez (2:50)
 ***** Getting Started with Emmet : Kristian Freeman (0:55)
 **** egghead
+***** WATCHEDONLY How to Contribute to an Open Source Project on Github
 ***** TODO Using Webpack for Production JS Apps
-***** TODO How to Contribute to an Open Source Project on Github
 
-
-* App Ideas
-** Soil Test
-** Ship's Log (searchable note taker) 
-** SNAP
-** Index Cards
-
-
-* Horizon
-** Scheme
-*** Little Schemer / Seasoned Schemer
-*** HtDP [5/43]
-    I. Processing Simple Forms of Data
- - [X] Students, Teachers, Computers
- - [X] Numbers, Expressions, Simple Programs
- - [X] Programs are Function Plus Variable Definitions
- - [X] Conditional Expressions and Functions
- - [X] Symbolic Information
- - [ ] Compound Data, Part 1: Structures
- - [ ] The Varieties of Data
- - [ ] Intermezzo 1: Syntax and Semantics
- II. Processing Arbitrarily Large Data
- - [ ] Compound Data, Part 2: Lists
- - [ ] More on Processing Lists
- - [ ] Natural Numbers
- - [ ] Composing Functions, Revisited Again
- - [ ] Intermezzo 2: List Abbreviations
- III. More on Processing Arbitrarily Large Data
- - [ ] More Self-referential Data Definitions
- - [ ] Mutually Referential data Definitions
- - [ ] Development through Iterative Refinement
- - [ ] Processing Two Complex Pieces of Data
- - [ ] Intermezzo 3: Local Definitions and Lexical Scope
- IV. Abstracting Designs
- - [ ] Similarities in Definitions
- - [ ] Functions as Values
- - [ ] Designing Abstractions from Examples
- - [ ] Designing Abstractions with First-Class Functions
- - [ ] Mathematical Examples
- - [ ] Intermezzo 4: Defining Functions on the Fly
- V. Generative Recursion
- - [ ] A New Form of Recursion
- - [ ] Designing Algorithms
- - [ ] Variations on a Theme
- - [ ] Algorithms that Backtrack
- - [ ] Intermezzo 5: The Cost of Computing and Vectors
- VI. Accumulating Knowledge
- - [ ] The Loss of Knowledge
- - [ ] Designing Accumulator-Style Functions
- - [ ] More Uses of Accumulation
- - [ ] Intermezzo 6: The Nature of Inexact Numbers
- VII. Changing the State of Variables
- - [ ] Memory for Functions
- - [ ] Assignment to Variables
- - [ ] Designating Functions with Memory
- - [ ] Examples of Memory Usage
- - [ ] Intermezzo 7: The Final Syntax and Semantics
- VIII.
- - [ ] Encapsulation
- - [ ] Mutable Structures
- - [ ] Designing Functions that Change Structures
- - [ ] Equality
- - [ ] Changing Structures, Vectors, and Objects
- Epilogue
-
-*** SICP
-** Clojure
-*** Living Clojure
-*** Clojure for the Brave and True
-*** Clojure Applied
-** Secondary Languages
-*** Java
-*** Elm
-*** Elixir
-*** Rust
-** MIT OpenCourseware
-*** 6.01   - Intro to EE and CompSci
-*** 18.01  - Single Variable Calculus
-*** 6.042  - Mathematics for Computer Science
-*** 6.006  - Intro to Algorithms
-*** 18.02  - MultiVariable Calculus
-*** 6.046  - Algorithms
-*** 18.310 - Principles of Discrete Applied Math
     
