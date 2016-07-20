@@ -21,7 +21,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 * TODO list
 ** OPEN Learn CSS Layout: the Pendatic Way
-** OPEN Responsive Web Design : Ben Callahan (4:31)
 ** TODO Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
 ** OPEN Survive JS - Webpack
 ** OPEN Webpack Fundamentals : Joe Eames (2:23)
@@ -88,13 +87,13 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** OPEN pendaticLayout
 **** Pluralsight
 ***** DONE CSS Positioning : Susan Sumkins (0:50)
+***** DONE Responsive Web Design : Ben Callahan (4:31)
 ***** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
-***** OPEN Responsive Web Design : Ben Callahan (4:31)
 ***** TODO Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
 ***** HTML5 Advanced Topics : Craig Shoemaker (2:45)
 ***** HTML5 Browser Caching : Ben Schwarz (1:01)
 ***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
-***** Creating Elegant Nav. Using CSS# Transitions : Susam Simkins (1:02)
+***** Creating Elegant Nav. Using CSS3 Transitions : Susam Simkins (1:02)
 **** DONE egghead
 ***** DONE Flexbox Fundamentals
 *** linux

@@ -1,7 +1,8 @@
 Inline Styles are Cool Again
 
-* Christopher Chedeau's: React CSS in JS
+* TODO Christopher Chedeau's: React CSS in JS
 https://speakerdeck.com/vjeux/react-css-in-js
+
 
 * DONE IS are About to Kill CSS : Colin Megill (36:10) Jun 24, 2015
 ** Who's still writing vanilla CSS? No one...
@@ -188,7 +189,7 @@ It takes a ton of work to test components, have to set up a template to represen
 ***** Each component has unique styling needs, style and html/jsx are coupled! Embrace it!
 ***** Keep it Local (Co-locate styles, and tests)
 ****** Store a component's unique styles in a dir with the component, and import the styles
-***** Modularity facilitates composition
+***** Modularity facilitates composition (aka, compose is the new mixin?) 
 ****** 'composes: dark-theme' allows us to inherit styles from another css class
 ***** Get more re-use
 ****** When style and state are coupled, use functional components that accept style-state as an argument
@@ -244,7 +245,7 @@ export const ButtonContainer = React.createClass({
 *** Class Components
 ** CSS Modules
 ** Webpack
-*** Webpack is hard - super complicated...
+*** Webpack is hard - super complicated
 *** Let's you load different types of assets
 *** Code splitting -  vendor/manifest/app/styles...
 *** chunks optimize perf by taking advantage of browser caching

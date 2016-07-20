@@ -1,19 +1,18 @@
 #+TODO: VIEWONLY TODO NEXT OPEN | WATCHEDONLY DONE CANCELED
 
-Responsive Web Design : Ben Callahan (4:31)
-
-* RWD 101
-** A Fluid Foundation
+* Responsive Web Design : Ben Callahan (4:31)
+** RWD 101
+*** A Fluid Foundation
 Use proportionate Thinking! Move away from pixels and to relative units of measure. Honor the proportions of
 the design by creating percentage-based grids instead of fixed-width, pixel-based grids.
-** IE Rounding
+*** IE Rounding
 Older versions of IE round up.
-** Semantic Grid Systems
+*** Semantic Grid Systems
 http://semantic.gs
 http://susy.oddbird.net
-** Flexible Content
+*** Flexible Content
 Content inside the layout must also be flexible.
-*** responsive images
+**** responsive images
 Use a max-width, or width, proportionate to the parent container. Width alone will permit the image to scale
 beyond its original size... Max-width 100%, prevents the image from overflowing its parent, and from scaling beyond its size.
 
@@ -23,8 +22,8 @@ img {
 }
 #+END_SRC
 
-*** videos
-**** video container that will maintain an aspect ratio of 2:1
+**** videos
+***** video container that will maintain an aspect ratio of 2:1
 #+BEGIN_SRC css
 
 .video_container {
@@ -35,19 +34,404 @@ img {
 
 #+END_SRC
 
-** Media Queries
+*** Media Queries
 Make large layout adjustments when necessary.
-*** Media Types
+**** Media Types
 We usually just use all, screen, or print. All is the default.
 | all | braille | embossed | speech | handheld | print | projection | screen | tv | tty |
 
-*** Media Features
+**** Media Features
 Generally, features appear as name: value pairs. We predominately use width, and sometimes orientation.
 | width | height      | devide-width | orientation | aspect-ratio | device-aspect-ratio |
 | color | color-index | monochrome   | resolution  | scan         | grid                |
 Width is viewport width. Device width is the width of the viewport in its standard orientation, ex the
 device-width of an iPhone is 320px, even though it may be in landscape mode...
 
+**** Two approaches to writing queries
+
+|-------------------------------+----------------------------------------|
+| large first                   | small first                            |
+|-------------------------------+----------------------------------------|
+| Easy support for old IE       | more logical (build up, not tear down) |
+| small devices load all assets | old IE is tricky                       |
+| more work for the device      |                                        |
+|-------------------------------+----------------------------------------|
+
+***** Large Resolution First
+
+#+BEGIN_SRC css
+
+/* large resolution layouts here */
+
+  @media (max-width: 62em) {
+    /* styles for 62em and down go here */
+  }
+
+  @media (max-width: 40em) {
+    /* styles for 40em and down go here */
+  }
+
+#+END_SRC
+
+***** Small Resolution First
+
+#+BEGIN_SRC css
+
+/* smallest resolution layouts here */
+
+  @media (max-width: 28em) {
+    /* styles for 28em and down go here */
+  }
+
+  @media (max-width: 53em) {
+    /* styles for 53em and down go here */
+  }
+
+#+END_SRC
+
+**** Media Query Code Examples
+***** Head of HTML
+
+#+BEGIN_SRC css
+
+  /* stylesheet applies when the min-width is 30ems */
+  <link media="(min-width: 30em)" ...
+
+  /* stylesheet applies when the device is screen and the min-width is 30ems */
+  <link media="screen and (min-width: 30em)" ...
+
+#+END_SRC
+
+***** In Stylesheet
+
+#+BEGIN_SRC css
+
+  @media (min-width: 30em ) {...}
+
+  @media screen and (min-width: 30em) {...}
+
+#+END_SRC
+
+#+BEGIN_SRC css
+
+  @media (min-width: 600px) {
+    /* styles for 600px and up go here */
+  }
+
+  @media (max-width: 38em) {
+    /* styles for 38em and down go here */
+  }
+
+#+END_SRC
+
+*** Other RWD Considerations
+**** Touch Target Areas
+***** Apple recommends minimum 44px x 44px (based on non-retina displays)
+***** Use padding instead of margin
+**** Hover States
+***** Don't hide content behind :hover (often happens in nav drop downs)
+***** Consider using modernizr to hide hover states behind a .no-touch class
+
+#+BEGIN_SRC css
+
+a {
+  /* standard styles */
+}
+
+.no-touch a:hover {
+  /* :hover styles */
+}
+
+#+END_SRC
+
+**** Contrast
+***** Try your site outside in the sun
+***** Try your site in bed when its dark
+***** Take it with you
+**** Readability
+***** Small screen != small type
+***** Consider increasing font-size
+** RWD Process
+*** A Myth About Process
+"Each client deliverable needs to look more liks a final, beautiful end-product than the previous one."
+Which results in pushing toward nearly-designed wireframes quickly, and completely designed comps soon
+after. A better mindset focuses on deliverables that best serve the organization and prioritization of content and function across multiple resolutions.
+**** Deliverables
+***** Research Deliverables
+- Brand analysis
+- Competitor analysis
+- Requirements gathering
+- Investigate current site (what works, what doesn't)
+- Stakeholder interviews
+***** Content Deliverables
+- Content inventory
+- Gap analysis
+***** Priority Deliverables
+- Information Architectures
+- Wireframes
+***** Style Deliverables
+- Layout
+- Typography
+- Color
+- Texture
+***** Functional Deliverables
+- Templates
+- CMS system / Datable integration
+- Custom integration
+*** Content Priority Prototype (ideal for content based pages, not apps)
+Takes the place of a traditional wireframe. Includes real content, as much as possible. Order the content,
+the prototype should be linear in nature, so priority is implied. Always create it in HTML, so it must be 
+viewed in a browser, but don't be concerned with style. It's about the content, start by marking up the 
+content, worry about how it will look later. NO LAYOUT.
+*** Style Prototype
+Like style tiles, but in the browser (instead of photoshop). Very fast to build, can even be generated from a 
+template. We're just getting concepts down for colors, textures, typography, and maybe links, etc. Easy to 
+show web interaction. Client reqiews in their browser of preference, so expectations are set regarding what 
+it will look like when they view their website in the future.
+https://seesparkbox.com/foundry/our_new_responsive_design_deliverable_the_style_prototype
+http://www.alistapart.com/article/responsive-comping-obtaining-signoff-with-mockups/
+
+*** !Priority
+Priority becomes critical wqith smaller displays
+
+** Applying RWD Styles
+*** The Basic Structure
+
+#+BEGIN_SRC html
+
+<head>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- necessary to get apple devices to report actual viewport size  -->
+
+  <link rel="stylesheet" href="c/base.css">
+  <link rel="stylesheet" media="not print" href="c/mq.css">
+  <!-- load base css styles, then load media query styles if not print -->
+
+  <!--  use Sass to run some logic on media features.
+        in this case, we're inserting a css file for
+        browsers that don't support media queries
+        [if (lte IE 8 )&)!IEMobile)]>
+    <link rel="stylesheet" media="screen" href="c/nomq.css">
+  <![endif]-->
+
+</head>
+
+#+END_SRC
+
+*** CSS Files (using Sass)
+You can use Sass to build up css styles from separate files.
+In the previous example, base.css might import a reset or normalize, then include the smallest width 
+stylesheet. The mq.css imports an additional stylesheet based on media queries. nomq.css imports the same 
+thing as mq.css but without media queries. This is an additive approach, relying on latter styles to
+override previous ones.
+  Note that without Sass, you might require the client download multiple styles, based on media queries. Sass 
+is just helping reduce the number of files loaded. 
+ 
+**** Ex sans Sass:
+
+#+BEGIN_SRC html
+
+<link rel="stylesheet" href="stylesheets/reset.css">
+<link rel="stylesheet" href="stylesheets/smallest.css">
+<link rel="stylesheet" href="stylesheets/450.css" media="(min-width: 450px)">
+<link rel="stylesheet" href="stylesheets/600.css" media="(min-width: 600px)">
+<link rel="stylesheet" href="stylesheets/950.css" media="(min-width: 950px)">
+
+#+END_SRC
+
+*** Implementing RWD Styles
+http://mediaqueri.es/
+*** Using EM-Based Media Queries
+Ems are relative, based on the initial font size declaration. Layouts adjust based on font-size. This
+better adheres to the principles of RWD.
+*** RWD Patterns: Navigation
+**** flavors
+***** top nav
+***** bottom nav (footer nav)
+***** slide down nav
+***** select box nav
+***** menu icon nav
+***** multi-level (tiered)
+**** examples
+***** http://siyelo.com
+***** http://contentsmagazine.com
+***** http://2012.dconstruct.org
+***** http://getbootstrap.com/
+***** http://www.msj.edu/
+***** https://www.dpandl.com/
+***** https://www.bostonglobe.com/
+*** RWD Patterns: Tables and Images
+"...performance is important, but access is more important. Mobile later is bettern than mobile never."
+- Kristofer Layton
+**** Responsive Tables
+https://css-tricks.com/examples/ResponsiveTables/responsive.php
+http://zurb.com/playground/responsive-tables
+https://css-tricks.com/accessible-simple-responsive-tables/
+old https://css-tricks.com/responsive-data-tables/
+*! very nice w/ js https://www.filamentgroup.com/examples/rwd-table-patterns/
+**** Responsive Images
+- picturefill - polyfill for a new image element : http://github.com/scottjehl/picturefill
+- sencha.io : http://docs.sencha.io
+- resrc.it : http://resrc.it
+- Adaptive images  : http://adaptive-images.com
+also see other org doc
+*** RWD Patterns: Off-Canvas Layouts
+http://www.lukew.com/ff/entry.asp?1569
+http://jasonweaver.name/lab/offcanvas/technical/
+
+** RWD Retrofitting
+*** What is a Retrofit?
+Finding the fastest and lowest-risk approach to creating a better experience on an existing site for users
+of any screen size.
+1. How to do it.
+2. Managing your client
+
+*** From Fixed to Fluid
+1. Set width of the main element to 100% (but remember the old px value, for future math)
+   *. Use 'box-sizing: border-box' if padding and border make the width extend beyond the width of the 
+      screen. This property makes the width of an element reflect the content, padding, and border.
+2. Take secondary elements and convert the width to %ages. Ex. if parent was 1000 and child was 300,
+   set the child width to 30%.
+*** Retrofitting Images
+Tl;dr you can override inline styles, say those generated from a CMS, using max-width property, min-width, 
+etc. lots of options, but you have to get creative.
+
+https://timkadlec.com/2012/04/media-query-asset-downloading-results/
+- display: none on parent element
+- specify all background images inside media queries
+
+*** WATCHEDONLY Retrofitting Tables
+*** Retrofitting Media Queries
+- Serve the original css to large viewports
+- Serve mobile-first css to small viewports
+- No changes to original CSS!
+**** Small resolution first, Capped
+#+BEGIN_SRC html
+
+<head>
+  <script src="/js/modernizr.js"></script>
+
+  /* test whether browser implements media queries... */
+  <script>
+    yepnope({
+      test : Modernizr.mg('(min-width: 0px)'),
+      yup  : 'base.css',
+      nope : 'original.css'
+    });
+  </script>
+
+  <noscript>
+    <link rel="stylesheet" href="original.css">
+  </noscript>
+
+</head>
+
+#+END_SRC
+
+**** Sass aggregate via imports
+#+BEGIN_SRC css
+
+@media (max-width: 979px) {
+  @import "small";
+}
+@media (min-width: 661px) and (max-width: 979px) {
+  @import "medium";
+}
+@media (min-width: 980px) {
+  @import "original";
+}
+
+#+END_SRC
+*** Client Interaction
+**** Evaluate the Project
+***** Solid UX at higher widths?
+***** Semantic markup?
+***** Can't start over?
+***** Immediate need?
+***** Real benefit for the user?
+**** Make sure you're capturing the analytics.
+**** Constantly remind them of the user.
+**** When you're done and they ask for more, push for even better experiences.
+***** 
+** JS to the Rescue
+*** Media Queries
+**** Polyfills for media queries
+***** respond.js (lean, focused on width)
+https://github.com/scottjehl/Respond
+***** css3-mediaqueries.js
+https://github.com/livingston/css3-mediaqueries-js
+**** matchMedia
+
+Part of the CSS Object Module
+
+#+BEGIN_SRC js
+
+if (window.matchMedia("(min-width: 400px)").matches) {
+  /* the viewport is >= 400px wide */
+} else {
+  /* the viewport is < 400px wide */
+}
+
+#+END_SRC
+
+**** Polyfills & Wrappers
+***** matchMedia.js
+https://github.com/paulirish/matchMedia.js/
+***** Harvey (by the team at harvest)
+https://github.com/harvesthq/harvey
+***** mediaCheck
+https://github.com/sparkbox/mediaCheck
+*** Conditional Loading
+**** Agressive Enhancement
+***** Ajax-Include-Pattern
+https://github.com/filamentgroup/Ajax-Include-Pattern
+***** Demo with Media Queries
+http://filamentgroup.github.com/Ajax-Include-Pattern/test/functional/media.html
+***** Live Example
+http://m.people.com
+** WATCHEDONLY Lessons Learned
+*** Pricing 
+*** Prioritization
+*** Testing, Consistency, and Experimentation
+** What's Next in RWD?
+*** The Responsive Dip
+you get worse before you get better
+*** Move beyond the technique
+**** Mobile first process
+What's truly needed when we have limited real estate? When we have more space, should we add things?
+**** Performance as a feature
+How can we implement more complicated techniques and make more performant sites...
+**** The server is our friend
+**** Modular content systems
+Content management systems, not websites...
+**** Content and functional priority
+*** Move the industry forward
+**** Apprenticeships
+**** Board of Advisors
+**** Experimentation
+
+
+
+* TL;DR (code snippets)
+** responsive images
+#+BEGIN_SRC css
+img {
+  max-width: 100%;
+}
+#+END_SRC
+** responsive videos
+video container that will maintain an aspect ratio of 2:1
+#+BEGIN_SRC css
+
+.video_container {
+  position: relative;
+  height: 0;
+  padding:bottom: 50%
+}
+
+#+END_SRC
+** media queries
 *** Two approaches to writing queries
 
 |-------------------------------+----------------------------------------|
@@ -124,8 +508,7 @@ device-width of an iPhone is 320px, even though it may be in landscape mode...
   }
 
 #+END_SRC
-
-** Other RWD Considerations
+** Design Considerations
 *** Touch Target Areas
 **** Apple recommends minimum 44px x 44px (based on non-retina displays)
 **** Use padding instead of margin
@@ -152,52 +535,19 @@ a {
 *** Readability
 **** Small screen != small type
 **** Consider increasing font-size
-* RWD Process
-** A Myth About Process
-"Each client deliverable needs to look more liks a final, beautiful end-product than the previous one."
-Which results in pushing toward nearly-designed wireframes quickly, and completely designed comps soon
-after. A better mindset focuses on deliverables that best serve the organization and prioritization of content and function across multiple resolutions.
-*** Deliverables
-**** Research Deliverables
-- Brand analysis
-- Competitor analysis
-- Requirements gathering
-- Investigate current site (what works, what doesn't)
-- Stakeholder interviews
-**** Content Deliverables
-- Content inventory
-- Gap analysis
-**** Priority Deliverables
-- Information Architectures
-- Wireframes
-**** Style Deliverables
-- Layout
-- Typography
-- Color
-- Texture
-**** Functional Deliverables
-- Templates
-- CMS system / Datable integration
-- Custom integration
-** Content Priority Prototype (ideal for content based pages, not apps)
-Takes the place of a traditional wireframe. Includes real content, as much as possible. Order the content,
-the prototype should be linear in nature, so priority is implied. Always create it in HTML, so it must be 
-viewed in a browser, but don't be concerned with style. It's about the content, start by marking up the 
-content, worry about how it will look later. NO LAYOUT.
-** Style Prototype
-Like style tiles, but in the browser (instead of photoshop). Very fast to build, can even be generated from a 
-template. We're just getting concepts down for colors, textures, typography, and maybe links, etc. Easy to 
-show web interaction. Client reqiews in their browser of preference, so expectations are set regarding what 
-it will look like when they view their website in the future.
-https://seesparkbox.com/foundry/our_new_responsive_design_deliverable_the_style_prototype
-http://www.alistapart.com/article/responsive-comping-obtaining-signoff-with-mockups/
+** HTML <head> templates
+NOTE: Use em based media queries when possible!
+*** sans sass
+#+BEGIN_SRC html
 
-** !Priority
-Priority becomes critical wqith smaller displays
+<link rel="stylesheet" href="stylesheets/reset.css">
+<link rel="stylesheet" href="stylesheets/smallest.css">
+<link rel="stylesheet" href="stylesheets/450.css" media="(min-width: 450px)">
+<link rel="stylesheet" href="stylesheets/600.css" media="(min-width: 600px)">
+<link rel="stylesheet" href="stylesheets/950.css" media="(min-width: 950px)">
 
-* Applying RWD Styles
-** The Basic Structure
-
+#+END_SRC
+*** with sass
 #+BEGIN_SRC html
 
 <head>
@@ -219,181 +569,39 @@ Priority becomes critical wqith smaller displays
 </head>
 
 #+END_SRC
-
-** CSS Files (using Sass)
-You can use Sass to build up css styles from separate files.
-In the previous example, base.css might import a reset or normalize, then include the smallest width 
-stylesheet. The mq.css imports an additional stylesheet based on media queries. nomq.css imports the same 
-thing as mq.css but without media queries. This is an additive approach, relying on latter styles to
-override previous ones.
-  Note that without Sass, you might require the client download multiple styles, based on media queries. Sass 
-is just helping reduce the number of files loaded. 
- 
-*** Ex sans Sass:
-
-#+BEGIN_SRC html
-
-<link rel="stylesheet" href="stylesheets/reset.css">
-<link rel="stylesheet" href="stylesheets/smallest.css">
-<link rel="stylesheet" href="stylesheets/450.css" media="(min-width: 450px)">
-<link rel="stylesheet" href="stylesheets/600.css" media="(min-width: 600px)">
-<link rel="stylesheet" href="stylesheets/950.css" media="(min-width: 950px)">
-
-#+END_SRC
-
-** Implementing RWD Styles
-http://mediaqueri.es/
-** Using EM-Based Media Queries
-Ems are relative, based on the initial font size declaration. Layouts adjust based on font-size. This
-better adheres to the principles of RWD.
-** RWD Patterns: Navigation
-*** flavors
-**** top nav
-**** bottom nav (footer nav)
-**** slide down nav
-**** select box nav
-**** menu icon nav
-**** multi-level (tiered)
-*** examples
-**** http://siyelo.com
-**** http://contentsmagazine.com
-**** http://2012.dconstruct.org
-**** http://getbootstrap.com/
-**** http://www.msj.edu/
-**** https://www.dpandl.com/
-**** https://www.bostonglobe.com/
-** RWD Patterns: Tables and Images
+** RWD Examples:nav, tables & images, and off-canvas layout
+*** RWD Patterns: Navigation
+**** flavors
+***** top nav
+***** bottom nav (footer nav)
+***** slide down nav
+***** select box nav
+***** menu icon nav
+***** multi-level (tiered)
+**** examples
+***** http://siyelo.com
+***** http://contentsmagazine.com
+***** http://2012.dconstruct.org
+***** http://getbootstrap.com/
+***** http://www.msj.edu/
+***** https://www.dpandl.com/
+***** https://www.bostonglobe.com/
+*** RWD Patterns: Tables and Images
 "...performance is important, but access is more important. Mobile later is bettern than mobile never."
 - Kristofer Layton
-*** Responsive Tables
+**** Responsive Tables
 https://css-tricks.com/examples/ResponsiveTables/responsive.php
 http://zurb.com/playground/responsive-tables
 https://css-tricks.com/accessible-simple-responsive-tables/
 old https://css-tricks.com/responsive-data-tables/
 *! very nice w/ js https://www.filamentgroup.com/examples/rwd-table-patterns/
-*** Responsive Images
+**** Responsive Images
 - picturefill - polyfill for a new image element : http://github.com/scottjehl/picturefill
 - sencha.io : http://docs.sencha.io
 - resrc.it : http://resrc.it
 - Adaptive images  : http://adaptive-images.com
 also see other org doc
-** RWD Patterns: Off-Canvas Layouts
+*** RWD Patterns: Off-Canvas Layouts
 http://www.lukew.com/ff/entry.asp?1569
 http://jasonweaver.name/lab/offcanvas/technical/
 
-* RWD Retrofitting
-** What is a Retrofit?
-Finding the fastest and lowest-risk approach to creating a better experience on an existing site for users
-of any screen size.
-1. How to do it.
-2. Managing your client
-
-** From Fixed to Fluid
-1. Set width of the main element to 100% (but remember the old px value, for future math)
-   *. Use 'box-sizing: border-box' if padding and border make the width extend beyond the width of the 
-      screen. This property makes the width of an element reflect the content, padding, and border.
-2. Take secondary elements and convert the width to %ages. Ex. if parent was 1000 and child was 300,
-   set the child width to 30%.
-** Retrofitting Images
-Tl;dr you can override inline styles, say those generated from a CMS, using max-width property, min-width, 
-etc. lots of options, but you have to get creative.
-
-https://timkadlec.com/2012/04/media-query-asset-downloading-results/
-- display: none on parent element
-- specify all background images inside media queries
-
-** WATCHEDONLY Retrofitting Tables
-** Retrofitting Media Queries
-- Serve the original css to large viewports
-- Serve mobile-first css to small viewports
-- No changes to original CSS!
-*** Small resolution first, Capped
-#+BEGIN_SRC html
-
-<head>
-  <script src="/js/modernizr.js"></script>
-
-  /* test whether browser implements media queries... */
-  <script>
-    yepnope({
-      test : Modernizr.mg('(min-width: 0px)'),
-      yup  : 'base.css',
-      nope : 'original.css'
-    });
-  </script>
-
-  <noscript>
-    <link rel="stylesheet" href="original.css">
-  </noscript>
-
-</head>
-
-#+END_SRC
-
-*** Sass aggregate via imports
-#+BEGIN_SRC css
-
-@media (max-width: 979px) {
-  @import "small";
-}
-@media (min-width: 661px) and (max-width: 979px) {
-  @import "medium";
-}
-@media (min-width: 980px) {
-  @import "original";
-}
-
-#+END_SRC
-** Client Interaction
-*** Evaluate the Project
-**** Solid UX at higher widths?
-**** Semantic markup?
-**** Can't start over?
-**** Immediate need?
-**** Real benefit for the user?
-*** Make sure you're capturing the analytics.
-*** Constantly remind them of the user.
-*** When you're done and they ask for more, push for even better experiences.
-**** 
-* JS to the Rescue
-** Media Queries
-*** Polyfills for media queries
-**** respond.js (lean, focused on width)
-https://github.com/scottjehl/Respond
-**** css3-mediaqueries.js
-https://github.com/livingston/css3-mediaqueries-js
-*** matchMedia
-
-Part of the CSS Object Module
-
-#+BEGIN_SRC js
-
-if (window.matchMedia("(min-width: 400px)").matches) {
-  /* the viewport is >= 400px wide */
-} else {
-  /* the viewport is < 400px wide */
-}
-
-#+END_SRC
-
-*** Polyfills & Wrappers
-**** matchMedia.js
-https://github.com/paulirish/matchMedia.js/
-**** Harvey (by the team at harvest)
-https://github.com/harvesthq/harvey
-**** mediaCheck
-https://github.com/sparkbox/mediaCheck
-** Conditional Loading
-*** Agressive Enhancement
-**** Ajax-Include-Pattern
-https://github.com/filamentgroup/Ajax-Include-Pattern
-**** Demo with Media Queries
-http://filamentgroup.github.com/Ajax-Include-Pattern/test/functional/media.html
-**** Live Example
-http://m.people.com
-* Lessons Learned
-** Pricing
-** Prioritization
-** Testing, Consistency, and Experimentation
-* What's Next in RWD?
-** The Responsive Dip
