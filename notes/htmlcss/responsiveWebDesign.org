@@ -354,7 +354,7 @@ https://timkadlec.com/2012/04/media-query-asset-downloading-results/
 *** Make sure you're capturing the analytics.
 *** Constantly remind them of the user.
 *** When you're done and they ask for more, push for even better experiences.
-*** 
+**** 
 * JS to the Rescue
 ** Media Queries
 *** Polyfills for media queries

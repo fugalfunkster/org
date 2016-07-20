@@ -333,7 +333,80 @@ elements.
 
 *** Margins for Floating Blocks and Inline-Block Elements (auto -> 0)
 *** Absolutely Positioned, Non-Replaced Elements
-If the content dimensions are unspecified, they are calculated using the shrink-to-fit (for width) / content-based (for height) algorithm before attempting to fill in the rest of the values through the constraints specified by the box model.
- * 3. Additional properties that influence positioning
+If the content dimensions are unspecified, they are calculated using the shrink-to-fit (for width) / content-based (for height) algorithm before attempting to fill in the rest of the values through the constraints specified by the box model
+* 3. Additional properties that influence positioning
+** Margin Collapsing
+When there are two adjacent vertical margins, the greater of the two is used, and the other is ignored.
+*** Four Rules
+1. Only vertical margins can collapse - horizontal margins never collapse.
+2. Only margins from block level elements can collapse.
+3. Only margins from boxes that participate in the same block formatting context can collapse. Note
+   that block formatting contexts are not established by block boxes with 'overflow: visible' (default).
+4. Only margins that are considered to be adjoining can collapse.
+*** Defining Adjoining
+The notion of adjointness is explained in a roundabout way in the spec, but I found it easiest to think 
+about the margin-top and margin-bottom values as rectangles on their own - ignoring the box that generates 
+them - and then looking at whether those margin rectangles touch each other.
+  If you think of the margins as boxes on their own, then you can see that two margins will be next to each 
+other when they are:
+ - parent and child margins
+ - margins between siblings
+ - grandparent and parent and child margins
+ - margins from elements with no content
+  All of these cases are eligible for margin collapsing. Two margins will only collapse if they are not 
+separated by:
+- content (e.g. text in line boxes)
+- padding or borders (e.g. if a parent has padding or borders, its margins cannot collapse with the margins 
+  of its children but otherwise they will)
+- clearance (e.g. the result of clearing a float may separate the margins enough that they cannot collapse.)
+*** Working with Negative Margins
+When two or more margins collapse, the resulting margin width is the maximum of the collapsing margins' 
+widths. In the case of negative margins, the maximum of the absolute values of the negative adjoining 
+margins is deducted from the maximum of the positive adjoining margins. If there are no positive margins, 
+the maximum of the absolute values of the adjoining margins is deducted from zero.
+
+** Negative Margins (avoid)
+*** from spec
+In the case of negative margins, the maximum of the absolute values of the negative adjoining margins is 
+deducted from the maximum of the positive adjoining margins. If there are no positive margins, the maximum 
+of the absolute values of the adjoining margins is deducted from zero.
+** Overflow
+When child elements (often content) do not fit inside of, or are positioned outside of, their parent element, the overflow property controls how the portion of the child element that overflows is rendered.
+*** Applying an overflow value other than visible creates a block formatting context.
+*** overflow values
+- visible: This value indicates that content is not clipped, i.e., it may be rendered outside the block box.
+- hidden: This value indicates that the content is clipped and that no scrolling user interface should be 
+  provided to view the content outside the clipping region.
+- scroll: This value indicates that the content is clipped and that if the user agent uses a scrolling 
+  mechanism that is visible on the screen (such as a scroll bar or a panner), that mechanism should be 
+  displayed for a box whether or not any of its content is clipped. This avoids any problem with scrollbars 
+  appearing and disappearing in a dynamic environment. When this value is specified and the target medium 
+  is 'print', overflowing content may be printed.
+- auto: The behavior of the 'auto' value is user agent-dependent, but should cause a scrolling mechanism to 
+  be provided for overflowing boxes.
+** max/min-width/height
+Values for these properties can be specified with explicit units, like px, or as a percentage of the parent
+element's width or height (which must be set as a definite value)
+** Pseudo Elements
+** Stacking Contexts and Rendering Order
 * 4. Flexbox
+** Flexbox Properties
+*** display: flex and anonymous box generation
+*** flex-container: main and cross axis
+*** flex-container: flex lines
+*** Flex items: flex item sizing
+*** flex-basis
+*** dividing flex items onto flex lines
+*** resizing the flex items on each flex line
+*** calculations for flex-grow
+*** calculations for flex-shrink
+*** flex line & flex item alignment
+*** main axis alignment: justify-content
+*** cross-axis alignment for flex lines: align-content
+*** cross-axis alignment for flex-items: align-items, align-self
+*** order
+*** misc.
+*** centering with flexbox
+*** using margin: auto with flexbox
+*** using min-* max-* with flexbox
 * 5. CSS layout - tips and layout techniques
