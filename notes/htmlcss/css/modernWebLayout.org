@@ -1,0 +1,107 @@
+
+Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
+* Flexbox
+** Basics
+Flexbox is all about a parent container and it's relationship to it's direct descendant child elements.
+The parent container is known as the "flex container", and the children are known as the "flex items". The 
+flex items flow along the "main axis", which by default is from left to right.
+  The "main start" is found at the beginning of the flex container, and is where the flex items will begin to 
+flow. The items flow to the "main end", at the other side of the container. The length between the main start 
+and the main end is known as the "main size". The "cross axis" runs perpindicular to the main axis, and also 
+has a "cross start", "cross end", and "cross size".
+** The Flex Container
+To establish an element as a flex container we use 'display: flex;" This shifts items into "flex mode".
+This automatically causes boxes to flow horizontally, instead of vertically (default with block items), and 
+take up the entire width of the parent element..
+  Another value for display is "inline-flex" which behaves similarly to inline-block formatting, meaning that 
+the children of a display: inline-flex;" container will only take up the width required to display their 
+contents. 
+** Flex Flow Direction
+We can change the default flow direction (left to right) using the 'flex-direction' property. The default 
+value of flex-direction is 'row'. If we want the items to flow from right to left, we can set the value 
+'row-reverse'. If we want our items to flow from top to bottom, we can set the value to "column". The value 
+'column-reverse' flows the flex-items from bottom to top.
+** Flex Wrap
+How do flex-items respond when there's not enough room. The 'flex-wrap' property is how we control whether 
+flex items will wrap or not wrap. This property is similar to text wrap. 'nowrap' is the default. If flex items exceed the size of their flex-container they will overflow. 
+  'flex-wrap: wrap' permits the flex items to wrap in rows (assuming 'flex-direction: row') from top to 
+bottom. If we want to flip the direction of wrapping, we can use wrap-reverse. In 'flex-diretion: row', this 
+will cause wrapping to order from bottom to top, instead of top to bottom. 
+  Wrapping order follows the main axis. Thus changing the main axis also changes the wrapping order.
+** Flex Flow (combines the flex-wrap and flex-direction properties)
+Ex: 'flex-flow: column wrap' / 'flex-flow: row-reverse wrap-reverse' 
+** Display Order
+You can change the order flex items are displayed inside the flex container. By default all flex-items are given an ordinal property of 0: 'order: 0;' By increasing an item's order, the item's position changes relative to it's original position. You can also decrease an items ordinal number. 
+  When items have the same ordinal, they are ordered as they appear in the source. However, changes to an 
+items ordinal do not change the source, and screen readers will not reflect the visual order affected by the 
+order property. 
+** Flexibility
+Flex items can shrink and grow to accomodate their parent container's size.
+*** flex-grow
+The 'flex-grow' property determines how much a flex-item will grow or shrink to fill up the parent 
+container's available space, relative to other flex-items in the same container. 
+  When all flex-items have a lfex-grow property of 1, they will fill grow or shrink equally within the 
+parent container. However, when an item has a larger number than its peers, it will grow at a ratio relative 
+to its peers's flex-grow' value. For example, if there are four flex-items, in a parent container that is 
+twice the size necessary to contain the flex items, and the flex-items have a flex-grow of one, they will 
+each double in size, equally taking up the excesss space. However, if one of the flex-items had a flex-grow 
+value of 4, it would take up 4 times as much space as the other three. This means that the excess space 
+would be distributed among the flex-items in 1/7ths, with each 'flex-grow: 1' items recieving 1/7th of the 
+available space, and the 'flex-grow: 4' item recieving 4/7ths of the available space.
+*** flex-shrink
+flex-shrink is the flip-side of flex-grow, and controls how space is distributed when the parent container
+contains too little space. flex-shrink of 0 will prevent a flex-item from shrinking. Whereas a flex-shrink 
+value about 1 means that the item will shrink more than other flex-items with a lower flex-shrink value.
+*** flex-basis
+flex-basis sets the initial size of an item, before extra space is distributed. This property takes the same 
+values as the 'width' property: px, em, rem, %. The default is auto, which contains the flex-items content, 
+and no more.
+*** flex (shorthand) flex: (flex-grow) (flex-shrink) (flex-basis)
+default: flex: 0 1 auto;
+** Alignment
+*** flex container properties
+**** justify-content
+The justify-content property allows us to align flex-items along the main axis of the flex container.
+- flex-start: aligns the items starting the beginning of the main axis
+- flex-end: aligns the items ending at the end of the main axis
+- center: centers the items in the parent container along the main axis
+- space-between: distributes available space between items equally
+- space around: distributes available space on each side of each item, with other spacing being 1/2 
+  innerspacing between items (sort of like margins)
+**** align-items
+The align-items property aligns the flex-items along the cross axis of the flex container.
+- flex-start: aligns item's top to the "top" of the container
+- flex-end: aligns item's bottom to the "bottom" of the container
+- center: centers items along the cross-axis
+- baseline: aligns text in items using the text's baseline
+- stretch: stretches item's height across entire cross-axis of container
+**** align-content
+align-content is used to align multiple lines (wrapped) in a flex-container along the cross-axis when 
+there's space available. It will not do anything to single line flex containers. This is like 
+justify-content for the cross-axis for lines of items.
+
+  flex-start, flex-end, center, space-between, space-around, stretch (default)
+
+*** align-self
+align-self lets us align an individual item along the cross-axis
+flex-start, flex-end, center, stretch
+* TODO CSS Grid Layout
+* Gotchas, Browser Support & Resources
+** Gotchas
+*** Be caseful with source order to make sure your site is still accessible. Use proper semantics, as if there were no styles at all. 
+*** flexbugs (bookmarked)
+*** flexbox spec
+** Browser Support
+*** flexbox is widely supported
+*** if you need IE10 support, use autoprefixer?
+*** virturally no support for grid
+*** polyfill for grid...
+** Resources
+*** Rachel Andrew
+**** csslayout.news
+**** gridbyexample.com
+*** visual guide to flexbox properties
+*** solved by flexbox
+*** css-tricks
+**** complete guide to flexbox
+**** complete guide to grid
