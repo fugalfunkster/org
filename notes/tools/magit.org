@@ -1,4 +1,51 @@
 * Intro to Magit https://www.youtube.com/watch?v=LDafmAJa-4w
+* Rewrite git history with emacs https://www.youtube.com/watch?v=mtliRYQd0j4
+** interactive rebase
+*** aborting mid rebase
+
+=r= then =a= 
+
+*** continue...
+
+=rr= at the end of the rebase?
+
+*** edit commit message
+
+=ll= to see log, then put point on commit, press ENTER to see diff. Go back to log buffer, press =r= then
+=i= for interactive and then =w= for reword.
+
+*** reorder and squash commits
+
+Put point on oldest commit that you want to work with.
+
+**** reorder
+
+Press =r= then =i=. In this bufffer you can reorder commits with =M-p= and =M-n=
+
+(The order of commits will now be flipped, with more recent commits at the bottom)
+
+=C-c C-c= to make it happen
+
+**** squash
+
+Squash commits using =s=
+
+When done press =C-c= (look in the mini buffer, revert buffer fron file?)
+
+=y= brings you to the commit_editmsg popup, so you can rewrite the commit from the previous commit messages
+
+=C-c C-c= to commit
+
+
+*** Break open commit into multiple commits
+
+Put point on commit you want to break open.
+
+Press =r= then =m= to edit. Commit message not gets a =@= prepended
+
+Do =M-x magit-reset= or just press =x= and enter =head~=
+
+Go to magit with =C-x g= and formulate commits. (stage hunks, or lines using mark)
 
 * TODO Howard's talk (through 8:21) https://www.youtube.com/watch?v=vQO7F2Q9DwA
 ** Magit popups allow you to toggle switches, options, etc. 
@@ -48,13 +95,17 @@
 **** to achieve this you must rebase, which magit makes easy
 **** move to parent (in log) rebase parent before twig, use i...
 **** put lst commit at the top of the list...?
-*** stash (z?)
+*** stash popup - z
 **** pop puts it to staged
-*** squashing commits (combine multiple commits that are unpushed
+*** squashing commits (combine multiple commits that are unpushed)
 **** r - rebase popup
 **** l
 **** s - squash newer commit into older commit
-**** 
+*** manipulate history with rebasing
+**** in log, move to parent before twig happens
+**** r i 
+**** top is parent, newest commits at bottom
+**** more new commit to bottom, so it's the latest commit
 ** DEMO CODE from howards magit demo repo
 
 * TODO Howard's Blog
