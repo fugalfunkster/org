@@ -168,4 +168,3 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** WATCHEDONLY How to Contribute to an Open Source Project on Github
 ***** TODO Using Webpack for Production JS Apps
 
-    
