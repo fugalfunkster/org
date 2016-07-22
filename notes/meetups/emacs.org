@@ -353,6 +353,39 @@ fifth
 **** interest in beginners view of emacs
 *** ALSO! learn elisp in 15 mintutes
 
+* July
+** Intro to emacs lisp
+*** About elisp
+**** elisp is an old lisp
+**** the common-lisp package is accessible through emacs
+***** reduce
+***** string manip functions
+**** elisp you often use buffers as string manip grounds, then dump back into string...
+*** Steps
+*** Get documentation for target API
+*** Test First!
+**** pro
+***** prioritizes fundamental questions
+***** scietific
+***** other virtues
+**** against
+***** premature formalization
+***** epensive refactoring
+***** procedural
+**** REPL env lets us do informal testing as we go
+***** C-x C-e evals expression, sends results to mini-buffer
+***** C-u C-x C-e evals, sends results to current buffer
+**** elisp has ERP, a lightwrigt test framework
+*** make http requests
+**** can use http request package, but we'll use the url package
+**** url documentation
+*** setf?
+**** places as things you write to
+*** with-temp-buffer (macro)
+**** you can do string manip inside, and return the result
+** hack night!
+** help with magit
+*** 
 
 * August Emacs Conference!
 ** Learning JavaScript in Emacs
