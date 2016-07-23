@@ -268,8 +268,7 @@ Javascript Allonge Notepad
 **** any function that takes a function as argument, returns functions, or both
 *** combinators
 **** Technical Definition
-***** "A combinator is a higher-order function that uses only function application
-***** and earlier defined combinators to define a result from its arguments"
+***** "A combinator is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments"
 **** Looser definition
 ***** higher-order pure functions that take only functions as arguments
 ***** and return a function
@@ -328,7 +327,7 @@ Javascript Allonge Notepad
 ** Partial Application
 *** Recipe:
 
-#+BEGIN_SRC js :tangle yes
+#+BEGIN_SRC js cmd: "org-babel-node --presets es2015" :tangle yes
 const callFirst = (fn, larg) =>
   function (rest) {
   return fn.call(this, larg, rest);

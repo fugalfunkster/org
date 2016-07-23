@@ -1,0 +1,101 @@
+* Intro
+I'm going to assume that you know the following:
+** Primitive Expressions
+*** Primitive values
+**** numbers, strings, booleans, undefined...
+*** Primitive Procedures
+**** operators like + - < > === !== || &&
+** Means of Combination
+*** compound procedures
+**** parenthenses and operator precedence () 
+*** statements
+**** blocks {}
+**** if/else
+**** for
+**** while
+** Means of Abstraction
+*** declarations
+**** var, let, const
+**** functions
+* What is a Function?
+
+"Functions are values that represent computations to be performed"
+- functions are values
+- functions represent computations (evaluate expressions)
+
+A function is a procedure that accepts input and produces output.
+- functions are procedures
+- functions accept input (arguments)
+- functions return values
+
+** Procedures and Processes
+
+"A procedure is a pattern for the local evolution of a computational 
+process. It specifies how each stage of the process is built upon the 
+previous stage. We would like to be able to make statements about the 
+overall, or global, behavior of a process whose local evolution has been 
+specified by a procedure. This is very difficult to do in general, but we 
+can at least try to describe some typical patterns of process evolution."
+
+WHAT?
+
+We write procedures. The machine executes processes. The procedures we write determine the "shapes" of the process the machine executes.
+
+** Function anatomy
+*** Forms of functions
+**** Function Declaration
+**** Function Expresion
+**** 
+() => {} 
+- the function signature
+*** Proof that functions are values!
+* Using functions
+We use functions by applying arguments to the value
+** calling a function
+** say my name
+** 
+** immediate invocation of a function
+* In JavaScript, Functions are First Class
+** pure functions
+** higher order functions
+Higher order functionsfunctions that take another function as an argument, returns a function, or both
+*** function decorators
+A higher order function that takes one function as an argument, and returns a function (a variation on the original function).
+**** call me Maybe
+
+#+BEGIN_SRC js cmd: "org-babel-node --presets es2015" :results output
+'use strict'
+
+const myNumber = 5557301554;
+
+const callMe = (phoneNumber) => {
+  console.log("Hello? This is crazy!");
+};
+
+const maybe = (func) =>
+  function (argument) {
+    if (typeof(argument) !== "number" || 
+        (argument > 999999999 && argument < 1000000000)) {
+      console.log("That's not a valid number!");
+      return
+    } else {
+      func(argument);
+    }
+};
+
+const callMeMaybe = maybe(callMe);
+
+callMeMaybe("Hello");
+
+callMeMaybe(myNumber);
+
+#+END_SRC
+
+#+RESULTS:
+: That's not a valid number!
+: Hello? This is crazy!
+
+*** combinators
+A combinator is a higher-order, pure function that accepts only functions as arguments and returns a function. Combinators are useful when you are trying to describe "what you're doing" and "how you're doing it" - verbs. Not so much "what you're working with" - nouns.
+**** TODO Once upon a time
+* 
