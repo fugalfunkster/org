@@ -1,0 +1,68 @@
+* DONE Reasoning about Asynchronous JavaScript - Wes Higbee (2:05)
+** Concurrency Model and Event Loop : https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop
+*** JavaScript is single threaded, JS cannot execure processes in parallel
+*** The event loop and the event queue interface with the function stack
+*** async function calls stage functions and their dependency 
+*** once the function's dependency arrives, the function will be conj'd onto the queue
+*** js supports concurrency through non-blocking
+** Avoid Blocking
+*** each process runs to completion
+*** callbacks go onto the event queue, and won't be called until the current process finishes
+*** browser rendering is async!
+*** use webworkers to run intensive code in the background to avoid blocking the front-End of the app.
+** Cooperative Concurrency
+*** concurrency permits multiple processes to execute alternately
+*** our programs are composed of async processes: 'little programs'
+*** think explicitly about asynchronous seams
+** Sources of Async
+*** Timers
+**** timer delay not guaranteed, pushed to queue after time elapsed, delay is a minimum.
+*** user interactions
+**** event listeners are synchronous!
+*** network & disk I/O
+*** Node stuff (see docs)
+**** fs
+**** process.nextTick (beats out setTimeout, jups to the front of the event queue, guaranteed ordered execution)
+**** setImmediate (also async, guaranteed ordered execution)
+**** disk I/O
+**** IPC - interprocess communication EX: webworkers
+*** Web Workers
+** Not all function calls aren't async
+** race conditions in order of queue
+** Debuggin in the browser
+*** sources, call stack,
+*** check async, call stack will display source of current stack 
+
+
+* YDKJS: Async
+** Asynchrony: Now & Later
+*** A Program in Chunks
+
+*** Event Loop
+*** Parallel Thinking
+*** Concurrency
+*** Jobs
+*** Statement Ordering
+** Callbacks
+*** Continuations
+*** Sequential Brain
+*** Trust Issues
+*** Trying to Save Callbacks
+** Promises
+*** What is a Promise?
+*** Thenable Duck Typing
+*** Promise Trust
+*** Chain Flow
+*** Error Handling
+*** Promise Patterns
+*** Promise API Recap
+*** Promise Limitations
+** Generators
+*** Breaking Run-to-Completion
+*** Generator-ing Values
+*** Iterating Generators Asychronously
+*** Generators + Promises
+*** Generator Delegation
+*** Cenerator Concurrency
+*** Thunks
+*** Pre-ES6 Generators

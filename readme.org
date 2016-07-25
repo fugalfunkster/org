@@ -19,10 +19,13 @@ My notes are formatted as org docs, but I only use headings, tables, TODOs, and 
 source blocks extensively. For more information on org-mode see: http://orgmode.org/
 
 
-* TODO list
+* TODO queue
 ** OPEN Learn CSS Layout: the Pendatic Way
 ** OPEN React Fundamentals : Joe Maddaloe
 ** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
+** TODO YDKJS: Async
+** VIEWONLY Front-End First: Testing and Prototyping JS Apps : Elijah Manor (3:21)
+
 
 * BackBurner (next, open, view-only)
 ** TODO Getting Started with Redux (egghead)
@@ -38,9 +41,10 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 * directory
 ** Notes
 *** Books
-**** OPEN Survive JS - Webpack
-**** Survive JS - React
 **** OPEN JavaScript Allonge : Review and Refactor Portfolio
+**** OPEN Survive JS - Webpack
+**** TODO YDKJS: Async
+**** Survive JS - React
 *** D3
 **** Pluralsight
 ***** Interactive Data Visualization with D3.js : Ian Johnson (5:30)
@@ -52,10 +56,10 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** WATCHEDONLY JS Objects and Prototypes
 ***** WATCHEDONLY JS Best Practices : Jonathan Mills (2:39)
 ***** WATCHEDONLY JS.Next: ES6 : Aaron Frost (5:24)
+***** DONE Reasoning About Async JS : Wes Higbee (2:05)
 ***** OPEN jQuery-free JS : Elijah Manor (2:26)
 ***** TODO JS Module Fundamentals : (2:16)
 ***** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
-***** TODO Reasoning About Async JS : Wes Higbee (2:05)
 ***** Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
 ***** JavaScript Design Patterns : Aaron Powell (2:02)
 ***** JS Templating w/ Handlebars: Ryan Lewis (2:19)
