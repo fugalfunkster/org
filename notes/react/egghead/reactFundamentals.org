@@ -1,7 +1,10 @@
 * React Fundamentals (egghead)
 ** JSX
 JSX is an HTML-like syntax, all JXS is transpiled into JS
-ex: React.createElement('h1', null(props), 'inner html')
+Ex: 
+#+BEGIN_SRC js
+React.createElement('h1', null(props), 'inner html');
+#+END_SRC
 ** Class Component
 extends React.Component
 always has a render method, that returns jsx
@@ -11,37 +14,38 @@ class components can have state
 stateless function components do not have state
 props are passed into SFCs as argument
 ** The Render Method
-The Render method is only allowed to return a single node. Adjacent JSX elements must be wrapped in an 
-enclosing tag. Be careful with wrapping our return statement in the render method.
+The Render method is only allowed to return a single node. Adjacent JSX elements must be 
+wrapped in an enclosing tag. Be careful with wrapping our return statement in the render 
+method.
 ** Intro to Props
-A lot like setting an attribute on an html element, or passing arguments to a function. we access props on 
-our component as this.props.whatever. To access props, we can interpolatie in JSX 
-<tag>{this.props.whatever}</tag>
+A lot like setting an attribute on an html element, or passing arguments to a function. we 
+access props on our component as this.props.whatever. To access props, we can interpolatie in 
+JSX <tag>{this.props.whatever}</tag>
 ** App.propTypes
-We can define the property types the component expects, to affect basis type checking for props. 
-App.propTypes can be assigned an object where each name is the prop name and each value is a 
-React.PropTypes.Type. Ex:
+We can define the property types the component expects, to affect basis type checking for 
+props. App.propTypes can be assigned an object where each name is the prop name and each value 
+is a React.PropTypes.Type. Ex:
 - React.PropTypes.string
 - React.PropTypes.number
 - React.PropTypes.number.isrequired (makes the prop required)
 ** App.defaultProps
-Setting default props follows the same pattern as App.propTypes. The object names are the prop names, and 
-each value is the default value.
+Setting default props follows the same pattern as App.propTypes. The object names are the prop 
+names, and each value is the default value.
 ** State Basics
-State is used for properties on a component that will change, versus static properties that are passed in.
-Our state model is a POJO that a component will manage itself. Within a component, we access state throughout 
-the class as this.state.txt.
+State is used for properties on a component that will change, versus static properties that 
+are passed in. Our state model is a POJO that a component will manage itself. Within a 
+component, we access state throughout the class as this.state.txt.
 ** Initializing a class component's state with the constructor method
-Class components can have a constructor method, which calls super(). This provides context for the 'this' 
-keyword within our component when using ES6 class syntax. After calling super, we can declare 
-'this.state = {};' with out starting state. 
+Class components can have a constructor method, which calls super(). This provides context for 
+the 'this' keyword within our component when using ES6 class syntax. After calling super, we 
+can declare 'this.state = {};' with out starting state. 
 ** Setting State
-The idiomatic way to change the state object is with 'this.setState = {}'. setState lets us update only what 
-we specify, letting us avoid repeating properties that do not change.
+The idiomatic way to change the state object is with 'this.setState = {}'. setState lets us 
+update only what we specify, letting us avoid repeating properties that do not change.
 ** Binding 'this' for events
-You can bind 'this' for any method, to ensure the correct context, by using .bind(this) in invocation. For 
-example, if we wired up a method to setState based on en event's target value, we would have the following 
-method in our constructor function:
+You can bind 'this' for any method, to ensure the correct context, by using .bind(this) in 
+invocation. For example, if we wired up a method to setState based on en event's target value, 
+we would have the following method in our constructor function:
 #+BEGIN_SRC js
 update(e) {
   this.setState({txt: e.target.value});
@@ -53,8 +57,9 @@ and this 'this' bound invocation in our jsx
   onChange={this.update.bind(this)} />
 #+END_SRC
 
-If we're going to be passing around the method, via props for ex, we might want to hard bind the method in the
-Class component's constructor method, to ensure correct future invocations. Ex: 
+If we're going to be passing around the method, via props for ex, we might want to hard bind 
+the method in the Class component's constructor method, to ensure correct future invocations. 
+Ex: 
 #+BEGIN_SRC js
 constructor (){
   super();
@@ -64,9 +69,9 @@ constructor (){
 #+END_SRC
 
 ** Owner Ownee Relationship
-When one component renders another component, React calles this the owner-ownee relationship. The parent 
-component is called a composite component. The props of the child are set by the parent through attribute-like
-assignment:
+When one component renders another component, React calles this the owner-ownee relationship. 
+The parent component is called a composite component. The props of the child are set by the 
+parent through attribute-like assignment:
 #+BEGIN_SRC js
 ... 
 // in parent return ()
@@ -74,12 +79,13 @@ assignment:
 ...
 #+END_SRC
 ** Using Refs to Access Components (not encouraged)
-Refs let you reference an instance of a Class component within our application. When you are using React 
-components you may need to be able to access specific references to individual components. This is done by 
-defining a ref. Refs won't work with SFCs.
-  We can pass a ref='' property to a Class component from its parent. This allows us to identify that 
-component in the DOM, using react-dom, and we can grap its value using 
-  This technique is handy for using child components to update different pieces of a parent's state.
+Refs let you reference an instance of a Class component within our application. When you are 
+using React components you may need to be able to access specific references to individual 
+components. This is done by defining a ref. Refs won't work with SFCs.
+  We can pass a ref='' property to a Class component from its parent. This allows us to 
+identify that component in the DOM, using react-dom, and we can grap its value using 
+  This technique is handy for using child components to update different pieces of a parent's 
+state.
 
 #+BEGIN_SRC js
   class App extends React.Component {
@@ -128,11 +134,12 @@ component in the DOM, using react-dom, and we can grap its value using
 *** Refs once removed
 The example above works because the slider component is one component deep. If the input component were wrapped in a div, the div would bear the color ref, ad we'd have to assign another ref to the input tag inside the slider component, ex: 'refs='inp'. We would then reference the input tag as: ReactDOM.findDOMNode(this.refs.red.refs.inp).value
 ** Accessing Child Properties {this.props.children}
-When you're building your React components, you'll probably want to access child properties of the markup. To 
-get at innerHTML or nested components of another component, we can use this.props.children. 
-  In a child component, this.props.children refers to content (strings, interpolated JS, even other 
-components - if any) appearing between the component's corresponding opening and closing tags in the 
-parent's render markup.
+When you're building your React components, you'll probably want to access child properties of 
+the markup. To get at innerHTML or nested components of another component, we can use 
+this.props.children. 
+  In a child component, this.props.children refers to content (strings, interpolated JS, even
+other components - if any) appearing between the component's corresponding opening and closing 
+tags in the parent's render markup.
 ** Component Lifecycle - Mounting Basics
 React components have a lifecycle, and you are able to access specific phases
 of that lifecycle. When a component is added or removed from the DOM, this is called mounting
@@ -149,20 +156,21 @@ fires once, before the component will be removed from the DOM
 The previous lesson introduced the React component lifecycle mounting and
 unmounting. In this lesson you will learn some simple uses for these hooks.
 *** componentWillMount
-We don't have access to the DOM, but we do have access to state and props. So we can maniuulate the state 
-or props before render.
+We don't have access to the DOM, but we do have access to state and props. So we can 
+maniuulate the state or props before render.
 *** render
 *** componentDidMount
 We now have access to component in the actual DOM, so we could find the DOM node.
 *** componentWillUnmount
-We can clean up any processes we have running during the life of the component. Ex. if we set up a 
-setInterval in componentDidMount, we could clear the interval in componentWillUnmount.
+We can clean up any processes we have running during the life of the component. Ex. if we 
+set up a setInterval in componentDidMount, we could clear the interval in 
+componentWillUnmount.
 ** Component Lifecycle - Updating
 The React component lifecycle will allow you to update your components at runtime. 
 *** componentWillReceiveProps(nextProps)
-This method fires before a component is re-rendered with new props., and receives as an argument, the next 
-props that the component will receive. This might occur because an update method might make the call to 
-ReactDOM.render, and pass an expression as props
+This method fires before a component is re-rendered with new props., and receives as an 
+argument, the next props that the component will receive. This might occur because an update 
+method might make the call to ReactDOM.render, and pass an expression as props
 EX:
 #+BEGIN_SRC js
   update(){
@@ -172,8 +180,8 @@ EX:
   }
 #+END_SRC
 
-In the body of the componentWillReceiveProps, the previous props are still available as this.props, thus, 
-the current and future props can be compared. EX:
+In the body of the componentWillReceiveProps, the previous props are still available as 
+this.props, thus, the current and future props can be compared. EX:
 #+BEGIN_SRC js
   componentWillReceiveProps(nextProps){
     this.setState({increasing: nextProps.val > this.props.val})
@@ -181,7 +189,8 @@ the current and future props can be compared. EX:
 #+END_SRC
 
 *** shouldComponentUpdate(nextProps, nextState)
-This method lets us determine whether the component should re-render by returning true or false. Ex:
+This method lets us determine whether the component should re-render by returning true or 
+false. Ex:
 #+BEGIN_SRC js
   shouldComponentUpdate(nextProps, nextState){
     return nextProps.val % 5 === 0;
@@ -201,11 +210,13 @@ Ex:
 ** TODO Composable Components
 ** TODO Dynamically Generated Components
 ** DONE Build a JSX Live Compiler
-As a tool for future lessons, we want to have the ability to write JSX and see the output live in the 
-browser. In this lesson we will use React to build our own live JSX compiler.
+As a tool for future lessons, we want to have the ability to write JSX and see the output live 
+in the browser. In this lesson we will use React to build our own live JSX compiler.
 ** DONE JSX Deep Dive
-"JSX transforms from an XML-like syntax into native JavaScript. XML elements and attributes are transformed into function calls and objects, respectively."
+"JSX transforms from an XML-like syntax into native JavaScript. XML elements and attributes 
+are transformed into function calls and objects, respectively."
 ** DONE Precompile JSX
-The JSX Transformer library is not recommended for production use. Instead, you'll probably want to precompile your JSX into JavaScript.
+The JSX Transformer library is not recommended for production use. Instead, you'll probably 
+want to precompile your JSX into JavaScript.
 ** DONE Developer Tools
 
