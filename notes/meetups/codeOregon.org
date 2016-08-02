@@ -68,4 +68,53 @@
 ***** merging
 ***** rebasing
 ***** IMPORTANT ALL THESE THINGS
-**** 
+
+* July
+** Make Faster Websites
+*** rj zaworki - github.com/rjz
+*** Optimization: Don't do it
+the first thing you should optmize for is your time as a 
+*** measurement tools
+Chrome DevTools
+Google pagespeed
+YSlow
+*** Why is it slow?
+bandwidth
+volume
+proximity
+*** how to make it faster
+**** bandwidth - browsrs have concurrent connection limits (6 is typical)
+**** script blocking
+***** async & defer for external scripts, (essentially) run at end of page
+**** browsers will prefetch when possible - execution is deferred
+**** fewer requests - http header overhead
+**** minification
+***** uglifyjs
+***** closure compiler
+**** serve compressed content (gzip) - you might have to instruct your server to do so
+**** style won't block, each link triggers a request
+***** cssmin
+**** preprocesing - sass, stylus, less
+optimize for dev time = this does the minification for you
+**** bundle small scripts into HTML instead of requiring another script file
+the price: caching
+**** use caching to your advantage
+less distance is faster, keep content as close as possible to user
+enable browser caching - cache-control header ; etag ; no-cache
+**** ServiceWorker spec for granular caching, replaces depricated AppCache...
+not really ready...
+**** CDNs
+located near the users, replicate automagically, ==fast
+***** common assets
+cdnjs.com
+jsdeliver.com
+google hosted libraries
+***** CDNs do go down, be sure to have a fallback
+**** server side caching
+minimize disk I/O, cache popular files in memory
+*** Summary
+**** avoid blocking - use as much bandwidth as you can
+**** minimize request quantity and size
+**** use browser caching and a CDN
+** AVA
+*** unit testing
