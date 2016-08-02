@@ -199,7 +199,30 @@ Ex:
     
 ** TODO Higher Order Components (replaces mixins)
 ** TODO Composable Components
-** TODO Dynamically Generated Components
+** Dynamically Generated Components
+We can map over data to generate arrays of components, and render those components as the 'innerHtml' of a component by passing it as this.props.children.
+Ex: 
+#+BEGIN_SRC js
+  render(){
+    let rows = this.state.data.map( person => {
+      return <PersonRow data={person} />
+    })
+    return <table>
+      <tbody>{rows}</tbody>
+    </table>
+  }
+...
+  const PersonRow = props => {
+    return <tr>
+      <td>{props.data.id}</td>
+      <td>{props.data.name}</td>
+    </tr>
+  }
+#+END_SRC
+
+Each child in an array or iterator should have a unique "key" prop. The unique key is required amongst 
+siblngs. 
+ 
 ** DONE Build a JSX Live Compiler
 As a tool for future lessons, we want to have the ability to write JSX and see the output live in the 
 browser. In this lesson we will use React to build our own live JSX compiler.
