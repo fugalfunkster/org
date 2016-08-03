@@ -1,4 +1,4 @@
-#+TODO: VIEWONLY TODO NEXT OPEN | WATCHEDONLY DONE CANCELED
+#+TODO: VIEWONLY TODO NEXT OPEN | CLOSED WATCHEDONLY DONE
 
 * Notes Readme Orientation
 
@@ -21,22 +21,17 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 * TODO queue
 ** OPEN Learn CSS Layout: the Pendatic Way
-** OPEN React Fundamentals : Joe Maddaloe
-** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
-** TODO YDKJS: Async
-** VIEWONLY Front-End First: Testing and Prototyping JS Apps : Elijah Manor (3:21)
-
-
-* BackBurner (next, open, view-only)
 ** TODO Getting Started with Redux (egghead)
-** TODO Building React Apps w/ Idiomatic Redux
-** OPEN Udemy : Modern React with Redux
-** TODO Getting Started with React Router (egghead)
-** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
+** OPEN Modern React with Redux : Stephen Girder (?)
+** TODO YDKJS: Async
 
+* BackBurner
+** TODO Building React Apps w/ Idiomatic Redux
+** TODO Testing Clientside JavaScript : Joe Eames (4:50)
+** TODO Advanced React and Redux : Stephen Girder (?)
+** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 ** OPEN Survive JS - Webpack
 ** OPEN Webpack Fundamentals : Joe Eames (2:23)
-
 
 * directory
 ** Notes
@@ -59,6 +54,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE Reasoning About Async JS : Wes Higbee (2:05)
 ***** OPEN jQuery-free JS : Elijah Manor (2:26)
 ***** TODO JS Module Fundamentals : (2:16)
+***** TODO Testing Clientside JavaScript : Joe Eames (4:50)
 ***** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
 ***** Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
 ***** JavaScript Design Patterns : Aaron Powell (2:02)
@@ -95,7 +91,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** HTML5 Browser Caching : Ben Schwarz (1:01)
 ***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
 ***** Creating Elegant Nav. Using CSS3 Transitions : Susam Simkins (1:02)
-**** DONE egghead
+**** egghead
 ***** DONE Flexbox Fundamentals
 *** linux
 **** pluralsight
@@ -135,8 +131,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** React Native Apps with Exponent and Redux : Hendrick(3:21)
 ***** Building iOS Apps with React Native : Hendrik Swanepoel (1:59)
 **** Egghead
-***** OPEN React Fundamentals : Joe Maddalon
-***** TODO Getting Started with React Router (egghead)
+***** CLOSED React Fundamentals : Joe Maddalon
+***** CLOSED Getting Started with React Router (egghead)
 ***** TODO Getting Started with Redux (egghead)
 ***** TODO Building React Apps w/ Idiomatic Redux
 ***** React Testing Cookbook
