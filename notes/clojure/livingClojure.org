@@ -1,0 +1,456 @@
+
+
+Living Clojure - Carin Meier
+
+* I. The Structure of Clojure
+** Simple values are expressions that evaluate to themselves
+*** Integers
+*** Ratios
+*** Decimals
+*** Strings ("example")
+*** Keywords (:example)
+*** char (\e)
+*** booleans true false
+*** nil
+** Compound Expressions take the form of a List
+Clojure is a dialect of LISP (LISt Processing). All clojure code is made of lists of data. Lists are 
+evaluated in Clojure as expressions; The first element in a list is the operator, and subsequent elements are 
+operands of the first element.
+
+#+BEGIN_SRC clojure
+  (+ 1/2 3/4)
+#+END_SRC
+
+#+RESULTS:
+: 5/4
+
+Clojure also uses lists as compound data structures when the list is preceded by a single-quote. 
+
+Code is data.
+
+** Compound Data - Collections: lists, vectors, maps, and sets
+
+Collections have two important features: immutability and persistence. Immutable collections cannot be 
+changed. Instead, the data in a collection is shared by collections created from the original collection. 
+Thus, a function that "adds" a new value to an existing collection does no such thing; It instead returns a 
+new collection, containing the new value, and references to each value in the original collection. This is 
+called structural sharing.
+  Collections provide a consistent interface to a category of functions called 'sequence functions,' which 
+include =first=, =rest=, and =cons=. The seq interface permits 'walking' the collection, accessing the elements of the collection as sequences of values.
+  All collections also support functions =count= and  =conj=. However, different collection types will
+implement these functions in different ways. For example, =conj= returns a collection from an existing 
+collection and a value. When =conj= is applied to a list, the new value appears at the beginning of the new 
+list. But, when =conj= is applied to a vector, the new value appears at the end of the new vector. In both 
+cases =conj= returns a new collection with a new value, but the implementation is different. 
+*** Types of Collections
+**** Lists are enclosed in parens
+***** Create a list
+****** list literal
+#+BEGIN_SRC clojure
+  '(1 true "three" :four nil)
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+****** programmatically
+#+BEGIN_SRC clojure
+  ( list 1 true "three" :four nil)
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+***** first
+
+#+BEGIN_SRC clojure
+  (first '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+***** rest
+
+#+BEGIN_SRC clojure
+  (rest '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+| true | three | :four | nil |
+
+***** cons
+
+#+BEGIN_SRC clojure
+  (cons 0 '(1 2 3 4))
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 | 3 | 4 |
+
+**** Vectors providing fast index access
+***** Create a vector
+****** literal
+
+#+BEGIN_SRC clojure
+  [1 true "three" :four nil]
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+****** programatically
+
+#+BEGIN_SRC clojure
+  (vector 1 true "three" :four nil)
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+***** nth
+
+#+BEGIN_SRC clojure
+  (nth [1 true "three" :four nil] 3)
+#+END_SRC
+
+#+RESULTS:
+: :four
+
+***** last
+
+#+BEGIN_SRC clojure
+  (last [1 true "three" :four nil])
+#+END_SRC
+
+#+RESULTS:
+: nil
+
+**** Maps store key-value pairs
+***** Create a map
+****** literal
+
+#+BEGIN_SRC clojure
+  {:key "value"}
+#+END_SRC
+
+#+RESULTS:
+| :key | value | 
+
+****** programmatically
+
+#+BEGIN_SRC clojure
+  (hash-map :key "value")
+#+END_SRC
+
+#+RESULTS:
+| :key | value |
+
+***** Element retrieval with get, keyword access, and default values
+****** get
+#+BEGIN_SRC clojure
+  (get {:a "A" :b "B" :c "C"} :a)
+#+END_SRC
+
+#+RESULTS:
+: A
+
+****** keyword access
+
+#+BEGIN_SRC clojure
+  (:a {:a "A" :b "B" :c "C"})
+#+END_SRC
+
+#+RESULTS:
+: A
+
+****** default values
+
+#+BEGIN_SRC clojure
+  (:d {:a "A" :b "B" :c "C"} "not found")
+#+END_SRC
+
+#+RESULTS:
+: not found
+
+***** keys & vals
+****** keys
+
+#+BEGIN_SRC clojure
+  (keys {:a "A" :b "B" :c "C"})
+#+END_SRC
+
+#+RESULTS:
+| :a | :b | :c |
+
+****** vals
+
+#+BEGIN_SRC clojure
+  (vals {:a "A" :b "B" :c "C"})
+#+END_SRC
+
+#+RESULTS:
+| A | B | C |
+
+***** assoc & dissoc
+****** assoc
+#+BEGIN_SRC clojure
+  (assoc {:a "A" :b "B" :c "C"} :d "D")
+#+END_SRC
+
+#+RESULTS:
+| :a | A | :b | B | :c | C | :d | D |
+
+****** dissoc
+
+#+BEGIN_SRC clojure
+  (dissoc {:a "A" :b "B" :c "C"} :a)
+#+END_SRC
+
+#+RESULTS:
+| :b | B | :c | C |
+
+***** merge
+
+#+BEGIN_SRC clojure
+  (merge {:a "A" :b "B" :c "C"} {:d "D" :e "E" :f "F"})
+#+END_SRC
+
+#+RESULTS:
+| :a | A | :b | B | :c | C | :d | D | :e | E | :f | F |
+
+**** Sets are collections of unique values, no duplicate values are allowed when creating a set
+***** Create a set
+****** literal
+
+#+BEGIN_SRC clojure
+  #{1 2 3 4}
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2}
+
+****** programatically
+
+#+BEGIN_SRC clojure
+  (hash-set 1 2 3 4)
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2}
+
+***** Element retrieval with get, keyword access, & contains?
+****** get
+
+#+BEGIN_SRC clojure
+  (get #{1 2 3 4} 2)
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+****** keyword access
+
+#+BEGIN_SRC clojure
+  (:b #{:a :b :c :d})
+#+END_SRC
+
+#+RESULTS:
+: :b
+
+****** contains?
+
+#+BEGIN_SRC clojure
+  (contains? #{1 2 3 4} 2)
+#+END_SRC
+
+#+RESULTS:
+: true
+
+***** conj & disj
+****** conj
+
+#+BEGIN_SRC clojure
+  (conj #{1 2 3 4} 5)
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2 5}
+
+****** disj
+
+#+BEGIN_SRC clojure
+  (disj #{1 2 3 4} 4)
+#+END_SRC
+
+#+RESULTS:
+: #{1 3 2}
+
+***** clojure.set/union
+
+#+BEGIN_SRC clojure
+  (clojure.set/union #{1 2 3 4} #{3 4 5})
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2 5}
+
+***** clojure.set/difference
+
+#+BEGIN_SRC clojure
+  (clojure.set/difference #{1 2 3 4} #{3 4 5})
+#+END_SRC
+
+#+RESULTS:
+: #{1 2}
+
+***** clojure.set/intersection
+
+#+BEGIN_SRC clojure
+  (clojure.set/intersection #{1 2 3 4} #{3 4 5})
+#+END_SRC
+
+#+RESULTS:
+: #{4 3}
+
+** Binding Values to Symbols
+"Clojure symbols refer to values. When a symbol is evaluated, it returns the thing it refers to."
+*** def
+Creates a var "object" scoped to the namespace (def name value)
+
+#+BEGIN_SRC clojure :results output
+(def foo "bar")
+(println foo)
+#+END_SRC
+
+#+RESULTS:
+: bar
+
+*** let
+Scoped to the let expression (let [name value] ...)
+
+#+BEGIN_SRC clojure :results output
+  (let [ref "value"] 
+    (println ref))
+  (println ref)
+#+END_SRC
+
+#+RESULTS:
+: value
+: #object[clojure.core$ref 0x3c6345f5 clojure.core$ref@3c6345f5]
+
+** Functions
+*** defn
+
+#+BEGIN_SRC clojure :results output
+ (defn symbolicName "This is a description of the function" [parameter1] (println parameter1))
+ (symbolicName "Code is Data")
+#+End_SRC
+
+#+RESULTS:
+: Code is Data
+
+*** anonymous functions
+
+#+BEGIN_SRC clojure :results output
+  ((fn [parameter] (println parameter)) "Code is Data")
+#+END_SRC
+
+#+RESULTS:
+: Code is Data
+
+*** anonymous function shorthand
+
+#+BEGIN_SRC clojure :results output
+  (#(println %) "Code is Data")
+#+END_SRC
+
+#+RESULTS:
+: Code is Data
+
+** Namespaces
+vars are scoped to namespaces. The default namespace is "user". 
+*** creating and identifying a namespace
+
+#+BEGIN_SRC clojure :results output
+  (ns alice.favfoods)
+  (println  *ns*)
+#+END_SRC
+
+#+RESULTS:
+: #object[clojure.lang.Namespace 0x763be7bf alice.favfoods]
+
+*** accessing a namespace
+
+#+BEGIN_SRC clojure :results output
+  (ns userland)
+  (println *ns*)
+  (def whoDoYouFightFor "the users")
+  (println whoDoYouFightFor)
+  (ns the.System)
+  (println *ns*)
+  (println userland/whoDoYouFightFor)
+#+END_SRC
+
+#+RESULTS:
+: #object[clojure.lang.Namespace 0x65170eca userland]
+: the users
+: #object[clojure.lang.Namespace 0x6caf1747 the.System]
+: the System
+: the users
+
+*** :require(ing) libs
+Clojure has 'libs', namespaces full of symbols bound to values. Likely, function buckets...
+**** require
+After we require a namespace, symbols in that namespace will be accessible through a qualified namespace.
+
+#+BEGIN_SRC clojure
+  (require 'clojure.set)
+  clojure.set/union
+#+END_SRC
+
+#+RESULTS:
+: nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+
+**** :require :as
+We can use the :as option to set an alias for a namespace.
+
+#+BEGIN_SRC clojure
+  (ns wonderland 
+    (require '[clojure.set :as s]))
+  s/union
+#+END_SRC
+
+#+RESULTS:
+: #object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+
+This form is acceptable, but less common:
+
+#+BEGIN_SRC clojure
+  (require '[clojure.set :as s])
+  s/union
+#+END_SRC
+
+#+RESULTS:
+: nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+
+
+**** :require :refer :all
+The :all option makes a namespaces symbold available in the current namespace without qualification. IF symbols conflict between namespaces, the compiler will throw an exception.
+
+#+BEGIN_SRC clojure
+  (ns wonderland
+    (:require [alice.favfoods :refer :all]
+              [rabbit.favfoods :refer :all]))
+#+END_SRC
+
+* II. Flow and Functional Transformations
+* III. State and Concurrency
+* IX. Weekly Training Plan
+- [ ] Week 1
+- [ ] Week 2
+- [ ] Week 3
+- [ ] Week 4
+- [ ] Week 5
+- [ ] Week 6
+- [ ] Week 7
