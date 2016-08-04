@@ -25,6 +25,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ** OPEN Modern React with Redux : Stephen Girder (?)
 ** TODO YDKJS: Async
 
+
 * BackBurner
 ** TODO Building React Apps w/ Idiomatic Redux
 ** TODO Testing Clientside JavaScript : Joe Eames (4:50)
@@ -32,6 +33,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 ** OPEN Survive JS - Webpack
 ** OPEN Webpack Fundamentals : Joe Eames (2:23)
+
 
 * directory
 ** Notes

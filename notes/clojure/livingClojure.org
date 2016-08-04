@@ -1,5 +1,4 @@
 
-
 Living Clojure - Carin Meier
 
 * I. The Structure of Clojure
@@ -29,7 +28,6 @@ Clojure also uses lists as compound data structures when the list is preceded by
 Code is data.
 
 ** Compound Data - Collections: lists, vectors, maps, and sets
-
 Collections have two important features: immutability and persistence. Immutable collections cannot be 
 changed. Instead, the data in a collection is shared by collections created from the original collection. 
 Thus, a function that "adds" a new value to an existing collection does no such thing; It instead returns a 
@@ -444,7 +442,90 @@ The :all option makes a namespaces symbold available in the current namespace wi
               [rabbit.favfoods :refer :all]))
 #+END_SRC
 
-* II. Flow and Functional Transformations
+* IIA. Control Flow
+** Basic Logic Tests
+Only two values evaluate to false in logic operations: false and nil. nil is logically false.
+In Clojure, functions that return a boolean value as their result typically end with a question
+mark.
+*** true? - tests for true values
+
+#+BEGIN_SRC clojure
+  (true? nil)
+#+END_SRC
+
+#+RESULTS:
+: false
+
+*** false? - tests for the boolean value false
+
+#+BEGIN_SRC clojure
+  (false? nil)
+#+END_SRC
+
+#+RESULTS:
+: false
+
+*** nil? - tests for nil, the absence of value
+
+#+BEGIN_SRC clojure
+  (nil? nil)
+#+END_SRC
+
+#+RESULTS:
+: true
+
+*** not - returns the negation of a boolean returned from its operand
+
+#+BEGIN_SRC clojure
+  (true? (not nil))
+  (false? (not nil))
+#+END_SRC
+
+#+RESULTS:
+: truefalse
+
+*** = & not= - tests for equality or inequality
+
+#+BEGIN_SRC clojure
+  (= nil (not= nil false))
+#+END_SRC
+
+#+RESULTS:
+: false
+
+** Logic Tests you Can Use on Collections
+*** empty? - tests whether a collection is empty
+
+#+BEGIN_SRC clojure
+  (empty? #{})
+#+END_SRC
+
+#+RESULTS:
+: true
+
+*** seq - tests whether a collection is not empty, aka: is it seq(-able)
+
+#+BEGIN_SRC clojure :results output
+  (println (seq {:a "A"}))
+#+END_SRC
+
+#+RESULTS:
+: ([:a A])
+
+*** some - test whether some of the elements in the collection are truthy
+*** every? - tests whether each element in the collection is truthy
+*** not-any? - tests whether each element in the collection is falsey
+** Harnessing the Power of Flow Control
+** Functions Creating Functions
+** Destructuring
+** The Power of Laziness
+** Recursion
+* IIB. Functional Transformations
+** The Functional Shape of Data Transformations
+** Map
+** Reduce
+** Filter
+** et. al.
 * III. State and Concurrency
 * IX. Weekly Training Plan
 - [ ] Week 1
@@ -454,3 +535,10 @@ The :all option makes a namespaces symbold available in the current namespace wi
 - [ ] Week 5
 - [ ] Week 6
 - [ ] Week 7
+
+
+
+
+
+* Symbols to know
+- 
