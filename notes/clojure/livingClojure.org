@@ -1,4 +1,3 @@
-
 Living Clojure - Carin Meier
 
 * I. The Structure of Clojure

@@ -1,0 +1,908 @@
+* Index
+** Living Clojure
+[X] Chapter 1 : The Structure of Clojure
+[ ] Chapter 2 : Flow and Functional Transformations
+[ ] Chapter 3 : State and Concurrency
+[ ] Chapter 4 : Java Interop and Polymorphism
+[ ] Chapter 5 : How to Use Clojure Projects and Libraries
+[ ] Chapter 6 : Communication with core.async
+[ ] Chapter 7 : Creating Web Applications with Clojure
+[ ] Chapter 8 : The Power of Macros
+[ ] Training Plan Week 1
+[ ] Training Plan Week 2
+[ ] Training Plan Week 3
+[ ] Training Plan Week 4
+[ ] Training Plan Week 5
+[ ] Training Plan Week 6
+[ ] Training Plan Week 7
+** Clojure for the Brave and True
+[ ] 1. Building, Running, and the REPL
+[ ] 2. How to Use Emacs, An Excellent Clojure Editor
+[ ] 3. Do Things: A Clojure Crash Course
+[ ] 4. Core Functions in Depth
+[ ] 5. Functional Programming
+[ ] 6. Organizing Your Project: A Librarian's Tale
+[ ] 7. Clojure Alchemy: Reading, Evaluation, and Macros
+[ ] 8. Writing Macros
+[ ] 9. The Sacred Art of Concurrent and Parallel Programming
+[ ] 10. Clojure Metaphysics: Atoms, Refs, Vars, ...
+[ ] 11. Mastering Concurrent PRocesses with core.async
+[ ] 12. Working with the JVM
+[ ] 13. Creating & Extending Abstractions w/ Multimethods, Protocols, and Records
+[ ] A. Building and Developing with Leiningen
+[ ] B. Boot, the Fancy Clojure Build Framework
+** ClojureScript Unraveled
+[X] 3.1. First steps with Lisp syntax
+[X] 3.2. The base data types
+[X] 3.3. Vars
+[X] 3.4. Functions
+[X] 3.5. Flow control
+[X] 3.6. Truthiness
+[ ] 3.7. Locals, Blocks, and Loops
+[ ] 3.8. Collection types
+[ ] 3.9. Destructuring
+[ ] 3.10. Threading Macros
+[ ] 3.11. Reader Conditionals
+[ ] 3.12. Namespaces
+[ ] 3.13. Abstractions and Polymorphism
+[ ] 3.14. Data types
+[ ] 3.15. Host interoperability
+[ ] 3.16. State management
+[ ] 4.1. Getting Started with the Compiler
+[ ] 4.2. Working with the REPL
+[ ] 4.3. The Closure Library
+[ ] 4.4. Dependency management
+[ ] 4.5. External dependencies
+[ ] 4.6. Unit testing
+[ ] 5.1. Transducers
+[ ] 5.2. Transients
+[ ] 5.3. Metadata
+[ ] 5.4. Core protocols
+[ ] 5.5. CSP (with core.async)
+[ ] 6.1. Appendix A: Interactive development with Figwheel
+[ ] 6.2. Appendix B: Setting up a ClojureScript development environment
+** Clojure Applied
+
+
+
+
+* Simple Expressions (lc) / Base Data Types (cu) / Data Structures (brave)
+** Simple values are expressions that evaluate to themselves
+*** Integers
+*** Ratios - not available in ClojureScript
+*** Decimals
+*** Strings ("example")
+*** Keywords (:example)
+*** symbols (example) - evaluate to what they refer to
+*** char (\e) - evaluate to a single character string in ClojureScript
+*** booleans (true false)
+*** (nil)
+* Forms (brave)
+* Compound Data - Collections & Seqs
+Collections have two important features: immutability and persistence. Immutable 
+collections cannot be changed. Instead, the data in a collection is shared by 
+collections created from the original collection. Thus, a function that "adds" a new 
+value to an existing collection does no such thing; It instead returns a 
+new collection, containing the new value, and references to each value in the 
+original collection. This is called structural sharing.
+  Collections provide a consistent interface to a category of functions called 
+'sequence functions,' which include =first=, =rest=, and =cons=. The seq interface 
+permits 'walking' the collection, accessing the elements of the collection as 
+sequences of values.
+  All collections also support functions =count= and  =conj=. However, different
+collection types willimplement these functions in different ways. For example, =conj= 
+returns a collection from an existing collection and a value. When =conj= is applied 
+to a list, the new value appears at the beginning of the new list. But, when =conj= 
+is applied to a vector, the new value appears at the end of the new vector. In both 
+cases =conj= returns a new collection with a new value, but the implementation is 
+different. 
+** Types of Collections
+*** Lists
+Lists are enclosed in parens, and preceded with a ' to prevent evaluation of the 
+list as an expression. Lists are very efficient for sequential access to 
+elements. 
+**** Create a list
+***** list literal
+#+BEGIN_SRC clojure
+  '(1 true "three" :four nil)
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+***** programmatically
+#+BEGIN_SRC clojure
+  ( list 1 true "three" :four nil)
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+**** first
+
+#+BEGIN_SRC clojure
+  (first '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+**** rest
+
+#+BEGIN_SRC clojure
+  (rest '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+| true | three | :four | nil |
+
+**** cons
+
+#+BEGIN_SRC clojure
+  (cons 0 '(1 2 3 4))
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 | 3 | 4 |
+
+*** Vectors
+Vectors provide fast index access. Every item is evaluated before being stored in 
+a vector.
+**** Create a vector
+***** literal
+
+#+BEGIN_SRC clojure
+  [1 true "three" :four nil]
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+***** programatically
+
+#+BEGIN_SRC clojure
+  (vector 1 true "three" :four nil)
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+**** nth
+
+#+BEGIN_SRC clojure
+  (nth [1 true "three" :four nil] 3)
+#+END_SRC
+
+#+RESULTS:
+: :four
+
+**** last
+
+#+BEGIN_SRC clojure
+  (last [1 true "three" :four nil])
+#+END_SRC
+
+#+RESULTS:
+: nil
+
+*** Maps
+Maps store key-value pairs. Every item is evaluated before being stored in a map, like vectors, but the order of evaluation is indeterminate.
+**** Create a map
+***** literal
+
+#+BEGIN_SRC clojure
+  {:key "value"}
+#+END_SRC
+
+#+RESULTS:
+| :key | value | 
+
+***** programmatically
+
+#+BEGIN_SRC clojure
+  (hash-map :key "value")
+#+END_SRC
+
+#+RESULTS:
+| :key | value |
+
+**** Element retrieval with get, keyword access, and default values
+***** get
+#+BEGIN_SRC clojure
+  (get {:a "A" :b "B" :c "C"} :a)
+#+END_SRC
+
+#+RESULTS:
+: A
+
+***** keyword access
+
+#+BEGIN_SRC clojure
+  (:a {:a "A" :b "B" :c "C"})
+#+END_SRC
+
+#+RESULTS:
+: A
+
+***** default values
+
+#+BEGIN_SRC clojure
+  (:d {:a "A" :b "B" :c "C"} "not found")
+#+END_SRC
+
+#+RESULTS:
+: not found
+
+**** keys & vals
+***** keys
+
+#+BEGIN_SRC clojure
+  (keys {:a "A" :b "B" :c "C"})
+#+END_SRC
+
+#+RESULTS:
+| :a | :b | :c |
+
+***** vals
+
+#+BEGIN_SRC clojure
+  (vals {:a "A" :b "B" :c "C"})
+#+END_SRC
+
+#+RESULTS:
+| A | B | C |
+
+**** assoc & dissoc
+***** assoc
+#+BEGIN_SRC clojure
+  (assoc {:a "A" :b "B" :c "C"} :d "D")
+#+END_SRC
+
+#+RESULTS:
+| :a | A | :b | B | :c | C | :d | D |
+
+***** dissoc
+
+#+BEGIN_SRC clojure
+  (dissoc {:a "A" :b "B" :c "C"} :a)
+#+END_SRC
+
+#+RESULTS:
+| :b | B | :c | C |
+
+**** merge
+
+#+BEGIN_SRC clojure
+  (merge {:a "A" :b "B" :c "C"} {:d "D" :e "E" :f "F"})
+#+END_SRC
+
+#+RESULTS:
+| :a | A | :b | B | :c | C | :d | D | :e | E | :f | F |
+
+*** Sets
+Sets are collections of unique values. No duplicate values are allowed when creating a set. Like maps, sets are unordered.
+**** Create a set
+***** literal
+
+#+BEGIN_SRC clojure
+  #{1 2 3 4}
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2}
+
+***** programatically
+
+#+BEGIN_SRC clojure
+  (hash-set 1 2 3 4)
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2}
+
+**** Element retrieval with get, keyword access, & contains?
+***** get
+
+#+BEGIN_SRC clojure
+  (get #{1 2 3 4} 2)
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+***** keyword access
+
+#+BEGIN_SRC clojure
+  (:b #{:a :b :c :d})
+#+END_SRC
+
+#+RESULTS:
+: :b
+
+***** contains?
+
+#+BEGIN_SRC clojure
+  (contains? #{1 2 3 4} 2)
+#+END_SRC
+
+#+RESULTS:
+: true
+
+**** conj & disj
+***** conj
+
+#+BEGIN_SRC clojure
+  (conj #{1 2 3 4} 5)
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2 5}
+
+***** disj
+
+#+BEGIN_SRC clojure
+  (disj #{1 2 3 4} 4)
+#+END_SRC
+
+#+RESULTS:
+: #{1 3 2}
+
+**** clojure.set/union
+
+#+BEGIN_SRC clojure
+  (clojure.set/union #{1 2 3 4} #{3 4 5})
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2 5}
+
+**** clojure.set/difference
+
+#+BEGIN_SRC clojure
+  (clojure.set/difference #{1 2 3 4} #{3 4 5})
+#+END_SRC
+
+#+RESULTS:
+: #{1 2}
+
+**** clojure.set/intersection
+
+#+BEGIN_SRC clojure
+  (clojure.set/intersection #{1 2 3 4} #{3 4 5})
+#+END_SRC
+
+#+RESULTS:
+: #{4 3}
+** The Collection Abstraction (brave)
+*** into (brave)
+*** conj (brave)
+** Programming to Abstractions (brave)
+*** Treating Lists, Vectors, Sets and Maps as Sequences
+*** first, rest, and cons
+*** Abstraction Through Indirection
+* Basic Functions (lc, brave, cu)
+** Compound Expressions (lc)
+Clojure is a dialect of LISP (LISt Processing). All lisp code is made of lists of data - literally, data in the list data structure.  Lists are evaluated in Clojure as expressions; The first element in a list is the function, and subsequent elements are arguments of the first element. This is known as 'prefix' notation. Note, that Clojure does not have operators, only functions. This facilitates function argument arbitrarity. As a bonus, there's no operator precedence table to memorize. 
+
+#+BEGIN_SRC clojure
+  (+ 1/2 3/4)
+#+END_SRC
+
+#+RESULTS:
+: 5/4
+
+Clojure also uses lists as compound data structures when the list is preceded by a single-quote. Emphatically, in Clojure: code is data.
+** Function Invocation / Calling Functions (brave, cu)
+Because Clojure is a lisp, you invoke a function by using it as the first item in a list.
+** Functions Are Values
+In Clojure, functions are first class values: They can be referenced with vars, passed to functions as arguments, and returned from functions. 
+*** Defining Functions (brave, cu, lc)
+**** Anonymous functions with fn (brave, lc)
+
+#+BEGIN_SRC clojure :results output
+  ((fn [parameter] (println parameter)) "Code is Data")
+#+END_SRC
+
+#+RESULTS:
+: Code is Data
+**** Binding a Function to a Symbol Using def (cu)
+
+#+BEGIN_SRC clojure :results output
+  (def symbolicName (fn [parameter1] (println parameter1)))
+  (symbolicName "Code is Data")
+#+End_SRC
+
+#+RESULTS:
+: Code is Data
+
+**** Binding a Function to a Symbol Using defn (lc, cu)
+The defn macro is the idiomatic way to define functions, and optionally 
+includes a 'docstring'.
+
+#+BEGIN_SRC clojure :results output
+  (defn symbolicName "This is a description of the function" 
+    [parameter1] (println parameter1))
+  (symbolicName "Code is Data")
+#+End_SRC
+
+#+RESULTS:
+: Code is Data
+
+**** Functions with Multiple Arities and Variadic Functions (cu)
+Function definitions can include different bodies for different arities.
+
+#+BEGIN_SRC clojure :results output
+  (defn myinc
+    "Self defined version of parameterized 'inc'."
+    ([x] (myinc x 1))
+    ([x y] (+ x y)))
+  (println (myinc 5))
+  (println (myinc 9))
+#+END_SRC
+
+#+RESULTS:
+: 6
+: 10
+
+And, functions can accept an arbitrary number of arguments using the & symbol.
+
+#+BEGIN_SRC clojure
+  (defn my-variadic-set [& params] (set params))
+  (my-variadic-set 1 2 3 4 2 3)
+#+END_SRC
+
+#+RESULTS:
+: #'user/my-variadic-set#{1 4 3 2}
+
+**** Anonymous function shorthand #(%) (lc)
+The # reader macro expands shorthand function expressions into legit function expressions during compilation. A single arity function would use % as shorthand for its argument. Otherwise, arguments should be numbered (%1 %1 etc.) or variable (%&).
+
+#+BEGIN_SRC clojure :results output
+  (#(println %) "Code is Data")
+#+END_SRC
+
+#+RESULTS:
+: Code is Data
+* Boolean Logic
+** Basic Logic Tests (lc)
+Only two values evaluate to false in logic operations: false and nil. nil is 
+logically false. In Clojure, functions that return a boolean value as their result 
+typically end with a question mark.
+*** true? - tests for true values
+
+#+BEGIN_SRC clojure
+  (true? nil)
+#+END_SRC
+
+#+RESULTS:
+: false
+
+*** false? - tests for the boolean value false
+
+#+BEGIN_SRC clojure
+  (false? nil)
+#+END_SRC
+
+#+RESULTS:
+: false
+
+*** nil? - tests for nil, the absence of value
+
+#+BEGIN_SRC clojure
+  (nil? nil)
+#+END_SRC
+
+#+RESULTS:
+: true
+
+*** not - returns the negation of a boolean returned from its operand
+
+#+BEGIN_SRC clojure
+  (true? (not nil))
+  (false? (not nil))
+#+END_SRC
+
+#+RESULTS:
+: truefalse
+
+*** = & not= - tests for equality or inequality
+
+#+BEGIN_SRC clojure
+  (= nil (not= nil false))
+#+END_SRC
+
+#+RESULTS:
+: false
+
+** TODO Predicates (cu)
+Maps and Sets implement the callable protocol (IFn), and can thus be used as 
+if they were functions. When calling a collection, it will return an argument's value that the collection itself contains. IF the collection does not contain the argument's value, the result will be nil. 
+
+#+BEGIN_SRC clojure
+  (#{1 2 3} 2)
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+** Logic Tests you Can Use on Collections (lc)
+**** empty? - tests whether a collection is empty
+
+#+BEGIN_SRC clojure
+  (empty? #{})
+#+END_SRC
+
+#+RESULTS:
+: true
+
+**** seq - tests whether a collection is not empty, aka: is it seq(-able)
+
+#+BEGIN_SRC clojure :results output
+  (println (seq {:a "A"}))
+#+END_SRC
+
+#+RESULTS:
+: ([:a A])
+
+**** some - test whether some of the elements in the collection are truthy
+**** every? - tests whether each element in the collection is truthy
+**** not-any? - tests whether each element in the collection is falsey
+
+* Control Flow (brave) / Flow Control (cu)
+There are no statements in Clojure, only expressions.
+** do (cu)
+The do expression accepts any number of arguments, evaluates them in turn, and returns the value of the last expression. This is how Clojure does 'blocks.' Idiomatically, do expressions are useful for side effects, like sdtout or logging. 
+
+#+BEGIN_SRC clojure
+  (do 
+    (println "I was evaluated")
+    "And, I was returned")
+#+END_SRC
+
+#+RESULTS:
+: And, I was returned
+
+** if (cu)
+if is a function that takes three parameters: a logic test, an expression to 
+evaluate in the event of a true result from the tests, and an expression to 
+evaluate in the event of a false result.
+
+#+BEGIN_SRC clojure
+  (if false
+    "The Truth is Out There"
+    "The X-Files have been closed")
+#+END_SRC
+
+#+RESULTS:
+: The X-Files have been closed
+
+** when
+** cond (cu)
+cond permits a mapping of logic tests to expressions. Should a logic test evaluate to true, the corresponding expression will be evaluated. 
+
+#+BEGIN_SRC clojure
+  (def x -4)
+  (cond
+    (> x 0) "positive"
+    (< x 0) "negative"
+    :else "zero")
+#+END_SRC
+
+#+RESULTS:
+: #'user/x"negative"
+
+** condp (cu)
+The logic tests for a cond expression may be very similar. condp permits the authoring of a single logic test that applies to pairs of keywords and expressions.
+
+#+BEGIN_SRC clojure
+  (defn translate
+    [code]
+    (condp = (keyword code)
+      :es "Spanish"
+      :en "English"
+      :fr "French"
+      "unknown"))
+  (translate "fr")
+  (translate "pg")
+#+END_SRC
+
+#+RESULTS:
+: #'user/translate"French""unknown"
+
+** case (cu)
+case is similar to condp, but always checks for equality between a symbol and a branching value that maps to an expression. Note that the branching values are evaluated during compilation.
+
+#+BEGIN_SRC clojure
+  (defn translate
+    [code]
+    (case code
+      "es" "Spanish"
+      "en" "English"
+      "fr" "French"
+      "Unknown"))
+  (translate "fr")
+  (translate "pg")
+#+END_SRC
+
+#+RESULTS:
+: #'user/translate"French""Unknown"
+
+* Naming Things (lc)
+** Binding Values to Symbols / Vars (lc)
+"Clojure symbols refer to values. When a symbol is evaluated, it returns the thing it refers 
+to." (lc) In Clojure, references cannot be reassigned - consistent with values being 
+immutable. Use let inside functions, not def!
+**** def
+Creates a var "object" scoped to the namespace. 
+
+#+BEGIN_SRC clojure :results output
+(def foo "bar")
+(println foo)
+#+END_SRC
+
+#+RESULTS:
+: bar
+
+**** let
+let defines a var "object(s)" scoped to the let expression. As its first parameter, let 
+takes a vector of paired items, typically symbol / expression pairs, and binds each expression's value to its corresponding symbol.
+  Remaining arguments are evaluated in the scope of the let bindings.
+
+#+BEGIN_SRC clojure :results output
+  (let [sym "value"] 
+    (println sym))
+  (println sym)
+#+END_SRC
+
+#+RESULTS:
+: value
+
+** Namespaces (lc) / Organizing Your Project: A Librarian's Tale (brave)
+vars are scoped to namespaces. The default namespace is "user". 
+*** creating and identifying a namespace (lc)
+
+#+BEGIN_SRC clojure :results output
+  (ns alice.favfoods)
+  (println  *ns*)
+#+END_SRC
+
+#+RESULTS:
+: #object[clojure.lang.Namespace 0x763be7bf alice.favfoods]
+
+*** accessing a namespace (lc)
+
+#+BEGIN_SRC clojure :results output
+  (ns userland)
+  (println *ns*)
+  (def whoDoYouFightFor "the users")
+  (println whoDoYouFightFor)
+  (ns the.System)
+  (println *ns*)
+  (println userland/whoDoYouFightFor)
+#+END_SRC
+
+#+RESULTS:
+: #object[clojure.lang.Namespace 0x65170eca userland]
+: the users
+: #object[clojure.lang.Namespace 0x6caf1747 the.System]
+: the System
+: the users
+
+*** :require(ing) libs (lc)
+Clojure has 'libs', namespaces full of symbols bound to values. Likely, function buckets...
+**** require
+After we require a namespace, symbols in that namespace will be accessible through a qualified namespace.
+
+#+BEGIN_SRC clojure
+  (require 'clojure.set)
+  clojure.set/union
+#+END_SRC
+
+#+RESULTS:
+: nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+
+**** :require :as
+We can use the :as option to set an alias for a namespace.
+
+#+BEGIN_SRC clojure
+  (ns wonderland 
+    (require '[clojure.set :as s]))
+  s/union
+#+END_SRC
+
+#+RESULTS:
+: #object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+
+This form is acceptable, but less common:
+
+#+BEGIN_SRC clojure
+  (require '[clojure.set :as s])
+  s/union
+#+END_SRC
+
+#+RESULTS:
+: nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+
+
+**** :require :refer :all
+The :all option makes a namespaces symbold available in the current namespace without qualification. IF symbols conflict between namespaces, the compiler will throw an exception.
+
+#+BEGIN_SRC clojure
+  (ns wonderland
+    (:require [alice.favfoods :refer :all]
+              [rabbit.favfoods :refer :all]))
+#+END_SRC
+*** Using libs (lc)
+** Namespaces (cu)
+*** 
+* Moar Functions
+** Higher Order Functions (brave)
+** Pure Functions: What and Why (brave)
+*** comp
+*** memoize
+** Functions Creating Functions and other Neat Expressions (lc) / Function Functions (brave)
+*** apply (brave)
+*** partial (brave)
+*** complement (brave)
+** Function Calls, Macro Calls, and Special Forms (brave)
+** The Power of Laziness (lc) / Lazy seqs (brave)
+*** Demonstrating Lazy Seq Efficiency (brave)
+*** Infinite Sequences (brave)
+** Destructuring (lc, cu)
+** The Functional Shape of Data Transformation (lc) / Seq Function Examples (brave)
+*** Map (lc, brave)
+*** Reduce (lc, brave)
+*** take, drop, take-while, and drop-while (brave)
+*** filter and some (brave)
+*** concat (brave)
+*** more (lc)
+* Living with Immutable Data Structures (brave)
+** Recursion Instead of for/while
+** Function Composition Instead of Attribute Mutation
+* Recursion (lc) / loop (brave) / Loops (cu)
+** loop (cu)
+loop is similar to let, in that it's first parameter is a vector that establishes bindings for 
+the remainger of the expression. Within a loop expression, a recur expression causes execution 
+of the loop to restart with new bindings.
+
+#+BEGIN_SRC clojure :results output
+  (loop [x 0
+         y 1]
+    (if (= x y)
+      (println "X is equal to Y")
+      (do
+        (println (str x " is not equal to " y))
+        (recur (inc x) y))))
+#+END_SRC
+
+#+RESULTS:
+: 0 is not equal to 1
+: X is equal to Y
+
+* Replacing for loops With Higher-Order Functions (cu)
+The venerable for loop is often used to iterate over an ordered collection of data and affect some transformation of that collection. 
+** map (cu)
+The map function accepts a function and a seq, and returns a new seq from the result of 
+applying the function to each item in the original seq.
+
+#+BEGIN_SRC clojure
+  (map #(* % %) '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+| 1 | 4 | 9 | 16 | 25 |
+
+** filter (cu)
+The filter function accepts a predicate and a seq, and returns a seq containing each item in 
+the original seq that passes the predicate.
+
+#+BEGIN_SRC clojure
+  (filter true? '(true false true true false))
+#+END_SRC
+
+#+RESULTS:
+| true | true | true |
+
+
+** reduce (cu)
+The reduce function boils down a seq to a single value, using an accumulator during the 
+iteration. reduce accepts a function for accumulating values, an optional initial value, and 
+and a collection.
+  A function passed to reduce must have two parameters. The first parameter represents the 
+accumulator, the value that was returned from the last iteration of reduce. The second 
+parameter represents the current item in the collection. The function must return a value, this value is the accumulator. 
+
+#+BEGIN_SRC clojure
+  (reduce + '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+: 15
+
+#+BEGIN_SRC clojure
+  (reduce + 100 '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+: 115
+
+#+BEGIN_SRC clojure
+  (reduce #(* %1 %2) '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+: 120
+
+* TODO for sequence comprehension (cu)
+The for function accepts a vector of bindings and an expression, and generates a sequence of the result of evaluating the expression.
+** :let
+** :while
+** :when
+** doseq
+** run!
+* Regular Expressions (brave)
+* State Management (cu)
+** Vars
+** Atoms
+** Volatiles
+* State and Concurrency (lc) / Clojure Metaphysica: Atoms, Refs, Vars... (brave)
+** Using Atoms for Independent Items (lc) / Atoms (brave)
+** Watches and Validators (brave)
+** Using Refs for Coordinated Changes (lc) / Refs (brave)
+** Vars (brave)
+** Using Agents to Manage Changes On Their Own (lc)
+* Host Interop (lc, brave, cu)
+** Working with the JVM (brave)
+** Java Interop (lc) 
+** Javascript (cu)
+* Abstractions and Polymorphism (cu)
+** Protocols
+** Multimethods
+** Heirarchies
+* Rolling Our Own Data Types (cu)
+* Tooling
+** Getting Set Up With a Clojure Editor (lc)
+** Lein / Boot
+*** Creating Our Project with Lein (lc)
+*** Dep Management with Lein (lc)
+*** Building and Developing with Leiningen (brave)
+*** Boot, the Fancy Clojure Build Framework (brave)
+* Threading Macros (cu)
+** Thread First
+** Thread Last
+* Reader Conditionals (cu)
+** 
+* Macros (lc) / Clojure Alchemy: Reading, Evaluation, and Macros (brave)
+** Clojure's Evaluation Model (brave)
+** The Reader (brave)
+** The Evaluator (brave(
+** templating (lc)
+* Writing Macros (brave)
+* Concurrency and Parallelism Concepts (brave)
+** Synchronous and Asynchronous
+** Concurrent and Parallel
+** Threads and the JVM
+*** Reference Cells
+*** Mutual Exclusion
+** Futures
+** Delays
+** Promises
+* core.async (lc) / Mastering Concurrent Processes with core.async (brave)
+** Getting Started with Processes (brave)
+** queues (brave)
+** channels (lc)
+* Creating and Extending Abstractions... (brave)
+** Polymorphism
+*** multimethods
+*** protocols
+** Records
+* Web Libs
+** Creating a Web Server With compojure
+** Using JSON with the Cheshire and Ring
+** Making HTTP Calls with ClojureScript and cljs-http
+** DOM control with ClojureScript and Enfocus
+** Event Handling with Enfocus
+** Hiccup, Enlive, Liberator, Transit
+** Om / OmNext
+** Using Hoplon and Luminus for Inclusive, Bundled Libraries for Web Development
+** Dealing with Databases
