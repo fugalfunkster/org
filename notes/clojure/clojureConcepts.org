@@ -1,3 +1,5 @@
+#+TODO: TODO NEXT OPEN | DONE
+
 * Index
 ** Living Clojure
 [X] Chapter 1 : The Structure of Clojure
@@ -64,8 +66,6 @@
 ** Clojure Applied
 
 
-
-
 * Simple Expressions (lc) / Base Data Types (cu) / Data Structures (brave)
 ** Simple values are expressions that evaluate to themselves
 *** Integers
@@ -77,9 +77,16 @@
 *** char (\e) - evaluate to a single character string in ClojureScript
 *** booleans (true false)
 *** (nil)
+
+
 * Regular Expressions (brave)
+
+
 * Forms (brave)
-* Compound Data - Collections & Seqs
+
+
+* Compound Data
+** Collections & Seqs (lc)
 Collections have two important features: immutability and persistence. Immutable 
 collections cannot be changed. Instead, the data in a collection is shared by 
 collections created from the original collection. Thus, a function that "adds" a new 
@@ -95,13 +102,13 @@ cases =conj= returns a new collection with a new value, but the implementation i
 different.
   Collections also provide a consistent interface to a category of functions called 
 'sequence functions,' which include =first=, =rest=, and =cons=. The seq function accepts a collection and returns a sequence. The sequence interface permits 'walking:' accessing the elements of the collection as sequences of values. When sequence functions are applied to collections, the collection is first represented as a sequence, and then the sequence function is performed.
-** Types of Collections
-*** Lists
+*** Types of Collections
+**** Lists
 Lists are enclosed in parens, and preceded with a ' to prevent evaluation of the 
 list as an expression. Lists are very efficient for sequential access to 
 elements. 
-**** Create a list
-***** list literal
+***** Create a list
+****** list literal
 #+BEGIN_SRC clojure
   '(1 true "three" :four nil)
 #+END_SRC
@@ -109,7 +116,7 @@ elements.
 #+RESULTS:
 | 1 | true | three | :four | nil |
 
-***** programmatically
+****** programmatically
 #+BEGIN_SRC clojure
   ( list 1 true "three" :four nil)
 #+END_SRC
@@ -117,7 +124,7 @@ elements.
 #+RESULTS:
 | 1 | true | three | :four | nil |
 
-**** first
+***** first
 
 #+BEGIN_SRC clojure
   (first '(1 true "three" :four nil))
@@ -126,7 +133,7 @@ elements.
 #+RESULTS:
 : 1
 
-**** rest
+***** rest
 
 #+BEGIN_SRC clojure
   (rest '(1 true "three" :four nil))
@@ -135,7 +142,7 @@ elements.
 #+RESULTS:
 | true | three | :four | nil |
 
-**** cons
+***** cons
 
 #+BEGIN_SRC clojure
   (cons 0 '(1 2 3 4))
@@ -144,11 +151,11 @@ elements.
 #+RESULTS:
 | 0 | 1 | 2 | 3 | 4 |
 
-*** Vectors
+**** Vectors
 Vectors provide fast index access. Every item is evaluated before being stored in 
 a vector.
-**** Create a vector
-***** literal
+***** Create a vector
+****** literal
 
 #+BEGIN_SRC clojure
   [1 true "three" :four nil]
@@ -157,7 +164,7 @@ a vector.
 #+RESULTS:
 | 1 | true | three | :four | nil |
 
-***** programatically
+****** programatically
 
 #+BEGIN_SRC clojure
   (vector 1 true "three" :four nil)
@@ -166,7 +173,7 @@ a vector.
 #+RESULTS:
 | 1 | true | three | :four | nil |
 
-**** nth
+***** nth
 
 #+BEGIN_SRC clojure
   (nth [1 true "three" :four nil] 3)
@@ -175,7 +182,7 @@ a vector.
 #+RESULTS:
 : :four
 
-**** last
+***** last
 
 #+BEGIN_SRC clojure
   (last [1 true "three" :four nil])
@@ -184,10 +191,10 @@ a vector.
 #+RESULTS:
 : nil
 
-*** Maps
+**** Maps
 Maps store key-value pairs. Every item is evaluated before being stored in a map, like vectors, but the order of evaluation is indeterminate.
-**** Create a map
-***** literal
+***** Create a map
+****** literal
 
 #+BEGIN_SRC clojure
   {:key "value"}
@@ -196,7 +203,7 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 | :key | value | 
 
-***** programmatically
+****** programmatically
 
 #+BEGIN_SRC clojure
   (hash-map :key "value")
@@ -205,8 +212,8 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 | :key | value |
 
-**** Element retrieval with get, keyword access, and default values
-***** get
+***** Element retrieval with get, keyword access, and default values
+****** get
 #+BEGIN_SRC clojure
   (get {:a "A" :b "B" :c "C"} :a)
 #+END_SRC
@@ -214,7 +221,7 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 : A
 
-***** keyword access
+****** keyword access
 
 #+BEGIN_SRC clojure
   (:a {:a "A" :b "B" :c "C"})
@@ -223,7 +230,7 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 : A
 
-***** default values
+****** default values
 
 #+BEGIN_SRC clojure
   (:d {:a "A" :b "B" :c "C"} "not found")
@@ -232,8 +239,8 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 : not found
 
-**** keys & vals
-***** keys
+***** keys & vals
+****** keys
 
 #+BEGIN_SRC clojure
   (keys {:a "A" :b "B" :c "C"})
@@ -242,7 +249,7 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 | :a | :b | :c |
 
-***** vals
+****** vals
 
 #+BEGIN_SRC clojure
   (vals {:a "A" :b "B" :c "C"})
@@ -251,8 +258,8 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 | A | B | C |
 
-**** assoc & dissoc
-***** assoc
+***** assoc & dissoc
+****** assoc
 #+BEGIN_SRC clojure
   (assoc {:a "A" :b "B" :c "C"} :d "D")
 #+END_SRC
@@ -260,7 +267,7 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 | :a | A | :b | B | :c | C | :d | D |
 
-***** dissoc
+****** dissoc
 
 #+BEGIN_SRC clojure
   (dissoc {:a "A" :b "B" :c "C"} :a)
@@ -269,7 +276,7 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 | :b | B | :c | C |
 
-**** merge
+***** merge
 
 #+BEGIN_SRC clojure
   (merge {:a "A" :b "B" :c "C"} {:d "D" :e "E" :f "F"})
@@ -278,10 +285,10 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 | :a | A | :b | B | :c | C | :d | D | :e | E | :f | F |
 
-*** Sets
+**** Sets
 Sets are collections of unique values. No duplicate values are allowed when creating a set. Like maps, sets are unordered.
-**** Create a set
-***** literal
+***** Create a set
+****** literal
 
 #+BEGIN_SRC clojure
   #{1 2 3 4}
@@ -290,7 +297,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 4 3 2}
 
-***** programatically
+****** programatically
 
 #+BEGIN_SRC clojure
   (hash-set 1 2 3 4)
@@ -299,8 +306,8 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 4 3 2}
 
-**** Element retrieval with get, keyword access, & contains?
-***** get
+***** Element retrieval with get, keyword access, & contains?
+****** get
 
 #+BEGIN_SRC clojure
   (get #{1 2 3 4} 2)
@@ -309,7 +316,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : 2
 
-***** keyword access
+****** keyword access
 
 #+BEGIN_SRC clojure
   (:b #{:a :b :c :d})
@@ -318,7 +325,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : :b
 
-***** contains?
+****** contains?
 
 #+BEGIN_SRC clojure
   (contains? #{1 2 3 4} 2)
@@ -327,8 +334,8 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : true
 
-**** conj & disj
-***** conj
+***** conj & disj
+****** conj
 
 #+BEGIN_SRC clojure
   (conj #{1 2 3 4} 5)
@@ -337,7 +344,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 4 3 2 5}
 
-***** disj
+****** disj
 
 #+BEGIN_SRC clojure
   (disj #{1 2 3 4} 4)
@@ -346,7 +353,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 3 2}
 
-**** clojure.set/union
+***** clojure.set/union
 
 #+BEGIN_SRC clojure
   (clojure.set/union #{1 2 3 4} #{3 4 5})
@@ -355,7 +362,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 4 3 2 5}
 
-**** clojure.set/difference
+***** clojure.set/difference
 
 #+BEGIN_SRC clojure
   (clojure.set/difference #{1 2 3 4} #{3 4 5})
@@ -364,7 +371,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 2}
 
-**** clojure.set/intersection
+***** clojure.set/intersection
 
 #+BEGIN_SRC clojure
   (clojure.set/intersection #{1 2 3 4} #{3 4 5})
@@ -372,13 +379,110 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 
 #+RESULTS:
 : #{4 3}
-** The Collection Abstraction (brave)
-*** into (brave)
-*** conj (brave)
-** Programming to Abstractions (brave)
-*** Treating Lists, Vectors, Sets and Maps as Sequences
-*** first, rest, and cons
-*** Abstraction Through Indirection
+*** The Collection Abstraction (brave)
+**** into (brave)
+**** conj (brave)
+*** Programming to Abstractions (brave)
+**** Treating Lists, Vectors, Sets and Maps as Sequences
+**** first, rest, and cons
+**** Abstraction Through Indirection
+** for : sequence comprehension (cu, lc)
+The for function accepts a vector of bindings and an expression, and returns a sequence of the 
+result of evaluating the expression. for can accept multiple bindings, and iterates through them 
+in a nested fashion.
+
+#+BEGIN_SRC clojure
+  (for [x [1 2 3]
+        y [4 5]]
+    [y (* x x)])
+#+END_SRC
+
+#+RESULTS:
+| 4 | 1 |
+| 5 | 1 |
+| 4 | 4 |
+| 5 | 4 |
+| 4 | 9 |
+| 5 | 9 |
+
+*** using :let to create local bindings
+
+#+BEGIN_SRC clojure
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]]
+    display-str)
+#+END_SRC
+
+#+RESULTS:
+| animal-mouse-color-red | animal-mouse-color-blue | animal-duck-color-red | animal-duck-color-blue | animal-lory-color-red | animal-lory-color-blue |
+
+*** using :while to break out of the sequence generation
+
+#+BEGIN_SRC clojure
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]
+        :while (not= animal :duck)]
+    display-str)
+#+END_SRC
+
+#+RESULTS:
+| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
+
+*** using :when to filter out values
+
+#+BEGIN_SRC clojure
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]
+        :when (not= animal :duck)]
+    display-str)
+#+END_SRC
+
+#+RESULTS:
+| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
+
+*** doseq and run! for side effects
+doseq is similar to for, but executes the expression, discards the resulting values, and returns nil.
+
+#+BEGIN_SRC clojure :results output
+  (doseq [x [1 2 3]
+          y [4 5]
+          :let [z (+ x y)]]
+    (println x "+" y "=" z))
+#+END_SRC
+
+#+RESULTS:
+: 1 + 4 = 5
+: 1 + 5 = 6
+: 2 + 4 = 6
+: 2 + 5 = 7
+: 3 + 4 = 7
+: 3 + 5 = 8
+
+run! similarly returns nil, and acts similarly to reduce.
+
+#+BEGIN_SRC clojure :results output
+  (run! println [1 2 3 4 5])
+#+END_SRC
+
+#+RESULTS:
+: 1
+: 2
+: 3
+: 4
+: 5
+
+** Collection Types (cu)
+
+
 * Basic Functions (lc, brave, cu)
 ** Compound Expressions (lc)
 Clojure is a dialect of LISP (LISt Processing). All lisp code is made of lists of data - literally, data in the list data structure.  Lists are evaluated in Clojure as expressions; The first element in a list is the function, and subsequent elements are arguments of the first element. This is known as 'prefix' notation. Note, that Clojure does not have operators, only functions. This facilitates function argument arbitrarity. As a bonus, there's no operator precedence table to memorize. 
@@ -462,12 +566,19 @@ The # reader macro expands shorthand function expressions into legit function ex
 
 #+RESULTS:
 : Code is Data
-* Boolean Logic 
-** Basic Logic Tests (lc)
+** Pure Functions: What and Why (brave)
+Pure functions always return the same output when given the same input. Pure functions are free of 'side effects'. 
+*** comp
+*** memoize
+
+
+* Control
+** Boolean Logic 
+*** Basic Logic Tests (lc)
 Only two values evaluate to false in logic operations: false and nil. nil is 
 logically false. In Clojure, functions that return a boolean value as their result 
 typically end with a question mark.
-*** true? - tests for true values
+**** true? - tests for true values
 
 #+BEGIN_SRC clojure
   (true? nil)
@@ -476,7 +587,7 @@ typically end with a question mark.
 #+RESULTS:
 : false
 
-*** false? - tests for the boolean value false
+**** false? - tests for the boolean value false
 
 #+BEGIN_SRC clojure
   (false? nil)
@@ -485,7 +596,7 @@ typically end with a question mark.
 #+RESULTS:
 : false
 
-*** nil? - tests for nil, the absence of value
+**** nil? - tests for nil, the absence of value
 
 #+BEGIN_SRC clojure
   (nil? nil)
@@ -494,7 +605,7 @@ typically end with a question mark.
 #+RESULTS:
 : true
 
-*** not - returns the negation of a boolean returned from its operand
+**** not - returns the negation of a boolean returned from its operand
 
 #+BEGIN_SRC clojure
   (true? (not nil))
@@ -504,7 +615,7 @@ typically end with a question mark.
 #+RESULTS:
 : truefalse
 
-*** = & not= - tests for equality or inequality
+**** = & not= - tests for equality or inequality
 
 #+BEGIN_SRC clojure
   (= nil (not= nil false))
@@ -513,7 +624,7 @@ typically end with a question mark.
 #+RESULTS:
 : false
 
-** Collections As Predicates (cu)
+*** Collections As Predicates (cu)
 Maps and Sets implement the callable protocol (IFn), and can thus be used as 
 if they were functions. When calling a collection, it will return an argument's value that the collection itself contains. If the collection does not contain the argument's value, the result will be nil. 
 
@@ -524,8 +635,8 @@ if they were functions. When calling a collection, it will return an argument's 
 #+RESULTS:
 : 2
 
-** Logic Tests you Can Use on Collections (lc)
-**** empty?
+*** Logic Tests you Can Use on Collections (lc)
+***** empty?
 The empty? predicate tests whether a collection contains any items.
 
 #+BEGIN_SRC clojure
@@ -535,7 +646,7 @@ The empty? predicate tests whether a collection contains any items.
 #+RESULTS:
 : true
 
-**** seq
+***** seq
 The seq function isn't really a predicate, but it is idiomatic to use it as a predicate for 
 whether a collection is not empty. If a collection is empty, seq returns nil -  a falsey value. Otherwise, seq returns a list containing the elements of that collection - a truthy value.
 
@@ -546,7 +657,7 @@ whether a collection is not empty. If a collection is empty, seq returns nil -  
 #+RESULTS:
 : ([:a A])
 
-**** every?
+***** every?
 The every? function tests whether every element in a collection passes a predicate.
 
 #+BEGIN_SRC clojure
@@ -555,7 +666,7 @@ The every? function tests whether every element in a collection passes a predica
 
 #+RESULTS:
 : false
-**** not-any?
+***** not-any?
 The not-any? function tests whether each element in the collection fails a predicate.
 
 #+BEGIN_SRC clojure
@@ -565,7 +676,7 @@ The not-any? function tests whether each element in the collection fails a predi
 #+RESULTS:
 : true
 
-**** some
+***** some
 The some function returns true if any item in a collection passes a predicate.
 
 #+BEGIN_SRC clojure
@@ -592,9 +703,9 @@ But be wary of falsey values!
 
 #+RESULTS:
 : nil
-* Control Flow (brave, cu)
+** Control Flow (brave, cu)
 There are no statements in Clojure, only expressions.
-** do (cu)
+*** do (cu)
 The do expression accepts any number of arguments, evaluates them in turn, and returns the value of the last expression. This is how Clojure does 'blocks.' Idiomatically, do expressions are useful for side effects, like sdtout or logging. 
 
 #+BEGIN_SRC clojure
@@ -606,7 +717,7 @@ The do expression accepts any number of arguments, evaluates them in turn, and r
 #+RESULTS:
 : And, I was returned
 
-** when (lc)
+*** when (lc)
 The when function accepts a predicate and an expression. If the predicate returns true, the expression will be evaluated. If the predicate returns false, when returns nil. That is all.
 
 #+BEGIN_SRC clojure
@@ -616,7 +727,7 @@ The when function accepts a predicate and an expression. If the predicate return
 #+RESULTS:
 : true
 
-** when-let (lc)
+*** when-let (lc)
 The when-let function works similarly to when, but has a symbol-binding in the place of a logic test. If the expression bound to the symbol is truthy, the truthy value is bound to the symbol and the expression is evaluated.
 
 #+BEGIN_SRC clojure :results output
@@ -627,7 +738,7 @@ The when-let function works similarly to when, but has a symbol-binding in the p
 #+RESULTS:
 : true is great!
  
-** if (cu)
+*** if (cu)
 The if function takes three parameters: a predicate, an expression to evaluate in the event of 
 a true result, and an expression to evaluate in the event of a false result.
 
@@ -640,7 +751,7 @@ a true result, and an expression to evaluate in the event of a false result.
 #+RESULTS:
 : The X-Files have been closed
 
-** if-let (lc)
+*** if-let (lc)
 The if-let function works similarly to let, but has a symbol-binding in the place of a logic test. If the expression bound to the symbol is truthy, the truthy value is bound to the symbol and the first expression is evaluated, otherwise the second expression is evaulated.
 
 #+BEGIN_SRC clojure :results output
@@ -652,7 +763,7 @@ The if-let function works similarly to let, but has a symbol-binding in the plac
 #+RESULTS:
 : 1 is true
 
-** cond (cu)
+*** cond (cu)
 The cond expression permits a mapping of logic tests to expressions. Should a logic test 
 evaluate to true, the corresponding expression will be evaluated. To ensure that the final 
 predicate succeeds, you can use any truthy value as a predicate: "default" or :else are 
@@ -670,7 +781,7 @@ semantically satisfying.
 #+RESULTS:
 : zero
 
-** condp (cu)
+*** condp (cu)
 The predicates in a cond expression may be very similar. The condp expression accepts a single predicate that applies to subsequent pairs of keywords and expressions.
 
 #+BEGIN_SRC clojure
@@ -688,7 +799,7 @@ The predicates in a cond expression may be very similar. The condp expression ac
 #+RESULTS:
 : #'user/translate"French""unknown"
 
-** case (cu)
+*** case (cu)
 The case expression is similar to condp, but always checks for equality between a symbol and a 
 branching value that maps to an expression. Note that the branching values are evaluated during 
 compilation.
@@ -710,7 +821,9 @@ evaluated.
 
 #+RESULTS:
 : #'user/translate"French""Unknown"
-* Naming Things (lc)
+
+
+* Naming Things (lc) / Namespaces
 ** Binding Values to Symbols / Vars (lc)
 "Clojure symbols refer to values. When a symbol is evaluated, it returns the thing it refers 
 to." (lc) In Clojure, references cannot be reassigned - consistent with values being 
@@ -901,13 +1014,11 @@ The :all option makes a namespaces symbold available in the current namespace wi
 #+END_SRC
 *** Using libs (lc)
 ** Namespaces (cu)
-*** 
-* Moar Functions
+
+
+* Higher Order Functions and Working with Compound Data
+** Function Calls, Macro Calls, and Special Forms (brave)
 ** Higher Order Functions (brave)
-** Pure Functions: What and Why (brave)
-Pure functions always return the same output when given the same input. Pure functions are free of 'side effects'. 
-*** comp
-*** memoize
 ** Functions Creating Functions and other Neat Expressions (lc) / Function Functions (brave)
 *** partial (brave, lc)
 Partial application is the process of fixing arguments to a function, and returning a 
@@ -933,9 +1044,142 @@ manner.
   (printStr "one" "two")
 #+END_SRC
 
-
 *** apply (brave)
-** Function Calls, Macro Calls, and Special Forms (brave)
+** Data Transformation with Higher-Order Functions (lc) / Seq Function Examples (brave)
+The venerable for loop is often used to iterate over an ordered collection of data and affect some transformation of that collection. 
+*** map (cu, lc, brave)
+The map function accepts a function and a seq, and returns a new, lazy seq from the result of 
+applying the function to each item in the original seq. Map is also capable of handling 
+multiple collections, in which case each collection populates the parameters of a function; but 
+the map will terminate when the shortest collection ends.
+
+#+BEGIN_SRC clojure
+  (map #(* %1 %2) '(1 2 3 4 5) '(2 3 4))
+#+END_SRC
+
+#+RESULTS:
+| 2 | 6 | 12 |
+
+*** reduce (cu, lc, brave)
+The reduce function boils down a seq to a single value, using an accumulator during the 
+iteration. reduce accepts a function for accumulating values, an optional initial value, and 
+and a collection.
+  A function passed to reduce must have two parameters. The first parameter represents the 
+accumulator, the value that was returned from the last iteration of reduce. The second 
+parameter represents the current item in the collection. The function must return a value, this 
+value is the accumulator. 
+
+#+BEGIN_SRC clojure
+  (reduce + '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+: 15
+
+#+BEGIN_SRC clojure
+  (reduce + 100 '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+: 115
+
+#+BEGIN_SRC clojure
+  (reduce #(* %1 %2) '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+: 120
+
+*** filter (cu, lc, brave)
+The filter function accepts a predicate and a seq, and returns a seq containing each item in 
+the original seq that passes the predicate.
+
+#+BEGIN_SRC clojure
+  (filter true? '(true false true true false))
+#+END_SRC
+
+#+RESULTS:
+| true | true | true |
+
+*** remove (lc)
+remove is the opposite of filter, returning a seq of items that fail the predicate.
+
+#+BEGIN_SRC clojure
+  (remove odd? (range 0 20))
+#+END_SRC
+
+#+RESULTS:
+| 0 | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 18 |
+
+*** flatten (lc)
+
+#+BEGIN_SRC clojure
+  (flatten '([1 2 3 [4 5 [6]]]))
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 | 5 | 6 |
+
+*** into (lc)
+into returns a collection made by conj-ing the items in its second argument onto its first 
+argument. This is useful for converting one collection type to another.
+
+#+BEGIN_SRC clojure
+  (into {} [[:a "A"] [:b "B"]])
+#+END_SRC
+
+#+RESULTS:
+| :a | A | :b | B |
+
+#+BEGIN_SRC clojure
+  (into '(0) [1 2 3 4])
+#+END_SRC
+
+#+RESULTS:
+| 4 | 3 | 2 | 1 | 0 |
+
+#+BEGIN_SRC clojure
+  (into [] {:a "A" :b "B"})
+#+END_SRC
+
+#+RESULTS:
+| :a | A |
+| :b | B |
+
+*** partition &  partition-all (lc)
+
+#+BEGIN_SRC clojure
+  (partition 4 (range 0 11))
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 | 3 |
+| 4 | 5 | 6 | 7 |
+
+#+BEGIN_SRC clojure
+  (partition-all 4 (range 0 11))
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 |  2 | 3 |
+| 4 | 5 |  6 | 7 |
+| 8 | 9 | 10 |   |
+
+*** partition-by (lc)
+partion-by is unique in that its first parameter is a function, and the second a collection. The function is applied to each item in the collection, and whenever the evaluation of the function changes, a new partition is begun.
+
+#+BEGIN_SRC clojure
+  (partition-by #(= % 6) (range 0 11))
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 |  3 | 4 | 5 |
+| 6 |   |   |    |   |   |
+| 7 | 8 | 9 | 10 |   |   |
+
+*** take, drop, take-while, and drop-while (brave)
+*** concat (brave)
+*** more (lc)
 ** The Power of Laziness (lc) / Lazy seqs (brave) / Laziness (cu)
 "Most of ClojureScript's sequence-returning functions generate lazy sequences instead of 
 eagerly creating a whole new sequence. Lazy sequences generate their contents as they are 
@@ -1027,12 +1271,8 @@ that collection repeated infinitely.
 
 *** Demonstrating Lazy Seq Efficiency (brave)
 *** Infinite Sequences (brave)
-
-* Living with Immutable Data Structures (brave)
-** Recursion Instead of for/while
-** Function Composition Instead of Attribute Mutation
-* Recursion With loop and recur
-** loop (cu)
+** Recursion With loop and recur (lc)
+*** loop (cu)
 loop is similar to let, in that it's first parameter is a vector that establishes bindings for 
 the remainger of the expression. Within a loop expression, a recur expression causes execution 
 of the loop to return to the beginning of the loop with new bindings specifiied in the recur 
@@ -1051,270 +1291,64 @@ expression. This is Clojure's way of recursion without consuming the stack.
 #+RESULTS:
 : 0 is not equal to 1
 : X is equal to Y
-* Data Transformation with Higher-Order Functions (lc) / Seq Function Examples (brave)
-The venerable for loop is often used to iterate over an ordered collection of data and affect some transformation of that collection. 
-** map (cu, lc, brave)
-The map function accepts a function and a seq, and returns a new, lazy seq from the result of 
-applying the function to each item in the original seq. Map is also capable of handling 
-multiple collections, in which case each collection populates the parameters of a function; but 
-the map will terminate when the shortest collection ends.
-
-#+BEGIN_SRC clojure
-  (map #(* %1 %2) '(1 2 3 4 5) '(2 3 4))
-#+END_SRC
-
-#+RESULTS:
-| 2 | 6 | 12 |
-
-** reduce (cu, lc, brave)
-The reduce function boils down a seq to a single value, using an accumulator during the 
-iteration. reduce accepts a function for accumulating values, an optional initial value, and 
-and a collection.
-  A function passed to reduce must have two parameters. The first parameter represents the 
-accumulator, the value that was returned from the last iteration of reduce. The second 
-parameter represents the current item in the collection. The function must return a value, this 
-value is the accumulator. 
-
-#+BEGIN_SRC clojure
-  (reduce + '(1 2 3 4 5))
-#+END_SRC
-
-#+RESULTS:
-: 15
-
-#+BEGIN_SRC clojure
-  (reduce + 100 '(1 2 3 4 5))
-#+END_SRC
-
-#+RESULTS:
-: 115
-
-#+BEGIN_SRC clojure
-  (reduce #(* %1 %2) '(1 2 3 4 5))
-#+END_SRC
-
-#+RESULTS:
-: 120
-
-** filter (cu, lc, brave)
-The filter function accepts a predicate and a seq, and returns a seq containing each item in 
-the original seq that passes the predicate.
-
-#+BEGIN_SRC clojure
-  (filter true? '(true false true true false))
-#+END_SRC
-
-#+RESULTS:
-| true | true | true |
-
-** remove (lc)
-remove is the opposite of filter, returning a seq of items that fail the predicate.
-
-#+BEGIN_SRC clojure
-  (remove odd? (range 0 20))
-#+END_SRC
-
-#+RESULTS:
-| 0 | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 18 |
-
-** flatten (lc)
-
-#+BEGIN_SRC clojure
-  (flatten '([1 2 3 [4 5 [6]]]))
-#+END_SRC
-
-#+RESULTS:
-| 1 | 2 | 3 | 4 | 5 | 6 |
-
-** into (lc)
-into returns a collection made by conj-ing the items in its second argument onto its first 
-argument. This is useful for converting one collection type to another.
-
-#+BEGIN_SRC clojure
-  (into {} [[:a "A"] [:b "B"]])
-#+END_SRC
-
-#+RESULTS:
-| :a | A | :b | B |
-
-#+BEGIN_SRC clojure
-  (into '(0) [1 2 3 4])
-#+END_SRC
-
-#+RESULTS:
-| 4 | 3 | 2 | 1 | 0 |
-
-#+BEGIN_SRC clojure
-  (into [] {:a "A" :b "B"})
-#+END_SRC
-
-#+RESULTS:
-| :a | A |
-| :b | B |
-
-** partition &  partition-all (lc)
-
-#+BEGIN_SRC clojure
-  (partition 4 (range 0 11))
-#+END_SRC
-
-#+RESULTS:
-| 0 | 1 | 2 | 3 |
-| 4 | 5 | 6 | 7 |
-
-#+BEGIN_SRC clojure
-  (partition-all 4 (range 0 11))
-#+END_SRC
-
-#+RESULTS:
-| 0 | 1 |  2 | 3 |
-| 4 | 5 |  6 | 7 |
-| 8 | 9 | 10 |   |
-
-** partition-by (lc)
-partion-by is unique in that its first parameter is a function, and the second a collection. The function is applied to each item in the collection, and whenever the evaluation of the function changes, a new partition is begun.
-
-#+BEGIN_SRC clojure
-  (partition-by #(= % 6) (range 0 11))
-#+END_SRC
-
-#+RESULTS:
-| 0 | 1 | 2 |  3 | 4 | 5 |
-| 6 |   |   |    |   |   |
-| 7 | 8 | 9 | 10 |   |   |
-
-** take, drop, take-while, and drop-while (brave)
-** concat (brave)
-** more (lc)
-* for : sequence comprehension (cu, lc)
-The for function accepts a vector of bindings and an expression, and returns a sequence of the 
-result of evaluating the expression. for can accept multiple bindings, and iterates through them 
-in a nested fashion.
-
-#+BEGIN_SRC clojure
-  (for [x [1 2 3]
-        y [4 5]]
-    [y (* x x)])
-#+END_SRC
-
-#+RESULTS:
-| 4 | 1 |
-| 5 | 1 |
-| 4 | 4 |
-| 5 | 4 |
-| 4 | 9 |
-| 5 | 9 |
-
-** using :let to create local bindings
-
-#+BEGIN_SRC clojure
-  (for [animal [:mouse :duck :lory]
-        color [:red :blue]
-        :let [animal-str (str "animal-"(name animal))
-              color-str (str "color-"(name color))
-              display-str (str animal-str "-" color-str)]]
-    display-str)
-#+END_SRC
-
-#+RESULTS:
-| animal-mouse-color-red | animal-mouse-color-blue | animal-duck-color-red | animal-duck-color-blue | animal-lory-color-red | animal-lory-color-blue |
-
-** using :while to break out of the sequence generation
-
-#+BEGIN_SRC clojure
-  (for [animal [:mouse :duck :lory]
-        color [:red :blue]
-        :let [animal-str (str "animal-"(name animal))
-              color-str (str "color-"(name color))
-              display-str (str animal-str "-" color-str)]
-        :while (not= animal :duck)]
-    display-str)
-#+END_SRC
-
-#+RESULTS:
-| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
-
-** using :when to filter out values
-
-#+BEGIN_SRC clojure
-  (for [animal [:mouse :duck :lory]
-        color [:red :blue]
-        :let [animal-str (str "animal-"(name animal))
-              color-str (str "color-"(name color))
-              display-str (str animal-str "-" color-str)]
-        :when (not= animal :duck)]
-    display-str)
-#+END_SRC
-
-#+RESULTS:
-| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
-
-** doseq and run! for side effects
-doseq is similar to for, but executes the expression, discards the resulting values, and returns nil.
-
-#+BEGIN_SRC clojure :results output
-  (doseq [x [1 2 3]
-          y [4 5]
-          :let [z (+ x y)]]
-    (println x "+" y "=" z))
-#+END_SRC
-
-#+RESULTS:
-: 1 + 4 = 5
-: 1 + 5 = 6
-: 2 + 4 = 6
-: 2 + 5 = 7
-: 3 + 4 = 7
-: 3 + 5 = 8
-
-run! similarly returns nil, and acts similarly to reduce.
-
-#+BEGIN_SRC clojure :results output
-  (run! println [1 2 3 4 5])
-#+END_SRC
-
-#+RESULTS:
-: 1
-: 2
-: 3
-: 4
-: 5
+** Living with Immutable Data Structures (brave)
+*** Recursion Instead of for/while
+*** Function Composition Instead of Attribute Mutation
 
 
+* State and Concurrency (lc) / Clojure Metaphysica: Atoms, Refs, Vars... (brave)
+** State Management (cu)
+*** Vars (cu, brave)
+*** Using Atoms for Independent Items (lc) / Atoms (brave, cu)
+*** Using Refs for Coordinated Changes (lc) / Refs (brave)
+*** Using Agents to Manage Changes On Their Own (lc)
+*** Volatiles
+*** Watches and Validators (brave)
+** Concurrency and Parallelism Concepts (brave)
+*** Synchronous and Asynchronous
+*** Concurrent and Parallel
+*** Threads and the JVM
+**** Reference Cells
+**** Mutual Exclusion
+*** Futures
+*** Delays
+*** Promises
+** core.async (lc) / Mastering Concurrent Processes with core.async (brave)
+*** Getting Started with Processes (brave)
+*** queues (brave)
+*** channels (lc)
 
 
-* The Reader, Evaluation and Macros (brave
+* Host Interop (lc, brave, cu)
+** Java Interop (lc) 
+** Javascript (cu)
+** Working with the JVM (brave)
+
+
+* Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
+** Polymorphism (brave)
+*** multimethods (brave, cu)
+*** protocols (brave, cu)
+** Records (brave)
+** Heirarchies (cu)
+
+
+* The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
+** Macros (lc) / Clojure Alchemy: Reading, Evaluation, and Macros (brave)
+*** Clojure's Evaluation Model (brave)
+*** The Reader (brave)
+*** The Evaluator (brave)
+*** templating (lc)
 ** Threading Macros (cu)
 *** Thread First
 *** Thread Last
 ** Reader Conditionals (cu)
-*** 
-** Macros (lc) / Clojure Alchemy: Reading, Evaluation, and Macros (brave)
-*** Clojure's Evaluation Model (brave)
-*** The Reader (brave)
-*** The Evaluator (brave(
-*** templating (lc)
+** Writing Macros (brave)
 
-* State and Concurrency (lc) / Clojure Metaphysica: Atoms, Refs, Vars... (brave)
-** Using Atoms for Independent Items (lc) / Atoms (brave)
-** Watches and Validators (brave)
-** Using Refs for Coordinated Changes (lc) / Refs (brave)
-** Vars (brave)
-** Using Agents to Manage Changes On Their Own (lc)
-* State Management (cu)
-** Vars
-** Atoms
-** Volatiles
 
-* Host Interop (lc, brave, cu)
-** Working with the JVM (brave)
-** Java Interop (lc) 
-** Javascript (cu)
-* Abstractions and Polymorphism (cu)
-** Protocols
-** Multimethods
-** Heirarchies
 * Rolling Our Own Data Types (cu)
+
+
 * Tooling
 ** Getting Set Up With a Clojure Editor (lc)
 ** Lein / Boot
@@ -1322,25 +1356,8 @@ run! similarly returns nil, and acts similarly to reduce.
 *** Dep Management with Lein (lc)
 *** Building and Developing with Leiningen (brave)
 *** Boot, the Fancy Clojure Build Framework (brave)
-* Writing Macros (brave)
-* Concurrency and Parallelism Concepts (brave)
-** Synchronous and Asynchronous
-** Concurrent and Parallel
-** Threads and the JVM
-*** Reference Cells
-*** Mutual Exclusion
-** Futures
-** Delays
-** Promises
-* core.async (lc) / Mastering Concurrent Processes with core.async (brave)
-** Getting Started with Processes (brave)
-** queues (brave)
-** channels (lc)
-* Creating and Extending Abstractions... (brave)
-** Polymorphism
-*** multimethods
-*** protocols
-** Records
+
+
 * Web Libs
 ** Creating a Web Server With compojure
 ** Using JSON with the Cheshire and Ring
