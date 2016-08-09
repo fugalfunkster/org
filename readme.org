@@ -21,8 +21,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 * TODO queue
 ** OPEN Learn CSS Layout: the Pendatic Way
-** TODO Getting Started with Redux (egghead)
-** OPEN Modern React with Redux : Stephen Girder (?)
+** TODO Getting Started with Redux (egghead) (1:30)
+** OPEN Modern React with Redux : Stephen Girder (10:30)
 ** TODO YDKJS: Async
 
 
