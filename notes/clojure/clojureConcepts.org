@@ -86,29 +86,77 @@
 
 
 * Compound Data: Collections & Seqs
-** Collections & Seqs (lc)
+** Immutability and Persistence
 Collections have two important features: immutability and persistence. Immutable 
 collections cannot be changed. Instead, the data in a collection is shared by 
 collections created from the original collection. Thus, a function that "adds" a new 
 value to an existing collection does no such thing; It instead returns a 
 new collection, containing the new value, and references to each value in the 
 original collection. This is called structural sharing.
-  All collections support functions =count=, =conj=, and =seq=. However, different
+  We can observe structural sharing using identical?, a predicate that tells us whether
+two valuesa are the same object in memory:
+
+#+BEGIN_SRC clojure :results output
+  (let [xs (list 1 2 3)
+        ys (cons 0 xs)]
+    (println "xs:" xs)
+    (println "ys:" ys)
+    (println "rest ys:" (rest ys))
+    (println (identical? xs (rest ys))))
+#+END_SRC
+
+#+RESULTS:
+: xs: (1 2 3)
+: ys: (0 1 2 3)
+: rest ys: (1 2 3)
+: true
+
+** Collections (lc, cu) / The Collection Abstraction (brave)
+All collections support functions =count=, =conj=, and =seq=. However, different
 collection types implement these functions in different ways. For example, =conj= 
 returns a new collection from an existing collection and a value. When =conj= is applied 
 to a list, the new value appears at the beginning of the new list. But, when =conj= 
 is applied to a vector, the new value appears at the end of the new vector. In both 
 cases =conj= returns a new collection with a new value, but the implementation is 
 different.
-  Collections also provide a consistent interface to a category of functions called 
-'sequence functions,' which include =first=, =rest=, and =cons=. The seq function accepts a collection and returns a sequence. The sequence interface permits 'walking:' accessing the elements of the collection as sequences of values. When sequence functions are applied to collections, the collection is first represented as a sequence, and then the sequence function is performed.
-** Types of Collections (cu)
+** Seqs (lc, cu) / Programming to Abstractions (brave) / the Sequence Abstraction
+Collections also provide a consistent interface to a category of functions called 
+'sequence functions,' which include =first=, =rest=, and =cons=. The =seq= function accepts a collection and returns a sequence. The sequence interface permits 'walking:' accessing the elements of the collection as sequences of values. When sequence functions are applied to collections, the collection is first represented as a sequence, and then the sequence function is performed.
+*** rest & next
+rest and next are similar function, but when they are passed an empty collection their behavior differs.
+
+#+BEGIN_SRC clojure :results output
+  (println (rest []))
+  (println (next []))
+#+END_SRC
+
+#+RESULTS:
+: ()
+: nil
+*** nil is sorta seqable
+Check it out:
+
+#+BEGIN_SRC clojure :results output
+  (println (seq nil))
+  (println (first nil))
+  (println (rest nil))
+#+END_SRC
+
+#+RESULTS:
+: nil
+: nil
+: ()
+
+*** Treating Lists, Vectors, Sets and Maps as Sequences
+*** Abstraction Through Indirection
+** Types of Collections (lc, cu)
 *** Lists
-Lists are enclosed in parens, and preceded with a ' to prevent evaluation of the 
-list as an expression. Lists are very efficient for sequential access to 
-elements. 
+In Clojure, lists are singly linked lists. Lists are syntatictally important in any LISP; See also 
+'Compound Expressions'. Lists are enclosed in parens, and preceded with a ' to prevent evaluation of the 
+list as an expression. Lists are very efficient for sequential access to elements, and acesss to the first item in a list is very fast. 
 **** Create a list
 ***** list literal
+
 #+BEGIN_SRC clojure
   '(1 true "three" :four nil)
 #+END_SRC
@@ -124,7 +172,8 @@ elements.
 #+RESULTS:
 | 1 | true | three | :four | nil |
 
-**** first
+**** Lists as seqs
+***** first
 
 #+BEGIN_SRC clojure
   (first '(1 true "three" :four nil))
@@ -133,7 +182,7 @@ elements.
 #+RESULTS:
 : 1
 
-**** rest
+***** rest
 
 #+BEGIN_SRC clojure
   (rest '(1 true "three" :four nil))
@@ -142,7 +191,7 @@ elements.
 #+RESULTS:
 | true | three | :four | nil |
 
-**** cons
+***** cons
 
 #+BEGIN_SRC clojure
   (cons 0 '(1 2 3 4))
@@ -151,9 +200,36 @@ elements.
 #+RESULTS:
 | 0 | 1 | 2 | 3 | 4 |
 
+**** Lists as stacks
+***** peek
+
+#+BEGIN_SRC clojure
+  (peek '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+***** pop
+
+#+BEGIN_SRC clojure
+  (pop '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+| true | three | :four | nil |
+
+***** conj (equivalent to push for list-stacks)
+
+#+BEGIN_SRC clojure
+  (conj '(1 2 3 4) 0)
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 | 3 | 4 |
+
 *** Vectors
-Vectors provide fast index access. Every item is evaluated before being stored in 
-a vector.
+Vectors provide fast index access, and grow from their tail. When creating a vector, every item is evaluated before being stored.
 **** Create a vector
 ***** literal
 
@@ -191,8 +267,71 @@ a vector.
 #+RESULTS:
 : nil
 
+**** Vectors as Stacks
+***** peek
+
+#+BEGIN_SRC clojure
+  (peek [1 true "three" :four "something"])
+#+END_SRC
+
+#+RESULTS:
+: something
+
+***** pop
+
+#+BEGIN_SRC clojure
+  (pop [1 true "three" :four "something"])
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four |
+
+***** conj
+
+#+BEGIN_SRC clojure
+  (conj [1 true "three" :four "something"] "else")
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | something | else |
+
+**** Vectors as Associative Collections
+Because vectors access values in relation to numerical indexes - a type of key - we can use the assoc function to return a new collection with a different value at a specified index. Note that Clojure won't permit us to create sparse arrays, and we can only specify existing indexes or the index after the last item - effectively conjing the value onto the vector.
+
+#+BEGIN_SRC clojure
+  (assoc [1 2 3 5 5 6 7] 3 4)
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+
+Vectors are functions of their keys.
+
+#+BEGIN_SRC clojure
+  ([1 2 3 4 5 6 7] 3)
+#+END_SRC
+
+#+RESULTS:
+: 4
+
+**** mapv & filterv
+The map and filter functions return lazy seqs, but it is common to need a fully realized seq instead. We can accomplish this when working with vectors by using mapv and filterv. This form is also faster. 
+
+#+BEGIN_SRC clojure :results output
+
+  (println (type (mapv inc [1 2 3 4])))
+#+END_SRC
+
+#+RESULTS:
+: clojure.lang.PersistentVector
+
 *** Maps
-Maps store key-value pairs. Every item is evaluated before being stored in a map, like vectors, but the order of evaluation is indeterminate.
+Maps are associative collections that store key value pairs. Every item is evaluated before being stored in 
+a map, like vectors, but the order of evaluation is indeterminate - we can't predict what order a map's 
+items will surface in. However, other relatives, like the sorted-maps, do provide ordering guarantees.
+  It is most common to use keywords as the keys in a map, in great part because keywords can be used as 
+functions that take the map as an argument and return the corresponding value if the key is present in the 
+map.
 **** Create a map
 ***** literal
 
@@ -238,7 +377,23 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 
 #+RESULTS:
 : not found
+**** assoc & dissoc
+***** assoc
+#+BEGIN_SRC clojure
+  (assoc {:a "A" :b "B" :c "C"} :d "D")
+#+END_SRC
 
+#+RESULTS:
+| :a | A | :b | B | :c | C | :d | D |
+
+***** dissoc
+
+#+BEGIN_SRC clojure
+  (dissoc {:a "A" :b "B" :c "C"} :a)
+#+END_SRC
+
+#+RESULTS:
+| :b | B | :c | C |
 **** keys & vals
 ***** keys
 
@@ -258,24 +413,6 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 #+RESULTS:
 | A | B | C |
 
-**** assoc & dissoc
-***** assoc
-#+BEGIN_SRC clojure
-  (assoc {:a "A" :b "B" :c "C"} :d "D")
-#+END_SRC
-
-#+RESULTS:
-| :a | A | :b | B | :c | C | :d | D |
-
-***** dissoc
-
-#+BEGIN_SRC clojure
-  (dissoc {:a "A" :b "B" :c "C"} :a)
-#+END_SRC
-
-#+RESULTS:
-| :b | B | :c | C |
-
 **** merge
 
 #+BEGIN_SRC clojure
@@ -286,7 +423,9 @@ Maps store key-value pairs. Every item is evaluated before being stored in a map
 | :a | A | :b | B | :c | C | :d | D | :e | E | :f | F |
 
 *** Sets
-Sets are collections of unique values. No duplicate values are allowed when creating a set. Like maps, sets are unordered.
+Sets are collections of unique values. No duplicate values are allowed when creating a set, even when 
+nesting sets. Like maps, sets are unordered, but have ordered relatives such as sorted-set and 
+sorted-set-by.
 **** Create a set
 ***** literal
 
@@ -306,7 +445,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 4 3 2}
 
-**** Element retrieval with get, keyword access, & contains?
+**** Element retrieval with get, keyword access, set access, & contains?
 ***** get
 
 #+BEGIN_SRC clojure
@@ -320,6 +459,15 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 
 #+BEGIN_SRC clojure
   (:b #{:a :b :c :d})
+#+END_SRC
+
+#+RESULTS:
+: :b
+
+***** set access
+
+#+BEGIN_SRC clojure
+  (#{:a :b :c :d} :b)
 #+END_SRC
 
 #+RESULTS:
@@ -353,7 +501,8 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 3 2}
 
-**** clojure.set/union
+**** Using the clojure.set library
+***** clojure.set/union
 
 #+BEGIN_SRC clojure
   (clojure.set/union #{1 2 3 4} #{3 4 5})
@@ -362,7 +511,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 4 3 2 5}
 
-**** clojure.set/difference
+***** clojure.set/difference
 
 #+BEGIN_SRC clojure
   (clojure.set/difference #{1 2 3 4} #{3 4 5})
@@ -371,7 +520,7 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 #+RESULTS:
 : #{1 2}
 
-**** clojure.set/intersection
+***** clojure.set/intersection
 
 #+BEGIN_SRC clojure
   (clojure.set/intersection #{1 2 3 4} #{3 4 5})
@@ -379,14 +528,32 @@ Sets are collections of unique values. No duplicate values are allowed when crea
 
 #+RESULTS:
 : #{4 3}
-** The Collection Abstraction (brave)
-*** into (brave)
-*** conj (brave)
-** Programming to Abstractions (brave) / the Sequence Abstraction
-*** Treating Lists, Vectors, Sets and Maps as Sequences
-*** first, rest, and cons
-*** Abstraction Through Indirection
-** The Power of Laziness (lc) / Lazy seqs (brave) / Laziness (cu)
+*** Queues
+Queues largely borrow the semantics of stacks. But, where a stack peeks and conjs to the same 'end', a queue peeks data from one end, and conj's it to another end.
+**** crete a queue
+Creating a queue is not as straightforward as other collections, and requires literal syntax.
+
+#+BEGIN_SRC clojure
+  (def pg #queue [1 2 3 4 5])
+#+END_SRC
+
+#+RESULTS:
+
+**** peek
+
+#+BEGIN_SRC clojure :results output
+  (def pq #queue [1 2 3 4 5])
+  (peek pq)
+#+END_SRC
+
+#+RESULTS:
+
+**** conj
+
+#+BEGIN_SRC clojure :results output
+  (def pq #queue [1 2 3 4 5])
+  (conj pq 5)
+#+END_SRC** The Power of Laziness (lc) / Lazy seqs (brave) / Laziness (cu)
 "Most of ClojureScript's sequence-returning functions generate lazy sequences instead of 
 eagerly creating a whole new sequence. Lazy sequences generate their contents as they are 
 requested, usually when iterating over them. Laziness ensures that we don't do more work than 
@@ -725,6 +892,17 @@ if they were functions. When calling a collection, it will return an argument's 
 : 2
 
 *** Logic Tests you Can Use on Collections (lc)
+***** coll?
+The coll? predicate returns true if its argument is a collection.
+
+#+BEGIN_SRC clojure
+  (coll? {})
+  (coll? 8)
+#+END_SRC
+
+#+RESULTS:
+: truefalse
+
 ***** empty?
 The empty? predicate tests whether a collection contains any items.
 
@@ -735,7 +913,7 @@ The empty? predicate tests whether a collection contains any items.
 #+RESULTS:
 : true
 
-***** seq
+***** seq & 'nil pruning'
 The seq function isn't really a predicate, but it is idiomatic to use it as a predicate for 
 whether a collection is not empty. If a collection is empty, seq returns nil -  a falsey value. Otherwise, seq returns a list containing the elements of that collection - a truthy value.
 
@@ -1135,7 +1313,7 @@ manner.
 
 *** apply (brave)
 ** Data Transformation with Higher-Order Functions (lc) / Seq Function Examples (brave)
-The venerable for loop is often used to iterate over an ordered collection of data and affect some transformation of that collection. 
+The venerable for loop is often used to iterate over an ordered collection of data and affect some transformation of that collection. But, there's a better way! The sequence abstraction's generic interface permits us to use a great many functions on collections.
 *** map (cu, lc, brave)
 The map function accepts a function and a seq, and returns a new, lazy seq from the result of 
 applying the function to each item in the original seq. Map is also capable of handling 
@@ -1148,6 +1326,24 @@ the map will terminate when the shortest collection ends.
 
 #+RESULTS:
 | 2 | 6 | 12 |
+*** mapping over maps
+When you map over a map, the function you pass to map will recieve a two-item vector, containg the key and the value from the map. You can destructure the vector in the function's signature to ease this complexity.
+
+#+BEGIN_SRC clojure
+  (map (fn [[key value]] (* value value)) {:one 1 :two 2 :three 3})
+#+END_SRC
+
+#+RESULTS:
+| 1 | 4 | 9 |
+
+However, if the keys are not needed, it is more idiomatic to extract the values before passing them to map.
+
+#+BEGIN_SRC clojure
+  (map (fn [value] (* value value)) (vals {:one 1 :two 2 :three 3}))
+#+END_SRC
+
+#+RESULTS:
+| 1 | 4 | 9 |
 
 *** reduce (cu, lc, brave)
 The reduce function boils down a seq to a single value, using an accumulator during the 
