@@ -1,0 +1,461 @@
+
+Getting Started with Redux - Dan Abramov
+
+* The Single Immutable State Tree
+The first principle of Redux is to represent the entire state of your application, both data and UI, as a single JS object. All changes to this state must be explicit.
+* Describing State Changes With Actions
+The second principle is that the state tree is read-only. To change the state, you must dispatch an action: a plain JavaScript Object describing the state change. Action objects must have a type property with a value that is not undefined. Strings are a common choice, b/c strings are serializable.
+  A simple example would be an action that increments the state (in this case an int):
+
+#+BEGIN_SRC js
+  { type: "INCREMENT" }
+#+END_SRC
+
+To change unique component-states, we must pass unique ids to generic actions.
+
+#+BEGIN_SRC js
+  { type: "INCREMENT", id: "10J4Jc89" }
+#+END_SRC
+* Pure and Impure Functions
+Pure functions do not have any observable side effects, such as state mutation, I/O, etc.. The return value of a pure function is solely dependent on its input.
+* The Reducer Function
+The third principle is that state changes should be affected by pure functions, which accept the current state and any actions being dispatched, and return the new state and UI. In Redux, the Reducer function serves this purpose.
+* Writing a Counter Reducer with Tests
+These tests use Michael Jackon's expect library, and assume a global state that is a single int.
+When writing a reducer, there are some general guidelines we should follow. First, if a reducer 
+recieves undefined as the state argument, it must return what it considers the initial state of 
+the application. This is easy to do with ES6's default argument syntax. Next, we want to 
+determine what type of action was passed in, and return the new state accordingly. This is easily 
+accomplished with a switch statement on (action.type). Finally, when we dispatch an action that a reducer doesn't understand, we should return the current state of the application.
+** CODE EXAMPLE:
+#+BEGIN_SRC js
+  const counter = (state = 0, action) => {
+    switch (action.type) {
+      case 'INCREMENT':
+        return state + 1;
+      case 'DECREMENT':
+        return state - 1;
+      default:
+        return state;
+    }
+  }
+
+  expect(
+    counter(0, {type: 'INCREMENT' });
+  ).toEqual(1);
+
+  expect(
+    counter(1, {type: 'INCREMENT' });
+  ).toEqual(2);
+
+  expect(
+    counter(2, {type: 'DECREMENT' });
+  ).toEqual(1);
+
+  expect(
+    counter(1, {type: 'DECREMENT' });
+  ).toEqual(0);
+
+  expect(
+    counter(1, {type: 'SOMETHINGELSE' });
+  ).toEqual(1);
+
+  expect(
+    counter(undefined, {});
+  ).toEqual(0);
+
+#+END_SRC
+* Store Methods : getState(), dispatch(), and subscribe()
+Now that we have our counter reducer...
+
+The store binds the three principles of Redux together: It holds the current application-state object, it lets you dispatch actions, and when you create it, you need to specify the recuter that updates the state. To create a store, we import createStore from Redux, pass a reducer to createStore, and bind the return value.
+
+#+BEGIN_SRC js
+  const { createStore } = Redux;
+  const store = createStore(counter);
+#+END_SRC
+
+Our store has three importand methods:
+1. store.getState() returns the current state of the Redux store.
+2. store.dispatch({action}) lets you dispatch actions to change the application state.
+3. store.subscribe() lets us register a callback that the Redux store will call anytime an action has been dispatched, allowing us to update the UI anytime the state changes.
+
+#+BEGIN_SRC js
+  const render = () => {
+    document.body.innerText = store.getState();
+  }
+
+  store.subscribe(render);
+  render();
+
+  document.addEventListener('click', () => {
+    store.dispatch({type: 'INCREMENT' });
+  });
+#+END_SRC
+
+Note that the example calls the render method once to render the initial state. 
+
+* Implementing Store from Scratch
+What we know about stores:
+- We create stores by passing in a reducer.
+- The store contains the application's state object.
+- The store has .getState, .dispatch, and .subscribe methods.
+- The store returns the state when it's .getState method is called.
+- The store can change the applications state by calls calling the .dispatch(action) method.
+- When the store dispatches an action, the application's state is overwritten by the return 
+  value from the reducer used to create the store.
+- When the application state is overwritten, listeners must be notified so that the UI can 
+  reflect the state change.
+- The store must have a 'list' of listeners to notify.
+- The store's subscribe method can add (and remove) listeners from the store.
+- The creation of the store should reify the application state.
+
+#+BEGIN_SRC js
+  const createStore = (reducer) => {
+    let state;
+    let listeners = [];
+
+    const getState = () => state;
+    const dispatch = (action) => {
+      state = reducer(state, action);
+      listeners.forEach(listener => listener());
+    };
+    const subscribe = (listener) => {
+      listeners.push(listener);
+      return () => {
+        listeners = listerners.filter(l => l !== listener); //remove listener func.
+      }
+    };
+
+    dispatch({});  // initialize state
+
+    return {getState, dispatch, subscribe};
+  }
+#+END_SRC
+
+* React Counter Example
+
+#+BEGIN_SRC js
+
+  const counter = (state = 0, action) => {
+    switch (action.type) {
+      case 'INCREMENT':
+        return state + 1;
+      case 'DECREMENT':
+        return state - 1;
+      default:
+        return state;
+    }
+  }
+
+  const Counter = ({
+    value,
+    onIncrement,
+    onDecrement
+  }) => (
+    <div>
+      <h1>{value}</h1>
+      <button onClick={onIncrement}>+</button>
+      <button onClick={onDecrement}>-</button>
+    </div>
+  )
+
+  const { createStore } = Redux;
+  const store = createStore(counter);
+
+  const render = () => {
+    ReactDOM.render(
+      <Counter 
+        value={store.getState()}
+        onIncrement={() => store.dispatch({type: 'INCREMENT'})}  // are arrow funcs necessary?
+        onDecrement={() => store.dispatch({type: 'DECREMENT'})} />, 
+      document.getElementById('root')); 
+  }
+
+  store.subscribe(render);
+  render();
+
+  document.addEventListener('click', () => {
+    store.dispatch({type: 'INCREMENT' });
+  });
+
+#+END_SRC
+
+* Avoiding Array Mutations with concat(), slice(), and ...spread
+Array methods like push and splice mutate the array they are called upon. Instead, we want to return a new array with the desired changes, leaving the original array unchanged. 
+** Adding items to arrays
+Instead of using Array.push, we can use Array.concat(newItem).
+
+#+BEGIN_SRC js
+  const newArray = oldArray.concat(newItemToAdd)
+#+END_SRC
+
+We can also use the ES6 spread operator to destructure the old array. 
+
+#+BEGIN_SRC js
+  const newArray = [...oldArray, newItem];
+#+END_SRC
+
+** Removing items from arrays
+Instead of Array.splice, we can use Array.slice! Slice returns a new array beginning at the first argument and ending before the second argument. We can concatenate this with another slice beginning after the index we want to drop.
+
+#+BEGIN_SRC js
+  const index = indexOfItemToRemove;
+  const newArray = oldArray.slice(0, index).concat(oldArray.slice(index + 1));
+#+END_SRC
+
+And, with the ES6 spread operator:
+
+#+BEGIN_SRC js
+  const newArray = [...oldArray.slice(0, index), ...oldArray.slice(index + 1)]
+#+END_SRC
+
+** Increminting items in arrays
+Instead of mutating an item in place, we can use the techniques we use for removing items from arrays:
+
+#+BEGIN_SRC js
+  const newArray = [
+                    ...oldArray.slice(0, index),
+                    [oldArray[index] + 1],
+                    ...oldArray.slice(index + 1)
+                   ];
+#+END_SRC
+
+* Avoiding Object Mutations with Object.assign() and ...spread
+The ES6 Object.assign() method allows you to assign properties to an object using other objects.
+Object.assign accepts an arbitrary number of objects, leftmost objects are assigned properties of rightmost objects: rightmost objects overrule objects left of them.
+
+#+BEGIN_SRC js
+  const newObject = Object.assign({}, oldObject, {key: newValue});
+#+END_SRC
+
+The ES6 spread operator also lets do this!
+
+#+BEGIN_SRC js
+  const newObject = {...oldObject, key: newValue};
+#+END_SRC
+
+* Writing a Todo List Reducer (Adding a Todo)
+
+#+BEGIN_SRC js
+  const todos = (state = [], action) => {
+    switch (action.type) {
+      case 'ADD_TODO':
+        return [
+          ...state,
+          {
+            id: action.id,
+            text: action.text,
+            completed: false
+          }
+        ];
+      default:
+        return state;
+    }
+  };
+
+  const testAddTodo = () => {
+    const stateBefore = [];
+    const action = {
+      type: 'ADD_TODO',
+      id: 0,
+      text: 'Learn Redux'
+    };
+    const stateAfter = [
+      {
+        id: 0,
+        text: 'Learn Redux',
+        completed: false
+      }
+    ];
+    expect(
+      todos(stateBEfore, action)
+    ).toEqual(stateAfter);
+  };
+
+  testAddToto();
+  console.log('All Tests Passed...');
+ 
+#+END_SRC
+
+* Writing a Todo List Reducer (Toggling a Todo)
+
+#+BEGIN_SRC js
+  const todos = (state = [], action) => {
+    switch (action.type) {
+      case 'ADD_TODO':
+        return [
+          ...state,
+          {
+            id: action.id,
+            text: action.text,
+            completed: false
+          }
+        ];
+      case 'TOGGLE_TODO':
+        return state.map(todo => {
+          if (todo.id !== action.id) {
+            return todo;
+          }
+          return {
+            ...todo,
+            completed: !todo.completed
+          };
+        });
+      default:
+        return state;
+    }
+  };
+
+  const testToggleTodo = () => {
+    const stateBefore = [
+      {
+        id: 0,
+        text: 'Learn Redux',
+        completed: false
+      },
+      {
+        id: 1,
+        text: 'Go shopping',
+        completed: false
+      }
+    ];
+    const action = {
+      type: 'TOGGLE_TODO',
+      id: 1
+    };
+    const stateAfter = [
+      {
+        id: 0,
+        text: 'Learn Redux',
+        completed: false
+      },
+      {
+        id: 1,
+        text: 'Go shopping',
+        completed: true
+      }
+    ];
+    expect(
+      todos(stateBefore, action)
+    ).toEqual(stateAfter);
+  };
+
+  testToggleTodo()
+  console.log('All Tests Passed...');
+ 
+#+END_SRC
+
+* Reducer Composition with Arrays
+Anytime a function does too many things, you want to extract other functions from it, and compose those functions. In the previous example our reducer was overloaded with logic. Let's delegate some behavior... (I think this is excessive, too many strings...)
+
+#+BEGIN_SRC js
+  const todo = (state, action) => {
+    switch (action.type) {
+      case 'ADD_TODO':
+        return {
+          id: action.id,
+          text: action.text,
+          completed: false
+        };
+      case 'TOGGLE_TODO':
+        if (todo.id !== action.id) {
+          return todo;
+        }
+        return {
+          ...todo,
+          completed: !todo.completed
+        };
+      default:
+        return state;
+    }
+  };
+
+  const todos = (state = [], action) => {
+    switch (action.type) {
+      case 'ADD_TODO':
+        return [
+          ...state,
+          todo(state, action)
+        ];
+      case 'TOGGLE_TODO':
+        return state.map(t => todo(t, action));
+      default:
+        return state;
+    }
+  };
+#+END_SRC
+* Reducer Composition with Objects
+We can combine several, unrelated reducers through reducer composition. This allows us to have a 
+more complex state model, while maintaining a separation of concerns in our reducers through 
+composition.
+  Say we wanted to add a visibilityFilter object to our application's state (above, it was just 
+a simple array). To do so, we would nest the todos array and the visibility filter object in a 
+parent object, providing us with a new application state model. Now we have to refactor our 
+reducers:
+
+#+BEGIN_SRC js
+
+  const visibilityFilter = (
+    state = 'SHOW_ALL',
+    action
+  ) => {
+    switch (action.type) {
+      case 'SET_VISIBILITY_FILTER':
+        return action.filter;
+      default:
+        return state;
+    }
+  }
+
+  const todoApp = (state = {}, action) => {
+    return {
+      todos: todos(
+        state.todos,
+        action
+      ),
+      visibilityFilter: visibilityFilter(
+        state.visibilityFilter,
+        action
+      )
+    };
+  };
+
+
+  const { createStore } = Redux;
+  const store = createStore(todoApp);
+#+END_SRC
+
+Note, our global state is an empty object, so it's crucial that the child reducers populate the global state object with their default states.
+
+* Reducer Composition with combineReducers()
+Because the pattern found in the last example is so common, Redux provides some sugar to help us out.
+
+#+BEGIN_SRC js
+  const { combineReducers } = Redux;
+  const todoApp = combineReducers({
+    todos,
+    visibilityFilter
+  });
+#+END_SRC
+
+It is idiomatic to always name your reducers after the state keys they manage. This allows us to take advantage of the ES6 object literal shorthand notation.
+
+* Implementing combineReducers() from Scratch
+
+#+BEGIN_SRC js
+const combineReducers(reducers) => {
+  return (state = {}, action) => {
+    return Object.keys(reducers).reduce(
+      (nextState, key) = {
+        nextState[key] = reducers[key](
+          state[key],
+          action
+        );
+        return nextState;
+      },
+      {} // initial value of nextState
+    );
+  };
+}
+#+END_SRC
