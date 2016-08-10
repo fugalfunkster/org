@@ -150,4 +150,19 @@ gen.next();
 ** when you need a job, talk to justin collum at CDK global
 *** justin.collum@cdk.com
 *** send resume and portfolio
-* 
+* 8/9
+** Lucid React Component Library
+*** Hybrid Components
+*** Props or Children
+*** slides.com/jondlm/lucid-ui
+*** http://appnexus.github.io/lucid/#/
+*** https://github.com/joefraley/react-meetup-firebase
+*** see also uncontrollable
+** Easy Prototyping with React & Firebase
+*** Jen Tong talk on iOt, see meetup for link
+*** Firebase, backend as a service, check out matchbox for cljs
+**** https://github.com/crisptrutski/matchbox
+*** https://github.com/joefraley/react-meetup-firebase
+*** https://docs.google.com/presentation/d/1q_uTuoD0qKECiScWHcRO3GDVkyahdl3kuLK3sAYrXC8/edit#slide=id.gcb9a0b074_1_0
+** react-a11y
+*** library throws errors for accessibility problems, helps grab low hanging fruit quickly
