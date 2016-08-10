@@ -68,7 +68,7 @@ accomplished with a switch statement on (action.type). Finally, when we dispatch
 * Store Methods : getState(), dispatch(), and subscribe()
 Now that we have our counter reducer...
 
-The store binds the three principles of Redux together: It holds the current application-state object, it lets you dispatch actions, and when you create it, you need to specify the recuter that updates the state. To create a store, we import createStore from Redux, pass a reducer to createStore, and bind the return value.
+The store binds the three principles of Redux together: It holds the current application-state object, it lets you dispatch actions, and when you create it, you need to specify the reducer that updates the state. To create a store, we import createStore from Redux, pass a reducer to createStore, and bind the return value.
 
 #+BEGIN_SRC js
   const { createStore } = Redux;
@@ -101,7 +101,7 @@ What we know about stores:
 - The store contains the application's state object.
 - The store has .getState, .dispatch, and .subscribe methods.
 - The store returns the state when it's .getState method is called.
-- The store can change the applications state by calls calling the .dispatch(action) method.
+- The store can change the application's state by calling the .dispatch() method.
 - When the store dispatches an action, the application's state is overwritten by the return 
   value from the reducer used to create the store.
 - When the application state is overwritten, listeners must be notified so that the UI can 
@@ -137,6 +137,7 @@ What we know about stores:
 
 #+BEGIN_SRC js
 
+  // our reducer function
   const counter = (state = 0, action) => {
     switch (action.type) {
       case 'INCREMENT':
@@ -148,6 +149,7 @@ What we know about stores:
     }
   }
 
+  // our counter component
   const Counter = ({
     value,
     onIncrement,
@@ -160,9 +162,11 @@ What we know about stores:
     </div>
   )
 
+  // reify the store
   const { createStore } = Redux;
   const store = createStore(counter);
 
+  // render and pass props to component
   const render = () => {
     ReactDOM.render(
       <Counter 
@@ -171,13 +175,10 @@ What we know about stores:
         onDecrement={() => store.dispatch({type: 'DECREMENT'})} />, 
       document.getElementById('root')); 
   }
-
+  
+ 
   store.subscribe(render);
   render();
-
-  document.addEventListener('click', () => {
-    store.dispatch({type: 'INCREMENT' });
-  });
 
 #+END_SRC
 
@@ -459,3 +460,4 @@ const combineReducers(reducers) => {
   };
 }
 #+END_SRC
+
