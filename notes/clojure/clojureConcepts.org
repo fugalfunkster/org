@@ -41,7 +41,7 @@
 [X] 3.5. Flow control
 [X] 3.6. Truthiness
 [X] 3.7. Locals, Blocks, and Loops
-[ ] 3.8. Collection types
+[X] 3.8. Collection types
 [X] 3.9. Destructuring
 [ ] 3.10. Threading Macros
 [ ] 3.11. Reader Conditionals
@@ -49,7 +49,7 @@
 [ ] 3.13. Abstractions and Polymorphism
 [ ] 3.14. Data types
 [ ] 3.15. Host interoperability
-[ ] 3.16. State management
+[X] 3.16. State management
 [ ] 4.1. Getting Started with the Compiler
 [ ] 4.2. Working with the REPL
 [ ] 4.3. The Closure Library
@@ -1204,7 +1204,7 @@ Thankfully, destructuring nested data is as easy as flat data.
 #+RESULTS:
 : red2
 
-** Namespaces (lc) / Organizing Your Project: A Librarian's Tale (brave)
+** Namespaces (lc, cu) / Organizing Your Project: A Librarian's Tale (brave)
 vars are scoped to namespaces. The default namespace is "user". 
 *** creating and identifying a namespace (lc)
 
@@ -1280,7 +1280,7 @@ The :all option makes a namespaces symbold available in the current namespace wi
               [rabbit.favfoods :refer :all]))
 #+END_SRC
 *** Using libs (lc)
-** Namespaces (cu)
+
 
 
 * Higher Order Functions and Working with Compound Data
@@ -1492,12 +1492,206 @@ expression. This is Clojure's way of recursion without consuming the stack.
 
 * State and Concurrency (lc) / Clojure Metaphysica: Atoms, Refs, Vars... (brave)
 ** State Management (cu)
-*** Vars (cu, brave)
-*** Using Atoms for Independent Items (lc) / Atoms (brave, cu)
-*** Using Refs for Coordinated Changes (lc) / Refs (brave)
-*** Using Agents to Manage Changes On Their Own (lc)
-*** Volatiles
-*** Watches and Validators (brave)
+Useful programs have state, we need to model data that retains a consistent identity but changes value over time. Bindings like let and def allow us to redefine a var in a namespace, but we cannot know (programmatically) when a redefinition occurs. And, when we're outside of that namespace, we cannot redefine a var. 
+*** TODO Review our options in above paragraph...
+*** Using Atoms for Independent and Synchronous Changes (lc) / Atoms (brave, cu)
+Atoms are objects with values that we can change at will. We can also use watcher functions to observe the atom for changes, and validation functions to ensure that the atoms value is valid.
+**** Declaring and dereferencing an atom
+To declare an atom, we use the atom function.
+
+#+BEGIN_SRC clojure
+  (def h (atom "Hydrogen"))
+#+END_SRC
+
+#+RESULTS:
+: #'user/h
+
+In order to get the current value of the atom, we have to dereference the binding. We can use the =deref= function, or the @ shorthand.
+
+#+BEGIN_SRC clojure
+  (def h (atom "Hydrogen"))
+  (deref h)
+  @h
+#+END_SRC
+
+#+RESULTS:
+: #'user/h"Hydrogen""Hydrogen"
+
+**** Altered states with swap! and reset!
+To change the value of an atom, we can either use =swap!=, in conjunction with a function 
+that returns a new state value, or we can use =reset!= to overwrite the atom's value 
+directly. Functions that end in a bang =!= indicate that we're messing with state in clojure.
+***** swap!
+The swap! function takes an atom and a function that accepts that atom's current value and returns that atom's new value. The function we pass swap must be free of side effects, because swap! is an 'atomic transaction.' Under the hood, swap! applies its function to its atom, and then checks to ensure that the atom hasn't been changed since the function began execution - via a process in another thread for example. If it has changed, swap! will start over, passing the changed atom to the function. This means any side effects could potentially execute multiple times as swap! attempts to ensure that it transforms the atom's state correctly. 
+
+#+BEGIN_SRC clojure :results output
+  (def h (atom "In the beginning..."))
+  (defn nextAtom [currentAtom] (if (= currentAtom "Hydrogen" ) "Helium" "Hydrogen"))
+  (println @h)
+  (swap! h nextAtom)
+  (println @h)
+  (swap! h nextAtom)
+  (println @h)
+#+END_SRC
+
+#+RESULTS:
+: In the beginning...
+: Hydrogen
+: Helium
+
+***** reset!
+The reset! function will overwrite the value of an atom directly. 
+
+#+BEGIN_SRC clojure :results output
+  (def h (atom "Hydrogen")) 
+  (println @h)
+  (reset! h "Helium")
+  (println @h)
+#+END_SRC
+
+#+RESULTS:
+: Hydrogen
+: Helium
+
+**** Observation (cu) / Watches and Validators (brave)
+=add-watch= and =remove-watch= are functions that tie an atom to a watcher function (a keyword-function pair) or remove that tie. Whenever an atom's value changes, all of that atom's watcher functions will be called. Each watcher function must have a key (keyword) associated with it, so that the watcher can be removed. 
+
+#+BEGIN_SRC clojure :results output
+  (def a (atom 0))
+  (add-watch a :logger (fn [key the-atom old-value new-value]
+                         (println "Key:" key "Old:" old-value "New:" new-value)))
+  (reset! a 42)
+  (swap! a inc)
+  (remove-watch a :logger)
+
+
+#+END_SRC
+
+#+RESULTS:
+: Key: :logger Old: 0 New: 42
+: Key: :logger Old: 42 New: 43
+
+*** Using Refs for Coordinated and Synchronous Changes (lc) / Refs (brave)
+Refs can only be changed within a transaction. Transactions have a few characteristics that are database-like:
+- Atomic: Within a transaction, multiple refs may be changed, but it's an all or nothing proposition. Either all changes succeed, or all fail. We do this by using =dosync= which coordinates any state changes within its body.
+- Consistent: An optional validator function can check the refs values before the transaction commits.
+- Isolated: Transactions are ignorant of each other. Transactions in separate threads cannot affect each other.
+**** declaring and dereferencing a ref
+
+#+BEGIN_SRC clojure
+  (def ump (ref "Steve"))
+  (deref ump)
+  @ump
+#+END_SRC
+
+#+RESULTS:
+: #'user/ump"Steve""Steve"
+
+**** alter
+The =alter= function behaves similarly to swap!, it accepts a ref and a function that accepts a ref and returns the new state of the ref. In order to coordinate state changes across multiple refs, we must run our alter forms in a dosync form. This ensures that we get the do or die guarantees of an atomic transaction. And, like swap!, if the transaction fails, the program will retry, so the functions passed to alter must be side-effect free.
+
+#+BEGIN_SRC clojure :results output
+  (def alice-height (ref 3))
+  (def right-hand-bites (ref 10))
+  (defn eat-from-right-hand []
+    (dosync (when (pos? @right-hand-bites)
+              (alter right-hand-bites dec)
+              (alter alice-height #(+ % 24)))))
+  (let [n 2]
+    (future (dotimes [_ n] (eat-from-right-hand)))
+    (future (dotimes [_ n] (eat-from-right-hand)))
+    (future (dotimes [_ n] (eat-from-right-hand))))
+
+  (println @alice-height)
+  (println @right-hand-bites)
+#+END_SRC
+
+#+RESULTS:
+: 147
+: 4
+
+**** TODO commute
+Unlike alter, commute will not retry upon failure. Instead, commute will use an 'in-transaction-value' after a failure, and set the ref valueat the commit point in the transaction. WHAT IS THE COMMIT POINT?
+
+#+BEGIN_SRC clojure :results output
+  (def alice-height (ref 3))
+  (def right-hand-bites (ref 10))
+  (defn eat-from-right-hand []
+    (dosync (when (pos? @right-hand-bites)
+              (commute right-hand-bites dec)
+              (commute alice-height #(+ % 24)))))
+  (let [n 2]
+    (future (dotimes [_ n] (eat-from-right-hand)))
+    (future (dotimes [_ n] (eat-from-right-hand)))
+    (future (dotimes [_ n] (eat-from-right-hand))))
+
+  (println @alice-height)
+  (println @right-hand-bites)
+#+END_SRC
+
+#+RESULTS:
+: 147
+: 4
+
+**** ref-set
+When one ref's value is defined in terms of another ref's value, we must use ref-set instead of alter or commute to ensure that the dependency is respected. =ref-set= directly sets the value.
+
+#+BEGIN_SRC clojure :results output
+  (def x (ref 1))
+  (def y (ref 1))
+  (defn new-values []
+    (dosync
+      (alter x inc)
+      (ref-set y (+ 2 @x))))
+  (let [n 2]
+    (dotimes [_ n] (new-values))
+    (dotimes [_ n] (new-values)))
+  (println @x)
+  (println @y)
+#+END_SRC
+
+#+RESULTS:
+: 5
+: 7
+
+*** Using Agents for Independent and Synchronous Changes (lc)
+**** creation and dereferencing
+Creation and dereferencing is similar to an atom.
+#+BEGIN_SRC clojure
+  (def secret (agent "man"))
+  @secret
+#+END_SRC
+
+#+RESULTS:
+: #'user/secret"man"
+
+**** send
+
+#+BEGIN_SRC clojure
+  (def secret (agent "man"))
+#+END_SRC
+
+**** send-off
+*** Volatiles (cu)
+Volatiles are -essentially- atoms that lack an option to attach watchers. This makes them more performant. Note that the volatile constructor uses =volatile!=.
+
+#+BEGIN_SRC clojure :results output
+ 
+(def vol (volatile! "Voldemort"))
+(println (volatile? vol))
+(println (deref vol))
+(vswap! vol #(when (= "Voldemort" %) "The One Who Must Not Be Named"))
+(println (deref vol))
+(vreset! vol "Vanquished")
+(println (deref vol))
+#+END_SRC
+
+#+RESULTS:
+: true
+: Voldemort
+: The One Who Must Not Be Named
+: Vanquished
+
 ** Concurrency and Parallelism Concepts (brave)
 *** Synchronous and Asynchronous
 *** Concurrent and Parallel
@@ -1505,6 +1699,42 @@ expression. This is Clojure's way of recursion without consuming the stack.
 **** Reference Cells
 **** Mutual Exclusion
 *** Futures
+The future function accepts a 'body' and executes it in another thread. The following example demonstrates the importance of keeping our swap! functions side effect free.
+
+#+BEGIN_SRC clojure :results output
+  (def counter (atom 0))
+  (println @counter)
+  (defn inc-print [a] 
+    (println a)
+    (inc a))
+  (let [n 3]
+    (future (dotimes [_ n] (swap! counter inc-print)))
+    (future (dotimes [_ n] (swap! counter inc-print)))
+    (future (dotimes [_ n] (swap! counter inc-print))))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+0
+0
+0
+0
+1
+2
+21
+
+3
+3
+2
+4
+4
+5
+5
+6
+7
+8
+#+end_example
+
 *** Delays
 *** Promises
 ** core.async (lc) / Mastering Concurrent Processes with core.async (brave)
