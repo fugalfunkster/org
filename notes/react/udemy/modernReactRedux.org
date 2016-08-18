@@ -328,6 +328,8 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
 #+END_SRC
 
+redux-promise intercepts actions that have a promise and resolves them before passing them through to the reducers
+
 *** AJAX with axios
        we return the promise as the payload of the action, the action goes to the
        reducer with the promise's response. redux-promise doesn't pass an action on
@@ -341,3 +343,8 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 ** map props to a render helper...
 ** react-sparklines
 ** react-google-maps
+** Big ideas
+*** action creators
+*** redux-promise middleware
+*** reducers and avoiding state mutation
+*** sparklines and google-maps libraries

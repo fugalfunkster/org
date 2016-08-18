@@ -461,3 +461,1578 @@ const combineReducers(reducers) => {
 }
 #+END_SRC
 
+* React Todo List Example (Adding a Todo)
+So far we have written reducer functions, refactored them, and composed them into a single reducer function 
+using combineReducers(). Now we can write our view layer using React. 
+** Rendering with react
+In the previous examples, we passed a render function to our store.subscribe() method. This triggered the 
+render function each time our state changed. To render our react component, we call React.DOM inside our 
+render function, and pass it our app's root component. 
+  We will pass in our state in this render function as well. Our TodoApp component will need our todos data, 
+so we pass in the todos as props, and reqtieve the data from out store with {store.getState().todos}
+
+#+BEGIN_SRC js
+const render = () => {
+  ReactDOM.render(
+    <TodoApp
+      todos={store.getState().todos}
+    />,
+    document.getElementById('root')
+  );
+};
+
+store.subscribe(render);
+render();
+#+END_SRC
+
+** Building Our TodoApp 'root' Component
+React provides a base class for all components, which we can extend. Our component will return a div 
+containing an input field, a submit button to add a todo, and a list of the todos.
+  Our button adds a todo by dispatching an action with a type 'ADD_TODO', an id (referenced from a global 
+variable), and by using the value of the input text field.
+  To access the input text, we can use the ref prop, which calls a function and passes it the DOM node, to 
+set the component's this.input property to the input component's node. This allows us to access the value 
+attribute of the input node in our button's click handler. 
+  
+#+BEGIN_SRC js 
+const { Component } = React;
+
+let nextTodoId = 0;
+class TodoApp extends Component {
+  render() {
+    return (
+      <div>
+        <input ref={node => {
+          this.input = node;
+        }} />
+        <button onClick={() => {
+          store.dispatch({
+            type: 'ADD_TODO',
+            text: this.input.value,
+            id: nextTodoId++
+          });
+          this.input.value = '';
+        }}>
+          Add Todo
+        </button>
+        <ul>
+          {this.props.todos.map(todo =>
+            <li key={todo.id}>
+              {todo.text}
+            </li>
+          )}
+        </ul>
+      </div>
+    );
+  }
+}
+#+END_SRC
+
+* React Todo List Example (Toggling a Todo)
+Now that we are able to add todos, we will permit the user to toggle todos. In the list of todos, each list item will have a click handler that dispatches an action with type: 'TOGGLE_TODO' and the id of the todo being clicked. 
+  We can also programmatically style these list items, by using a ternary expression in an inline style tag. 
+
+#+BEGIN_SRC js
+class TodoApp extends Component {
+  render() {
+    return (
+      <div>
+        // <input/>
+        // <button/>
+        <ul>
+          {this.props.todos.map(todo =>
+            <li key={todo.id}
+                onClick={() => {
+                  store.dispatch({
+                    type: 'TOGGLE_TODO',
+                    id: todo.id
+                  });         
+                }}
+                style={{
+                  textDecoration:
+                    todo.completed ?
+                      'line-through' :
+                      'none'
+                }}>
+              {todo.text}
+            </li>
+          )}
+        </ul>
+      </div>
+    );
+  }
+}
+#+END_SRC
+* React Todo List Example (Filtering Todos)
+Now that our users can toggle todos, we want to give them the option to only show todos that have not been completed. To do this we will write a Filter Link component that will dispatch an action when clickes. And we 
+** the FilterLink Component
+Our FilterLink component will have a filter prop, for identifying which filter the link will activate, a currentFilter prop, that identifies the currently active filter, and children props, to permit us to define 
+the text of the component in its parent component.
+
+  
+#+BEGIN_SRC js
+const FilterLink = ({
+  filter,
+  currentFilter,
+  children
+}) => {
+  if (filter === currentFilter) {
+    return <span>{children}</span>;
+  }
+
+  return (
+    <a href='#'
+       onClick={e => {
+         e.preventDefault();
+         store.dispatch({
+           type: 'SET_VISIBILITY_FILTER',
+           filter
+         });
+       }}
+    >
+      {children}
+    </a>
+  );
+};
+#+END_SRC
+
+** Place FilterLinks in our Todo Component
+We will create three instances of our FilterLink component: one for each possible value.
+
+#+BEGIN_SRC js
+  <ul>
+    {visibleTodos.map(todo =>
+      <li key={todo.id}
+        onClick={() => {
+          store.dispatch({
+            type: 'TOGGLE_TODO',
+            id: todo.id
+          });         
+        }}
+        style={{
+          textDecoration:
+          todo.completed ?
+            'line-through' :
+            'none'
+        }}
+      >
+      {todo.text}
+    </li>
+    )}
+  </ul>
+  <p>
+    Show:
+    {' '}
+    <FilterLink
+      filter='SHOW_ALL'
+      currentFilter={visibilityFilter}
+    >
+      All
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_ACTIVE'
+      currentFilter={visibilityFilter}
+    >
+      Active
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_COMPLETED'
+      currentFilter={visibilityFilter}
+    >
+      Completed
+    </FilterLink>
+  </p>
+#+END_SRC
+
+** getVisibleTodos function filters and returns Todos
+ 
+#+BEGIN_SRC js
+const getVisibleTodos = (
+  todos,
+  filter
+) => {
+  switch (filter) {
+    case 'SHOW_ALL':
+      return todos;
+    case 'SHOW_COMPLETED':
+      return todos.filter(
+        t => t.completed
+      );
+    case 'SHOW_ACTIVE':
+      return todos.filter(
+        t => !t.completed
+      );
+  }
+}
+#+END_SRC
+
+** Pass props down to our component generically
+
+#+BEGIN_SRC js
+const render = () => {
+  ReactDOM.render(
+    <TodoApp
+      {...store.getState()}
+    />,
+    document.getElementById('root')
+  );
+}
+#+END_SRC
+
+** destructure props and call getVisibleTodos before rendering out TodoApp Component
+
+
+#+BEGIN_SRC js
+let nextTodoId = 0;
+class TodoApp extends Component {
+  const { todos, visibilityFilter } = this.props;
+  const visibleTodos = getVisibleTodos(todos, visibilityFilter);
+  render() {
+    return (
+      <div>
+//...
+#+END_SRC
+
+* Extracting Presentational Components (Todo, TodoList)
+Now that our UI is functional, we can refactor our components. We want to have components that can be used, 
+tested and changed separately. We will extract multiple 'presentational' components from our existing app: A 
+todo Component and a TodoList Component.
+ 'Presentational Components' are components that have no logic about what they do, they do not specify any 
+particular behavior, instead they are concerned only with how they look. This also make your project depend 
+less on Redux, as the rendering is all separate from the state management.
+*** Before
+#+BEGIN_SRC js
+  <ul>
+    {this.props.todos.map(todo =>
+      <li key={todo.id}
+        onClick={() => {
+          store.dispatch({
+            type: 'TOGGLE_TODO',
+            id: todo.id
+          });         
+        }}
+        style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+      >
+        {todo.text}
+      </li>
+    )}
+  </ul>
+#+END_SRC
+
+*** After
+**** Todo component
+For each item in our list of todos, we have a click handler that dispatches a 'TOGGLE_TODO' action. 
+Instead of keeping this logic in our todo component, we extract the click handler logic, and instead 
+recieve a function via props to execute on click. This permits us to pass any action to our todo 
+components.
+  Instead of passing a props object, Dan likes to be explicit with what he's passing into his components, 
+and here we pass all of the props the component needs separately.
+  Note that Dan left in the logic regarding how the component will appear based on its props. This is 
+style logic. 
+
+#+BEGIN_SRC js
+const Todo = ({
+  onClick,
+  completed,
+  text
+}) => (
+  <li
+    onClick={onClick}
+    style={{ textDecoration: completed ? 'line-through' : 'none' }}
+  >
+    {text}
+  </li>
+);
+#+END_SRC
+
+**** TodoList component
+Our TodoList component will render an unordered list, and map over an array of todos, generating a todo 
+component for each todo. Becaue each item in an array of components requires a unique key, this is where 
+the logic for our todo component's keys will reside.
+  Because this is a presentational component, the logic for how the todos should handle click events will 
+pe passed in from this component's parent.
+  Note that we spread the todo object to pass each property on the todo ovject as props to the todo 
+component. Some handy ES6 syntax.
+
+#+BEGIN_SRC js
+const TodoList = ({
+  todos,
+  onTodoClick
+}) => (
+  <ul>
+    {todos.map(todo =>
+      <Todo
+        key={todo.id}
+        {...todo}
+        onClick={() => onTodoClick(todo.id)}
+      />
+    )}
+  </ul>
+);
+#+END_SRC
+
+**** TodoApp Component
+Finally, we refactor our TodoApp component, which is now a container component, responsible for rendering 
+the presentational components and supplying them with data and logic.
+  To pass the TodoList component the array of todos, and the logic for handling click events on each todo 
+component.
+
+#+BEGIN_SRC js
+class TodoApp extends Component {
+  render() {
+    const {
+      todos,
+      visibilityFilter
+    } = this.props;
+    const visibleTodos = getVisibleTodos(
+      todos,
+      visibilityFilter
+    );
+    return (
+      <div>
+      // ...
+        <TodoList
+          todos={visibleTodos}
+          onTodoClick={id =>
+            store.dispatch({
+              type: 'TOGGLE_TODO',
+              id
+            })
+          }
+        />
+       // ...
+      </div>
+    );
+  }
+}
+#+END_SRC
+* Extracting Presentational Components (AddTodo, Footer, FilterLink)
+** Add Todo
+We can extract the functionalisy to add todos and create an AddTodo component. This component will have an 
+input field and a submit button. Our input field currently refers to the state of the component, but we can just create and close over a variable called let.
+ Then, the logic for the submit button can be passed in as props.
+
+*** Before
+
+#+BEGIN_SRC js
+class TodoApp extends Component {
+  render() {
+    return (
+      <div>
+        <input ref={node => {
+          this.input = node;
+        }} />
+        <button onClick={() => {
+          store.dispatch({
+            type: 'ADD_TODO',
+            text: this.input.value,
+            id: nextTodoId++
+          });
+          this.input.value = '';
+        }}>
+          Add Todo
+        </button>
+        // Todo List
+        // ... 
+        // FilterLinks
+        // ...
+      </div>
+    );
+  }
+}
+#+END_SRC
+
+*** After
+
+#+BEGIN_SRC js
+const AddTodo = ({
+  onAddClick
+  }) => {
+  let input;
+
+  return (
+    <div>
+      <input ref={node => {
+        input = node;
+      }} />
+      <button onClick={() => {
+        onAddClick(input.value);
+        input.value = '';
+      }}>
+        Add Todo
+      </button>
+    </div>
+  );
+};
+#+END_SRC
+** FilterLink
+Our filter links currently contain the logic for their click handlers. Let's pass those in as props, and our FilterLinks will become presentational!
+*** Before
+
+#+BEGIN_SRC js
+const FilterLink = ({
+  filter,
+  currentFilter,
+  children
+}) => {
+  if (filter === currentFilter) {
+    return <span>{children}</span>;
+  }
+
+  return (
+    <a href='#'
+       onClick={e => {
+         e.preventDefault();
+         store.dispatch({
+           type: 'SET_VISIBILITY_FILTER',
+           filter
+         });
+       }}
+    >
+      {children}
+    </a>
+  );
+};
+#+END_SRC
+
+*** After
+#+BEGIN_SRC js
+const FilterLink = ({
+  filter,
+  currentFilter,
+  children,
+  onClick
+}) => {
+  if (filter === currentFilter) {
+    return <span>{children}</span>;
+  }
+
+  return (
+    <a href='#'
+       onClick={e => {
+         e.preventDefault();
+         onClick(filter);
+       }}
+    >
+      {children}
+    </a>
+  );
+};
+#+END_SRC
+** Footer
+Now that our FilterLink's depend on their props to handle click events, we must pass that logic down. We can also remove the FilterLink's paragraph component into another presentational component. This component will need the visitbilityFilter from out state, and the logic for the FilterLinks to handle click events.
+*** Before
+
+#+BEGIN_SRC js
+class TodoApp extends Component {
+  render() {
+    const {
+      todos,
+      visibilityFilter
+    } = this.props;
+    const visibleTodos = getVisibleTodos(
+      todos,
+      visibilityFilter
+    );
+    return (
+      <div>
+        // AddTodo Component
+        // ... 
+        // TodoList Component
+        // ...
+        <p>
+          Show:
+          {' '}
+          <FilterLink
+            filter='SHOW_ALL'
+            currentFilter={visibilityFilter}
+          >
+            All
+          </FilterLink>
+          {', '}
+          <FilterLink
+            filter='SHOW_ACTIVE'
+            currentFilter={visibilityFilter}
+          >
+            Active
+          </FilterLink>
+          {', '}
+          <FilterLink
+            filter='SHOW_COMPLETED'
+            currentFilter={visibilityFilter}
+          >
+            Completed
+          </FilterLink>
+        </p>
+      </div>
+    );
+  }
+}
+#+END_SRC
+
+*** After
+
+#+BEGIN_SRC js
+const Footer = ({
+  visibilityFilter,
+  onFilterClick
+}) => (
+  <p>
+    Show:
+    {' '}
+    <FilterLink
+      filter='SHOW_ALL'
+      currentFilter={visibilityFilter}
+      onClick={onFilterClick}
+    >
+      All
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_ACTIVE'
+      currentFilter={visibilityFilter}
+      onClick={onFilterClick}
+    >
+      Active
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_COMPLETED'
+      currentFilter={visibilityFilter}
+      onClick={onFilterClick}
+    >
+      Completed
+    </FilterLink>
+  </p>
+);
+#+END_SRC
+** Our updated TodoApp Component
+
+#+BEGIN_SRC js
+const TodoApp = ({
+  todos,
+  visibilityFilter
+}) => (
+  <div>
+    <AddTodo
+      onAddClick={text =>
+        store.dispatch({
+          type: 'ADD_TODO',
+          id: nextTodoId++,
+          text
+        })
+      }
+    />
+    <TodoList
+      todos={
+        getVisibleTodos(
+          todos,
+          visibilityFilter
+        )
+      }
+      onTodoClick={id =>
+        store.dispatch({
+          type: 'TOGGLE_TODO',
+          id
+        })
+      }
+    />
+    <Footer
+      visibilityFilter={visibilityFilter}
+      onFilterClick={filter =>
+        store.dispatch({
+          type: 'SET_VISIBILITY_FILTER',
+          filter
+        })
+      }
+    />
+  </div>
+);
+#+END_SRC
+* Extracting Container Components (Footer, FilterLink, AddTodo, VisibleTodoList)
+The major downside with using presentational components, is that you have to do a fair bit of work to pass 
+down everything that the 'leaf' components need. When intermediary components don't actually need access to the props of their leaf components, it's logical to just inject state and logic into those leaf components directly.
+  And, when presentational components are inseperable from their behavior, that's a sign that the component isn't really presentation, and maybe should be a container component.
+** Footer
+We will give our Filterlink's direct access to the global state's visibility filter property, and the logic to change the global state, so we can remove those props from our footer component. This leaves the only prop from the footer component as the filter prop, which is unique for each instance of the FilterLink component.
+*** Before
+
+#+BEGIN_SRC js
+const Footer = ({
+  visibilityFilter,
+  onFilterClick
+}) => (
+  <p>
+    Show:
+    {' '}
+    <FilterLink
+      filter='SHOW_ALL'
+      currentFilter={visibilityFilter}
+      onClick={onFilterClick}
+    >
+      All
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_ACTIVE'
+      currentFilter={visibilityFilter}
+      onClick={onFilterClick}
+    >
+      Active
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_COMPLETED'
+      currentFilter={visibilityFilter}
+      onClick={onFilterClick}
+    >
+      Completed
+    </FilterLink>
+  </p>
+);
+#+END_SRC
+
+*** After
+
+#+BEGIN_SRC js
+const Footer = () => (
+  <p>
+    Show:
+    {' '}
+    <FilterLink
+      filter='SHOW_ALL'
+    >
+      All
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_ACTIVE'
+    >
+      Active
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_COMPLETED'
+    >
+      Completed
+    </FilterLink>
+  </p>
+);
+#+END_SRC
+
+** FilterLink
+The FilterLink component can spin off a presentational "Link component". Link components recieve props to instruct whether they are active, what their text is (via children), and how to handle click events.
+  Each FilterLink now needs access to the store's visibility filter property. In our render method, we will 
+access the sstate using store.getState(). Once we do so, we must notify Redux that this component must 
+change when the state shanges. So, we include a lifecycle method to subscribe the component to chnages in 
+state. React provides a special forceUpdate method on components. Also, remember that the return value of a subscribe call is a function to unsubscribe, and when the component unmounts we should unsubscribe from changes to the store.
+  Finally, we embed the click logic directly in the component.
+*** Before
+
+#+BEGIN_SRC js
+const FilterLink = ({
+  filter,
+  currentFilter,
+  children,
+  onClick
+}) => {
+  if (filter === currentFilter) {
+    return <span>{children}</span>;
+  }
+
+  return (
+    <a href='#'
+       onClick={e => {
+         e.preventDefault();
+         onClick(filter);
+       }}
+    >
+      {children}
+    </a>
+  );
+};
+#+END_SRC
+
+*** After
+
+#+BEGIN_SRC js
+const Link = ({
+  active,
+  children,
+  onClick
+}) => {
+  if (active) {
+    return <span>{children}</span>;
+  }
+
+  return (
+    <a href='#'
+       onClick={e => {
+         e.preventDefault();
+         onClick();
+       }}
+    >
+      {children}
+    </a>
+  );
+};
+#+END_SRC
+
+#+BEGIN_SRC js
+class FilterLink extends Component {
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    );
+  }
+  
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+  
+  render() {
+    const props = this.props;
+    const state = store.getState();
+    
+    return (
+      <Link
+        active={
+          props.filter ===
+          state.visibilityFilter
+        }
+        onClick={() =>
+          store.dispatch({
+            type: 'SET_VISIBILITY_FILTER',
+            filter: props.filter
+          })
+        }
+      >
+        {props.children}
+      </Link>
+    );
+  }
+}
+#+END_SRC
+** AddTodo
+*** Before
+#+BEGIN_SRC js
+const AddTodo = ({
+  onAddClick
+  }) => {
+  let input;
+
+  return (
+    <div>
+      <input ref={node => {
+        input = node;
+      }} />
+      <button onClick={() => {
+        onAddClick(input.value);
+        input.value = '';
+      }}>
+        Add Todo
+      </button>
+    </div>
+  );
+};
+#+END_SRC
+*** After
+
+#+BEGIN_SRC js
+let nextTodoId = 0;
+const AddTodo = () => {
+  let input;
+
+  return (
+    <div>
+      <input ref={node => {
+        input = node;
+      }} />
+      <button onClick={() => {
+        store.dispatch({
+          type: 'ADD_TODO',
+          id: nextTodoId++,
+          text: input.value
+        })
+        input.value = '';
+      }}>
+        Add Todo
+      </button>
+    </div>
+  );
+};
+#+END_SRC
+
+** VisibleTodoList
+*** Before
+
+#+BEGIN_SRC js
+const TodoList = ({
+  todos,
+  onTodoClick
+}) => (
+  <ul>
+    {todos.map(todo =>
+      <Todo
+        key={todo.id}
+        {...todo}
+        onClick={() => onTodoClick(todo.id)}
+      />
+    )}
+  </ul>
+);
+
+//...
+
+class TodoApp extends Component {
+  render() {
+    const {
+      todos,
+      visibilityFilter
+    } = this.props;
+    const visibleTodos = getVisibleTodos(
+      todos,
+      visibilityFilter
+    );
+    return (
+      <div>
+      // <AddTodo>
+        <TodoList
+          todos={visibleTodos}
+          onTodoClick={id =>
+            store.dispatch({
+              type: 'TOGGLE_TODO',
+              id
+            })
+          }
+        />
+       // <Footer>
+      </div>
+    );
+  }
+}
+#+END_SRC
+*** After
+
+#+BEGIN_SRC js
+class VisibleTodoList extends Component {
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    );
+  }
+  
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+  
+  render() {
+    const props = this.props;
+    const state = store.getState();
+    
+    return (
+      <TodoList
+        todos={
+          getVisibleTodos(
+            state.todos,
+            state.visibilityFilter
+          )
+        }
+        onTodoClick={id =>
+          store.dispatch({
+            type: 'TOGGLE_TODO',
+            id
+          })            
+        }
+      />
+    );
+  }
+}
+
+// ...
+
+const TodoApp = () => (
+  <div>
+    <AddTodo />
+    <VisibleTodoList />
+    <Footer />
+  </div>
+);
+#+END_SRC
+** Managing Subscriptions
+Now that our leaf components manage their own subscriptions to the state, we can remove the logic that keeps our app state updated from the root component:
+*** Before
+
+#+BEGIN_SRC js
+const render = () => {
+  ReactDOM.render(
+    <TodoApp
+      {...store.getState()}
+    />,
+    document.getElementById('root')
+  );
+};
+
+store.subscribe(render);
+render();
+#+END_SRC
+
+*** After
+
+#+BEGIN_SRC js
+ReactDOM.render(
+    <TodoApp/>,
+    document.getElementById('root')
+  );
+#+END_SRC
+
+* Passing the Store Down Explicitly via Props
+When we extracted our container components, we made use of the top-level store variable to getState, dispatch, 
+and subscribe. This works so long as each container component has access to this top-level variable, but once 
+we are working with different files, we need to pass a reference to our store object to our container 
+components manually, by passing store down through parent component as props of its child components.
+  This is not ideal.
+
+#+BEGIN_SRC js
+
+// ...
+
+class FilterLink extends Component {
+  componentDidMount() {
+    const { store } = this.props;
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    );
+  }
+  
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+  
+  render() {
+    const props = this.props;
+    const { store } = props;
+    const state = store.getState();
+    
+    return (
+      <Link
+        active={
+          props.filter ===
+          state.visibilityFilter
+        }
+        onClick={() =>
+          store.dispatch({
+            type: 'SET_VISIBILITY_FILTER',
+            filter: props.filter
+          })
+        }
+      >
+        {props.children}
+      </Link>
+    );
+  }
+}
+
+const Footer = ({ store }) => (
+  <p>
+    Show:
+    {' '}
+    <FilterLink
+      filter='SHOW_ALL'
+      store={store}
+    >
+      All
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_ACTIVE'
+      store={store}
+    >
+      Active
+    </FilterLink>
+    {', '}
+    <FilterLink
+      filter='SHOW_COMPLETED'
+      store={store}
+    >
+      Completed
+    </FilterLink>
+  </p>
+);
+
+// ...
+
+let nextTodoId = 0;
+const AddTodo = ({ store }) => {
+  let input;
+
+  return (
+    <div>
+      <input ref={node => {
+        input = node;
+      }} />
+      <button onClick={() => {
+        store.dispatch({
+          type: 'ADD_TODO',
+          id: nextTodoId++,
+          text: input.value
+        })
+        input.value = '';
+      }}>
+        Add Todo
+      </button>
+    </div>
+  );
+};
+
+class VisibleTodoList extends Component {
+  componentDidMount() {
+    const { store } = this.props;
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    );
+  }
+  
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+  
+  render() {
+    const props = this.props;
+    const { store } = props;
+    const state = store.getState();
+    
+    return (
+      <TodoList
+        todos={
+          getVisibleTodos(
+            state.todos,
+            state.visibilityFilter
+          )
+        }
+        onTodoClick={id =>
+          store.dispatch({
+            type: 'TOGGLE_TODO',
+            id
+          })            
+        }
+      />
+    );
+  }
+}
+
+const TodoApp = ({ store }) => (
+  <div>
+    <AddTodo store={store} />
+    <VisibleTodoList store={store} />
+    <Footer store={store} />
+  </div>
+);
+
+
+const { createStore } = Redux;
+
+ReactDOM.render(
+  <TodoApp store={createStore(todoApp)} />,
+  document.getElementById('root')
+);
+#+END_SRC
+
+* Passing the Store Down Implicitly via Context
+Passing the store down via props requires a lot of boiler plate, but it works. Another option is using an 
+advanced react feature called context. This isn't ideal because the React context API isn't exactly 
+stable. But, by nesting our App component in a Provider component (from 'react-redux'), we can provide access 
+to the store for every component that is a child, grandchild, etc. of Provider.
+  To use the Provider component, we pass it store={createStore(...)} as a prop. By specifying the Provider's 
+childContextTypes, we 'turn on' the context of Provider's child components. Then, we make the store property 
+available by returning it from the Provider's getChildContext method. This makes the store accesssable to 
+children. Finally, Provider renders it's props.children, which is why we nest our top level component in 
+Provider.
+  Unfortunately, for each of our container components, we will have to explicitly set the component's 
+contextTypes property, which notifies the parent what property the child will access. This requires a fair bit 
+of boilerplte also, so it's not ideal. For stateless functional components, we also have to accept context as 
+the second argument to the function.
+** Top Level Component and Provider
+#+BEGIN_SRC js
+class Provider extends Component {
+  getChildContext() {
+    return {
+      store: this.props.store
+    }; 
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
+Provider.childContextTypes = {
+  store: React.PropTypes.object
+};
+
+const { createStore } = Redux;
+
+ReactDOM.render(
+  <Provider store={createStore(todoApp)}>
+    <TodoApp />
+  </Provider>,
+  document.getElementById('root')
+);
+#+END_SRC
+
+** Example Child Container Class Component w/ contextType set
+
+#+BEGIN_SRC js
+class VisibleTodoList extends Component {
+  componentDidMount() {
+    const { store } = this.context;
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    );
+  }
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+  render() {
+    const props = this.props;
+    const { store } = this.context;
+    const state = store.getState();
+    
+    return (
+      <TodoList
+        todos={
+          getVisibleTodos(
+            state.todos,
+            state.visibilityFilter
+          )
+        }
+        onTodoClick={id =>
+          store.dispatch({
+            type: 'TOGGLE_TODO',
+            id
+          })            
+        }
+      />
+    );
+  }
+}
+VisibleTodoList.contextTypes = {
+  store: React.PropTypes.object
+};
+#+END_SRC
+
+** Example Container Stateless Function Component w/ contextTypeSet
+Note, the second argument to the function is the context, and we use ES6 destructuring to bind the symbol store to the store property on context.
+
+#+BEGIN_SRC js
+const AddTodo = (props, { store }) => {
+  let input;
+
+  return (
+    <div>
+      <input ref={node => {
+        input = node;
+      }} />
+      <button onClick={() => {
+        store.dispatch({
+          type: 'ADD_TODO',
+          id: nextTodoId++,
+          text: input.value
+        })
+        input.value = '';
+      }}>
+        Add Todo
+      </button>
+    </div>
+  );
+};
+AddTodo.contextTypes = {
+  store: React.PropTypes.object
+};
+#+END_SRC
+* Passing the Store Down with <Provider> from React-Redux
+You can import Provider from 'react-redux' instead of writing it yourself. This does the same thing that we did manually. You must still specify contextType for container components that need to access the store from context.
+** Importing and Rendering Provider
+#+BEGIN_SRC js
+const { Provider } = ReactRedux;
+const { createStore } = Redux;
+
+ReactDOM.render(
+  <Provider store={createStore(todoApp)}>
+    <TodoApp />
+  </Provider>,
+  document.getElementById('root')
+);
+#+END_SRC
+
+* Generating Containers with connect() from React-Redux (VisibleTodoList)
+We can write our components without having to explicitly acknowledge context, using react-redux's =connect= 
+function. Before discussion connect or what it does, it's helpful to notice that all container components are 
+very similar: 
+- They access the current state of the store to render presentational components, passing data as props.
+- They need to subscribe to changes on the store, so they can rerender when the store state changes.
+- They need to unsubscribe from the store when they unmount.
+- They need to dispatch actions in response to DOM events.
+- And they need to declare contextType to gain access to the store via context.
+  In many cases, our container components exist solely to provide this functionality to presentational 
+components. But, we can leapfrog such components by programatically wiring the component to the redux store's 
+state via context, automatically subscribing and unsubscribing from state changes, and mapping store 
+properties like state and dispatch to props on a presentational component.
+** VisibleTodoList and TodoList before using connect()
+*** VisibleTodoList - A Container Component that fits the above description (doesn't really do anything)
+
+#+BEGIN_SRC js
+class VisibleTodoList extends Component {
+  componentDidMount() {                     // Subscribing
+    const { store } = this.context;
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    );
+  }
+  componentWillUnmount() {                  // Unsubscribing
+    this.unsubscribe();
+  }
+  render() {
+    const props = this.props;               // Accessing State of Store
+    const { store } = this.context;
+    const state = store.getState();
+    
+    return (
+      <TodoList                            // Renders Presentational Component, providing
+        todos={                            // Data From Redux Store's State as Props
+          getVisibleTodos(
+            state.todos,
+            state.visibilityFilter
+          )
+        }
+        onTodoClick={id =>
+        store.dispatch({                    // Passing an Action Creator as Props
+            type: 'TOGGLE_TODO',
+            id
+          })            
+        }
+      />
+    );
+  }
+}
+VisibleTodoList.contextTypes = {            // Accessing Store via Context
+  store: React.PropTypes.object
+};
+#+END_SRC
+
+*** TodoList - A Presentational Component (that does all the real work)
+
+#+BEGIN_SRC js
+const TodoList = ({
+  todos,
+  onTodoClick
+}) => (
+  <ul>
+    {todos.map(todo =>
+      <Todo
+        key={todo.id}
+        {...todo}
+        onClick={() => onTodoClick(todo.id)}
+      />
+    )}
+  </ul>
+);
+#+END_SRC
+
+** Auto-Generating the VisibleTodoList Component Using connect() from react-redux
+We can keep our TodoList presentational component and automatically generate our VisibleTodoList 
+component using connect. Connect accepts two functions - mapStateToProps and mapDispatchtoProps - and 
+returns a curried function. The returned function accepts a presentational component. The return value from the curried function is a container component that will handle the store management and itself render the presentational component.
+
+#+BEGIN_SRC js
+const { connect } = ReactRedux;
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList);
+#+END_SRC
+
+** mapStateToProps
+The mapStateToProps function accepts the redux store's state, and returns an object that will be accessed as props on a component. The properties of this object are the state-data needed to render a component. In this instance, the presentational component will be able to access props.todos.
+
+#+BEGIN_SRC js
+const mapStateToProps = (state) => {
+  return {
+    todos: getVisibleTodos(
+      state.todos,
+      state.visibilityFilter
+    )
+  };
+};
+#+END_SRC
+
+** mapDispatchToProps
+Accepts the dispatch method on the redux store, and returns an object that will be accessed as props on a component. The properties of this object are actions that specify the behavior of the component.  In this case, the presentational component will be able to emit actions by calling props.onTodoClick() with a id.
+
+#+BEGIN_SRC js
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onTodoClick: (id) => {
+      dispatch({
+        type: 'TOGGLE_TODO',
+        id
+      });
+    }
+  };
+};
+
+#+END_SRC
+
+* Generating Containers with connect() from React-Redux (AddTodo)
+In the example we work with a component that is not clearly a presentational or container-like. we mutate it in place, and provide dispatch directly to the component to handle actions. We prodive dispatch directly because AddTodo is managing the nextTodoId and input values locally, passing them around would be more of a hassle than it's worth.
+  The default behavior of connect() when called without any arguments is to not subscribe the component to the 
+store, but to provide dispatch as a prop to the component.
+** Before
+
+#+BEGIN_SRC js
+let nextTodoId = 0;
+const AddTodo = (props, { store }) => {
+  let input;
+
+  return (
+    <div>
+      <input ref={node => {
+        input = node;
+      }} />
+      <button onClick={() => {
+        store.dispatch({
+          type: 'ADD_TODO',
+          id: nextTodoId++,
+          text: input.value
+        })
+        input.value = '';
+      }}>
+        Add Todo
+      </button>
+    </div>
+  );
+};
+AddTodo.contextTypes = {
+  store: React.PropTypes.object
+};
+#+END_SRC
+
+** After
+
+#+BEGIN_SRC js
+let AddTodo = ({ dispatch }) => {    
+  let input;
+  return (
+    <div>
+      <input ref={node => {
+        input = node;
+      }} />
+      <button onClick={() => {
+        dispatch({
+          type: 'ADD_TODO',
+          id: nextTodoId++,
+          text: input.value
+        });
+        input.value = '';
+      }}>
+        Add Todo
+      </button>
+    </div>
+  );
+};
+
+AddTodo = connect()(AddTodo);                // Note: We're mutating the component in place
+#+END_SRC
+
+* Generating Containers with connect() from React-Redux (FilterLink)
+In this example we access the presentational component's 'ownProps' inside our mapXToY functions to handle 
+some logic for the presentational component. 'ownProps' are passed as the second argument to the functions 
+accepted by connect().
+** Before
+
+#+BEGIN_SRC js
+const Link = ({
+  active,
+  children,
+  onClick
+}) => {
+  if (active) {
+    return <span>{children}</span>;
+  }
+
+  return (
+    <a href='#'
+       onClick={e => {
+         e.preventDefault();
+         onClick();
+       }}
+    >
+      {children}
+    </a>
+  );
+};
+
+class FilterLink extends Component {
+  componentDidMount() {
+    const { store } = this.context;
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    );
+  }
+  
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+  
+  render() {
+    const props = this.props;
+    const { store } = this.context;
+    const state = store.getState();
+    
+    return (
+      <Link
+        active={
+          props.filter ===
+          state.visibilityFilter
+        }
+        onClick={() =>
+          store.dispatch({
+            type: 'SET_VISIBILITY_FILTER',
+            filter: props.filter
+          })
+        }
+      >
+        {props.children}
+      </Link>
+    );
+  }
+}
+FilterLink.contextTypes = {
+  store: React.PropTypes.object
+};
+#+END_SRC
+
+** After
+#+BEGIN_SRC js
+const Link = ({
+  active,
+  children,
+  onClick
+}) => {
+  if (active) {
+    return <span>{children}</span>;
+  }
+  return (
+    <a href='#'
+       onClick={e => {
+         e.preventDefault();
+         onClick();
+       }}
+    >
+      {children}
+    </a>
+  );
+};
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    active: state.visibilityFilter === ownProps.filter;
+  }
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    onClick: store.dispatch({
+               type: 'SET_VISIBILITY_FILTER',
+               filter: ownProps.filter
+             })
+  }
+}
+
+const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link);
+
+#+END_SRC
+
+* Extracting Action Creators
+Currently we are dispatching actions inside our AddTodo component, FilterLink component, and our 
+VisibleTodoList component. The AddTodo component is somewhat problematic, because it refers to the global, 
+nextTodoId variable. We can separate the action and nextTodoId variable in a way that would allow multiple 
+components to call the same action.
+  Separating action creators from our components is a handy separation of concerns. This allows us to separate 
+our components, containers, reducers, and actions.  
+** Action Creators
+
+#+BEGIN_SRC js
+let nextTodoId = 0;
+const addTodo = (text) => {
+  return {
+    type: 'ADD_TODO',
+    id: nextTodoId++,
+    text
+  };
+};
+
+const toggleTodo = (id) => {
+  return {
+    type: 'TOGGLE_TODO',
+    id
+  };
+};
+
+const setVisibilityFilter = (filter) => {
+  return {
+    type: 'SET_VISIBILITY_FILTER',
+    filter
+  };
+};
+#+END_SRC
+** Respective Components and mapDispatch(s)
+
+#+BEGIN_SRC js
+let AddTodo = ({ dispatch }) => {
+  let input;
+
+  return (
+    <div>
+      <input ref={node => {
+        input = node;
+      }} />
+      <button onClick={() => {
+        dispatch(addTodo(input.value));
+        input.value = '';
+      }}>
+        Add Todo
+      </button>
+    </div>
+  );
+};
+AddTodo = connect()(AddTodo);
+
+// ...
+
+const mapDispatchToLinkProps = (
+  dispatch,
+  ownProps
+) => {
+  return {
+    onClick: () => {
+      dispatch(
+        setVisibilityFilter(ownProps.filter)
+      );
+    }
+  };
+}
+
+// ...
+
+const mapDispatchToTodoListProps = (
+  dispatch
+) => {
+  return {
+    onTodoClick: (id) => {
+      dispatch(toggleTodo(id));
+    }
+  };
+};
+#+END_SRC
