@@ -20,16 +20,15 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 
 * TODO queue
+** TODO Building React Apps w/ Idiomatic Redux
+** TODO Consilidate Redux Notes
+** TODO Advanced React and Redux : Stephen Girder (12:00)
 ** OPEN Learn CSS Layout: the Pendatic Way
-** TODO Getting Started with Redux (egghead) (1:30)
-** OPEN Modern React with Redux : Stephen Girder (10:30)
 ** TODO YDKJS: Async
 
 
 * BackBurner
-** TODO Building React Apps w/ Idiomatic Redux
 ** TODO Testing Clientside JavaScript : Joe Eames (4:50)
-** TODO Advanced React and Redux : Stephen Girder (?)
 ** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 ** OPEN Survive JS - Webpack
 ** OPEN Webpack Fundamentals : Joe Eames (2:23)
@@ -44,7 +43,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** Survive JS - React
 *** D3
 **** Pluralsight
-***** Interactive Data Visualization with D3.js : Ian Johnson (5:30)
 ***** D3.js Data Visualization Fundamentals : Ben Sullins (4:35)
 ***** Geospatial mapping with D3 : Ben Sullins (2:39)
 *** JS
@@ -81,7 +79,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE Responsive Web Images : Robert Boedigheimer (1:55)
 ***** DONE Web Accessibility: Getting Started (1:30)
 ***** Making a Web Form Accessible (1:47)
-*** goodShipJS
 *** htmlcss
 **** OPEN pendaticLayout
 **** Pluralsight
@@ -95,12 +92,11 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Creating Elegant Nav. Using CSS3 Transitions : Susam Simkins (1:02)
 **** egghead
 ***** DONE Flexbox Fundamentals
-*** linux
+*** docker
 **** pluralsight
 ***** WATCHEDONLY Docker and Containers: The Big Picture : Nigel Poulton (1:47)
 ***** Play by Play: Docker for Web Developers with John Papa and Dan Wahlin (1:34))
 ***** Docker Deep Dive : Nigel Poulton (5:38)
-***** Meet The Command Line : Dan Benjamin (1:53)
 *** node
 **** Pluralsight
 ***** DONE Real-Time Web w/ Node.js : Kyle Simpson (5:23)
@@ -135,16 +131,14 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** Egghead
 ***** CLOSED React Fundamentals : Joe Maddalon
 ***** CLOSED Getting Started with React Router (egghead)
-***** TODO Getting Started with Redux (egghead)
+***** DONE Getting Started with Redux (egghead)
 ***** TODO Building React Apps w/ Idiomatic Redux
 ***** React Testing Cookbook
-***** Build Your First React.js App : Tyler McGinnise
 ***** React Native Fundamentals : Tyler McGinnis
 **** Udemy
-***** OPEN Modern React with Redux : Stephen Girder (?)
+***** DONE Modern React with Redux : Stephen Girder (?)
 ***** TODO Advanced React and Redux : Stephen Girder (?)
 ***** Build Apps with React Native : Stephen Grider (8:00+)
-***** Build Web Apps with ReactJS and Flux : Stephen Grider (9:30+)
 *** testing
 **** Pluralsight
 ***** Testing Client-Side JS : Joe Eames (4:50)
