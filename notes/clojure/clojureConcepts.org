@@ -1807,17 +1807,12 @@ The future function accepts a 'body' and executes it in another thread. The foll
 * Host Interop (lc, brave, cu)
 Clojure is a hosted language, and borrows heavily from the types provided by its host. In Clojure, a string is a java.lang.String; in ClojureScript a string is a JavaScript string. This common ground lets Clojure inter-operate with its host, including access to classes, objects,, libraries, and APIs of its host language.
 ** Javascript (cu)
+Note, cider is not configured to execute clojurescript. So don't lean on these code-blocks.
 *** Accessing the global object
 #+BEGIN_SRC clojure
   (js/console.log "222")
 #+END_SRC
-*** Creating Instances
-#+BEGIN_SRC clojure
-  (new js/RegExp "^foo$")
-  ; or the dot special form - the preferred, idiomatic way
-  (js/RegExp. "^foo$")
-#+END_SRC
-*** Invoke Instance Methods
+*** Method Invocation
 To call the method of a JS object, the property access call is first in the s-exp, followed by the object's var. Alternately, the object and method call can be combined.
 
 #+BEGIN_SRC clojure
@@ -1827,33 +1822,120 @@ To call the method of a JS object, the property access call is first in the s-ex
   (.sqrt js/Math 49) ; => 7
   (js/Math.sqrt 49) ; => 7
 #+END_SRC
-*** Accessing Object Properties
+*** Property Access
 Property access is similar to method invocation, but instead of using a period, you use a period and hyphen.
-
 #+BEGIN_SRC clojure
   (.-multiline re) ; => false
   (.-PI js.Math) ; => 3.14....
 #+END_SRC
 
-*** Property Access Shorthand
 The techniques described above have a convienent shorthand:
-
 #+BEGIN_SRC clojure
   (jsMath.PI) ; => 3.14...
 #+END_SRC
 
-*** JavaScript Objects
+*** Creating JavaScript Objects
+There are two methods to create JS objects:
+1. =js-obj= is a function that accepts a map and returns a JavaScript object. The return value can be passed to third party libraries that communicate in POJOs.
+2. =#js= is a reader macro that ou prepend to a map or vector to transform it to a POJO.
+**** js-obj Example:
+#+BEGIN_SRC clojure
+  (js-obj "name" "value") ;; => #js {:name "value"}
+#+END_SRC
+**** #js Example:
+#+BEGIN_SRC clojure
+  (def myObj #js {:name "value"})
+  ; Equivalent to:
+  #+BEGIN_SRC js
+  var myObj = {name: "value"}
+  #+END_SRC
+#+END_SRC
+**** Mutation with =set!=
+In JavaScript, objects are mutable, and ClojureScript permits you to mutate an object's state with the set! function.
+#+BEGIN_SRC clojure
+  (def myObj #js {:name "value"})
+  (set! (myObj.name) "cost")
+#+END_SRC
 *** Conversions
+The previously discussed form of making objects do not recursively transform data types. So, if you have nested objects, the nexted objects will not be converted. To affect deep conversions, use the =clj->js= and =js->clj= functions. Note that conversions from JS to CLJ changes keywords in parent data structures into strings. 
+
+#+BEGIN_SRC clojure
+ (def clj-map {:country {:code "FR" :name "France"}})
+  ;; => {:country {:code "FR", :name "France"}}
+  (:code (:country clj-map)
+  ;; => "FR"
+
+  (def js-obj #js {:country {:code "FR" :name "France"}})
+  ;; => #js {:country {:code "FR", :name "France"}
+  (.-country js-obj)
+  ;; => {:code "FR", :name "France"}
+  (.-code (.-country js-obj)
+  ;; => nil
+#+END_SRC
+
+#+BEGIN_SRC clojure
+  (clj->js {:foo {:bar "baz"}})
+  ;; => #js {:foo #js {:bar "baz"}}
+  (js->clj #js {:country {:code "FR" :name "France"}})
+  ;; => {"country" {:code "FR", :name "France"}}
+#+END_SRC
+
 *** JavaScript Arrays
+JS arrays are similar to vectors, we can even use the sequence abstraction overthem. Property access is the same as for POJOs.
+**** Creating JS Arrays
+You can create an aray in two ways:
+1. =into-array= is a function that accepts a vector and returns a JS array.
+2. =make-array= accepts a integer and returns a JS array with a preallocated length equal to the integer, and nil as the value for each index.
+
+#+BEGIN_SRC clojure
+  (into-array ["England" "France" "Germany" "Spain"])
+  (def array (make-array 7))
+#+END_SRC
+**** Access and Mutation
+You can use =aget= and =aset= for property access and mutation, not just for arrays, but for POJOs as well.
+
+#+BEGIN_SRC clojure
+  (def countries (into-array ["England" "France" "Germany" "Spain"]))
+  (aset countries 0 "USA")
+  (aget countries 0) ; => "USA"
+
+  (def b #js {:hour 16})
+  ;; => #js {:hour 16}
+  (aget b "hour")
+  ;; => 16
+  (aset b "minute" 22)
+  ;; => 22
+  b
+  ;; => #js {:hour 16, :minute 22}
+#+END_SRC
+
+**** Iterating Over JS Arrays Using the Sequence Abstraction
+
+#+BEGIN_SRC clojure
+  (def array (make-array 7))
+  (count a) ; => 7
+#+END_SRC
+
+*** Creating Instances of Other Built-In Object Types
+#+BEGIN_SRC clojure
+  (new js/RegExp "^foo$")
+  ; or the dot special form - the preferred, idiomatic way
+  (js/RegExp. "^foo$")
+#+END_SRC
 ** Working with the JVM (brave), Java Interop (lc)
 
 
 * Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
-** Polymorphism (brave)
-*** multimethods (brave, cu)
+** Abstractions and Polymorphism (brave, cu)
 *** protocols (brave, cu)
-** Records (brave)
-** Heirarchies (cu)
+*** multimethods (brave, cu)
+*** Heirarchies (cu)
+** Rolling Your Own Data Types
+*** deftype (cu)
+*** defrecord (brave)
+*** defprotocol
+*** the reify macro
+*** the specify! macro
 
 
 * The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
@@ -1873,9 +1955,6 @@ Macros allow us to rewrite our code at compile time, giving us the option to pen
 *** macroexpand
 ** templating with 'quote (lc)
 (~ unquote)
-
-
-* Rolling Our Own Data Types (cu)
 
 
 * Tooling
