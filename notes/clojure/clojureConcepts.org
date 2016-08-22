@@ -4,12 +4,12 @@
 ** Living Clojure
 [X] Chapter 1 : The Structure of Clojure
 [X] Chapter 2 : Flow and Functional Transformations
-[ ] Chapter 3 : State and Concurrency
+[X] Chapter 3 : State and Concurrency
 [ ] Chapter 4 : Java Interop and Polymorphism
 [ ] Chapter 5 : How to Use Clojure Projects and Libraries
 [ ] Chapter 6 : Communication with core.async
 [ ] Chapter 7 : Creating Web Applications with Clojure
-[ ] Chapter 8 : The Power of Macros
+[X] Chapter 8 : The Power of Macros
 [ ] Training Plan Week 1
 [ ] Training Plan Week 2
 [ ] Training Plan Week 3
@@ -45,7 +45,7 @@
 [X] 3.9. Destructuring
 [ ] 3.10. Threading Macros
 [ ] 3.11. Reader Conditionals
-[ ] 3.12. Namespaces
+[X] 3.12. Namespaces
 [ ] 3.13. Abstractions and Polymorphism
 [ ] 3.14. Data types
 [ ] 3.15. Host interoperability
@@ -1205,7 +1205,9 @@ Thankfully, destructuring nested data is as easy as flat data.
 : red2
 
 ** Namespaces (lc, cu) / Organizing Your Project: A Librarian's Tale (brave)
-vars are scoped to namespaces. The default namespace is "user". 
+Namespaces are Clojure's fundamental unit of code modularity. It is idiomatic for each file to begin with a namespace definition. In fact, namespaces must correspond to filenames. For example, the namespace =mynamespace.core= must correspond to the core.clj* file in the mynamespace directory. The default namespace is "user". 
+  When we bind symbols and vars, those bindings are scoped to the current namespaces. Although 
+you can create a namespace dynamically, it is idiomatic to only have one namespace per file.
 *** creating and identifying a namespace (lc)
 
 #+BEGIN_SRC clojure :results output
@@ -1216,7 +1218,7 @@ vars are scoped to namespaces. The default namespace is "user".
 #+RESULTS:
 : #object[clojure.lang.Namespace 0x763be7bf alice.favfoods]
 
-*** accessing a namespace (lc)
+*** remotely accessing a namespace (lc, cu)
 
 #+BEGIN_SRC clojure :results output
   (ns userland)
@@ -1225,19 +1227,18 @@ vars are scoped to namespaces. The default namespace is "user".
   (println whoDoYouFightFor)
   (ns the.System)
   (println *ns*)
-  (println userland/whoDoYouFightFor)
+  (println userland/whoDoYouFightFor) 
 #+END_SRC
 
 #+RESULTS:
-: #object[clojure.lang.Namespace 0x65170eca userland]
+: #object[clojure.lang.Namespace 0x2fea84c userland]
 : the users
-: #object[clojure.lang.Namespace 0x6caf1747 the.System]
-: the System
+: #object[clojure.lang.Namespace 0x8a91f84 the.System]
 : the users
 
 *** :require(ing) libs (lc)
 Clojure has 'libs', namespaces full of symbols bound to values. Likely, function buckets...
-**** require
+**** qualified namespaces with require
 After we require a namespace, symbols in that namespace will be accessible through a qualified namespace.
 
 #+BEGIN_SRC clojure
@@ -1248,7 +1249,7 @@ After we require a namespace, symbols in that namespace will be accessible throu
 #+RESULTS:
 : nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
 
-**** :require :as
+**** aliased namespaces with :require :as
 We can use the :as option to set an alias for a namespace.
 
 #+BEGIN_SRC clojure
@@ -1270,15 +1271,44 @@ This form is acceptable, but less common:
 #+RESULTS:
 : nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
 
+**** unqualified symbols with :require :refer
+You can bring symbols directly into your current namespace without qualification so long as there is not a var collision. 
+#+BEGIN_SRC clojure :results output
+  (ns myapp.main
+    (require [clojure.string :refer [upper-case]]))
+  (println (upper-case "hello world"))
+#+END_SRC
+
+#+RESULTS:
+: HELLO WORLD
 
 **** :require :refer :all
-The :all option makes a namespaces symbold available in the current namespace without qualification. IF symbols conflict between namespaces, the compiler will throw an exception.
+The :all option makes all of a namespace's symbols available in the current namespace without qualification. If symbols conflict between namespaces, the compiler will throw an exception.
 
 #+BEGIN_SRC clojure
   (ns wonderland
     (:require [alice.favfoods :refer :all]
               [rabbit.favfoods :refer :all]))
 #+END_SRC
+**** excluding symbols with :exclude
+Sometimes, you want to use a symbol that it bound in a library you are loading. To avoid this var clash, you can exclude specific symbols from being loaded.
+
+#+BEGIN_SRC clojure :results output
+  (ns myapp.main
+    (:refer-clojure :exclude [min]))
+
+  (defn min [x y]
+    (if (< x y)
+      y
+      x))
+
+  (println (min 5 8))
+
+#+END_SRC
+
+#+RESULTS:
+: 8
+
 *** Using libs (lc)
 
 
@@ -1654,24 +1684,55 @@ When one ref's value is defined in terms of another ref's value, we must use ref
 : 5
 : 7
 
-*** Using Agents for Independent and Synchronous Changes (lc)
+*** TODO Using Agents for Independent and Synchronous Changes (lc)
+Living Clojure's treatment was anemic... revisit...
 **** creation and dereferencing
 Creation and dereferencing is similar to an atom.
-#+BEGIN_SRC clojure
+#+BEGIN_SRC clojure :results output
   (def secret (agent "man"))
-  @secret
+  (println @secret)
 #+END_SRC
 
 #+RESULTS:
-: #'user/secret"man"
+: man
 
 **** send
+The send function lets us change the state of the agent. It works in a similar way to an atom's swap! function. But, unlike swap!, send does not block. Instead, send opens a separate thread and dispatches the action to the agent in that thread. Thus, when you deref an agent after a change, it my not have changed yet. Unlike swap! and alter, send returns immediately...
 
-#+BEGIN_SRC clojure
-  (def secret (agent "man"))
+#+BEGIN_SRC clojure :results output
+  (def secret (agent "russian"))
+  (println @secret)
+  (defn bribe [state]
+    (case state
+      "russian" "american"
+      "american" "russian"))
+  (send secret bribe)
+  (println @secret)
 #+END_SRC
 
+#+RESULTS:
+: russian
+: american
+
 **** send-off
+send-off is best for potentially blocking I/O actions. "Using send uses a fixed thread pool, which is good for CPU-bound operations, whereas send-off uses an expandable thread pool necessary to avoid an I.O-bound thread pool from blocking." -lc
+
+#+BEGIN_SRC clojure :results output
+  (def secret (agent "russian"))
+  (println @secret)
+  (defn bribe [state]
+    (case state
+      "russian" "american"
+      "american" "russian"))
+  (send-off secret bribe)
+  (println @secret)
+#+END_SRC
+
+#+RESULTS:
+: russian
+: american
+
+**** transactions
 *** Volatiles (cu)
 Volatiles are -essentially- atoms that lack an option to attach watchers. This makes them more performant. Note that the volatile constructor uses =volatile!=.
 
@@ -1744,9 +1805,47 @@ The future function accepts a 'body' and executes it in another thread. The foll
 
 
 * Host Interop (lc, brave, cu)
-** Java Interop (lc) 
+Clojure is a hosted language, and borrows heavily from the types provided by its host. In Clojure, a string is a java.lang.String; in ClojureScript a string is a JavaScript string. This common ground lets Clojure inter-operate with its host, including access to classes, objects,, libraries, and APIs of its host language.
 ** Javascript (cu)
-** Working with the JVM (brave)
+*** Accessing the global object
+#+BEGIN_SRC clojure
+  (js/console.log "222")
+#+END_SRC
+*** Creating Instances
+#+BEGIN_SRC clojure
+  (new js/RegExp "^foo$")
+  ; or the dot special form - the preferred, idiomatic way
+  (js/RegExp. "^foo$")
+#+END_SRC
+*** Invoke Instance Methods
+To call the method of a JS object, the property access call is first in the s-exp, followed by the object's var. Alternately, the object and method call can be combined.
+
+#+BEGIN_SRC clojure
+  (def re (js/RegExp "^Clojure"))
+  (.test re "ClojureScript") ; => true
+
+  (.sqrt js/Math 49) ; => 7
+  (js/Math.sqrt 49) ; => 7
+#+END_SRC
+*** Accessing Object Properties
+Property access is similar to method invocation, but instead of using a period, you use a period and hyphen.
+
+#+BEGIN_SRC clojure
+  (.-multiline re) ; => false
+  (.-PI js.Math) ; => 3.14....
+#+END_SRC
+
+*** Property Access Shorthand
+The techniques described above have a convienent shorthand:
+
+#+BEGIN_SRC clojure
+  (jsMath.PI) ; => 3.14...
+#+END_SRC
+
+*** JavaScript Objects
+*** Conversions
+*** JavaScript Arrays
+** Working with the JVM (brave), Java Interop (lc)
 
 
 * Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
@@ -1758,16 +1857,22 @@ The future function accepts a 'body' and executes it in another thread. The foll
 
 
 * The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
+Macros permit you to alter the evaluation paradigm from eager evaluation to normal order evaluation.
+Macros allow us to rewrite our code at compile time, giving us the option to pen our own custom syntax. 
 ** Macros (lc) / Clojure Alchemy: Reading, Evaluation, and Macros (brave)
+
 *** Clojure's Evaluation Model (brave)
 *** The Reader (brave)
 *** The Evaluator (brave)
-*** templating (lc)
 ** Threading Macros (cu)
 *** Thread First
 *** Thread Last
 ** Reader Conditionals (cu)
-** Writing Macros (brave)
+** Writing Macros (lc, brave)
+*** defmacro
+*** macroexpand
+** templating with 'quote (lc)
+(~ unquote)
 
 
 * Rolling Our Own Data Types (cu)
