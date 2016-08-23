@@ -48,7 +48,7 @@
 [X] 3.12. Namespaces
 [ ] 3.13. Abstractions and Polymorphism
 [ ] 3.14. Data types
-[ ] 3.15. Host interoperability
+[X] 3.15. Host interoperability
 [X] 3.16. State management
 [ ] 4.1. Getting Started with the Compiler
 [ ] 4.2. Working with the REPL
@@ -1927,9 +1927,215 @@ You can use =aget= and =aset= for property access and mutation, not just for arr
 
 * Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
 ** Abstractions and Polymorphism (brave, cu)
-*** protocols (brave, cu)
-*** multimethods (brave, cu)
-*** Heirarchies (cu)
+*** Protocols Dispatch on Type (brave, cu)
+Protocols are Clojure's way to create interfaces that provide a type-based polymorphism. Protocols allow you to associate multiple functions with a single name, then dispatch based on the type of the interface invocation's first argument. 
+  In the code-block below, we define a protocol called IProtocolName, with a single method 
+called sample-method:
+#+BEGIN_SRC clojure
+  (defprotocol IProtocolName
+    "A docstring describing the protocol."
+    (sample-method [this] "A doc string associated with this function."))
+#+END_SRC
+
+To define a protocol function, we can simply define a function in the same namespace that the protocol is defined. To do so, we use either the =extend-protocol= or =extend=type= macros. 
+**** extend-type
+extend-type permits you to extend 'a single type with different protocols in a single expression.' The symbols number, string, object, array, boolean, and function reflect the primitive types in JavaScript.
+
+#+BEGIN_SRC clojure :results output
+ (defprotocol IInvertible
+   "This is a protocol for data types that are 'invertible'"
+   (invert [this] "Invert the given item."))
+
+ (extend-type string
+   IInvertible
+   (invert [this] (apply str (reverse this))
+   ; another protocol
+   ; the function implementation for that protocol))
+ (extend-type cljs.core.List
+   IInvertible
+   (invert [this] (reverse this)))
+ (extend-type cljs.core.PersistentVector
+   IInvertible
+   (invert [this] (into [] (reverse this))))
+
+  (invert "abc")
+   ;; => "cba"
+  (invert 0)
+  ;; => 0
+  (invert '(1 2 3))
+  ;; => (3 2 1)
+  (invert [1 2 3])
+  ;; => [3 2 1]
+#+END_SRC
+
+**** extend-protocol
+extend-protocol permits you to add multiple implementations of a profocol for different types.
+
+#+BEGIN_SRC clojure
+  (defprotocol IInvertible
+    "This is a protocol for data types that are 'invertible'"
+    (invert [this] "Invert the given item."))
+
+  (extend-protocol IInvertible
+    java.lang.String
+    (invert [this] (apply str (reverse this)))
+    cljs.core.List
+    (invert [this] (reverse this))
+    cljs.core.PersistentVector
+    (invert [this] (into [] (reverse this))))
+
+  (invert "abc")
+   ;; => "cba"
+  (invert 0)
+  ;; => 0
+  (invert '(1 2 3))
+  ;; => (3 2 1)
+  (invert [1 2 3])
+  ;; => [3 2 1]
+#+END_SRC
+
+#+RESULTS:
+
+**** Extending Built-In Abstractions
+ClojureScript's abstractions are often defined as protocols, and the bahavior defined for ClojureScript's abstractiosn can be adapted to third party libraries as well. Below, we implement the IFn protocol for the js/RegExp type by defining =invoke=, a function that permits a type to be called as a function that accepts a collection and returns value matches in the collection - collection access using a value as the function.
+
+#+BEGIN_SRC clojure
+ (extend-type js/RegExp
+   IFn
+   (-invoke
+    ([this a]
+      (re-find this a))))
+
+
+  (filter #"^foo" ["haha" "foobar" "baz" "foobaz"])
+  ; => ("foobar", "foobaz")
+#+END_SRC
+
+**** Protocol Introspection with Satisfies?
+At runtime, we might want to check whether some object satisfies a given protocol.
+
+#+BEGIN_SRC clojure
+  (satisfies? clojure.lang.IFn #{1})
+  ; => true
+#+END_SRC
+
+*** Multimethods Offer Flexible Dispatch (brave, cu)
+Multimethods offer dispatch based on arity, type, and value - making them more flexible than 
+protocols. You can also designate ad-hoc 'hierarchies.' And, like protocols, multimethods are 
+extinsible for new types.
+  You construct a multimethod with =defmulti= and =defmethod=. defmulti creates a multimethod 
+with a initial dispatch function. The dispatch function must return some kind of signal that 
+will be used for diaptch. In the example below, the dispatch function returns value of :locale 
+in param, and defaults to :en.
+  After defmulti comes defmethod, which adds implementations to the multimethod. These 
+implementations must share the same name as used in the defmulti. On a call to the 
+multimethod, the dispatch signal is compared to the signals in te defmethods, and the 
+matching method is executed.
+  Note that if a default method is not provided but is asked for, you'll see an exception.
+
+#+BEGIN_SRC clojure :results output
+  (defmulti say-hello
+    "A polymorphic function that return a greetings message
+    depending on the language key with default lang as `:en`"
+    (fn [param] (:locale param))
+    :default :en)
+
+  (defmethod say-hello :en
+    [person]
+    (str "Hello " (:name person "Anonymous")))
+  (defmethod say-hello :es
+    [person]
+    (str "Hola " (:name person "Anonimo")))
+
+  (println (say-hello {:locale :es}))
+  (println (say-hello {:locale :en}))
+  (println (say-hello {:locale :fr}))
+#+END_SRC
+
+#+RESULTS:
+: Hola Anonimo
+: Hello Anonymous
+: Hello Anonymous
+
+*** Hierarchies Define Relationships(cu)
+Hierarchies define relationships between things, like symbols, keywords, types, etc. You can 
+define a hierarchy globally or locally, but when defining a hierarchy globally, keywords and 
+symbols must be namespaced to avoid conflicts between libraries.
+**** Defining a Hierarchy and Introspection
+We define hierarchies using the =derive= function. derive accepts two arguments and defines 
+the first argument as a 'child' of the second. Below we use :: notation to refer to the 
+namespaced ref of a keyword. 
+
+#+BEGIN_SRC clojure :results output
+  (derive ::circle ::shape)
+  (derive ::box ::shape)
+
+  (println (isa? ::circle ::shape))
+  (println (isa? ::rect ::shape))
+  (println (ancestors ::circle))
+  (println (descendants ::shape))
+#+END_SRC
+
+#+RESULTS:
+: true
+: false
+: #{:user/shape}
+: #{:user/box :user/circle}
+
+**** Locally Defined Hierarchies
+You can create local hierarchies with =make-heirarchy=. This creates a local context in 
+which a hierarchy applies, accessible through a local hierarchy parameter to introspecting 
+functions.
+
+#+BEGIN_SRC clojure :results output
+  (def h (-> (make-hierarchy)
+    (derive :lion :cat)
+    (derive :tiger :cat)))
+
+  (println (isa? h :lion :cat))
+  (println (isa? :lion :cat))
+#+END_SRC
+
+#+RESULTS:
+: true
+: false
+
+**** Hierarchies in Multimethods
+Multimethods uses hierarchical introspection for their dispatching by way of =isa?=.
+When we defmulti, we can specify a hierarchy to use, otherwise the global hierarchy is used.
+  During dispatch, the hierarchy is consolted to determine whether a match is possible. In 
+the xample below, because a tiger is a cat, the cat dispatch method is executed.
+
+#+BEGIN_SRC clojure :results output
+  (def zoo (-> (make-hierarchy)
+    (derive :lion :cat)
+    (derive :tiger :cat)))
+
+  (defmulti what-animal
+    "A function that lets you know what kind of animal you passed"
+    identity
+    :hierarchy #'zoo)
+  (defmethod what-animal :lion
+    [_]
+    "You passed the king of the Jungle")
+  (defmethod what-animal :cat
+    [_]
+    "You passed a cat")
+  (defmethod what-animal :default
+    [_]
+    "I'm not sure what that is...")
+
+  (println (what-animal :lion))
+  (println (what-animal :tiger))
+  (println (what-animal :liger))
+
+#+END_SRC
+
+#+RESULTS:
+: You passed the king of the Jungle
+: You passed a cat
+: I'm not sure what that is...
+
 ** Rolling Your Own Data Types
 *** deftype (cu)
 *** defrecord (brave)
