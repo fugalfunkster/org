@@ -46,8 +46,8 @@
 [ ] 3.10. Threading Macros
 [ ] 3.11. Reader Conditionals
 [X] 3.12. Namespaces
-[ ] 3.13. Abstractions and Polymorphism
-[ ] 3.14. Data types
+[X] 3.13. Abstractions and Polymorphism
+[X] 3.14. Data types
 [X] 3.15. Host interoperability
 [X] 3.16. State management
 [ ] 4.1. Getting Started with the Compiler
@@ -1923,6 +1923,110 @@ You can use =aget= and =aset= for property access and mutation, not just for arr
   (js/RegExp. "^foo$")
 #+END_SRC
 ** Working with the JVM (brave), Java Interop (lc)
+Basic types in Clojure are the types provided by its host. For example a Clojure string is an instance of java.lang.String. We can inspect a type using the class function:
+*** Using Class for Introspection
+#+BEGIN_SRC clojure :results output
+(println (class "string"))
+(println (class 5))
+(println (class 5.2))
+(println (class false))
+(println (class nil))
+(println (class symbol))
+(println (class keyword))
+#+END_SRC
+
+#+RESULTS:
+: java.lang.String
+: java.lang.Long
+: java.lang.Double
+: nil
+: java.lang.Boolean
+: clojure.core$symbol
+: clojure.core$keyword
+
+*** Calling Object Methods
+When we want to access the method of an object, we can use dot notation or dot shorthand.
+First comes the dot, then the object, next the method, and last any additional arguments. With the shorthand, the dot and method come first, then the object, and other arguments. 
+**** dot notation
+
+#+BEGIN_SRC clojure :results output
+  (println (. "string" toUpperCase))
+#+END_SRC
+
+#+RESULTS:
+: STRING
+
+#+BEGIN_SRC clojure :results output
+  (println (. "string" indexOf "tring"))
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+**** dot shorthand
+
+#+BEGIN_SRC clojure
+  (.toUpperCase "another string" )
+#+END_SRC
+
+#+RESULTS:
+: ANOTHER STRING
+
+#+BEGIN_SRC clojure :results output
+  (println (.indexOf "string" "r"))
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+*** Creating new Java objects
+We can create new Java objects with the new function or with a a dot following the class name.
+
+#+BEGIN_SRC clojure :results output
+  (println (String. "I'm a real string"))
+  (println (new String "I'm a new string!"))
+#+END_SRC
+
+#+RESULTS:
+: I'm a string
+: I'm a new string!
+
+*** Importing Java Objects and Calling Static Methods
+We can use java objects by importing them into our namespace or using their fully qualified names. To use a static method on a Java class, use the forward slash. 
+#+BEGIN_SRC clojure :results output
+  ; import and use
+  (ns caterpillar.network
+    (:import (java.net InetAddress)))
+  (println (InetAddress/getByName "localhost"))
+
+  ; using the fully qualified name:
+  (println (java.net.InetAddress/getByName "localhost"))
+
+  ;access the imported object using dot notation 
+  (println (.getHostName (InetAddress/getByName "localhost")))
+#+END_SRC
+
+#+RESULTS:
+: #object[java.net.Inet4Address 0x677d8d86 localhost/127.0.0.1]
+: #object[java.net.Inet4Address 0x677d8d86 localhost/127.0.0.1]
+: localhost
+
+*** the =doto= macro
+The doto macro lets us to order operations and execute them on a Java object.
+
+#+BEGIN_SRC clojure :results output
+  (def sb (doto (StringBuffer. "One ")
+            (.append "ring ")
+            (.append "to ")
+            (.append "rule ")
+            (.append "them ")
+            (.append "all.")))
+  (println (.toString sb))
+#+END_SRC
+
+#+RESULTS:
+: One ring to rule them all.
+
 
 
 * Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
@@ -1930,7 +2034,7 @@ You can use =aget= and =aset= for property access and mutation, not just for arr
 *** Protocols Dispatch on Type (brave, cu)
 Protocols are Clojure's way to create interfaces that provide a type-based polymorphism. Protocols allow you to associate multiple functions with a single name, then dispatch based on the type of the interface invocation's first argument. 
   In the code-block below, we define a protocol called IProtocolName, with a single method 
-called sample-method:
+called sample-method. this refers to the protocol itself.x
 #+BEGIN_SRC clojure
   (defprotocol IProtocolName
     "A docstring describing the protocol."
@@ -1967,6 +2071,8 @@ extend-type permits you to extend 'a single type with different protocols in a s
   (invert [1 2 3])
   ;; => [3 2 1]
 #+END_SRC
+
+#+RESULTS:
 
 **** extend-protocol
 extend-protocol permits you to add multiple implementations of a profocol for different types.
@@ -2035,7 +2141,7 @@ matching method is executed.
 
 #+BEGIN_SRC clojure :results output
   (defmulti say-hello
-    "A polymorphic function that return a greetings message
+    "A polymorphic function that returns a greetings message
     depending on the language key with default lang as `:en`"
     (fn [param] (:locale param))
     :default :en)
@@ -2136,12 +2242,141 @@ the xample below, because a tiger is a cat, the cat dispatch method is executed.
 : You passed a cat
 : I'm not sure what that is...
 
-** Rolling Your Own Data Types
+** Rolling Your Own Data Types (cu, lc, brave)
+Sometimes you want to define your own compound data type, with a specific structure. In Clojure, custom data types take the form of a host-backed type that can be named or anonymous. This is typically some form of class-like object.
+  The two most common type constructor macros are =deftype= and =defrecord=. 
 *** deftype (cu)
-*** defrecord (brave)
-*** defprotocol
+deftype is the most 'low-level' Clojure type constructor. deftype accepts a symbol to 
+associate with the type, and a vector of field/properties. After creating the type, you can 
+create an instance of the type using the name of the type followed by a dot, to indicate that 
+you are calling a constructor.
+
+#+BEGIN_SRC clojure
+  (deftype Human [firstname lastname])
+  (def person (Human. "Matthew" "Hoselton"))
+  (.-firstname person)
+#+END_SRC
+
+#+RESULTS:
+: user.Human#'user/person"Matthew"
+
+**** constructor functions with deftype
+Clojure also defines a constructor function called ->*TypeName* that can be imported with the :require directive. However, prefer more semantic approaches, such as the following constructor function:
+
+#+BEGIN_SRC clojure :results output
+  (deftype Human [firstname lastname])
+  (defn make-human
+    [firstname lastname]
+    (Human. firstname lastname))
+  (def steve (make-human "Steve" "Jobs"))
+  (println (.-lastname steve))
+#+END_SRC
+
+#+RESULTS:
+: Jobs
+
+*** defrecord (cu, brave)
+Records are preferable to types because they implement the map protocol. But, under the hood, records use =deftype= for defining the protocol's type. Like other proper types, records can also implement protocols. 
+
+#+BEGIN_SRC clojure :results output
+  (defrecord Car [make model year])
+  (def suzyQ (Car. "Pontiac" "GTO" 1971))
+  (println (:make suzyQ))
+  (println (map? suzyQ))
+  (println (assoc suzyQ :cylinders 8))
+  (println (dissoc suzyQ :cylinders))
+  (def suzyR (dissoc suzyQ :make))
+  (println suzyR)
+  (println (suzyR :year))
+  (println (suzyQ :year))
+#+END_SRC
+
+#+RESULTS:
+: Pontiac
+: true
+: #user.Car{:make Pontiac, :model GTO, :year 1971, :cylinders 8}
+: #user.Car{:make Pontiac, :model GTO, :year 1971}
+: {:model GTO, :year 1971}
+: 1971
+
+Records' ability to implement map's features is limited, becaue Records don't implement the IFn protocol. The above example demonstrates that records implement map functions like =assoc=, but be careful with =dissoc=, which will return a new record if the field being dissociated is not specified in the protofol, but will return a plain map if a specified field is removed. Also note that maps do not act as functions.
+
+**** constructor functions
+See the section on constructor functions with def types.
+
+#+BEGIN_SRC clojure :results output
+  (defrecord Car [make model year])
+  (defn make-car
+    [make model year]
+    (Car. make model year))
+  (def jazzmobile (make-car "Chevrolet" "Lumina" 1994))
+  (println (:year jazzmobile))
+#+END_SRC
+
+#+RESULTS:
+: 1994
+
+*** defining protocols inline with defprotocol
+Now that we know how to construct basic types and Records, we can implement protocols for our types inline! Behold:
+
+#+BEGIN_SRC clojure :results output
+  (defrecord Car [make model year]
+    ICar
+    (m&m [_]
+      (str make ", " model)))
+  (def jazzmobile (Car. "Chevrolet" "Lumina" 1994))
+  (println (m&m jazzmobile)) ; "Chevrolet, Lumina"
+#+END_SRC
+
 *** the reify macro
+reify permits ad hoc construction of a var with a protocol without defining a type. Like types and records, you specify the protocol inline, but with reify the definition takes place in a constructor function.
+
+#+BEGIN_SRC clojure
+(defn user
+   [firstname lastname]
+   (reify
+     IUser
+     (full-name [_]
+       (str firstname " " lastname))))
+ (def yen (user "Yennefer" "of Vengerberg"))
+ (full-name yen)
+ ; => "Yennefer of Vengerberg"
+#+END_SRC
+
+#+RESULTS:
+
 *** the specify! macro
+=specify!= allows you to add protocols to existing objects.
+
+#+BEGIN_SRC clojure
+  (def obj #js {})
+  (specify! obj
+     IUser
+     (full-name [_]
+       "my full name"))
+  (full-name obj)
+ ;; => "my full name"
+#+END_SRC
+
+=specify= is an immutable version of specify!, that can be used on immutable copyable values implementing ICloneable (Eg. ClojureScript collections)
+
+#+BEGIN_SRC clojure
+  (def a {})
+  (def b (specify a
+           IUser
+           (full-name [_]
+             "my full name")))
+  (full-name a)
+  ;; Error: No protocol method IUser.full-name defined for type cljs.core/
+  PersistentArrayMap: {}
+  (full-name b)
+  ;; => "my full name"
+#+END_SRC
+
+#+RESULTS:
+: #'user/a{}
+
+
 
 
 * The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
