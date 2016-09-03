@@ -1702,13 +1702,10 @@ When one ref's value is defined in terms of another ref's value, we must use ref
 #+RESULTS:
 : 5
 : 7
-<<<<<<< HEAD
 *** Using Agents for Independent and Synchronous Changes (lc)
-=======
 
 *** TODO Using Agents for Independent and Synchronous Changes (lc)
 Living Clojure's treatment was anemic... revisit...
->>>>>>> origin/master
 **** creation and dereferencing
 Creation and dereferencing is similar to an atom.
 #+BEGIN_SRC clojure :results output
@@ -1738,8 +1735,6 @@ The send function lets us change the state of the agent. It works in a similar w
 : american
 
 **** send-off
-<<<<<<< HEAD
-=======
 send-off is best for potentially blocking I/O actions. "Using send uses a fixed thread pool, which is good for CPU-bound operations, whereas send-off uses an expandable thread pool necessary to avoid an I.O-bound thread pool from blocking." -lc
 
 #+BEGIN_SRC clojure :results output
@@ -1777,7 +1772,6 @@ Volatiles are -essentially- atoms that lack an option to attach watchers. This m
 : Voldemort
 : The One Who Must Not Be Named
 : Vanquished
->>>>>>> origin/master
 
 ** Concurrency and Parallelism Concepts (brave)
 *** Synchronous and Asynchronous
@@ -1830,13 +1824,10 @@ The future function accepts a 'body' and executes it in another thread. The foll
 *** channels (lc)
 
 
-<<<<<<< HEAD
 * TODO Host Interop (lc, brave, cu)
-** Java Interop (lc) 
-=======
 * Host Interop (lc, brave, cu)
-Clojure is a hosted language, and borrows heavily from the types provided by its host. In Clojure, a string is a java.lang.String; in ClojureScript a string is a JavaScript string. This common ground lets Clojure inter-operate with its host, including access to classes, objects,, libraries, and APIs of its host language.
->>>>>>> origin/master
+Clojure is a hosted language, and borrows heavily from the types provided by its host. In Clojure, a string is a java.lang.String; in ClojureScript a string is a JavaScript string. This common ground lets Clojure inter-operate with its host, including access to classes, objects,, libraries, and APIs of its host
+** Java Interop (lc) 
 ** Javascript (cu)
 Note, cider is not configured to execute clojurescript. So don't lean on these code-blocks.
 *** Accessing the global object
@@ -2058,9 +2049,6 @@ The doto macro lets us to order operations and execute them on a Java object.
 #+RESULTS:
 : One ring to rule them all.
 
-
-
-<<<<<<< HEAD
 * TODO Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
 ** Polymorphism (brave)
 *** multimethods (brave, cu)
@@ -2069,8 +2057,7 @@ The doto macro lets us to order operations and execute them on a Java object.
 ** Heirarchies (cu)
 
 
-* TODO The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
-=======
+* TODO The Reader, Evaluation, and Macros (brave) / The Power of Macros 
 * Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
 ** Abstractions and Polymorphism (brave, cu)
 *** Protocols Dispatch on Type (brave, cu)
@@ -2424,7 +2411,7 @@ reify permits ad hoc construction of a var with a protocol without defining a ty
 * The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
 Macros permit you to alter the evaluation paradigm from eager evaluation to normal order evaluation.
 Macros allow us to rewrite our code at compile time, giving us the option to pen our own custom syntax. 
->>>>>>> origin/master
+
 ** Macros (lc) / Clojure Alchemy: Reading, Evaluation, and Macros (brave)
 
 *** Clojure's Evaluation Model (brave)
@@ -2434,19 +2421,14 @@ Macros allow us to rewrite our code at compile time, giving us the option to pen
 *** Thread First
 *** Thread Last
 ** Reader Conditionals (cu)
-<<<<<<< HEAD
 ** Writing Macros (brave)
 
 
 * TODO Rolling Our Own Data Types (cu)
-=======
 ** Writing Macros (lc, brave)
 *** defmacro
 *** macroexpand
 ** templating with 'quote (lc)
-(~ unquote)
->>>>>>> origin/master
-
 
 * TODO Tooling
 ** Getting Set Up With a Clojure Editor (lc)
