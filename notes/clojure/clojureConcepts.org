@@ -79,10 +79,10 @@
 *** (nil)
 
 
-* Regular Expressions (brave)
+* TODO Regular Expressions (brave)
 
 
-* Forms (brave)
+* TODO Forms (brave)
 
 
 * Compound Data: Collections & Seqs
@@ -1570,6 +1570,25 @@ The reset! function will overwrite the value of an atom directly.
 #+RESULTS:
 : Key: :logger Old: 0 New: 42
 : Key: :logger Old: 42 New: 43
+*** Volatiles (cu)
+Volatiles are -essentially- atoms that lack an option to attach watchers. This makes them more performant. Note that the volatile constructor uses =volatile!=.
+
+#+BEGIN_SRC clojure :results output
+ 
+(def vol (volatile! "Voldemort"))
+(println (volatile? vol))
+(println (deref vol))
+(vswap! vol #(when (= "Voldemort" %) "The One Who Must Not Be Named"))
+(println (deref vol))
+(vreset! vol "Vanquished")
+(println (deref vol))
+#+END_SRC
+
+#+RESULTS:
+: true
+: Voldemort
+: The One Who Must Not Be Named
+: Vanquished
 
 *** Using Refs for Coordinated and Synchronous Changes (lc) / Refs (brave)
 Refs can only be changed within a transaction. Transactions have a few characteristics that are database-like:
@@ -1653,7 +1672,6 @@ When one ref's value is defined in terms of another ref's value, we must use ref
 #+RESULTS:
 : 5
 : 7
-
 *** Using Agents for Independent and Synchronous Changes (lc)
 **** creation and dereferencing
 Creation and dereferencing is similar to an atom.
@@ -1672,25 +1690,6 @@ Creation and dereferencing is similar to an atom.
 #+END_SRC
 
 **** send-off
-*** Volatiles (cu)
-Volatiles are -essentially- atoms that lack an option to attach watchers. This makes them more performant. Note that the volatile constructor uses =volatile!=.
-
-#+BEGIN_SRC clojure :results output
- 
-(def vol (volatile! "Voldemort"))
-(println (volatile? vol))
-(println (deref vol))
-(vswap! vol #(when (= "Voldemort" %) "The One Who Must Not Be Named"))
-(println (deref vol))
-(vreset! vol "Vanquished")
-(println (deref vol))
-#+END_SRC
-
-#+RESULTS:
-: true
-: Voldemort
-: The One Who Must Not Be Named
-: Vanquished
 
 ** Concurrency and Parallelism Concepts (brave)
 *** Synchronous and Asynchronous
@@ -1743,13 +1742,13 @@ The future function accepts a 'body' and executes it in another thread. The foll
 *** channels (lc)
 
 
-* Host Interop (lc, brave, cu)
+* TODO Host Interop (lc, brave, cu)
 ** Java Interop (lc) 
 ** Javascript (cu)
 ** Working with the JVM (brave)
 
 
-* Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
+* TODO Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
 ** Polymorphism (brave)
 *** multimethods (brave, cu)
 *** protocols (brave, cu)
@@ -1757,7 +1756,7 @@ The future function accepts a 'body' and executes it in another thread. The foll
 ** Heirarchies (cu)
 
 
-* The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
+* TODO The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
 ** Macros (lc) / Clojure Alchemy: Reading, Evaluation, and Macros (brave)
 *** Clojure's Evaluation Model (brave)
 *** The Reader (brave)
@@ -1770,10 +1769,10 @@ The future function accepts a 'body' and executes it in another thread. The foll
 ** Writing Macros (brave)
 
 
-* Rolling Our Own Data Types (cu)
+* TODO Rolling Our Own Data Types (cu)
 
 
-* Tooling
+* TODO Tooling
 ** Getting Set Up With a Clojure Editor (lc)
 ** Lein / Boot
 *** Creating Our Project with Lein (lc)
@@ -1782,7 +1781,7 @@ The future function accepts a 'body' and executes it in another thread. The foll
 *** Boot, the Fancy Clojure Build Framework (brave)
 
 
-* Web Libs
+* TODO Web Libs
 ** Creating a Web Server With compojure
 ** Using JSON with the Cheshire and Ring
 ** Making HTTP Calls with ClojureScript and cljs-http
