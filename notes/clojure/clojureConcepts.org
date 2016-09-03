@@ -4,12 +4,12 @@
 ** Living Clojure
 [X] Chapter 1 : The Structure of Clojure
 [X] Chapter 2 : Flow and Functional Transformations
-[ ] Chapter 3 : State and Concurrency
+[X] Chapter 3 : State and Concurrency
 [ ] Chapter 4 : Java Interop and Polymorphism
 [ ] Chapter 5 : How to Use Clojure Projects and Libraries
 [ ] Chapter 6 : Communication with core.async
 [ ] Chapter 7 : Creating Web Applications with Clojure
-[ ] Chapter 8 : The Power of Macros
+[X] Chapter 8 : The Power of Macros
 [ ] Training Plan Week 1
 [ ] Training Plan Week 2
 [ ] Training Plan Week 3
@@ -45,10 +45,10 @@
 [X] 3.9. Destructuring
 [ ] 3.10. Threading Macros
 [ ] 3.11. Reader Conditionals
-[ ] 3.12. Namespaces
-[ ] 3.13. Abstractions and Polymorphism
-[ ] 3.14. Data types
-[ ] 3.15. Host interoperability
+[X] 3.12. Namespaces
+[X] 3.13. Abstractions and Polymorphism
+[X] 3.14. Data types
+[X] 3.15. Host interoperability
 [X] 3.16. State management
 [ ] 4.1. Getting Started with the Compiler
 [ ] 4.2. Working with the REPL
@@ -1205,7 +1205,9 @@ Thankfully, destructuring nested data is as easy as flat data.
 : red2
 
 ** Namespaces (lc, cu) / Organizing Your Project: A Librarian's Tale (brave)
-vars are scoped to namespaces. The default namespace is "user". 
+Namespaces are Clojure's fundamental unit of code modularity. It is idiomatic for each file to begin with a namespace definition. In fact, namespaces must correspond to filenames. For example, the namespace =mynamespace.core= must correspond to the core.clj* file in the mynamespace directory. The default namespace is "user". 
+  When we bind symbols and vars, those bindings are scoped to the current namespaces. Although 
+you can create a namespace dynamically, it is idiomatic to only have one namespace per file.
 *** creating and identifying a namespace (lc)
 
 #+BEGIN_SRC clojure :results output
@@ -1216,7 +1218,7 @@ vars are scoped to namespaces. The default namespace is "user".
 #+RESULTS:
 : #object[clojure.lang.Namespace 0x763be7bf alice.favfoods]
 
-*** accessing a namespace (lc)
+*** remotely accessing a namespace (lc, cu)
 
 #+BEGIN_SRC clojure :results output
   (ns userland)
@@ -1225,19 +1227,18 @@ vars are scoped to namespaces. The default namespace is "user".
   (println whoDoYouFightFor)
   (ns the.System)
   (println *ns*)
-  (println userland/whoDoYouFightFor)
+  (println userland/whoDoYouFightFor) 
 #+END_SRC
 
 #+RESULTS:
-: #object[clojure.lang.Namespace 0x65170eca userland]
+: #object[clojure.lang.Namespace 0x2fea84c userland]
 : the users
-: #object[clojure.lang.Namespace 0x6caf1747 the.System]
-: the System
+: #object[clojure.lang.Namespace 0x8a91f84 the.System]
 : the users
 
 *** :require(ing) libs (lc)
 Clojure has 'libs', namespaces full of symbols bound to values. Likely, function buckets...
-**** require
+**** qualified namespaces with require
 After we require a namespace, symbols in that namespace will be accessible through a qualified namespace.
 
 #+BEGIN_SRC clojure
@@ -1248,7 +1249,7 @@ After we require a namespace, symbols in that namespace will be accessible throu
 #+RESULTS:
 : nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
 
-**** :require :as
+**** aliased namespaces with :require :as
 We can use the :as option to set an alias for a namespace.
 
 #+BEGIN_SRC clojure
@@ -1270,15 +1271,44 @@ This form is acceptable, but less common:
 #+RESULTS:
 : nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
 
+**** unqualified symbols with :require :refer
+You can bring symbols directly into your current namespace without qualification so long as there is not a var collision. 
+#+BEGIN_SRC clojure :results output
+  (ns myapp.main
+    (require [clojure.string :refer [upper-case]]))
+  (println (upper-case "hello world"))
+#+END_SRC
+
+#+RESULTS:
+: HELLO WORLD
 
 **** :require :refer :all
-The :all option makes a namespaces symbold available in the current namespace without qualification. IF symbols conflict between namespaces, the compiler will throw an exception.
+The :all option makes all of a namespace's symbols available in the current namespace without qualification. If symbols conflict between namespaces, the compiler will throw an exception.
 
 #+BEGIN_SRC clojure
   (ns wonderland
     (:require [alice.favfoods :refer :all]
               [rabbit.favfoods :refer :all]))
 #+END_SRC
+**** excluding symbols with :exclude
+Sometimes, you want to use a symbol that it bound in a library you are loading. To avoid this var clash, you can exclude specific symbols from being loaded.
+
+#+BEGIN_SRC clojure :results output
+  (ns myapp.main
+    (:refer-clojure :exclude [min]))
+
+  (defn min [x y]
+    (if (< x y)
+      y
+      x))
+
+  (println (min 5 8))
+
+#+END_SRC
+
+#+RESULTS:
+: 8
+
 *** Using libs (lc)
 
 
@@ -1672,24 +1702,82 @@ When one ref's value is defined in terms of another ref's value, we must use ref
 #+RESULTS:
 : 5
 : 7
+<<<<<<< HEAD
 *** Using Agents for Independent and Synchronous Changes (lc)
+=======
+
+*** TODO Using Agents for Independent and Synchronous Changes (lc)
+Living Clojure's treatment was anemic... revisit...
+>>>>>>> origin/master
 **** creation and dereferencing
 Creation and dereferencing is similar to an atom.
-#+BEGIN_SRC clojure
+#+BEGIN_SRC clojure :results output
   (def secret (agent "man"))
-  @secret
+  (println @secret)
 #+END_SRC
 
 #+RESULTS:
-: #'user/secret"man"
+: man
 
 **** send
+The send function lets us change the state of the agent. It works in a similar way to an atom's swap! function. But, unlike swap!, send does not block. Instead, send opens a separate thread and dispatches the action to the agent in that thread. Thus, when you deref an agent after a change, it my not have changed yet. Unlike swap! and alter, send returns immediately...
 
-#+BEGIN_SRC clojure
-  (def secret (agent "man"))
+#+BEGIN_SRC clojure :results output
+  (def secret (agent "russian"))
+  (println @secret)
+  (defn bribe [state]
+    (case state
+      "russian" "american"
+      "american" "russian"))
+  (send secret bribe)
+  (println @secret)
 #+END_SRC
 
+#+RESULTS:
+: russian
+: american
+
 **** send-off
+<<<<<<< HEAD
+=======
+send-off is best for potentially blocking I/O actions. "Using send uses a fixed thread pool, which is good for CPU-bound operations, whereas send-off uses an expandable thread pool necessary to avoid an I.O-bound thread pool from blocking." -lc
+
+#+BEGIN_SRC clojure :results output
+  (def secret (agent "russian"))
+  (println @secret)
+  (defn bribe [state]
+    (case state
+      "russian" "american"
+      "american" "russian"))
+  (send-off secret bribe)
+  (println @secret)
+#+END_SRC
+
+#+RESULTS:
+: russian
+: american
+
+**** transactions
+*** Volatiles (cu)
+Volatiles are -essentially- atoms that lack an option to attach watchers. This makes them more performant. Note that the volatile constructor uses =volatile!=.
+
+#+BEGIN_SRC clojure :results output
+ 
+(def vol (volatile! "Voldemort"))
+(println (volatile? vol))
+(println (deref vol))
+(vswap! vol #(when (= "Voldemort" %) "The One Who Must Not Be Named"))
+(println (deref vol))
+(vreset! vol "Vanquished")
+(println (deref vol))
+#+END_SRC
+
+#+RESULTS:
+: true
+: Voldemort
+: The One Who Must Not Be Named
+: Vanquished
+>>>>>>> origin/master
 
 ** Concurrency and Parallelism Concepts (brave)
 *** Synchronous and Asynchronous
@@ -1742,12 +1830,237 @@ The future function accepts a 'body' and executes it in another thread. The foll
 *** channels (lc)
 
 
+<<<<<<< HEAD
 * TODO Host Interop (lc, brave, cu)
 ** Java Interop (lc) 
+=======
+* Host Interop (lc, brave, cu)
+Clojure is a hosted language, and borrows heavily from the types provided by its host. In Clojure, a string is a java.lang.String; in ClojureScript a string is a JavaScript string. This common ground lets Clojure inter-operate with its host, including access to classes, objects,, libraries, and APIs of its host language.
+>>>>>>> origin/master
 ** Javascript (cu)
-** Working with the JVM (brave)
+Note, cider is not configured to execute clojurescript. So don't lean on these code-blocks.
+*** Accessing the global object
+#+BEGIN_SRC clojure
+  (js/console.log "222")
+#+END_SRC
+*** Method Invocation
+To call the method of a JS object, the property access call is first in the s-exp, followed by the object's var. Alternately, the object and method call can be combined.
+
+#+BEGIN_SRC clojure
+  (def re (js/RegExp "^Clojure"))
+  (.test re "ClojureScript") ; => true
+
+  (.sqrt js/Math 49) ; => 7
+  (js/Math.sqrt 49) ; => 7
+#+END_SRC
+*** Property Access
+Property access is similar to method invocation, but instead of using a period, you use a period and hyphen.
+#+BEGIN_SRC clojure
+  (.-multiline re) ; => false
+  (.-PI js.Math) ; => 3.14....
+#+END_SRC
+
+The techniques described above have a convienent shorthand:
+#+BEGIN_SRC clojure
+  (jsMath.PI) ; => 3.14...
+#+END_SRC
+
+*** Creating JavaScript Objects
+There are two methods to create JS objects:
+1. =js-obj= is a function that accepts a map and returns a JavaScript object. The return value can be passed to third party libraries that communicate in POJOs.
+2. =#js= is a reader macro that ou prepend to a map or vector to transform it to a POJO.
+**** js-obj Example:
+#+BEGIN_SRC clojure
+  (js-obj "name" "value") ;; => #js {:name "value"}
+#+END_SRC
+**** #js Example:
+#+BEGIN_SRC clojure
+  (def myObj #js {:name "value"})
+  ; Equivalent to:
+  #+BEGIN_SRC js
+  var myObj = {name: "value"}
+  #+END_SRC
+#+END_SRC
+**** Mutation with =set!=
+In JavaScript, objects are mutable, and ClojureScript permits you to mutate an object's state with the set! function.
+#+BEGIN_SRC clojure
+  (def myObj #js {:name "value"})
+  (set! (myObj.name) "cost")
+#+END_SRC
+*** Conversions
+The previously discussed form of making objects do not recursively transform data types. So, if you have nested objects, the nexted objects will not be converted. To affect deep conversions, use the =clj->js= and =js->clj= functions. Note that conversions from JS to CLJ changes keywords in parent data structures into strings. 
+
+#+BEGIN_SRC clojure
+ (def clj-map {:country {:code "FR" :name "France"}})
+  ;; => {:country {:code "FR", :name "France"}}
+  (:code (:country clj-map)
+  ;; => "FR"
+
+  (def js-obj #js {:country {:code "FR" :name "France"}})
+  ;; => #js {:country {:code "FR", :name "France"}
+  (.-country js-obj)
+  ;; => {:code "FR", :name "France"}
+  (.-code (.-country js-obj)
+  ;; => nil
+#+END_SRC
+
+#+BEGIN_SRC clojure
+  (clj->js {:foo {:bar "baz"}})
+  ;; => #js {:foo #js {:bar "baz"}}
+  (js->clj #js {:country {:code "FR" :name "France"}})
+  ;; => {"country" {:code "FR", :name "France"}}
+#+END_SRC
+
+*** JavaScript Arrays
+JS arrays are similar to vectors, we can even use the sequence abstraction overthem. Property access is the same as for POJOs.
+**** Creating JS Arrays
+You can create an aray in two ways:
+1. =into-array= is a function that accepts a vector and returns a JS array.
+2. =make-array= accepts a integer and returns a JS array with a preallocated length equal to the integer, and nil as the value for each index.
+
+#+BEGIN_SRC clojure
+  (into-array ["England" "France" "Germany" "Spain"])
+  (def array (make-array 7))
+#+END_SRC
+**** Access and Mutation
+You can use =aget= and =aset= for property access and mutation, not just for arrays, but for POJOs as well.
+
+#+BEGIN_SRC clojure
+  (def countries (into-array ["England" "France" "Germany" "Spain"]))
+  (aset countries 0 "USA")
+  (aget countries 0) ; => "USA"
+
+  (def b #js {:hour 16})
+  ;; => #js {:hour 16}
+  (aget b "hour")
+  ;; => 16
+  (aset b "minute" 22)
+  ;; => 22
+  b
+  ;; => #js {:hour 16, :minute 22}
+#+END_SRC
+
+**** Iterating Over JS Arrays Using the Sequence Abstraction
+
+#+BEGIN_SRC clojure
+  (def array (make-array 7))
+  (count a) ; => 7
+#+END_SRC
+
+*** Creating Instances of Other Built-In Object Types
+#+BEGIN_SRC clojure
+  (new js/RegExp "^foo$")
+  ; or the dot special form - the preferred, idiomatic way
+  (js/RegExp. "^foo$")
+#+END_SRC
+** Working with the JVM (brave), Java Interop (lc)
+Basic types in Clojure are the types provided by its host. For example a Clojure string is an instance of java.lang.String. We can inspect a type using the class function:
+*** Using Class for Introspection
+#+BEGIN_SRC clojure :results output
+(println (class "string"))
+(println (class 5))
+(println (class 5.2))
+(println (class false))
+(println (class nil))
+(println (class symbol))
+(println (class keyword))
+#+END_SRC
+
+#+RESULTS:
+: java.lang.String
+: java.lang.Long
+: java.lang.Double
+: nil
+: java.lang.Boolean
+: clojure.core$symbol
+: clojure.core$keyword
+
+*** Calling Object Methods
+When we want to access the method of an object, we can use dot notation or dot shorthand.
+First comes the dot, then the object, next the method, and last any additional arguments. With the shorthand, the dot and method come first, then the object, and other arguments. 
+**** dot notation
+
+#+BEGIN_SRC clojure :results output
+  (println (. "string" toUpperCase))
+#+END_SRC
+
+#+RESULTS:
+: STRING
+
+#+BEGIN_SRC clojure :results output
+  (println (. "string" indexOf "tring"))
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+**** dot shorthand
+
+#+BEGIN_SRC clojure
+  (.toUpperCase "another string" )
+#+END_SRC
+
+#+RESULTS:
+: ANOTHER STRING
+
+#+BEGIN_SRC clojure :results output
+  (println (.indexOf "string" "r"))
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+*** Creating new Java objects
+We can create new Java objects with the new function or with a a dot following the class name.
+
+#+BEGIN_SRC clojure :results output
+  (println (String. "I'm a real string"))
+  (println (new String "I'm a new string!"))
+#+END_SRC
+
+#+RESULTS:
+: I'm a string
+: I'm a new string!
+
+*** Importing Java Objects and Calling Static Methods
+We can use java objects by importing them into our namespace or using their fully qualified names. To use a static method on a Java class, use the forward slash. 
+#+BEGIN_SRC clojure :results output
+  ; import and use
+  (ns caterpillar.network
+    (:import (java.net InetAddress)))
+  (println (InetAddress/getByName "localhost"))
+
+  ; using the fully qualified name:
+  (println (java.net.InetAddress/getByName "localhost"))
+
+  ;access the imported object using dot notation 
+  (println (.getHostName (InetAddress/getByName "localhost")))
+#+END_SRC
+
+#+RESULTS:
+: #object[java.net.Inet4Address 0x677d8d86 localhost/127.0.0.1]
+: #object[java.net.Inet4Address 0x677d8d86 localhost/127.0.0.1]
+: localhost
+
+*** the =doto= macro
+The doto macro lets us to order operations and execute them on a Java object.
+
+#+BEGIN_SRC clojure :results output
+  (def sb (doto (StringBuffer. "One ")
+            (.append "ring ")
+            (.append "to ")
+            (.append "rule ")
+            (.append "them ")
+            (.append "all.")))
+  (println (.toString sb))
+#+END_SRC
+
+#+RESULTS:
+: One ring to rule them all.
 
 
+
+<<<<<<< HEAD
 * TODO Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
 ** Polymorphism (brave)
 *** multimethods (brave, cu)
@@ -1757,19 +2070,382 @@ The future function accepts a 'body' and executes it in another thread. The foll
 
 
 * TODO The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
+=======
+* Creating and Extending Abstractions... (brave) / Abstractions and Polymorphism (cu)
+** Abstractions and Polymorphism (brave, cu)
+*** Protocols Dispatch on Type (brave, cu)
+Protocols are Clojure's way to create interfaces that provide a type-based polymorphism. Protocols allow you to associate multiple functions with a single name, then dispatch based on the type of the interface invocation's first argument. 
+  In the code-block below, we define a protocol called IProtocolName, with a single method 
+called sample-method. this refers to the protocol itself.x
+#+BEGIN_SRC clojure
+  (defprotocol IProtocolName
+    "A docstring describing the protocol."
+    (sample-method [this] "A doc string associated with this function."))
+#+END_SRC
+
+To define a protocol function, we can simply define a function in the same namespace that the protocol is defined. To do so, we use either the =extend-protocol= or =extend=type= macros. 
+**** extend-type
+extend-type permits you to extend 'a single type with different protocols in a single expression.' The symbols number, string, object, array, boolean, and function reflect the primitive types in JavaScript.
+
+#+BEGIN_SRC clojure :results output
+ (defprotocol IInvertible
+   "This is a protocol for data types that are 'invertible'"
+   (invert [this] "Invert the given item."))
+
+ (extend-type string
+   IInvertible
+   (invert [this] (apply str (reverse this))
+   ; another protocol
+   ; the function implementation for that protocol))
+ (extend-type cljs.core.List
+   IInvertible
+   (invert [this] (reverse this)))
+ (extend-type cljs.core.PersistentVector
+   IInvertible
+   (invert [this] (into [] (reverse this))))
+
+  (invert "abc")
+   ;; => "cba"
+  (invert 0)
+  ;; => 0
+  (invert '(1 2 3))
+  ;; => (3 2 1)
+  (invert [1 2 3])
+  ;; => [3 2 1]
+#+END_SRC
+
+#+RESULTS:
+
+**** extend-protocol
+extend-protocol permits you to add multiple implementations of a profocol for different types.
+
+#+BEGIN_SRC clojure
+  (defprotocol IInvertible
+    "This is a protocol for data types that are 'invertible'"
+    (invert [this] "Invert the given item."))
+
+  (extend-protocol IInvertible
+    java.lang.String
+    (invert [this] (apply str (reverse this)))
+    cljs.core.List
+    (invert [this] (reverse this))
+    cljs.core.PersistentVector
+    (invert [this] (into [] (reverse this))))
+
+  (invert "abc")
+   ;; => "cba"
+  (invert 0)
+  ;; => 0
+  (invert '(1 2 3))
+  ;; => (3 2 1)
+  (invert [1 2 3])
+  ;; => [3 2 1]
+#+END_SRC
+
+#+RESULTS:
+
+**** Extending Built-In Abstractions
+ClojureScript's abstractions are often defined as protocols, and the bahavior defined for ClojureScript's abstractiosn can be adapted to third party libraries as well. Below, we implement the IFn protocol for the js/RegExp type by defining =invoke=, a function that permits a type to be called as a function that accepts a collection and returns value matches in the collection - collection access using a value as the function.
+
+#+BEGIN_SRC clojure
+ (extend-type js/RegExp
+   IFn
+   (-invoke
+    ([this a]
+      (re-find this a))))
+
+
+  (filter #"^foo" ["haha" "foobar" "baz" "foobaz"])
+  ; => ("foobar", "foobaz")
+#+END_SRC
+
+**** Protocol Introspection with Satisfies?
+At runtime, we might want to check whether some object satisfies a given protocol.
+
+#+BEGIN_SRC clojure
+  (satisfies? clojure.lang.IFn #{1})
+  ; => true
+#+END_SRC
+
+*** Multimethods Offer Flexible Dispatch (brave, cu)
+Multimethods offer dispatch based on arity, type, and value - making them more flexible than 
+protocols. You can also designate ad-hoc 'hierarchies.' And, like protocols, multimethods are 
+extinsible for new types.
+  You construct a multimethod with =defmulti= and =defmethod=. defmulti creates a multimethod 
+with a initial dispatch function. The dispatch function must return some kind of signal that 
+will be used for diaptch. In the example below, the dispatch function returns value of :locale 
+in param, and defaults to :en.
+  After defmulti comes defmethod, which adds implementations to the multimethod. These 
+implementations must share the same name as used in the defmulti. On a call to the 
+multimethod, the dispatch signal is compared to the signals in te defmethods, and the 
+matching method is executed.
+  Note that if a default method is not provided but is asked for, you'll see an exception.
+
+#+BEGIN_SRC clojure :results output
+  (defmulti say-hello
+    "A polymorphic function that returns a greetings message
+    depending on the language key with default lang as `:en`"
+    (fn [param] (:locale param))
+    :default :en)
+
+  (defmethod say-hello :en
+    [person]
+    (str "Hello " (:name person "Anonymous")))
+  (defmethod say-hello :es
+    [person]
+    (str "Hola " (:name person "Anonimo")))
+
+  (println (say-hello {:locale :es}))
+  (println (say-hello {:locale :en}))
+  (println (say-hello {:locale :fr}))
+#+END_SRC
+
+#+RESULTS:
+: Hola Anonimo
+: Hello Anonymous
+: Hello Anonymous
+
+*** Hierarchies Define Relationships(cu)
+Hierarchies define relationships between things, like symbols, keywords, types, etc. You can 
+define a hierarchy globally or locally, but when defining a hierarchy globally, keywords and 
+symbols must be namespaced to avoid conflicts between libraries.
+**** Defining a Hierarchy and Introspection
+We define hierarchies using the =derive= function. derive accepts two arguments and defines 
+the first argument as a 'child' of the second. Below we use :: notation to refer to the 
+namespaced ref of a keyword. 
+
+#+BEGIN_SRC clojure :results output
+  (derive ::circle ::shape)
+  (derive ::box ::shape)
+
+  (println (isa? ::circle ::shape))
+  (println (isa? ::rect ::shape))
+  (println (ancestors ::circle))
+  (println (descendants ::shape))
+#+END_SRC
+
+#+RESULTS:
+: true
+: false
+: #{:user/shape}
+: #{:user/box :user/circle}
+
+**** Locally Defined Hierarchies
+You can create local hierarchies with =make-heirarchy=. This creates a local context in 
+which a hierarchy applies, accessible through a local hierarchy parameter to introspecting 
+functions.
+
+#+BEGIN_SRC clojure :results output
+  (def h (-> (make-hierarchy)
+    (derive :lion :cat)
+    (derive :tiger :cat)))
+
+  (println (isa? h :lion :cat))
+  (println (isa? :lion :cat))
+#+END_SRC
+
+#+RESULTS:
+: true
+: false
+
+**** Hierarchies in Multimethods
+Multimethods uses hierarchical introspection for their dispatching by way of =isa?=.
+When we defmulti, we can specify a hierarchy to use, otherwise the global hierarchy is used.
+  During dispatch, the hierarchy is consolted to determine whether a match is possible. In 
+the xample below, because a tiger is a cat, the cat dispatch method is executed.
+
+#+BEGIN_SRC clojure :results output
+  (def zoo (-> (make-hierarchy)
+    (derive :lion :cat)
+    (derive :tiger :cat)))
+
+  (defmulti what-animal
+    "A function that lets you know what kind of animal you passed"
+    identity
+    :hierarchy #'zoo)
+  (defmethod what-animal :lion
+    [_]
+    "You passed the king of the Jungle")
+  (defmethod what-animal :cat
+    [_]
+    "You passed a cat")
+  (defmethod what-animal :default
+    [_]
+    "I'm not sure what that is...")
+
+  (println (what-animal :lion))
+  (println (what-animal :tiger))
+  (println (what-animal :liger))
+
+#+END_SRC
+
+#+RESULTS:
+: You passed the king of the Jungle
+: You passed a cat
+: I'm not sure what that is...
+
+** Rolling Your Own Data Types (cu, lc, brave)
+Sometimes you want to define your own compound data type, with a specific structure. In Clojure, custom data types take the form of a host-backed type that can be named or anonymous. This is typically some form of class-like object.
+  The two most common type constructor macros are =deftype= and =defrecord=. 
+*** deftype (cu)
+deftype is the most 'low-level' Clojure type constructor. deftype accepts a symbol to 
+associate with the type, and a vector of field/properties. After creating the type, you can 
+create an instance of the type using the name of the type followed by a dot, to indicate that 
+you are calling a constructor.
+
+#+BEGIN_SRC clojure
+  (deftype Human [firstname lastname])
+  (def person (Human. "Matthew" "Hoselton"))
+  (.-firstname person)
+#+END_SRC
+
+#+RESULTS:
+: user.Human#'user/person"Matthew"
+
+**** constructor functions with deftype
+Clojure also defines a constructor function called ->*TypeName* that can be imported with the :require directive. However, prefer more semantic approaches, such as the following constructor function:
+
+#+BEGIN_SRC clojure :results output
+  (deftype Human [firstname lastname])
+  (defn make-human
+    [firstname lastname]
+    (Human. firstname lastname))
+  (def steve (make-human "Steve" "Jobs"))
+  (println (.-lastname steve))
+#+END_SRC
+
+#+RESULTS:
+: Jobs
+
+*** defrecord (cu, brave)
+Records are preferable to types because they implement the map protocol. But, under the hood, records use =deftype= for defining the protocol's type. Like other proper types, records can also implement protocols. 
+
+#+BEGIN_SRC clojure :results output
+  (defrecord Car [make model year])
+  (def suzyQ (Car. "Pontiac" "GTO" 1971))
+  (println (:make suzyQ))
+  (println (map? suzyQ))
+  (println (assoc suzyQ :cylinders 8))
+  (println (dissoc suzyQ :cylinders))
+  (def suzyR (dissoc suzyQ :make))
+  (println suzyR)
+  (println (suzyR :year))
+  (println (suzyQ :year))
+#+END_SRC
+
+#+RESULTS:
+: Pontiac
+: true
+: #user.Car{:make Pontiac, :model GTO, :year 1971, :cylinders 8}
+: #user.Car{:make Pontiac, :model GTO, :year 1971}
+: {:model GTO, :year 1971}
+: 1971
+
+Records' ability to implement map's features is limited, becaue Records don't implement the IFn protocol. The above example demonstrates that records implement map functions like =assoc=, but be careful with =dissoc=, which will return a new record if the field being dissociated is not specified in the protofol, but will return a plain map if a specified field is removed. Also note that maps do not act as functions.
+
+**** constructor functions
+See the section on constructor functions with def types.
+
+#+BEGIN_SRC clojure :results output
+  (defrecord Car [make model year])
+  (defn make-car
+    [make model year]
+    (Car. make model year))
+  (def jazzmobile (make-car "Chevrolet" "Lumina" 1994))
+  (println (:year jazzmobile))
+#+END_SRC
+
+#+RESULTS:
+: 1994
+
+*** defining protocols inline with defprotocol
+Now that we know how to construct basic types and Records, we can implement protocols for our types inline! Behold:
+
+#+BEGIN_SRC clojure :results output
+  (defrecord Car [make model year]
+    ICar
+    (m&m [_]
+      (str make ", " model)))
+  (def jazzmobile (Car. "Chevrolet" "Lumina" 1994))
+  (println (m&m jazzmobile)) ; "Chevrolet, Lumina"
+#+END_SRC
+
+*** the reify macro
+reify permits ad hoc construction of a var with a protocol without defining a type. Like types and records, you specify the protocol inline, but with reify the definition takes place in a constructor function.
+
+#+BEGIN_SRC clojure
+(defn user
+   [firstname lastname]
+   (reify
+     IUser
+     (full-name [_]
+       (str firstname " " lastname))))
+ (def yen (user "Yennefer" "of Vengerberg"))
+ (full-name yen)
+ ; => "Yennefer of Vengerberg"
+#+END_SRC
+
+#+RESULTS:
+
+*** the specify! macro
+=specify!= allows you to add protocols to existing objects.
+
+#+BEGIN_SRC clojure
+  (def obj #js {})
+  (specify! obj
+     IUser
+     (full-name [_]
+       "my full name"))
+  (full-name obj)
+ ;; => "my full name"
+#+END_SRC
+
+=specify= is an immutable version of specify!, that can be used on immutable copyable values implementing ICloneable (Eg. ClojureScript collections)
+
+#+BEGIN_SRC clojure
+  (def a {})
+  (def b (specify a
+           IUser
+           (full-name [_]
+             "my full name")))
+  (full-name a)
+  ;; Error: No protocol method IUser.full-name defined for type cljs.core/
+  PersistentArrayMap: {}
+  (full-name b)
+  ;; => "my full name"
+#+END_SRC
+
+#+RESULTS:
+: #'user/a{}
+
+
+
+
+* The Reader, Evaluation, and Macros (brave) / The Power of Macros (lc)
+Macros permit you to alter the evaluation paradigm from eager evaluation to normal order evaluation.
+Macros allow us to rewrite our code at compile time, giving us the option to pen our own custom syntax. 
+>>>>>>> origin/master
 ** Macros (lc) / Clojure Alchemy: Reading, Evaluation, and Macros (brave)
+
 *** Clojure's Evaluation Model (brave)
 *** The Reader (brave)
 *** The Evaluator (brave)
-*** templating (lc)
 ** Threading Macros (cu)
 *** Thread First
 *** Thread Last
 ** Reader Conditionals (cu)
+<<<<<<< HEAD
 ** Writing Macros (brave)
 
 
 * TODO Rolling Our Own Data Types (cu)
+=======
+** Writing Macros (lc, brave)
+*** defmacro
+*** macroexpand
+** templating with 'quote (lc)
+(~ unquote)
+>>>>>>> origin/master
 
 
 * TODO Tooling

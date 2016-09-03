@@ -1,5 +1,4 @@
 
-
 * Getting Started with React Router - Joe Maddalone
 ** Router, Route, and Link Components
 *** Router
@@ -99,7 +98,7 @@ class App extends React.Component {
 export default App;
 
 #+END_SRC
-** IndexRouter
+** IndexRoutes
 Index routes alow us to render a default component when no other route is active.
 *** Source:
 
@@ -278,40 +277,50 @@ export default App;
 
 #+END_SRC
 
-** TODO setRouteWillLeaveHook (come back after working with 'context' in react
-setRouteWillLeaveHook provides a method for us to intercept a route change before leaving the current route.
+** setRouteWillLeaveHook
+setRouteWillLeaveHook provides a method for us to intercept a route change before leaving the current route. But, this method exists on the Router component, so we must use context to access it. 
 
 *** Source
 #+BEGIN_SRC js
-
 import React from 'react';
-import {Router, Route, Redirect, Link, hashHistory} from 'react-router';
+import { Router, Route, Link, hashHistory } from 'react-router';
 
-const Home = () => <div><h1>Home</h1><Links /></div>;
-const About = () => <div><h1>About Us</h1><Links /></div>;
-const Contact = () => <div><h1>Contact</h1><Links /></div>;
+// const Home = () => <div><h1>Home</h1><Links /></div>;
 
-const Links = () => 
-  <nav>
-    <Link to="/">Home</Link>
-    <Link to="/about">About</Link >
-    <Link to="/about-us">About Us</Link >
-    <Link to="/contact">Contact</Link>
-</nav>
-
-class App extends React.Component {
-  render(){
-    return (
-      <Router history={hashHistory}>
-        <Route path="/" component={Home}></Route>
-        <Route path="/about-us" component={About}></Route>
-        <Redirect from='/about' to='/about-us'></Redirect>
-        <Route path="/contact" component={Contact}></Route>
-      </Router>
+class Home extends React.Component {
+  componentWillMount(){
+    this.context.router.setRouteLeaveHook(
+      this.props.route,
+      this.routerWillLeave
     )
   }
+  routerWillLeave( nextLocation ){
+    return `leaving home for ${nextLocation.pathname}`
+  }
+  render(){
+    return <div><h1>Home</h1><Links /></div>;
+  }
 }
+Home.contextTypes = { router: React.PropTypes.object.isRequired }
+
+const About = () => <div><h1>About</h1><Links /></div>;
+const Links = () => {
+  return (
+    <nav>
+      <Link to="/">Home</Link>
+      <Link to="about">About</Link>
+    </nav>
+  )
+};
+
+const App = () => {
+  return (
+    <Router history={ hashHistory }>
+      <Route path="/" component={Home}></Route>
+      <Route path="/about" component={About}></Route>
+    </Router>
+  )
+};
 
 export default App;
-
 #+END_SRC
