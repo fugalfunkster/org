@@ -20,6 +20,7 @@ https://github.com/alexmackey/PluralsightWebinar_ThreeJs
 A scene is a container for all of our other items: the camera, lights, and objects we want to display.
 **** Camera
 **** Lighting
+Lighting and materials are closely linked. Lighting can dramatically alter how a scene looks.
 **** Objects
 *** Setup
 **** Three uses a Cartesian Coordinate System
@@ -264,8 +265,178 @@ The scene exporter lets you exports an entire scene. It is also a separate sourc
 
 *** Editor
 The Three editor is a nice GUI for sandboxing geometries.
-** Materials, Lighting, & Textures
+** Materials
+Three has three main types of materials. All materials have the following properties:
+- color: Note disimilarities with MeshBasic and others.
+- side - THREE.FrontSide, THREE.BackSide & THREE.DoubleSide (what to color)
+- map: (texture to use)
+- transparency & opacity
+- visible (bool)
+- wireframe (bool, & others)
+*** MeshBasic
+Surface not influenced by lighting. Great for demos and debugging. 
+**** Create a new MeshBasic CODE:
+
+#+BEGIN_SRC js
+  var material = new THREE.MeshBasicMaterial({color: 0xFF0000});
+#+END_SRC
+
+*** MeshLambert
+MeshLambertMaterials have a dull, non-shiny surface (like matte, or pottery). These 
+materials need directional, point, or spot light to be properly visible. The properties you 
+specify with a Lambert material are different than Basic:
+- ambient: allows you to specify a color that will be multiplied by ambient light color in 
+  the scene
+- emissive: solid color unaffected by other lighting, defaults to black
+
+#+BEGIN_SRC js
+    
+#+END_SRC
+
+*** MeshPhong
+Shiny, like metal or plastic. Like Lamberts, these need to be used in conjunction with directional, point, or spot lighting. Phong materials have new properties:
+- specular: how shiny an object is and the color of shine. Defaults to a gray.
+- shininess: default of 30
+
+#+BEGIN_SRC js
+  var material = new THREE.MeshPhongMaterial({
+    color: 0xff00aa,
+    ambient: 0x0088bb,
+    specular: 0x002211,
+    shininess: 100
+  });
+#+END_SRC
+
+** Lighting
+*** Ambient
+Ambient lighting affects all objects equally. It can be used to soften a scene, by 
+specifying grey like colors. Generally ambient lighting wouldn't be the only lighting in a 
+scene.
+
+#+BEGIN_SRC js
+  var light = new THREE.AmbientLight(colorValue);
+#+END_SRC
+
+*** Point
+A point light shines in all directions. This type of light only affects MeshLAmbert or MeshPhong materials. Point lights have two advanced properties:
+- Intensity (a measure of the light's strength. defaults to 1)
+- Distance - distance where intensity will = 0, essentially sets the lights range
+
+#+BEGIN_SRC js
+  var light = new THREE.PointLight(colorValue, intensity, distance);
+#+END_SRC
+
+*** Directional
+Directional light comes from a direction, not a point. Analagous to sunlight, where the 'point' is so far away that light doesn't act as a point and so strong that light doesn't fade over distance.
+
+#+BEGIN_SRC js
+  var light = new THREE.DirectionalLight(color, intensity);
+#+END_SRC
+*** Spot
+Spotlights shine in one direction from a point, in the shape of a cone. Spotlights cast shadows in a single direction. And, spot lights only affect MeshLambert and MeshPhong materials. Spotlights have an angle property, specified in radians, and specifies the extent of the light's cone.
+
+#+BEGIN_SRC js
+  var light = new THREE.SpotLight(color, intensity, distance, angle);
+#+END_SRC
+*** Shadows
+Very resource intensive... We need to enable shadow properties on our light as well as our object.
+** Textures
+*** Loading
+Textures load asynchronously.
+
+#+BEGIN_SRC js
+  new THREE.MeshLabmertMaterial({
+    map: THREE.ImageUtils.loadTexture('content/crate.gif')
+  })
+
+#+END_SRC
+
+*** Transparency
+*** Bump Maps
+Bump maps are files that describes how to distort the light on the surface of an object. This simulates 3D texture on the surface of an object by maniuplating lighting at micro scale. This can help make stone and skin look more realistic.
 ** Scene Interaction
+*** Page Events
+We can use browser events. Keyboard events are easy. Handling mouse events are a bit more complicated, and rely on 'ray-casting'. 
+*** Control Libraries
+Working with browser events can be tricky when the complexity of an application grows. Three comes with a handful of control libraries, though they appear in separate files.
+- DeviceOrientation
+- Editor
+- Fly (allow a user to explore a scene by pointing and moving forward and backward)
+- FirstPerson
+- Oculus
+- Orbit (allow a user to explore an object by rotating and zooming in and out)
+- Path
+- PointerLock
+- TrackBall
+- Transform
+*** Collision Detection
+Collision detection allows us to  detect if object touches another object. There are two main methods of collision detection: raycasting and Box3.
+**** Raycasting
+Raycasting uses an origin vector and a destination vector to create a line, and calcualtes which objects fall on that line. Note, that raycasting can't be used for everything. It might miss small objects, and if the origin vector starts in a mesh, it won't register objects inside that mesh.
+**** Converting Screen to World Coordinates
+register a mousedown event, this gives us x and y screen coordinates. We can then use the rendering canvas's side and  aspect ratio to calculate a Three.js vector. The vector is then used with a Projector class, which takes into acount the camera's location and angle. Next, we use a raycaster with out projector and vector, and call the raycaster.intersectObjects method. This will give us a collection of objects that have hit by the line.
+  Be sure that if you've modified the rendering area, you account for this in calculating 
+your vector.
+**** Raycasting OnClick Handler
+
+#+BEGIN_SRC js
+  function onDocumentMouseDown(e){
+    var projector = new THREE.Projector();
+
+    var mouseClickVector = new THREE.Vector3( ( e.clientX / width ) * 2 - 1,
+                                              ( e.clientY / height ) * 2 + 1,
+                                              0.5 );
+    
+    projector.unprojectVector(mouseClickVector, camera);
+
+    var raycaster = new THREE.Raycaster(camera.position, 
+                                        mouseClickVector.sub(camera.position).normalize());
+
+    var intersects = raycaster.intersectObjects(objects)
+
+    if (intersects.length > 0) {
+      intersects[0].object.material.color.setHex(Math.random() * 0xffffff);
+    }
+
+  }
+
+#+END_SRC
+
+**** Box3
+Used to determine whether if one object has touched or is inside another, using the Three.js property 'bounded box.'
+**** checkForCollision Function
+
+#+BEGIN_SRC js
+  function checkForCollision(){
+
+    var boxPosition = new THREE.Box3().setFromObject( box );
+    var box2Position = new THREE.Box3().setFromObject( box2 );
+
+    if(boxPosition.isIntersectionBox(box2Position)){
+      document.querySelector('h1').textContent = 'Boxes Touching';
+    } else {
+      document.querySelector('h1').textContent = 'Boxes not touching';
+    }
+  }
+#+END_SRC
+
+*** Integrating a Physics Engine (Physijs)
+**** Why Physijs?
+- Easy to integrate into Three.JS Projects
+- Wrapper for AmmoJS (JS version of C++ bullet libs)
+- Calculation performes in separate thread (web worker)
+**** Setup
+Physijs
+- available from htp://chandlerprall.github.io/Physijs
+- Add physi.js
+- Add physijs_worker.js
+Ammo
+- Available from https://github.com/kripken/ammo.js/
+- Also included in Physi.js examples
+**** Properties
+Mesh: gravity, mass, 
+Materials: friction, Restitution/Bounciness
+
 ** Creating Three.js Frogger
 
 
