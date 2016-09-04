@@ -1,0 +1,279 @@
+
+* WebGL and Three.js Fundamentals - Alex Mackey (2:13)
+https://github.com/alexmackey/PluralsightWebinar_ThreeJs
+** Intro
+*** Three.js is based on WebGL, supported in all modern browsers and most moble devices
+*** WebGL is basically a JavaScript wrapper over OpenGL
+*** WebGL can be combined with browser tech like css, svg, and canvas
+*** TODO Possible security concerns? How many edges?
+*** Three.js abstracts away WebGL and provides
+- graphic primitives
+- loaders for popular modeling formats
+- math and helper functions
+- Special effects: fog, particle engine, sprites, etc.
+- Abiity to work with shaders
+- Basic collision detection
+*** Examples: http://threejs.org/examples/
+** Three.js Building Blocks
+*** Scene Components
+**** Scene
+A scene is a container for all of our other items: the camera, lights, and objects we want to display.
+**** Camera
+**** Lighting
+**** Objects
+*** Setup
+**** Three uses a Cartesian Coordinate System
+The axes intersect in the exact center of the screen, the origin. Objects display at the origin if a position is not specified. An object's position is described by a vector, a three number type describing a point in 3D space: (0, 0, 0) => (X, Y, Z).
+**** Camera Options
+***** FOV (Field of View)
+This is the field of view, the top to bottom of the screen, described in degree. Changing the FOV is like changing the lens on a camera. Values between 35 and 45 are common.
+***** Aspect Ratio
+The width of the container divided by the height of the container. If you want to use the whole screen, just pull values of the window object.
+***** near & far planes
+These planes establish boundaries, outside of which objects will not be rendered. This is important for performance reasons
+***** perspective vs. orthographic cameras
+Orthographic cameras don't provide perspective, think sim city.
+**** Renderer
+The renderer is independent of Three.js, so our Three.js code could render to multiple targets. Out of the box, Three supports three main types of renderers, WebGL, Canvas, and SVG. The WebGL renderer is the most feature rich and performant. The canvas renderer is best when you're need to support older browsers.
+  When browser coverage is a concern, use a ternary to test for WebGL support:
+
+#+BEGIN_SRC js
+  var renderer = window.WebGlRenderingContext 
+                   ? new THREE.WebGLRenderer() 
+                   : new THREE.CanvasRenderer(); 
+#+END_SRC
+*** Code Example 1
+
+#+BEGIN_SRC js
+var example = (function(){
+  'use strict';
+
+  var scene = new THREE.Scene();
+  var renderer = window.WebGlRenderingContext 
+                 ? new THREE.WebGLRenderer()
+                 : new THREE.CanvasRenderer();
+  var light = new THREE.AmbientLight(0xffffff);
+  var camera, box;
+
+  function initScene(){
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('webgl-container').appendChild(renderer.domElement);
+    
+    scene.add(light);
+    
+    camera = new THREE.PerspectiveCamera(
+      35, // FOV
+      window.innerWidth / window.innerHeight, // Aspect Ratio
+      1, // near plane
+      1000 // far plane
+    );
+    camera.position.z = 100;
+    scene.add(camera);
+
+    box = new THREE.Mesh( new THREE.BoxGeometry(20,20,20),
+                          new THREE.MeshBasicMaterial({color: 0xFF0000}) );
+    box.name = 'box';
+    scene.add(box);
+
+    render();
+  }
+
+  function render(){
+    box.rotation.y += 0.01;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(render); // recurses 
+  }
+
+  window.onload = initScene; 
+
+  return { scene: scene }; // returning the scene for debugging purposes
+  
+})();
+#+END_SRC
+
+*** Object3D Class
+Object3D is the base class for many of the objects we might add to our scenes. 
+**** Common Object Properties
+- Id: a unique number assigned to the object by THREE
+- uuid: unique identifier created by THREE
+- name: permits more semantic retrieval
+- position: a vector representing the object's current position in the same
+- userData: holds metadata
+- parent/children: scene objects are hierarchical, and objects can contain any number of children. the parent and child properties permit traversal of the family tree
+**** Common Object Methods
+- getObjetByName: allows us to retrieve an individual object by name. We can also serach   
+                  an object's children by passing =true= as a second parameter.
+- getObjectById: allows us to retrieve an individual object by Id
+- lookAt: allows us to rotate an object to face a vector...
+*** Manipulating Objects
+**** Position
+We can set the position of an object in three different ways:
+
+#+BEGIN_SRC js
+
+  // specify an object.s position on a individla axis
+  Object.position.x = value;
+
+  // specify it's position on all three axes
+  Object.position.set(x, y, z);
+
+  // assign a new vector
+  Object.position = new THREE.Vector3(0,0,0);
+#+END_SRC
+
+**** Scale
+To resize an object we use scale, a number that refers to the original size of the object. For example, if a object originally had a length of 10 along the x axis and we set the scale to 2.5, the new length along the x axis would be 25.
+
+#+BEGIN_SRC js
+  // scale an object's length on one axis
+  Object.scale.x = 2.5;
+
+  // scale an object's lengths on all axes
+  Object.scale.set(x,y,z);
+#+END_SRC
+
+**** Rotation
+Rotations can be performed on all three axes. Once an object has been rotated, it's internal axis has also been rotated. 
+  Rotations are measured in radians, rather than degrees. 
+radians  = degrees * (pi / 180)
+
+#+BEGIN_SRC js
+  box.rotation.y += 0.01;  
+#+END_SRC
+
+dat.gui: http://learningthreejs.com/blog/2011/08/14/dat-gui-simple-ui-for-demos/
+
+**** Child Objects and Transforms
+All transforms are performed on child objects to maintain relative position to the parent.
+
+*** Common Problems
+- The object is behind the camera
+- Turn the lights on...
+- imported objects often must be scaled.
+** Meshes and Geometry
+Meshes are made up of two items, geometries and materials.
+
+#+BEGIN_SRC js
+  box = new THREE.Mesh(
+    new THREE.BoxGeometry(20,20,20),
+    new THREE.MeshBasicMaterial({color:0xFF0000})
+  )
+#+END_SRC
+
+*** Geometries
+Geometries are made of faces (planes) defined by vertices (points). Vertices define a position in space, and are defined using cartesian coordinates. Lines between vertices form the edges of faces. Geometries are like the skeleton of a mesh.
+**** Inbult Geometry
+Three defined a large number of inbuilt geometries. Checkout docs for a list of all of the 
+inbuilt geometries. 
+  In the source of these inbuilt geometries, the code will call the THREE.Geometry class, 
+then define individual vertices, and finally link the vertices together with faces. 
+  Most geometries will have to main properties: size and segments. The more segments to 
+higher the 'resolution' of the shape. More segments mean more resolution and thus more 
+resources.
+  For info about perf, check out the stats library: https://github.com/mrdoob/stats.js/
+
+***** Inbult Sphere Example:
+#+BEGIN_SRC js
+  THREE.SphereGeometry(radius, widthSegments, heightSegments)
+#+END_SRC
+
+**** Custom Geometry
+We can also create our own geometries, by creating a new instance of THREE.Geometry, defining our shape's vertices, defining how the vertices link together, create a new instance of THREE.Mesh, and then add it to the scene.
+
+#+BEGIN_SRC js
+  var triangleGeometry = new THREE.Geometry();
+
+  // Define our Vertices
+  triangleGeometry.vertices.push(new THREE.Vector3(0.0, 1.0, 0.0));
+  triangleGeometry.vertices.push(new THREE.Vector3(-1.0, -1.0, 0.0));
+  triangleGeometry.vertices.push(new THREE.Vector3(1.0, -1.0, 0.0));
+
+  // Define the face(s)
+  triangleGeometry.faces.push(new THREE.Face3(0, 1, 2));
+
+  manualGeometry = new THREE.Mesh(triangleGeometry);
+
+  scene.add(manualGeometry)
+
+  render();
+#+END_SRC
+
+*** Materials
+Materials are coverings for geometries, like skin to the gemoetries' skeleton. If we do not specify a material for our geometry, Three will provide a default material with a random color.
+  Below, we will assign colors to vertices, and Three will automatically create the 
+necessary gradients.
+**** Creating a New Material
+
+#+BEGIN_SRC js
+  var material = new THREE.MeshBasicMaterial({
+    vertexColors: THREE.VertexColors, // use vertex colors
+    side: THREE.DoubleSide // necessary to view both sides
+  });
+
+  // Create new Geometry, define vertices and faces (above) ...
+
+  triangleGeometry.faces[0].vertexColors[0] = new THREE.Color(0xFF0000);
+  triangleGeometry.faces[0].vertexColors[1] = new THREE.Color(0x00FF00);
+  triangleGeometry.faces[0].vertexColors[2] = new THREE.Color(0xFF0000);
+
+  manualGeometry = new THREE.Mesh(triangleGeometry, material);
+
+  // Add to scene (above) ...
+
+#+END_SRC
+
+*** Modifying Existing Geometry
+We can iterate through our data and perform transformations to our vertices to change modify 
+existing geometries. This is often not the most performant operation, see shaders later...
+  NOTE that after such a transformation we must set the geometry.verticesNeedUpdate to 
+=true= to ensure the changes have effect.
+  We can also modify a geometry's extrustion, to create a 3D object from a 2d shape.
+*** Loading Geometries
+It would be onerous to describe every 3D object we might want using Three's primitives. Thankfully, Three supports a number of 3D modeling formats. To use these formats, we must specify a loader for that format's data. Three has loaders for many 3D formats.
+  The best way to load Three models us using Three's native formats, and convert outside 
+objects to Three's format. This avoids increasing client side dependencies. We load external geometries using Three's JSON loader:
+
+#+BEGIN_SRC js
+  var loader = new THREE.JSONLoader();
+  
+  loader.load('models/monkey.js', function(geometry, materials) {
+    var material = new THREE.MEshBasicMAterial({
+      color: 0xff0000,
+      wireframe: true
+    });
+    monkey = new THREE.Mesh(geometry, material);
+    scene.add(monkey);
+    render();
+  });
+#+END_SRC
+
+  Check our blender.org, an open source 3D modelling creation suite. We can export to Three 
+from blender.
+  
+*** Exporting Geometry and Scenes
+The geometry exporter is a separate source file from three.js. Each instance of the exporter permits you to export one geometry.
+
+#+BEGIN_SRC js
+  var exporter = new THREE.Geometry.Exporter();
+  var exportedSphereObject = exporter.parse(sphere.geometry);
+  var serializedExportedSphere = JSON.stringify(exportedSphereObject);
+#+END_SRC
+
+The scene exporter lets you exports an entire scene. It is also a separate source file. It works similarly to the geometry exporter.
+
+*** Editor
+The Three editor is a nice GUI for sandboxing geometries.
+** Materials, Lighting, & Textures
+** Scene Interaction
+** Creating Three.js Frogger
+
+
+* Thoughts About Galaxy
+** control pannel: simple buttons or Link components?
+** Three.js moved to ES6 Modules w/ rollup in recent PR
+** explain the differences between react-three and react-three-renderer
+*** react 14 and ReactDOM
+** bootstrap overhead, is rest of site bootstrapped?
+** What (if any) libraries is the ClojureScript code dependent on?
+*** Reagent? Chart? d3?
