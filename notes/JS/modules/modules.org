@@ -1,0 +1,182 @@
+* JS Module Fundamentals
+** What is a Module?
+"A group of code and data related to a particular piece of functionality. It encapsulates implementation details, exposes a public api, and is combined with other modules to build a larger application."
+** Why use Modules?
+- Create higher-level abstractions: black box that noise
+- Encapsulation: Expose an interface, conceal the implementation
+- Make Code Reusuable
+- Simplify Dependency Management
+** Module Patterns in ES5
+*** IIFEs
+Immediately Invoked Function Expression are anonymous functions that are invoked when they are 
+declared. Bring anonymous has its advantages, an IIFE has no binding in its scope. 
+  Additionally, because JS has function scope, you can encapsulate implementation logic within
+an IIFE and be confident that internal bindings are not accessable from other areas of your 
+code, avoiding global scope pollution. But, this pattern doesn't provide a method to manage 
+dependences.
+
+#+BEGIN_SRC js :results output
+(function(name) {
+  console.log(name);
+}("Matthew"));
+#+END_SRC
+
+#+RESULTS:
+: Matthew
+*** Revealing Module Pattern
+If we want to refer to a module by name, we can't use an IIFE, we need something that we can  
+bind. The revealing module pattern does this by exposing it's public API as methods on an 
+object returned from a function.
+  The Revealing Module Pattern provides a clear delineation between its private implementation 
+and its public API. Internal details are enclosed in the function, and the returned object provides public methods.
+  Unfortunately, this pattern still doesn't provide dependency management.
+**** Revealing Module Pattern - Singleton
+
+#+BEGIN_SRC js :results output
+  var scoreboard = function() {
+    var message = 'Welcome to the Game!';
+    function printMessage() {
+      console.log(message);
+    }
+    return { showMessage: printMessage };
+  }();
+
+  scoreboard.showMessage();
+#+END_SRC
+
+#+RESULTS:
+: Welcome to the Game!
+
+**** Revealing Module Pattern - Constructor
+In JS it is idiomatic to capitalize the first letter of a function's name when that function 
+returns an object.
+
+#+BEGIN_SRC js :results output
+  var Scoreboard = function() {
+    var message = 'Welcome to the Game!';
+    function printMessage() {
+      console.log(message);
+    }
+    return { showMessage: printMessage };
+  };
+
+  var scoreboard = Scoreboard();
+  scoreboard.showMessage();
+#+END_SRC
+
+#+RESULTS:
+: Welcome to the Game!
+
+*** Dependency Management in the Dark Ages
+When you're using the revealing module pattern or IIFEs, you'll want to put them in separate files. BUt once you do this, you have to manage dependencies manually by - literally - loading script tags in a specific order. Don't call a module before it has been loaded.
+
+** Module Formats and Loaders
+Module format is the syntax used to define a module. The module loader is a library that understands a specific module format, and how to load and execute those modules. 
+*** Formats
+**** Asynchronous Module Definition (AMD)
+The AMD uses the revealing module pattern, and is most often used in the browser.
+  You define AMD modules by calling the =define= function, provided by the loader. =define= 
+takes two arguments: 
+  1. An array of paths for any dependencies for the module, and
+  2. A function that will recieve the return value of those dependencies as arguments.
+Note that this format doesn't pollute the global scope. 
+
+#+BEGIN_SRC js
+define(['./player'], function(player) {
+  console.log('Starting game for ' + player.getName());
+  function calculateScore() {
+    // do some math
+  }
+  return {
+    calculateScore: calculateScore
+  };
+});
+#+END_SRC
+
+**** CommonJS
+Most often used on the server, in Node.js. Node includes a built-in module loader.
+  CommonJS modules expose a public api through the =module.exports= object, and it is common 
+to see =exports= used as sugar for =module.exports=. Although you can assign an object 
+literal, or a function, directly to module.exports, you cannot do so to =exports=.
+***** Adding Methods to =module.exports=
+
+#+BEGIN_SRC js
+  var player = require('./player.js');
+  console.log('Starting game for ' + player.getName());
+  function calculateScore(){
+    // do some math
+  }
+  function printGame(){
+
+  }
+  module.exports.calculateScore = calculateScore;
+  module.exports.printGame = printGame;
+#+END_SRC
+
+***** Adding Methods to  =exports=
+
+#+BEGIN_SRC js
+  var player = require('./player.js');
+  console.log('Starting game for ' + player.getName());
+  function calculateScore(){
+    // do some math
+  }
+  function printGame(){
+
+  }
+  exports.calculateScore = calculateScore;
+  exports.printGame = printGame;
+#+END_SRC
+
+***** Assigning an Object to =module.exports=
+
+#+BEGIN_SRC js
+  var player = require('./player.js');
+  console.log('Starting game for ' + player.getName());
+  function calculateScore(){
+    // do some math
+  }
+  function printGame(){
+
+  }
+  module.exports = { calculateScore: calculateScore,
+                     printGame: printGame };
+#+END_SRC
+
+***** Assigning a function to =module.exports=
+
+#+BEGIN_SRC js
+  var player = require('./player.js');
+  console.log('Starting game for ' + player.getName());
+  function calculateScore(){
+    // do some math
+  }
+  module.exports = calculateScore;
+#+END_SRC
+
+**** Universal Module Definition (UMD)
+This format attempts to be compatible with both AMD and CommonJS. This can be helpful when you want to use a dependency on the client and server.
+**** System.register
+A custom format for the System.js loader. Not common...
+*** Loaders
+**** TODO RequireJS (AMD)
+**** TODO SystemJS (AMD, CommonJS, UMD, System.register)
+** Native Modules in ES2015
+*** Import
+*** Export
+** Module Bundlers
+*** Browserify
+*** Webpack
+
+
+* Next Steps
+** Structuring JavaScript Code
+** Practical Design Patterns in JS
+
+* YDKS: Scope & Closures - Ch.? Modules...
+
+* Loose Ends
+** Rollup
+** Bower?
+** Universal Module Definition?
+** Other Patterns?
