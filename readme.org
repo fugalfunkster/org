@@ -22,7 +22,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 * TODO queue
 ** TODO Building React Apps w/ Idiomatic Redux
 ** TODO Consilidate Redux Notes
-** TODO JS Module Fundamentals : Brice Wilson (2:16)
 ** TODO Advanced React and Redux : Stephen Girder (12:00)
 ** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
 ** VIEWONLY React Testing Cookbook
@@ -56,13 +55,14 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** WATCHEDONLY JS Best Practices : Jonathan Mills (2:39)
 ***** WATCHEDONLY JS.Next: ES6 : Aaron Frost (5:24)
 ***** DONE Reasoning About Async JS : Wes Higbee (2:05)
+***** DONE JS Module Fundamentals : Brice Wilson (2:16)
 ***** OPEN jQuery-free JS : Elijah Manor (2:26)
-***** TODO JS Module Fundamentals : Brice Wilson (2:16)
 ***** TODO Testing Clientside JavaScript : Joe Eames (4:50)
 ***** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
 ***** Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
+***** Practical Design Patterns in JavaScript : Jonathan Mills (3:10)
 ***** JavaScript Design Patterns : Aaron Powell (2:02)
-***** JS Templating w/ Handlebars: Ryan Lewis (2:19)
+***** VIEWONLY Structuring JS Code : Dan Wahlin (2:10)
 **** Egghead
 ***** Asynchronous Programming: The End of the Loop : Jafar Husain
 ***** Regex in JavaScript : Joe Maddalone
