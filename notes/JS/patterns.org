@@ -68,7 +68,7 @@ environment will work to sole the problem presented. ... The empirical questions
 
 *** Object.create() for Prototypal Inheritance
 Not a deep copy, b/c it doesn't copy defineProperty settings over.
-** Creational Design Patterns
+** TODO Creational Design Patterns
 *** Constructor Pattern: Constructor Functions and the =new= Keyword
 The constructor pattern is really about using constructor functions and the =new= keyword. 
 When a Constructor function invocation is preceeded by the =new= keyword, the constructor 
@@ -185,17 +185,593 @@ function via the constructor functions =.prototype= property.
 : saving task: create a demo for singletons
 : saving task: create a demo for prototypes
 
-*** TODO Module Pattern
+*** Module Pattern
 At its core, the module pattern is an object literal that has properties or methods that make up its public API. We can return an object from a function, and take advantage of closures to encapsulate and protect internal state, while using the public api exposed on the returned object.
 
-#+BEGIN_SRC js
-  // unfinished
-#+END_SRC
+See modules.org for examples of AMD, CommonJS, and ES2015 module patterns. 
 
-*** Factory Pattern
+*** TODO Factory Pattern
 The factory pattern simplifies object creation, and helps you create different objects based 
 on need. 
 *** Singleton Pattern
+Used to restrict an object to one instance. 
+  For example, the CommonJS module pattern exports a 
+singleton when you export an object. In Node's CommonJS module loader, modules are cached 
+after the first time they are loaded. This means that every call to =require= will get exactly 
+the same object returned, if it would resolve to the same file. ... If you want to have a 
+module execute code multiple times, then export a function, and call that function. 
+
+#+BEGIN_SRC js
+  // repo.js
+  var repo = function() {
+    var called = 0;
+    var save = function(task) {
+      called++;
+      console.log('Saving task: ' + task + ' Called ' + called + ' times'); 
+    }
+    console.log('newing up task repo');
+    return {
+      save: save
+    }
+  }
+
+  module.exports = repo() // exports an object, and this module will be cached
+  module.exports = repo;  // exports a function that can be called multiple times
+#+END_SRC
+
+#+BEGIN_SRC js
+  // main.js
+
+  // import a function or object, and assign it to =Repo=
+  var Repo = require('./repo');
+  // invoke function assigned to Repo, and save returned object in =repo=
+  var repo = repo();
+
+  // import a function, invoke it, and assign the returned object to repo2
+  var repo2 = require('./repo')(); 
+  
+
+#+END_SRC
 
 ** Structural Design Patterns
+Structural Design Patterns deal with relationships between objects, where one object either extends the functionality of another object, or simplifies the functionality of another object. 
+*** Decorator Pattern (naive?, see Allonge)
+Used to add new functionality to an existing object without being obtrusive. This can take two forms in JS. First, when we create a new object from a Constructor function, we can simply assign new properties and methods to the object, extending the default object returned from the constructor function.
+  We can also shadow methods on the prototype by simply assigning methods to an object with 
+the same name as the method on the object's prototype.
+**** Simple
+
+#+BEGIN_SRC js :results output
+  var Task = function(name){
+    this.name = name;
+    this.completed = false;
+  }
+
+  Task.prototype.complete = function(){
+    console.log('completing task: ' + this.name);
+    this.completed = true;
+  };
+
+  Task.prototype.save = function(){
+    console.log('saving task: ' + this.name);
+  };
+
+  var myTask = new Task('Legacy Task');
+  myTask.complete();
+  myTask.save();
+
+  // Now to decorate
+
+  var urgentTask = new Task('Urgent Task');
+  urgentTask.priority = 2;
+  urgentTask.notify = function () {
+    console.log('Note: Priority Level ' + this.priority);
+  }
+
+  urgentTask.complete();
+  urgentTask.save = function() {
+    this.notify();
+    Task.prototype.save.call(this);
+  };
+
+  urgentTask.save();
+#+END_SRC
+
+#+RESULTS:
+: completing task: Legacy Task
+: saving task: Legacy Task
+: completing task: Urgent Task
+: Note: Priority Level 2
+: saving task: Urgent Task
+**** Moar Complex
+
+#+BEGIN_SRC js :results output
+  var Task = function(name){
+    this.name = name;
+    this.completed = false;
+  }
+
+  Task.prototype.complete = function(){
+    console.log('completing task: ' + this.name);
+    this.completed = true;
+  };
+
+  Task.prototype.save = function(){
+    console.log('saving task: ' + this.name);
+  };
+
+  var myTask = new Task('Legacy Task');
+  myTask.complete();
+  myTask.save();
+
+  // Now to decorate
+
+  var UrgentTask = function(name, priority) {
+    // Use the Task constructor to add name, and completed properties
+    Task.call(this, name);  
+    // assign priority property in constructor
+    this.priority = priority;
+    // implicitly return =this=
+  }
+
+  // To get access to the methods on the Task.prototype object, we assign a copy of 
+  // Task.prototype to UrgentTask.prototype. This insulates Task.prototype from changes 
+  // subsequently made to UrgentTask.prototype.
+  UrgentTask.prototype = Object.create(Task.prototype);
+
+  UrgentTask.prototype.notify = function () {
+    console.log('Note: Priority Level ' + this.priority);
+  }
+  UrgentTask.prototype.save = function() {
+    this.notify();
+    Task.prototype.save.call(this);
+  };
+
+  var urgentTask = new UrgentTask('Urgent Task', 1);
+  urgentTask.complete();
+  console.log(urgentTask.priority);
+  urgentTask.save();
+#+END_SRC
+
+#+RESULTS:
+: completing task: Legacy Task
+: saving task: Legacy Task
+: completing task: Urgent Task
+: 1
+: Note: Priority Level 1
+: saving task: Urgent Task
+
+*** Facade Pattern
+Facades are used to provide a simplified interface to a complicated system. 
+**** Ugly API
+
+#+BEGIN_SRC js :results output
+  var Task = function (data) {
+    this.name = data.name;
+    this.priority = data.priority;
+    this.project = data.project;
+    this.user = data.user;
+    this.completed = data.completed;
+  }
+
+  var TaskService = function () {
+    return {
+      complete: function (task) {
+        task.completed = true;
+        console.log(task.name + ' completed');
+      },
+      setCompleteDate: function (task) {
+        task.completedDate = new Date();
+        console.log(task.name + ' completed on ' + task.completedDate);
+      },
+      notifyCompletion: function (task, user) {
+        console.log('Notifying ' + user + ' of the completion of ' + task.name);
+      },
+      save: function(task) {
+        console.log('saving task: ' + task.name);
+      }
+    }
+  }();
+
+  var myTask = new Task({
+    name: 'My Task',
+    priority: 1,
+    project: 'Courses',
+    user: 'Matthew',
+    completed: false
+  });
+
+  TaskService.complete(myTask)
+  if (myTask.completed === true) {
+    TaskService.setCompleteDate(myTask);
+    TaskService.notifyCompletion(myTask, myTask.user);
+    TaskService.save(myTask);
+  }
+
+  console.log(myTask);
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+My Task completed
+My Task completed on Wed Sep 07 2016 14:39:15 GMT-0700 (PDT)
+Notifying Matthew of the completion of My Task
+saving task: My Task
+{ name: 'My Task',
+  priority: 1,
+  project: 'Courses',
+  user: 'Matthew',
+  completed: true,
+  completedDate: 2016-09-07T21:39:15.137Z }
+#+end_example
+
+**** Ugly API Hidden By Facade!
+
+#+BEGIN_SRC js :results output
+  var Task = function (data) {
+    this.name = data.name;
+    this.priority = data.priority;
+    this.project = data.project;
+    this.user = data.user;
+    this.completed = data.completed;
+  }
+
+  var TaskService = function () {
+    return {
+      complete: function (task) {
+        task.completed = true;
+        console.log(task.name + ' completed');
+      },
+      setCompleteDate: function (task) {
+        task.completedDate = new Date();
+        console.log(task.name + ' completed on ' + task.completedDate);
+      },
+      notifyCompletion: function (task, user) {
+        console.log('Notifying ' + user + ' of the completion of ' + task.name);
+      },
+      save: function(task) {
+        console.log('saving task: ' + task.name);
+      }
+    }
+  }();
+
+  var myTask = new Task({
+    name: 'My Task',
+    priority: 1,
+    project: 'Courses',
+    user: 'Matthew',
+    completed: false
+  });
+
+  // Here's the facade, with the API interactions abstracted into a single function call
+  var TaskServiceWrapper = function () {
+
+    var completeAndNotify = function(task) {
+      TaskService.complete(task);
+      if (task.completed === true) {
+        TaskService.setCompleteDate(task);
+        TaskService.notifyCompletion(task, task.user);
+        TaskService.save(task);
+      }
+    }
+    return { completeAndNotify: completeAndNotify}
+  }();
+  
+  TaskServiceWrapper.completeAndNotify(myTask)
+
+  console.log(myTask);
+
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+My Task completed
+My Task completed on Wed Sep 07 2016 14:42:53 GMT-0700 (PDT)
+Notifying Matthew of the completion of My Task
+saving task: My Task
+{ name: 'My Task',
+  priority: 1,
+  project: 'Courses',
+  user: 'Matthew',
+  completed: true,
+  completedDate: 2016-09-07T21:42:53.280Z }
+#+end_example
+
+*** Flyweight Pattern
+Flyweight's conserve memory by sharing portions of an object across other objects, resulting in a smaller memory footprint. NOTE this is only useful if you have large numbers of objects that share data that is not unique, due to the overhead of implementing the pattern itself.
+
+#+BEGIN_SRC js :results output
+  var Task = function (data) {
+    this.flyweight = FlyweightFactory.get(
+      data.project,
+      data.priority,
+      data.user,
+      data.completed
+    );
+    this.name = data.name;
+    //this.priority = data.priority;
+    //this.project = data.project;
+    //this.user = data.user;
+    //this.completed = data.completed;
+  };
+
+  function Flyweight(project, priority, user, completed) {
+    this.priority = priority;
+    this.project = project;
+    this.user = user;
+    this.completed = completed;
+  };
+
+  var FlyweightFactory = function() {
+    var flyweights = {};
+    var get = function(project, priority, user, completed) {
+      if (!flyweights[project + priority + user + completed]) {
+        flyweights[project + priority + user + completed] = 
+          new Flyweight(project, priority, user, completed);
+      }
+      return flyweights[project + priority + user + completed];
+    };
+    var getCount = function () {
+      var count = 0;
+      for (var f in flyweights) count++;
+      return count;
+    }
+    return {
+      get: get,
+      getCount: getCount
+    }
+  }();
+
+  function TaskCollection () {
+    var tasks = {};
+    var count = 0;
+    var add = function (data) {
+      tasks[data.name] = new Task(data);
+      count++;
+    }
+    var get = function (name) {
+      return tasks[name];
+    }
+    var getCount = function () {
+      return count;
+    }
+    return {
+      add: add,
+      get: get,
+      getCount: getCount
+    };
+  }
+
+  var tasks = new TaskCollection();
+
+  var projects = ['none', 'courses', 'training', 'project'];
+  var priorities = [1, 2, 3, 4, 5];
+  var users = ['Jon', 'Erica', 'Amanda', 'Nathan'];
+  var completed = [true, false];
+
+  var initialMemory = process.memoryUsage().heapUsed;
+
+  for (var i = 0; i < 10000; i++) {
+    tasks.add({
+      name: 'task' + i,
+      priority: priorities[Math.floor((Math.random() * 5))],
+      project: projects[Math.floor((Math.random() * 4))],
+      user: users[Math.floor((Math.random() * 4))],
+      completed: completed[Math.floor((Math.random() * 2))]
+    });
+  };
+
+  var afterMemory = process.memoryUsage().heapUsed;
+
+  console.log('Used memory ' + (afterMemory - initialMemory) / 1000000);
+  console.log('tasks: ' + tasks.getCount());
+  console.log('flyweights: ' + FlyweightFactory.getCount());
+
+#+END_SRC
+
+#+RESULTS:
+: Used memory 2.686808
+: tasks: 10000
+: flyweights: 160
+
 ** Behavorial Design Patterns
+Behavorial design patterns are concerned with the assignment of responsibilities between objects and how they communicate.
+*** Observers
+The observer pattern allows a collection of objects to watch an object and be notified of changes. This helps facilitate loose coupling: We can decorate an object (the subject) with a list of functions supplied by Observer objects, and a notification method. When the subject changes, the registered observer's functions will be called, notifying them of the change.
+**** Main.js
+
+#+BEGIN_SRC js :results output
+  // Normally, this would live in a separate module
+  var Task = function (data) {
+    this.name = data.name;
+    this.priority = data.priority;
+    this.project = data.project;
+    this.user = data.user;
+    this.completed = data.completed;
+  };
+
+  Task.prototype.complete = function(){
+    console.log('completing task: ' + this.name);
+    this.completed = true;
+  };
+
+  Task.prototype.save = function(){
+    console.log('saving task: ' + this.name);
+  };
+
+  // The three services are our observers
+  var notificationService = function() {
+    var message = 'Notifying ';
+    this.update = function(task){
+      console.log(message + task.user + ' for task ' + task.name);
+    }
+  }
+
+  var loggingService = function() {
+    var message = 'Logging ';
+    this.update = function(task){
+      console.log(message + task.user + ' for task ' + task.name);
+    }
+  }
+
+  var auditingService = function() {
+    var message = 'Auditing ';
+    this.update = function(task){
+      console.log(message + task.user + ' for task ' + task.name);
+    }
+  }
+
+  // Create our observer list
+
+  function ObserverList(){
+    this.observerList = [];
+  }
+
+  ObserverList.prototype.add = function (obj) {
+    return this.observerList.push(obj);
+  }
+
+  ObserverList.prototype.removeAt = function(index){
+    this.observerList.splice(index, 1);
+  }
+
+  ObserverList.prototype.indexOf = function (obj, startIndex){
+    var i = startIndex;
+    while (i < this.observerList.length) {
+      if (this.observerList[i] === obj){
+        return i;
+      }
+      i++;
+    }
+    return -1;
+  }
+
+  ObserverList.prototype.get = function (index) {
+    if( index > -1 && index < this.observerList.length){
+      return this.observerList[index];
+    }
+  }
+
+  ObserverList.prototype.count = function(){
+    return this.observerList.length;
+  }
+  
+  // Decorating our Task Constructor
+
+  var ObservableTask = function(data) {
+    Task.call(this, data);
+    this.observers = new ObserverList();
+  }
+
+  ObservableTask.prototype.addObserver = function(observer){
+    this.observers.add(observer);
+  }
+
+  ObservableTask.prototype.removeObserver = function(observer){
+    this.observers.removeAt(this.observers.indexOf(observer, 0));
+  }
+
+  ObservableTask.prototype.notify = function(context){
+    var observerCount = this.observers.count();
+    for (var i = 0; i < observerCount; i++){
+      this.observers.get(i)(context);
+    }
+  }
+
+  ObservableTask.prototype.save = function(){
+    this.notify(this);
+    Task.prototype.save.call(this);
+  }
+
+  // Creating an Instance of our observable task
+  var task1 = new ObservableTask({ name: 'create a demo for constructors',
+                         user: 'Matthew' });
+
+
+  // Creating instances of our services (observers)
+  var not = new notificationService();
+  var ls = new loggingService();
+  var audit = new auditingService();
+                       
+  // Register Observers
+
+  task1.addObserver(not.update);
+  task1.addObserver(ls.update);
+  task1.addObserver(audit.update)
+  
+  task1.save();
+
+  task1.removeObserver(audit.update)
+  task1.save();
+#+END_SRC
+
+#+RESULTS:
+: Notifying Matthew for task create a demo for constructors
+: Logging Matthew for task create a demo for constructors
+: Auditing Matthew for task create a demo for constructors
+: saving task: create a demo for constructors
+: Notifying Matthew for task create a demo for constructors
+: Logging Matthew for task create a demo for constructors
+: saving task: create a demo for constructors
+
+*** TODO Mediators
+The mediator pattern allows for a loosely coupled system, where one object manages all communication between other objects - a many to many relationship.
+
+#+BEGIN_SRC js
+ // Normally, this would live in a separate module
+  var Task = function (data) {
+    this.name = data.name;
+    this.priority = data.priority;
+    this.project = data.project;
+    this.user = data.user;
+    this.completed = data.completed;
+  };
+
+  Task.prototype.complete = function(){
+    console.log('completing task: ' + this.name);
+    this.completed = true;
+  };
+
+  Task.prototype.save = function(){
+    console.log('saving task: ' + this.name);
+  };
+
+  // The three services are our observers
+  var notificationService = function() {
+    var message = 'Notifying ';
+    this.update = function(task){
+      console.log(message + task.user + ' for task ' + task.name);
+    }
+  }
+
+  var loggingService = function() {
+    var message = 'Logging ';
+    this.update = function(task){
+      console.log(message + task.user + ' for task ' + task.name);
+    }
+  }
+
+  var auditingService = function() {
+    var message = 'Auditing ';
+    this.update = function(task){
+      console.log(message + task.user + ' for task ' + task.name);
+    }
+  }
+
+  // Creating our Mediator
+
+  // Creating an Instance of our Task
+  var task1 = new Task({ name: 'create a demo for constructors',
+                         user: 'Matthew' });
+
+
+  // Creating instances of our services (observers)
+  var not = new notificationService();
+  var ls = new loggingService();
+  var audit = new auditingService();
+
+  task1.save(); 
+#+END_SRC
+
+*** TODO Command (How is this different from a facade?)
+The command pattern decouples an interface from an implementation by using an intermediary that presents an API and invokes methods on another object which has the implementation
