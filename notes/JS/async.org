@@ -29,15 +29,170 @@
 *** Web Workers
 ** Not all function calls aren't async
 ** race conditions in order of queue
-** Debuggin in the browser
+** Debugging in the browser
 *** sources, call stack,
 *** check async, call stack will display source of current stack 
+
+
+* Modern Asynchronous JavaScript : Wes Higbee (6:34)
+
+* CSP-JS
+The Library: https://github.com/ubolonton/js-csp
+** Communicating with Channels (video) https://www.youtube.com/watch?v=W2DgDNQZOwo
+** CSP - FullStackFest (video) https://www.youtube.com/watch?v=r7yWWxdP_nc
+** David Nolan
+- CSP http://swannodette.github.io/2013/07/12/communicating-sequential-processes
+- ES6 generators http://swannodette.github.io/2013/08/24/es6-generators-and-csp
+** Generators and Channels in JS https://medium.com/javascript-inside/generators-and-channels-in-javascript-594f2cf9c16e#.448z7n5na
+** Taming the Async Beast w/ CSP in JS http://jlongster.com/Taming-the-Asynchronous-Beast-with-CSP-in-JavaScript
+
+
+* Rethinking Asynchronous JavaScript : Kyle Simpson (NaN WEB / FrontEnd Masters)
+** Parallel, Concurrent, and Asynchronous
+*** Parallel: At the same time
+A CPU can only execute one process at a time. But as computer with multiple cores can execute multiple processes at a time. Parallelism is when two or more processes are executing at the same time. Parallelism is usually espressed via threads. The operating system has virtural threads, and manages the execution of threads to take advantage of multiple cores. JavaScript programs only execute within a single thread.
+*** Concurrency: Within a time frame
+Concurrency is when multiple process are executing within a time frame. In JavaScript, processes are coordinated in an event loop. Processes are scheduled and executed in a queue-like fashion.
+** Callbacks
+*** A Simple Example:
+How does the following code work?
+
+#+BEGIN_SRC js :results output
+  setTimeout(function(){
+    console.log("callback!");
+  }, 1000);
+#+END_SRC
+
+#+RESULTS:
+: callback!
+
+First, a event is scheduled to be fired after 1000ms. Sometime after this countdown has finished, depending largely on what else is going on within the event loop, the event will fire, causing the function to execute.
+
+*** Callbacks are Continuations
+In our code, there is a now, and a later. This idea is that of a continuation: Your code will execute, stop execution, and then resume execution later. Continuations and callbacks are the same concept.
+*** The Two Evils of Callback Hell
+**** Inversion of Control: An Issue of Trust
+When you pass a callback to a third-party utility, you trust that
+- Your callback will not be called too early
+- Your callback will not be called too late
+- Your callback will not be called too many times
+- Your callback will not be called too few times
+- Your callback will not loose its execution context
+- Errors will not be swallowed
+...
+**** Not-Reasonable: Humans are Single Threaded and Synchronous Planners
+Asychronous patterns are difficult to reason about. Our programs will be more robust if our patterns permit us to write code in a synchronous, sequential, blocking way.
+** Thunks
+Broadly, thunks are expressions that have not yet been evaluated, and thus 
+represent a future value. 
+  "Functional programming languages have also allowed programmers to explicitly 
+generate thunks. This is done in source code by wrapping an argument expression in 
+an anonymous function that has no parameters of its own. This prevents the 
+expression from being evaluated until a receiving function calls the anonymous 
+function, thereby achieving the same effect as call-by-name."
+  - Wikipedia
+*** Sync Thunk Ex:
+A thunk is a function that requires no new arguments to execute and return a value.
+
+#+BEGIN_SRC js :results output
+  function add (x, y) {
+    return x + y;
+  }
+  const thunk = () => add(10,15);
+  console.log(thunk());
+#+END_SRC
+
+#+RESULTS:
+: 25
+
+Thunks are the concetual underpinning for promises: a wrapper around a value.
+
+*** Async Thunk Ex:
+What is an async thunk? a function that needs to be passed a callback so you can 
+access a value
+  Note that both the thunk and reference function's signature and body handle the 
+asynchronicity. But, once the asynchronous code is embedded in the thunk, we can 
+access the value in the thunk without concerning ourselves with the temporal 
+implementation.
+
+#+BEGIN_SRC js :results output
+  function addAsync(x, y, cb) {
+    setTimeout(function() {
+      cb(x+y);
+    }, 1000);
+  }
+
+  let thunk = function(cb) {
+    addAsync(10,15,cb);
+  };
+
+  thunk((x) => console.log(x));  
+#+END_SRC
+
+#+RESULTS:
+: 25
+
+*** Thunk Maker & Nesting Thunks Ex:
+
+#+BEGIN_SRC js :results output
+  function makeThunk(fn){
+    var args = [].slice.call(arguments, 1);
+    return function(cb) {
+      args.push(cb);
+      fn.apply(null, args);
+    };
+  }
+
+  function getData(n, cb){
+    cb(n);
+  }
+
+  let get10 = makeThunk(getData, 10);
+  let get30 = makeThunk(getData, 30);
+  
+  get10(function(n1){
+    let x = 1 + n1;
+    get30(function(n2){
+      let y = 1 + n2;
+      let getAnswer = makeThunk(getData, (x + y));
+      getAnswer((x) => console.log(x));
+    });
+  });
+#+END_SRC
+
+#+RESULTS:
+: 42
+
+*** TODO Thunks and Closure (example solution)
+Time is the most complex form of state in a program. Thunks use closure to 
+maintain state, removing time as a complecting factor of state. This helps us 
+to abstract away time based complexity in ordering processes.
+
+** Promises
+*** Native Promises
+*** Promise API
+*** Promise Flow Control
+*** Abstractions
+*** Sequences and Gates
+** Generators
+*** Example
+*** Messaging
+*** Async Generators
+*** Promises and Generators
+** Observables
+*** Events and Promises
+*** Observables
+*** Reactive Sequences
+** CSP
+*** Concurrency and Chanels
+*** Blocking Channels
+*** Event Channels
+*** Recap
 
 
 * YDKJS: Async
 ** Asynchrony: Now & Later
 *** A Program in Chunks
-
 *** Event Loop
 *** Parallel Thinking
 *** Concurrency
