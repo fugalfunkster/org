@@ -21,7 +21,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 * TODO heap(s)
 ** React
-*** Update react-router Notes for v.4
+*** OPEN Update react-router Notes for v.4
 *** Consilidate Redux Notes
 *** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov(egghead)
 *** TODO Advanced React and Redux : Stephen Girder (12:00)
@@ -35,7 +35,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** colocate links to survive / keathly / react.js boilerplate / create-react-app
 ** Asynchronicity
 *** TODO Modern Asynchronous JavaScript : Wes Higbee (6:34)
-*** NAN WEB Playlist: https://www.youtube.com/playlist?list=PLXkhVgwfT5WUzXkV6yN7DLOx7NzoJHr3G
+*** OPEN NAN WEB Playlist: https://www.youtube.com/playlist?list=PLXkhVgwfT5WUzXkV6yN7DLOx7NzoJHr3G
 *** csp-js
 *** redux-thunk / redux-promises / redux-saga / redux-observable
 *** TODO Asynchronous Programming: The End of the Loop : Jafar Husain
