@@ -1,0 +1,243 @@
+* Advanced React and Redux
+** Intro
+https://github.com/StephenGrider/ReduxSimpleStarter.git
+** Testing
+*** What are we testing?
+When writing a test, you should first ascertain what it is that you seek to test. What might break in the future, where are the boundaries of each abstraction, etc... But, testing should focus on the user interface not the implementation, this accomodates refactoring that preserves fueature functionality.
+*** An Example Test
+  In our example, we test a react component. For this 
+component we have a test file, that imports the component we seek to test, and utilizes three testing utilities, which manifest as nested functions.
+  The nested nature of these functions is significant 
+for error handling within the runtime, and allows the testing suite to meaningfully convey errors throughout an application without failing in whole. 
+
+#+BEGIN_SRC js
+import { renderComponent, expect } from '../test_helper';
+import App from '../../src/components/app';
+
+describe('App', () => {
+  let component;
+  beforeEach( () => {
+    component = renderComponent(App);
+  });
+  it('shows a comment box', () => {  
+    expect(component.find('.comment-box')).to.exist;
+  });
+  it('shows a comment list', () => {  
+    expect(component.find('.comment-list')).to.exist;
+  });
+});
+#+END_SRC
+*** The Big Three: describe, it, & expect
+**** describe
+=describe= allows us to name our tests. The string we pass to describe is not magic, it is only used to label a group of tests for reporting purposes.
+**** it
+=it= describes an assertion about a target, and provides the scope for the assertion. 
+**** expect
+=expect= is used to make an assertion
+***** Anatomy of an assertion
+
+#+BEGIN_SRC js
+  expect(component).to.have.class('comment-box');
+#+END_SRC
+
+- The =component= is the thing we want to make an assertion about.
+- =to.have.class= is a way to compare the value we get to the value we expected
+- and ='comment-box'= is the value we expect
+
+The syntax should be semantic!
+***** Mechanics
+=expect= is a function that returns an object. We call methods on the object - called 'matchers' -  to match the type of assertion we wish to make. There are many 'matchers,' and assembling them is often the most challenging part of making tests.
+*** beforeEach
+the =beforeEach= function runs before each if statement. This allows us to DRY out our code, so we don't have to render our component within each if block. 
+  Note that the component assigned within a beforeEach 
+block must be available inside the =it= block's scope. So it's ideal to declare a component var within the describe block, and use =beforeEach= to reassign that var.
+ When using nested describe statements, we may also use 
+successive beforeEach statements, to help setup the conditions for our =it= blocks. Predictably, parent =beforeEach= statements will run before nested/child =before
+
+*** Testing During Development
+**** running tests (watch mode)
+$ npm run test:watch
+**** On writing tests after the implementation
+If you write a test to test a feature, writing failing tests, and then fix them, to ensure that you're not testing nothing, or something that will always be true. Test the test.
+*** On Testing Components
+When testing components, we are usually trying to determine whether the DOM object that the component will create has certain properties. This means that our tests must render the component in order to render the component.
+  Additionally, we can test our component's behavior by 
+simulating browser events.
+**** using chai jQuery
+Chai jQuery uses jQuery to make assertions. Our test utility, renderComponent, accepts a react component and returns a jQuery element. We can then use the chai jQuery assertion library to analyze the actual html produced upon rendering our component.
+**** simulate
+We often want to simulate user activity to test behavior. This is easy if we're trying to simulate browser events, like change or click. 
+***** Example:
+#+BEGIN_SRC js
+//...
+
+describe('Comment Box', () => {
+
+  let component;
+
+  beforeEach(() => {
+    component = renderComponent(CommentBox);
+  });
+
+  // ...
+
+  describe('entering some text', () => {
+
+    beforeEach(() => {
+      component.find('textarea').simulate('change', 'new comment');
+    });
+
+    it('shows text that is entered', () => {
+      expect(component.find('textarea'))
+        .to.have.value('new comment');
+    });
+
+    it('when submitted, clear the input', () => {
+      component.simulate('submit');
+      expect(component.find('textarea'))
+        .to.have.value('');
+    });    
+  });
+});
+#+END_SRC
+
+*** On Testing Actions and Reducers
+Actions and reducers are easier to test than components, because they are pure functions that return objects. And, there's no DOM to think about.
+  Setting up our tests will often require creating mock 
+props, state, or other arguments to pass to our function. Assertions for these modules mostly involves testing the return value from an action creator or reducer.
+**** Action Test Example:
+
+#+BEGIN_SRC js
+import { expect } from '../test_helper';
+import { SAVE_COMMENT } from '../../src/actions/types';
+import { saveComment } from '../../src/actions';
+
+describe('actions', () => {
+  describe('saveComment', () => {
+
+    it('has correct type', () => {
+      const action = saveComment();
+      expect(action.type).to.equal(SAVE_COMMENT);
+    });
+
+    it('has correct payload', () => {
+      const action = saveComment('New Comment');
+      expect(action.payload).to.equal('New Comment');
+    });
+  });
+});
+#+END_SRC
+**** Reducer Test Example:
+
+#+BEGIN_SRC js
+import { expect } from '../test_helper';
+import commentReducer from '../../src/reducers/comments';
+import { SAVE_COMMENT } from '../../src/actions/types';
+
+describe('Comments reducer', () => {
+  
+  it('handles action with unknown type', () => {
+  //expect(commentReducer()).to.be.instanceof(Array);
+    expect(commentReducer(undefined, {})).to.eql([]);
+  });
+
+  it('handles action of type SAVE_COMMENT', () => {
+    const action = {
+      type: SAVE_COMMENT,
+      payload: 'new comment' };
+    expect(commentReducer([], action)).to.eql(['new comment']); 
+  });
+});
+#+END_SRC
+**** .to.eql or .to.equal?
+Note that the Reducer test uses to.eql, which compares deep equality - allowing us to compare objects.   
+  =.to.equal= check's strict equality ===, which only 
+assesses value, and fails upon comparing objects. 
+*** Index of matchers in our test files
+**** .to.exist
+**** .to.eql
+**** .to.equal
+**** .to.contain
+**** .to.have.class
+**** .to.have.value
+** Test Environment Setup
+*** Testing Suites: Runners and Assertion Libraries
+We need to parts to make a testing suite. A test runner and an assertion library.
+  Mocha is a test runner. It loads our tests, runs them, 
+reports it's findings, and clean's up after itself.
+  Chai is an assertion library. It helps us write our tests, 
+and ascertain certain properties about the test subject. 
+*** Test Helper from Scratch
+What does our test_helps do?
+- setup chai_jquery
+- set up a testing environment to run like a browser, in the CLI
+- build renderComponent helper, that renders a react element
+- build a helper for simularting events
+*** jsdom setup
+The jsdomm library is an implementation of the WHATWG DOM and HTML standards for use with node.js. THis allows us to simulate a browser environment for our tests through the CLI.
+**** Setup:
+Because we are running in node, we have to setup global variables to simulate the browser environment.
+
+#+BEGIN_SRC js
+global.document = jsdom.jsdom(`<!doctype html>
+                                 <html>
+                                   <body></body>
+                                 </html>`);
+global.window = global.document.defaultView;
+#+END_SRC
+**** Integrating jQuery
+We import the jQuery factory function and create an instance of jQuery with the global.window object from our node environment.
+  
+#+BEGIN_SRC js
+  const $ = jquery(global.window);
+#+END_SRC
+*** Writing renderComponent
+**** React's TestUtils Library
+React's addons library includes test utilities. The =testUtils.renderIntoDocument()= accepts a component, and returns something we can pass to ReactDOM to render into HTML.
+  =ReactDOM.findDOMNode()= accepts the rendered instance, 
+and returns a DOM element - raw html - that we can wrap in a jQuery =$()= call.
+**** Wiring Up react-redux
+For our component to render within a redux context, it has to have access to the redux store facilities.
+- We need to wrap out Component in a Provider, from react-redux
+- the Provider needs to have a store, with our reducers and an initial state - using =createStore= from redux
+- and the componentClass has to recieve props
+
+#+BEGIN_SRC js
+function renderComponent(ComponentClass, props, state) {
+  const componentInstance =
+    TestUtils.renderIntoDocument(
+        <Provider store={createStore(reducers, state)} >
+          <ComponentClass {...props} />
+        </Provider>
+    ); 
+  return $(ReactDOM.findDOMNode(componentInstance));
+}
+#+END_SRC
+
+*** Simulate Helper
+We can add a method to the global jQuery object by assigning a method to =$.fn=. Within the function body, =this= refers to the DOM object that was selected in jQuery.
+  Our event simulator must accept an event name, and a 
+value. If it is called with a value, we call =this.val()= - a jQuery method - to set the value of the elemtn.
+  Additionally, the react test-utils has a simulate 
+method that allows us to simulate an event on a component. 
+
+#+BEGIN_SRC js
+$.fn.simulate = function(eventName, value) {
+  if (value) {
+    this.val(value);
+  }
+  TestUtils.Simulate[eventName](this[0]);
+};
+#+END_SRC
+
+*** chaiJquery
+boilerplate...
+
+#+BEGIN_SRC js
+  chaiJquery(chai, chai.util, $);
+#+END_SRC
+
+** Higher Order Components
+** Middleware
+** Server Setup - Authentication
+** Client Side Authentication

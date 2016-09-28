@@ -487,3 +487,17 @@ The error property is avaibale in our input component as a property on the form'
 *** redux-form
 **** wiring up
 **** validation
+* TODO ReactRally Extras
+** TODO Basics of Redux Thunk
+** Combining Redux and Firebase
+** Dynamic Forms with Redux Form
+** Logicless Components with Reselect
+** TODO Data Loading Methods with Redux
+** Animation of React Components
+** TODO Four Most Common Errors with React and Redux
+** TODO Modals in React and Redux Apps
+** TODO The Best Way to Store Redux Data
+** BrowserHistory in Production
+** Introducing JSPlaygrounds for Rapid Prototyping
+** TODO Development of React/Webpack Apps
+** TODO React Integration with Third Party Libraries
