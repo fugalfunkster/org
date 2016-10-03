@@ -91,7 +91,7 @@ an anonymous function that has no parameters of its own. This prevents the
 expression from being evaluated until a receiving function calls the anonymous 
 function, thereby achieving the same effect as call-by-name."
   - Wikipedia
-*** Sync Thunk Ex:
+*** Thunk Ex:
 A thunk is a function that requires no new arguments to execute and return a value.
 
 #+BEGIN_SRC js :results output
@@ -109,10 +109,9 @@ Thunks are the concetual underpinning for promises: a wrapper around a value.
 
 *** Async Thunk Ex:
 What is an async thunk? a function that needs to be passed a callback so you can 
-access a value
-  Note that both the thunk and reference function's signature and body handle the 
-asynchronicity. But, once the asynchronous code is embedded in the thunk, we can 
-access the value in the thunk without concerning ourselves with the temporal 
+access a value.
+  Note that both the thunk and reference function's signature and body handle 
+the asynchronicity. But, once the asynchronous code is embedded in the thunk, we can access the value in the thunk without concerning ourselves with the temporal 
 implementation.
 
 #+BEGIN_SRC js :results output
@@ -135,8 +134,7 @@ implementation.
 *** Thunk Maker & Nesting Thunks Ex:
 
 #+BEGIN_SRC js :results output
-  function makeThunk(fn){
-    var args = [].slice.call(arguments, 1);
+  function makeThunk(fn, ...args){
     return function(cb) {
       args.push(cb);
       fn.apply(null, args);
@@ -167,10 +165,20 @@ implementation.
 Time is the most complex form of state in a program. Thunks use closure to 
 maintain state, removing time as a complecting factor of state. This helps us 
 to abstract away time based complexity in ordering processes.
-
 ** Promises
-*** Native Promises
-*** Promise API
+Promises represent future values. They allow you to retain control over the callback, by allowing you to execute your callbacks upon "completion events."
+You control over what happens when a requested value arrives, solving the inversion of control problem inherent with vanilla callbacks.
+*** Promises You Can Trust
+Promises were designed to solve the inversion of control that plagued vanilla callbacks. To do this, promises make certain guarantees.
+1. Promises can only resolve once
+2. A resolved promise has a state of either success or error
+3. Resolution values passed into the promise are kept (messages)
+4. Exceptions become errors, nothing is swallowed
+5. Once a promise resolves, it's value is immutable
+
+*** Native Promise API
+In native promises, the completion event is the .then method.
+
 *** Promise Flow Control
 *** Abstractions
 *** Sequences and Gates
