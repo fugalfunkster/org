@@ -1,0 +1,206 @@
+
+React Testing: Trevor Miller (0:38)
+
+* Setting Up
+
+#+BEGIN_SRC shell
+ $ npm install mocha expect react-addons-testutils --savedev
+#+END_SRC
+
+* Running Tests
+We need to use mocha's CLI, and tell mocha where to find tests. In the following example, we tell mocha to look for files that end in .spec.js in and sub directory of the src/ directory.
+  Additionally, we use the compiler flag to transpile our 
+code with Babel.
+
+#+BEGIN_SRC js
+//package.json
+  "scripts": {
+    "test": "mocha './src/**/*.spec.js' --compilers js:babel-core/register"
+  },
+#+END_SRC
+
+* An example test
+Mocha provides =describe= and =it=. We get =expect= from our assertion library, 'expect'.
+
+#+BEGIN_SRC js
+import expect from 'expect';
+
+describe('empty', () => {
+  it('should work', () => {
+    expect(true).toEqual(true);
+  });
+});
+#+END_SRC
+
+* Utility Modules
+Whenever possible, refactor components to break utility functions - functions that can be de-complected from your react component - into separate files. This makes the function easier to test.
+** Example Module:
+
+#+BEGIN_SRC js
+export default function(uniqueNumber, description) {
+  const shortKebabDescription = description
+    .toLowerCase()
+    .split(' ')
+    .slice(0, 2)
+    .join('-');
+  return `${uniqueNumber}-${shortKebabDescription}`;
+}
+#+END_SRC
+
+** Example Test:
+
+#+BEGIN_SRC js
+import expect from 'expect';
+import createId from './createId';
+
+describe('createId', () => {
+  it('should convert a description into a unique id', () => {
+    const actual = createId(123, 'Cool example description');
+    const expected = `123-cool-example`;
+    expect(actual).toEqual(expected);
+  });
+});
+#+END_SRC
+
+* Intro to Shallow Rendering
+React's Test Utilities - an add on package -  provides the TestUtils.createRenderer method, which returns a renderer object. 
+
+#+BEGIN_SRC js
+  import TestUtils from 'react-addons-test-utils';
+//...
+ const renderer = TestUtils.createRenderer();
+#+END_SRC
+
+You can use the renderer object to shallowly render a react component by passing the component to =renderer.render()=, along with any props.
+
+#+BEGIN_SRC js
+    renderer.render(<Component greeting='hello world' />);
+#+END_SRC
+
+The DOM object that represents the component is now accessible via the renderer's =getRenderOutput()= method.
+
+#+BEGIN_SRC js
+  const output =  renderer.getRenderOutput();
+#+END_SRC
+
+** Example Shallowly Rendered Component:
+#+BEGIN_SRC js
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import expect from 'expect';
+
+const CoolComponent = ({greeting}) => (
+  <div>
+    <h1>Greeting</h1>
+    <div>{greeting}</div>
+  </div>
+);
+
+describe('CoolComponent', () => {
+  it('should...', () => {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(<CoolComponent greeting='hello world' />);
+    const output = renderer.getRenderOutput();
+    const children = renderer.getRenderOutput().props.children;
+  });
+});
+#+END_SRC
+
+* Why Shallow Rendering?
+Shallow rendering is useful because it allows you to test a component in isolation, without having to mock the environment that the component will be rendered in.
+* DOM Object vs JSX error diffs / Children
+Because the TestUtils renderer creates a DOM object, failing tests error diffs can be dificult to decipher. Many assertion libraries permit you to make assertions about the JSX of the rendered component. 
+  The 'expect-jsx' package extends 'expect' and provides 
+JSX specific asssertions. https://github.com/algolia/expect-jsx
+** Example using .toIncludeJSX : 
+This assertion is handy because it allows you to assert that a rendered component will have a specific child element. This helps avoid lengthy comparisons when you only need to ensure that something essential is working.
+ 
+#+BEGIN_SRC js
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import expect from 'expect';
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
+
+const CoolComponent = ({greeting}) => (
+  <div>
+    <h1>Greeting</h1>
+    <div>{greeting}!</div>
+  </div>
+);
+
+describe('CoolComponent', () => {
+  it('should render the greeting', () => {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(<CoolComponent greeting='hello world' />);
+    const actual = renderer.getRenderOutput();
+    const expected = <div>hello world!</div>;
+    expect(actual).toIncludeJSX(expected);
+  });
+});
+#+END_SRC
+* Element types with Shallow Rendering
+We can assert that a component is a specific HTML element type by inspecting the .type property on the DOM object returned from =.getRendererOutput=.
+
+#+BEGIN_SRC js
+import LikeCounter from './LikeCounter';
+//...
+describe('LikeCounter', () => {
+  it('should be a link', () => {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(<LikeCounter count={5} />);
+    const actual = renderer.getRenderOutput().type;
+    const expected = 'a';
+    expect(actual).toEqual(expected);
+  });
+});
+#+END_SRC
+
+* className with Shallow Rendering
+We can make assertions about a component's classes by accessing the =.props.className= property on the DOM object returned from =.getRendererOutput=. 
+** ClassName Example: 
+Note that the .className property is a string, and we use the ES6 =.includes= method.
+
+#+BEGIN_SRC js
+import Icon from './Icon';
+//...
+describe('Icon', () => {
+  it('should render the icon', () => {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(<Icon name='facebook' />);
+    const actual = renderer.getRenderOutput().props.className.includes('facebook');
+    const expected = true;
+    expect(actual).toEqual(expected);
+  });
+});
+#+END_SRC
+
+* Conditional className with Shallow Rendering
+To compare how a component renders given different props, make separate asertions with separate props. Helper functions can be helpful. ;)
+** Example: 
+Note, that we moved the renderer.render boilerplate into a function, to keep our code DRYer.
+
+#+BEGIN_SRC js
+import LikeCounter from './LikeCounter';
+//...
+describe('LikeCounter', () => {
+  describe('isActive', () => {
+    function renderLikeCounter(isActive) {
+      const renderer = TestUtils.createRenderer();
+      renderer.render(<LikeCounter count={5} isActive={isActive} />);
+      return renderer.getRenderOutput().props.className.includes('LikeCounter--active');
+    }
+    it('should show the like count as active', () => {
+      expect(renderLikeCounter(true)).toEqual(true);
+    });
+    it('should show the like count as inactive', () => {
+      expect(renderLikeCounter(false)).toEqual(false);
+    });
+  });
+});
+#+END_SRC
+
+* The Redux Store - Multiple Actions
+
+* The Redux Store - Initial State
+* The Redux Store - Redux Reducers

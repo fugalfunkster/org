@@ -40,6 +40,9 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** redux-thunk / redux-promises / redux-saga / redux-observable
 *** TODO Asynchronous Programming: The End of the Loop : Jafar Husain
 *** TODO YDKJS: Async
+** Testing
+*** TODO React Testing Cookbook
+*** TODO Mastering React Testing with Jest : Daniel Stern (1:57)
 ** Clojure
 *** Chapters 5, 6, 7 in Living Clojure
 *** https://howistart.org/posts/clojure/1
@@ -171,7 +174,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** CLOSED Getting Started with React Router (egghead)
 ***** DONE Getting Started with Redux (egghead)
 ***** TODO Building React Apps w/ Idiomatic Redux
-***** TODO React Testing Cookbook
 ***** React Native Fundamentals : Tyler McGinnis
 **** Udemy
 ***** DONE Modern React with Redux : Stephen Girder (10:00)
@@ -180,10 +182,12 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** testing
 **** Pluralsight
 ***** Testing Client-Side JS : Joe Eames (4:50)
-***** Code Testability : Misko Hevery (0:51)
+***** WATCHEDONLY Code Testability : Misko Hevery (0:51)
 ***** Unit Testing with Node.js : Joe Eames (1:26)
 ***** Node.js Testing Strategies : Rob Conery (2:39)
 ***** Mastering React Testing with Jest : Daniel Stern (1:57)
+**** Egghead
+***** TODO React Testing Cookbook
 *** tools
 **** emacsHelp
 **** Pluralsight
