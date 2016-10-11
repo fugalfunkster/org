@@ -22,16 +22,16 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 * TODO heap(s)
 ** React
 *** OPEN Update react-router Notes for v.4
+*** OPEN Advanced React and Redux : Stephen Girder (12:00)
+*** VIEWONLY React Testing Cookbook
 *** Consilidate Redux Notes
 *** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov(egghead)
-*** TODO Advanced React and Redux : Stephen Girder (12:00)
 *** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 *** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
-*** VIEWONLY React Testing Cookbook
 ** Env: Webpack / eslint / etc
 *** TODO Advanced Webpack Talk : Jonathan Creamer (0:31) https://www.youtube.com/watch?v=MzVFrIAwwS8
-*** eslint configs : template strings, bodil, etc.
-*** update starter kit with nested
+*** eslint configs : template strings, bodil, fp,etc.
+*** update starter kit with postcss-nested
 *** colocate links to survive / keathly / react.js boilerplate / create-react-app
 ** Asynchronicity
 *** TODO Modern Asynchronous JavaScript : Wes Higbee (6:34)
