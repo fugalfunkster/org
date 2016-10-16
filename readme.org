@@ -23,13 +23,22 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ** React
 *** OPEN Update react-router Notes for v.4
 *** OPEN Advanced React and Redux : Stephen Girder (12:00)
+<<<<<<< HEAD
 *** OPEN React Testing Cookbook
+=======
+*** VIEWONLY React Testing Cookbook
+>>>>>>> origin/master
 *** Consilidate Redux Notes
 *** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov(egghead)
 *** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 *** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
 ** Env: Webpack / eslint / etc
 *** TODO Advanced Webpack Talk : Jonathan Creamer (0:31) https://www.youtube.com/watch?v=MzVFrIAwwS8
+<<<<<<< HEAD
+=======
+*** eslint configs : template strings, bodil, fp,etc.
+*** update starter kit with postcss-nested
+>>>>>>> origin/master
 *** colocate links to survive / keathly / react.js boilerplate / create-react-app
 ** Asynchronicity
 *** TODO Modern Asynchronous JavaScript : Wes Higbee (6:34)
@@ -38,6 +47,9 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** redux-thunk / redux-promises / redux-saga / redux-observable
 *** TODO Asynchronous Programming: The End of the Loop : Jafar Husain
 *** TODO YDKJS: Async
+** Testing
+*** TODO React Testing Cookbook
+*** TODO Mastering React Testing with Jest : Daniel Stern (1:57)
 ** Clojure
 *** Chapters 5, 6, 7 in Living Clojure
 *** https://howistart.org/posts/clojure/1
@@ -237,7 +249,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** CLOSED Getting Started with React Router (egghead)
 ***** DONE Getting Started with Redux (egghead)
 ***** TODO Building React Apps w/ Idiomatic Redux
-***** TODO React Testing Cookbook
 ***** React Native Fundamentals : Tyler McGinnis
 **** Udemy
 ***** DONE Modern React with Redux : Stephen Girder (10:00)
@@ -247,12 +258,16 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** testing
 **** Pluralsight
 ***** Testing Client-Side JS : Joe Eames (4:50)
-***** Code Testability : Misko Hevery (0:51)
+***** WATCHEDONLY Code Testability : Misko Hevery (0:51)
 ***** Unit Testing with Node.js : Joe Eames (1:26)
 ***** Node.js Testing Strategies : Rob Conery (2:39)
 ***** Mastering React Testing with Jest : Daniel Stern (1:57)
 **** Egghead
+<<<<<<< HEAD
 
+=======
+***** TODO React Testing Cookbook
+>>>>>>> origin/master
 *** tools
 **** emacsHelp
 **** Pluralsight
