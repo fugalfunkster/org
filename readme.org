@@ -23,22 +23,14 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ** React
 *** OPEN Update react-router Notes for v.4
 *** OPEN Advanced React and Redux : Stephen Girder (12:00)
-<<<<<<< HEAD
-*** OPEN React Testing Cookbook
-=======
-*** VIEWONLY React Testing Cookbook
->>>>>>> origin/master
 *** Consilidate Redux Notes
 *** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov(egghead)
 *** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 *** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
 ** Env: Webpack / eslint / etc
 *** TODO Advanced Webpack Talk : Jonathan Creamer (0:31) https://www.youtube.com/watch?v=MzVFrIAwwS8
-<<<<<<< HEAD
-=======
 *** eslint configs : template strings, bodil, fp,etc.
 *** update starter kit with postcss-nested
->>>>>>> origin/master
 *** colocate links to survive / keathly / react.js boilerplate / create-react-app
 ** Asynchronicity
 *** TODO Modern Asynchronous JavaScript : Wes Higbee (6:34)
@@ -48,17 +40,18 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** TODO Asynchronous Programming: The End of the Loop : Jafar Husain
 *** TODO YDKJS: Async
 ** Testing
-*** TODO React Testing Cookbook
-*** TODO Mastering React Testing with Jest : Daniel Stern (1:57)
+*** OPEN React Testing Cookbook
+*** VIEWONLY Mastering React Testing with Jest : Daniel Stern (1:57)
 ** Clojure
 *** Chapters 5, 6, 7 in Living Clojure
 *** https://howistart.org/posts/clojure/1
-*** Living CLojure Week 2
+*** Living Clojure Week 2
 *** Chapter 4 in ClojureScript Unraveled
 *** Anki Flash Cards for .core function signatures
-** emacs talk
-*** elisp in 15 minutes: https://learnxinyminutes.com/docs/elisp/
-*** analyse . files
+** emacs
+*** Elisp Talks
+**** elisp in 15 minutes: https://learnxinyminutes.com/docs/elisp/
+**** analyse . files
 
 
 * BackBurner
@@ -174,6 +167,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** TODO Testing Clientside JavaScript : Joe Eames (4:50)
 ***** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
 ***** TODO Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
+***** Shifting JS into High Gear w/ Web Workers : Kasia Zmokia (3:13)
 ***** JavaScript Design Patterns : Aaron Powell (2:02)
 **** Egghead
 ***** TODO Asynchronous Programming: The End of the Loop : Jafar Husain
@@ -205,6 +199,9 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** HTML5 Browser Caching : Ben Schwarz (1:01)
 ***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
 ***** Creating Elegant Nav. Using CSS3 Transitions : Susam Simkins (1:02)
+**** FrontEndMasters
+***** Motion Design with CSS : Rachel Nabors (4:01)
+***** Animated SVG Animation : Sarah Drasner (2:53)
 **** egghead
 ***** DONE Flexbox Fundamentals
 *** docker
@@ -233,6 +230,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Web Performance : Robert Boedigheimer (2:51)
 ***** Using Google PageSpeed for Perf. : David Berry (3:19)
 **** FrontEndMasters
+***** Website Perf : Kyle Simpson (5:01)
+***** 
 *** react
 **** DONE React.js Program: Fundamentals : Tyler McGinnis
 **** DONE Facebook Official React Tutorial
@@ -257,22 +256,20 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** TypeScript
 *** testing
 **** Pluralsight
-***** Testing Client-Side JS : Joe Eames (4:50)
 ***** WATCHEDONLY Code Testability : Misko Hevery (0:51)
+***** Testing JS w/ Jasmine and TypeScript : Tony Curtis (2:42)
+***** Testing Client-Side JS : Joe Eames (4:50)
 ***** Unit Testing with Node.js : Joe Eames (1:26)
 ***** Node.js Testing Strategies : Rob Conery (2:39)
 ***** Mastering React Testing with Jest : Daniel Stern (1:57)
 **** Egghead
-<<<<<<< HEAD
-
-=======
-***** TODO React Testing Cookbook
->>>>>>> origin/master
+***** OPEN React Testing Cookbook
 *** tools
 **** emacsHelp
 **** Pluralsight
 ***** DONE Intro to NPM as a Build Tool : Marcus Hammarberg (1:37)
 ***** DONE Git Fundamentals : James Kovacs (1:51)
+***** Mastering Git : Paolo Perrotta (2:42)
 ***** DONE NPM Playbook : Joe Eames (0:58)
 ***** WATCHEDONLY Meet Emacs : Phil Hagelberg (0:58)
 ***** TODO Advanced Git : Ben Hoskings (1:00)
@@ -280,7 +277,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Using the Chrome Dev. Tools : John Sonmez (2:50)
 ***** Getting Started with Emmet : Kristian Freeman (0:55)
 **** FrontEndMasters
-***** 
+***** Mastering Chrome Developer Tools : Jon Kuperman (4:15)
 **** egghead
 ***** WATCHEDONLY How to Contribute to an Open Source Project on Github
 ***** TODO Using Webpack for Production JS Apps
