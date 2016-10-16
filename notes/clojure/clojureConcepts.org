@@ -590,7 +590,7 @@ The flip side is that then you're applying functions that produce side-effects t
 : bee
 
 *** range (lc)
-The range function, in the absence of any arguments, returns a lazy, infinite sequence of all the integers. Thankfully range is polymorphic. With one argument, range returns a lazy sequence of integers from 0 until the argument. With two arguments, range returns a lazy sequence beginning at the first argument and ending before the second. If a third argument is provided, the difference between integers in the returned seq will reflect the third argument.
+The range function, in the absence of any arguments, returns a lazy, infinite sequence of all the integers. Thankfully, range is polymorphic. With one argument, range returns a lazy sequence of integers from 0 until the argument. With two arguments, range returns a lazy sequence beginning at the first argument and ending before the second. If a third argument is provided, the difference between integers in the returned seq will reflect the third argument.
  
 #+BEGIN_SRC clojure
   (range 6 19 2.5)
