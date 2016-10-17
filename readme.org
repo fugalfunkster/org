@@ -147,13 +147,29 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** How Linux Works
 ***** The Linux Command Line
 ***** Using Docker
-*** D3
+*** design
 **** Pluralsight
-***** WATCHEDONLY D3: The Big Picture : Ben Sullins (1:26)
-***** D3.js Data Visualization Fundamentals : Ben Sullins (4:35)
-***** Geospatial mapping with D3 : Ben Sullins (2:39)
-***** Force LAyout Graphs in D3 : Ben Sullins (2:33)
-*** JS
+***** DONE Responsive Typography : Jason Pamental (5:55)
+***** DONE Responsive Web Images : Robert Boedigheimer (1:55)
+***** DONE Web Accessibility: Getting Started (1:30)
+***** Making a Web Form Accessible (1:47)
+*** html/css
+**** OPEN pendaticLayout
+**** Pluralsight
+***** DONE CSS Positioning : Susan Sumkins (0:50)
+***** DONE Responsive Web Design : Ben Callahan (4:31)
+***** DONE Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
+***** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
+***** HTML5 Advanced Topics : Craig Shoemaker (2:45)
+***** HTML5 Browser Caching : Ben Schwarz (1:01)
+***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
+***** Creating Elegant Nav. Using CSS3 Transitions : Susam Simkins (1:02)
+**** FrontEndMasters
+***** Motion Design with CSS : Rachel Nabors (4:01)
+***** Animated SVG Animation : Sarah Drasner (2:53)
+**** egghead
+***** DONE Flexbox Fundamentals
+*** JavaScript
 **** Pluralsight
 ***** WATCHEDONLY Advanced Javascript : Kyle Simpson ()
 ***** WATCHEDONLY JS Objects and Prototypes
@@ -180,58 +196,14 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** VIEWONLY Functional-Lite JS : Kyle Simpson (3:10)
 ***** Rethinking Async JS : Kyle Simpson (6:22)
 ***** Asynchronous Programming in Javascript : Jafar Husain (9:36)
-*** databases
-**** WATCHEDONLY Intro to Mongoose for Node.js & MongoDB : Mark Scott (1:41)
-*** design
+*** TypeScript
 **** Pluralsight
-***** DONE Responsive Typography : Jason Pamental (5:55)
-***** DONE Responsive Web Images : Robert Boedigheimer (1:55)
-***** DONE Web Accessibility: Getting Started (1:30)
-***** Making a Web Form Accessible (1:47)
-*** html/css
-**** OPEN pendaticLayout
-**** Pluralsight
-***** DONE CSS Positioning : Susan Sumkins (0:50)
-***** DONE Responsive Web Design : Ben Callahan (4:31)
-***** DONE Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
-***** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
-***** HTML5 Advanced Topics : Craig Shoemaker (2:45)
-***** HTML5 Browser Caching : Ben Schwarz (1:01)
-***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
-***** Creating Elegant Nav. Using CSS3 Transitions : Susam Simkins (1:02)
-**** FrontEndMasters
-***** Motion Design with CSS : Rachel Nabors (4:01)
-***** Animated SVG Animation : Sarah Drasner (2:53)
-**** egghead
-***** DONE Flexbox Fundamentals
-*** docker
-**** pluralsight
-***** WATCHEDONLY Docker and Containers: The Big Picture : Nigel Poulton (1:47)
-***** Play by Play: Docker for Web Developers with John Papa and Dan Wahlin (1:34))
-***** Docker Deep Dive : Nigel Poulton (5:38)
-*** node
-**** Pluralsight
-***** DONE Real-Time Web w/ Node.js : Kyle Simpson (5:23)
-***** DONE RESTful Web Services with Node.js and Express (2:04)
-***** DONE Build Web Apps with Node.js and Express 4.0 : Jonathan Mills (4:43)
-***** DONE Securing Yours App w/ OAuth and Passport : Jonathan Mills
-***** OPEN Intro to Node JS : Paul O'Fallon (2:48)
-***** TODO Five Essential tools for REST APIs : Elton Stoneman (2:56)
-***** HTTP Fundamentals : Scott Allen (2:50)
-***** Node Application Patterns : Rob Conery (2:30)
-***** FullStack NodeJS : Geoffrey Grosenbach (2:35)
-***** Building Web Apps with Node.js : Kevin Whinnery (3:43)
-**** FrontEndMasters
-***** API Design with Node.js using Express : Scott Moss (10:18)
-**** Udemy
-***** OPEN Learn & Understand Node.js : Anthony Alicea (12:00+)
-*** perf
-**** Pluralsight
-***** Web Performance : Robert Boedigheimer (2:51)
-***** Using Google PageSpeed for Perf. : David Berry (3:19)
-**** FrontEndMasters
-***** Website Perf : Kyle Simpson (5:01)
-***** 
+***** A Practical Start with TypeScript : Roland Guijt (1:39)
+***** TypeScript Fundamentals : Dan Wahlin & John Papa (4:25)
+***** TypeScript In-Depth : Brice Wilson (4:40)
+**** Egghead
+***** Up and Running with TypeScript : John Lindquist (0:43)
+***** Use Types Effectively in TypeScript : Ari Picker (0:29)
 *** react
 **** DONE React.js Program: Fundamentals : Tyler McGinnis
 **** DONE Facebook Official React Tutorial
@@ -253,7 +225,42 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE Modern React with Redux : Stephen Girder (10:00)
 ***** TODO Advanced React and Redux : Stephen Girder (12:00)
 ***** Build Apps with React Native : Stephen Grider (8:00+)
-*** TypeScript
+*** perf
+**** Pluralsight
+***** Web Performance : Robert Boedigheimer (2:51)
+***** Using Google PageSpeed for Perf. : David Berry (3:19)
+**** FrontEndMasters
+***** Website Perf : Kyle Simpson (5:01)
+***** 
+*** D3
+**** Pluralsight
+***** WATCHEDONLY D3: The Big Picture : Ben Sullins (1:26)
+***** D3.js Data Visualization Fundamentals : Ben Sullins (4:35)
+***** Geospatial mapping with D3 : Ben Sullins (2:39)
+***** Force LAyout Graphs in D3 : Ben Sullins (2:33)
+*** node
+**** Pluralsight
+***** DONE Real-Time Web w/ Node.js : Kyle Simpson (5:23)
+***** DONE RESTful Web Services with Node.js and Express (2:04)
+***** DONE Build Web Apps with Node.js and Express 4.0 : Jonathan Mills (4:43)
+***** DONE Securing Yours App w/ OAuth and Passport : Jonathan Mills
+***** OPEN Intro to Node JS : Paul O'Fallon (2:48)
+***** TODO Five Essential tools for REST APIs : Elton Stoneman (2:56)
+***** HTTP Fundamentals : Scott Allen (2:50)
+***** Node Application Patterns : Rob Conery (2:30)
+***** FullStack NodeJS : Geoffrey Grosenbach (2:35)
+***** Building Web Apps with Node.js : Kevin Whinnery (3:43)
+**** FrontEndMasters
+***** API Design with Node.js using Express : Scott Moss (10:18)
+**** Udemy
+***** OPEN Learn & Understand Node.js : Anthony Alicea (12:00+)
+*** docker
+**** pluralsight
+***** WATCHEDONLY Docker and Containers: The Big Picture : Nigel Poulton (1:47)
+***** Play by Play: Docker for Web Developers with John Papa and Dan Wahlin (1:34))
+***** Docker Deep Dive : Nigel Poulton (5:38)
+*** databases
+**** WATCHEDONLY Intro to Mongoose for Node.js & MongoDB : Mark Scott (1:41)
 *** testing
 **** Pluralsight
 ***** WATCHEDONLY Code Testability : Misko Hevery (0:51)
@@ -281,7 +288,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** egghead
 ***** WATCHEDONLY How to Contribute to an Open Source Project on Github
 ***** TODO Using Webpack for Production JS Apps
-
 
 * Horizon
 ** Someday Languages
