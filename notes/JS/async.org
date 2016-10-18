@@ -36,6 +36,7 @@
 
 * Modern Asynchronous JavaScript : Wes Higbee (6:34)
 
+
 * CSP-JS
 The Library: https://github.com/ubolonton/js-csp
 ** Communicating with Channels (video) https://www.youtube.com/watch?v=W2DgDNQZOwo
@@ -47,7 +48,7 @@ The Library: https://github.com/ubolonton/js-csp
 ** Taming the Async Beast w/ CSP in JS http://jlongster.com/Taming-the-Asynchronous-Beast-with-CSP-in-JavaScript
 
 
-* Rethinking Asynchronous JavaScript : Kyle Simpson (NaN WEB / FrontEnd Masters)
+* TODO Rethinking Asynchronous JavaScript : Kyle Simpson 
 ** Parallel, Concurrent, and Asynchronous
 *** Parallel: At the same time
 A CPU can only execute one process at a time. But as computer with multiple cores can execute multiple processes at a time. Parallelism is when two or more processes are executing at the same time. Parallelism is usually espressed via threads. The operating system has virtural threads, and manages the execution of threads to take advantage of multiple cores. JavaScript programs only execute within a single thread.
@@ -166,8 +167,8 @@ Time is the most complex form of state in a program. Thunks use closure to
 maintain state, removing time as a complecting factor of state. This helps us 
 to abstract away time based complexity in ordering processes.
 ** Promises
-Promises represent future values. They allow you to retain control over the callback, by allowing you to execute your callbacks upon "completion events."
-You control over what happens when a requested value arrives, solving the inversion of control problem inherent with vanilla callbacks.
+Promises represent future values. They allow you to retain control over callback execution, by allowing you to subscribe to "completion events." In native promises, the completion event is the .then method. Because promises permit you to retain control over what happens when a requested value arrives, promises address the inversion of control problem inherent with vanilla callbacks.
+
 *** Promises You Can Trust
 Promises were designed to solve the inversion of control that plagued vanilla callbacks. To do this, promises make certain guarantees.
 1. Promises can only resolve once
@@ -176,10 +177,105 @@ Promises were designed to solve the inversion of control that plagued vanilla ca
 4. Exceptions become errors, nothing is swallowed
 5. Once a promise resolves, it's value is immutable
 
-*** Native Promise API
-In native promises, the completion event is the .then method.
+*** Promise API
+When a promise resolves, the value passed to resolve =resolve(data)= is propagated forward, 
+and becomes the argument to the callback in that promise's .then method. 
+*** TODO Catch(ing?)
+*** Promise Flow Control - dot chaining
+Promises allow us to express flow control by chaining promises together. AWhenever a promise's .then method is called, it will return a promise (what promise?) by default. However, we can order sequential promises by returning a different promise in the then method's callback.
+**** dot chaining Example:
+#+BEGIN_SRC js :results output
+  function getData(d) {
+    return new Promise(function(resolve, reject){
+      setTimeout(function(){ 
+        resolve(d); 
+      }, 1000);
+    });
+  }
 
-*** Promise Flow Control
+  let x;
+
+  getData(10)
+  .then(function(num1){
+    x = 1 + num1;
+    return getData(30);
+  })
+  .then(function(num2){
+    let y = 1 + num2;
+    return getData("Meaning of Life: " + ( x + y));
+  })
+  .then(function(answer){
+    console.log(answer);
+  })
+#+END_SRC
+
+#+RESULTS:
+: Meaning of Life: 42
+
+*** Exercise #3
+
+ #+BEGIN_SRC js :results output
+function fakeAjax(url,cb) {
+	var fake_responses = {
+		"file1": "The first text",
+		"file2": "The middle text",
+		"file3": "The last text"
+	};
+
+	var randomDelay = (Math.round(Math.random() * 1E4) % 8000) + 1000;
+
+	console.log("Requesting: " + url);
+
+	setTimeout(function(){
+		cb(fake_responses[url]);
+	},randomDelay);
+}
+
+function output(text) {
+	console.log(text);
+}
+
+// **************************************
+
+function getFile(file) {
+    return new Promise(function(resolve, reject){
+      fakeAjax(file, resolve); 
+    });
+}
+
+// request all files at once in "parallel"
+
+let file1 = getFile("file1");
+let file2 = getFile("file2");
+let file3 = getFile("file3");
+
+// print results in the correct order
+
+file1
+.then(output)
+.then(function(data){
+  console.log("Data: ", data); // note we're not dealing with file1 anymore
+  return file2;
+})
+.then(function(data){
+  output(data);
+  return file3;
+})
+.then(function(data){
+  output(data);
+})
+
+#+END_SRC
+
+ #+RESULTS:
+ : Requesting: file1
+ : Requesting: file2
+ : Requesting: file3
+ : The first text
+ : Data:  undefined
+ : The middle text
+ : The last text
+
 *** Abstractions
 *** Sequences and Gates
 ** Generators
