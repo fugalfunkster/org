@@ -166,3 +166,19 @@ gen.next();
 *** https://docs.google.com/presentation/d/1q_uTuoD0qKECiScWHcRO3GDVkyahdl3kuLK3sAYrXC8/edit#slide=id.gcb9a0b074_1_0
 ** react-a11y
 *** library throws errors for accessibility problems, helps grab low hanging fruit quickly
+* React Native
+http://slides.com/browniefed/react-native#/
+** layout is done in flexbox, it's all about ratios
+** elements #8
+*** <View> == <div>
+*** <Image> == <img>
+*** <Text> == <Span>
+*** <TouchableOpacity> == <Button>
+** events #9,10
+*** onPress
+** styles #11
+instead of a css file, you import stylesheet from react and do css-in-js. 
+** API
+- https://api.darksky.net/forecast/83956602260dfa87fb1b825d9ee53e80/37.8267,-122.4233
+- 83956602260dfa87fb1b825d9ee53e80
+**  

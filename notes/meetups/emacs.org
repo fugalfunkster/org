@@ -252,7 +252,6 @@ fifth
 *** calling blocks with different parameters
 *** embedded results
 
-
 * April
 ** emacs Help! (will)
    You can use these key commands to get information about the code where the
@@ -300,7 +299,6 @@ fifth
 *** if you needed to keep all packages inside a local network, you can utilize
 **** tools built for melpa?
 
-
 * May
 ** Working with Clojure in emacs
    check abrams github for configs
@@ -344,7 +342,6 @@ fifth
      fixup
      lookup z for stashing
 
-
 * June 
 ** DONE email Howard through meetup
 *** clojure org mode fix
@@ -386,42 +383,22 @@ fifth
 ** hack night!
 ** help with magit
 *** 
+* November
+** beginning elisp
+- resume at vars...
+** Presenting in Emacs
+Presentations are programmatic
+=demo-it=
+- opening files
+- running code
+- presenting
+  - org-tree-slide: shows each section as a single screen
+- misc functions
+*** available on melpa
+package is customizable, customize group
+*** check out ivy minor mode, for use in help documentation?
+* December
 
-* August Emacs Conference!
-** Learning JavaScript in Emacs
-*** I started using emacs because a book suggested I should
-    and nothing on the internet convinced me not to
-*** What's an emacs? It's a type of gnu
-**** getting to gnu you
-**** console what
-***** stallman and steele 
-**** simple made easy made wat
-***** keybinds are magic 
-****** they cast a function
-****** some of them can be really useful
-****** like, you can fucking fly man
-***** there are tomes of these spells
-****** and libraries of spells at your fingertips
-****** you can even write your own
-******* emacs lisp, not a great second language, or third, or rlly
-******** wat again?
-***** but, but, but, wat
-****** keybinds hurt, emacs pinky is actually a thing
-****** proficiency require
-****** practice makes permanent
-**** make it stop hurting
-***** jump around
-***** IDO mode
-***** neotree
-***** eshell
-*** Org mode and babel are dope
-*** Tools for Web Devs
-**** web mode
-**** emmet mode
-**** js2-mode is tolerable
-**** flycheck eslint is the new flycheck jscs jshint
-**** snippets
-**** tern it up
-**** magit
+
 
 

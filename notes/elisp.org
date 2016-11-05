@@ -1,0 +1,363 @@
+Emacs Lisp
+
+* What's an Emacs?
+New to emacs? Start the tutorial with =C-h t=.
+** My god, it's full of vars..
+Emacs is basically an elisp runtime-REPL-ish-like-thing, that happens to let you edit text files.
+  After emacs awakens, it loads your initialization files, filling this REPL with 
+vars and functions bound to key commands. Once loaded, emacs lets you execute 
+elisp commands that affect the buffer containing your point.
+  For example, the =f= key invokes an emacs lisp function that inserts 
+the character =f= at point. 
+** Re: eval
+The first thing you're likely to see when emacs fires up is a scratch buffer. 
+Scratch buffers just so happen to default to using emacs lisp mode, in which you 
+can execute elisp by placing the point after the closing parentheses of a 
+function, and invoking the following command: =C-c e=. The result will appear in 
+the minibuffer.
+  Feel free to follow along by opening up a scratch buffer with =C-x b 
+*scratch*  RET= and execute elisp with me. Alternately, you can access a bona-fide repl with 
+=M-x ielm=.
+  This presentation is in org mode, not elisp mode, and so I must must settle for 
+source blocks, which I invoke with =C-c C-c=.
+  Alright, lets evaluate some elisp.
+* In the Beginning: atoms
+** Numbers
+Ints and Floats
+
+#+BEGIN_SRC elisp
+  ;;22
+  42.0
+#+END_SRC
+
+#+RESULTS:
+: 42.0
+
+** Symbols
+Symbols cannot start with a number.
+
+#+BEGIN_SRC elisp
+  maxwellSilverhammer
+#+END_SRC
+
+** Strings
+
+#+BEGIN_SRC elisp
+"one"
+#+END_SRC
+
+#+RESULTS:
+: one
+
+** TODO keywords
+
+** TODO buffers etc
+* On Lists and Lisps - Means of Combination and Abstraction
+** Lists are compound Data Structures
+Lists are a compound data structure.
+*** lat?
+This is a list. Why won't it eval?
+
+#+BEGIN_SRC elisp
+  (1 2 3)
+#+END_SRC
+
+*** Quotable
+
+#+BEGIN_SRC elisp
+  ;;(quote (1 2 3))
+  ;;(list 1 2 3)
+  ;;'(1 2 3)
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 | 3 |
+
+*** nil, nada, zilch, nothing, and emptyness
+#+BEGIN_SRC elisp
+  ()
+  ;;nil
+#+END_SRC
+
+#+RESULTS:
+
+** Lisps are List Processors
+*** Easy
+#+BEGIN_SRC elisp
+  (+ 1 2 3)
+#+END_SRC
+
+#+RESULTS:
+: 4
+*** Less Easy
+
+#+BEGIN_SRC elisp
+  (* 2 (- (/ 40 8) (% 4 6)))
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+*** Building Lists - aka Cons the Magnificent
+We're not always going to have the data we want, in the format we want it, so we need a way to combine atoms into lists programatically.
+
+#+BEGIN_SRC elisp
+  ;;(cons 3 4)
+  ;;(cons (cons 3 4) '())
+  ;;(cons '(2) (cons (cons 3 4) '()))
+  (cons 1 (cons '(2) (cons (cons 3 4) '())))
+#+END_SRC
+
+#+RESULTS:
+: (1 (2) (3 . 4))
+
+*** Working with Lists
+Has anyone in the crowd programmed on the IBM 704?
+
+**** The first thing to know about about working with lists
+#+BEGIN_SRC elisp
+  (car '(1 (2) (3 4)))
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+**** The rest of it
+#+BEGIN_SRC elisp
+  (cdr '(1 (2) (3 4)))
+#+END_SRC
+
+#+RESULTS:
+| 2 |   |
+| 3 | 4 |
+
+**** The beginning of the end
+#+BEGIN_SRC elisp
+  (cadr '(1 (2) (3 4)))
+  ;;(car (cadr '(1 (2) (3 4))))
+#+END_SRC
+
+#+RESULTS:
+| 2 |
+
+* Predicates and Control Flow
+** Booleans
+We've already seen the face of false:
+=null= returns t if its argument is truthy, and nil if falsy.
+
+#+BEGIN_SRC elisp
+  (null '(atom))
+#+END_SRC
+
+If it's not nil, it's true. 
+
+#+BEGIN_SRC elisp
+  (null '())
+#+END_SRC
+
+False is nil is '() is False
+
+#+BEGIN_SRC elisp
+  (equal nil '())
+#+END_SRC
+
+** when
+
+#+BEGIN_SRC elisp
+  (when (null '(atom)) t)
+#+END_SRC
+
+#+RESULTS:
+
+** if
+
+#+BEGIN_SRC elisp
+  (defun even-or-odd (n)
+    (if (= 0 (% n 2))
+      "even"
+      "odd"))
+  ;;(even-or-odd 5)
+  (even-or-odd 6)
+#+END_SRC
+
+** cond
+
+#+BEGIN_SRC elisp
+  (defun one-or-zero (number)
+    (cond 
+      ((= number 0) "yes")
+      ((= number 1) "of course")
+      (t "The Number must be 1 or 0")))
+
+  ;;(one-or-zero 1)
+  ;;(one-or-zero 0)
+  ;;(one-or-zero 6)
+#+END_SRC
+
+* Vars
+** binding values to symbols
+*** set
+=set= and =setq= let you bind global vars
+
+#+BEGIN_SRC elisp
+  (set 'name "value")
+  ;;(setq name "value")
+  name
+#+END_SRC
+
+*** let
+let is lexically scoped to a paren block, and accepts a list of lists
+
+#+BEGIN_SRC elisp
+  (let ((a 40)
+        (b 2))
+    (+ a b))
+#+END_SRC
+
+*** let*
+
+#+BEGIN_SRC elisp
+  (let* ((a 40)
+         (b (/ a 20)))
+    (+ a b))  
+#+END_SRC
+
+#+RESULTS:
+: 42
+
+** binding functions to symbols
+*** defun
+
+#+BEGIN_SRC elisp
+  (defun square (x) "return the square of a number" (* x x))
+  ;;(square 4)
+#+END_SRC
+
+#+RESULTS:
+: 16
+
+*** lambda the Ultimate
+
+#+BEGIN_SRC elisp
+  ;;(fset 'square (lambda (x) (* x x)))
+  (fsetq square (lambda (x) (* x x)))
+
+  ;;What's a LISP2?
+  ;;(setq square (lambda (x) (* x x))) 
+
+  (square 4)
+#+END_SRC
+
+#+RESULTS:
+: 16
+
+* Recursion
+No tail optimization. Does anyone know how to avoid blowing the stack?
+
+#+BEGIN_SRC elisp
+  (defun factorial (n)
+    (if (< n 1)
+      1
+      (* n (factorial (- n 1)))))
+
+  (factorial 5)
+  ;;(factorial 19)
+  ;;(factorial 20)
+#+END_SRC
+
+#+RESULTS:
+: 120
+
+
+
+* TODO Higher Order Functions
+Get definition of a HOF from allonge org doc.
+
+#+BEGIN_SRC elisp
+ (mapcar (lambda (x) (* x x)) '(1 2 3 4 5))
+#+END_SRC
+
+#+RESULTS:
+| 1 | 4 | 9 | 16 | 25 |
+
+* TODO Keybindings
+** Global Keybindings
+#+BEGIN_SRC elisp
+  (global-set-key (kbd "M-C-f") 'sort-lines)
+#+END_SRC
+
+1
+5
+3
+4
+2
+
+** TODO Local Keybindings
+
+major-mode
+
+#+BEGIN_SRC elisp
+  (add-hook 'org-mode
+    (lambda () 
+      (local-set-key (kbd "M-C-f") (insert "Bam!"))))
+#+END_SRC
+
+** Keybindings Documentation
+
+=C-h k=
+
+#+BEGIN_SRC elisp
+  (describe-key (kbd "C-h k"))
+#+END_SRC
+
+** TODO apropos
+Lets you search for commands that contains a string (in the name or docstring?).
+
+=C-h a=
+
+#+BEGIN_SRC elisp
+  (apropos-command "region")
+#+END_SRC
+
+#+RESULTS:
+: Type C-x 1 to remove help window.  
+
+** describe function
+
+=C-h f=
+
+#+BEGIN_SRC elisp
+  (describe-function 'sort-lines)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+sort-lines is an interactive autoloaded compiled Lisp function in
+`sort.el'.
+
+It is bound to C-M-f.
+
+(sort-lines REVERSE BEG END)
+
+Sort lines in region alphabetically; argument means descending order.
+Called from a program, there are three arguments:
+REVERSE (non-nil means reverse order), BEG and END (region to sort).
+The variable `sort-fold-case' determines whether alphabetic case affects
+the sort order.
+#+end_example
+
+** help
+
+=C-h C-h=
+
+* TODO Buffers, Windows, and Frames
+From learn elisp in 15 minutes:
+
+#+BEGIN_SRC elisp
+
+#+END_SRC
+
+
+
+* config
+
