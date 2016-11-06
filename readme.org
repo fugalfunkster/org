@@ -20,21 +20,30 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 
 * TODO heap(s)
+** OPEN Getting Started with Elixir : Nate Taylor (2:49)
 ** React
 *** OPEN Update react-router Notes for v.4
 *** OPEN Advanced React and Redux : Stephen Girder (12:00)
 *** Consilidate Redux Notes
-*** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov(egghead)
+*** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov (egghead)
 *** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 *** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
+** TODO TypeScript
+*** Pluralsight
+**** A Practical Start with TypeScript : Roland Guijt (1:39)
+**** TypeScript Fundamentals : Dan Wahlin & John Papa (4:25)
+**** TypeScript In-Depth : Brice Wilson (4:40)
+*** Egghead
+**** Up and Running with TypeScript : John Lindquist (0:43)
+**** Use Types Effectively in TypeScript : Ari Picker (0:29)
 ** Env: Webpack / eslint / etc
-*** TODO Advanced Webpack Talk : Jonathan Creamer (0:31) https://www.youtube.com/watch?v=MzVFrIAwwS8
-*** eslint configs : template strings, bodil, fp,etc.
-*** update starter kit with postcss-nested
-*** colocate links to survive / keathly / react.js boilerplate / create-react-app
+*** TODO Add readme to redux-starter-kit
+**** colocate links to survive / keathly / react.js boilerplate / create-react-app
+*** eslint configs : template strings, bodil, fp, etc.
+*** make ergodox config repo
+*** Advanced Webpack Talk : Jonathan Creamer (0:31) https://www.youtube.com/watch?v=MzVFrIAwwS8
 ** Asynchronicity
-*** TODO Modern Asynchronous JavaScript : Wes Higbee (6:34)
-*** OPEN Rethinking Async JS : Kyle Simpson (6:22)
+*** OPEN Modern Asynchronous JavaScript : Wes Higbee (6:34)
 *** csp-js
 *** redux-thunk / redux-promises / redux-saga / redux-observable
 *** TODO Asynchronous Programming: The End of the Loop : Jafar Husain
@@ -45,13 +54,14 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ** Clojure
 *** Chapters 5, 6, 7 in Living Clojure
 *** https://howistart.org/posts/clojure/1
-*** Living Clojure Week 2
+*** Living Clojure Week 3
 *** Chapter 4 in ClojureScript Unraveled
 *** Anki Flash Cards for .core function signatures
 ** emacs
 *** Elisp Talks
-**** elisp in 15 minutes: https://learnxinyminutes.com/docs/elisp/
-**** analyse . files
+**** notify meetup of my org repo
+**** begin work on buffers, frames, windows, etc.
+**** learn org-tree-slide for next month: https://github.com/takaxp/org-tree-slide
 
 
 * BackBurner
@@ -87,7 +97,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Etudes for ClojureScript
 ***** Clojure Applied
 **** Scheme
-***** The Little Schemer
+***** OPEN The Little Schemer
 ***** HtDP [5/43]
     I. Processing Simple Forms of Data
  - [X] Students, Teachers, Computers
@@ -179,7 +189,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE JS Module Fundamentals : Brice Wilson (2:16)
 ***** CLOSED jQuery-free JS : Elijah Manor (2:26)
 ***** OPEN Practical Design Patterns in JavaScript : Jonathan Mills (3:10)
-***** TODO Modern Asynchronous JavaScript : Wes Higbee (6:34)
+***** OPEN Modern Asynchronous JavaScript : Wes Higbee (6:34)
 ***** TODO Testing Clientside JavaScript : Joe Eames (4:50)
 ***** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
 ***** TODO Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
@@ -194,7 +204,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:00)
 **** FrontEndMasters
 ***** VIEWONLY Functional-Lite JS : Kyle Simpson (3:10)
-***** Rethinking Async JS : Kyle Simpson (6:22)
+***** DONE Rethinking Async JS : Kyle Simpson (6:22)
 ***** Asynchronous Programming in Javascript : Jafar Husain (9:36)
 *** TypeScript
 **** Pluralsight
@@ -215,15 +225,18 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 ***** React Native Apps with Exponent and Redux : Hendrick (3:21)
 ***** Building iOS Apps with React Native : Hendrik Swanepoel (1:59)
+**** FrontEndMasters
+***** React Native (feat. Redux) : Scott Moss (4:19)
+***** Intro. to React/Redux : Brian Holt (11:23)
 **** Egghead
 ***** CLOSED React Fundamentals : Joe Maddalon
 ***** CLOSED Getting Started with React Router (egghead)
 ***** DONE Getting Started with Redux (egghead)
-***** TODO Building React Apps w/ Idiomatic Redux
+***** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov
 ***** React Native Fundamentals : Tyler McGinnis
 **** Udemy
 ***** DONE Modern React with Redux : Stephen Girder (10:00)
-***** TODO Advanced React and Redux : Stephen Girder (12:00)
+***** OPEN Advanced React and Redux : Stephen Girder (12:00)
 ***** Build Apps with React Native : Stephen Grider (8:00+)
 *** perf
 **** Pluralsight
@@ -231,13 +244,14 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Using Google PageSpeed for Perf. : David Berry (3:19)
 **** FrontEndMasters
 ***** Website Perf : Kyle Simpson (5:01)
-***** 
 *** D3
 **** Pluralsight
 ***** WATCHEDONLY D3: The Big Picture : Ben Sullins (1:26)
 ***** D3.js Data Visualization Fundamentals : Ben Sullins (4:35)
 ***** Geospatial mapping with D3 : Ben Sullins (2:39)
 ***** Force LAyout Graphs in D3 : Ben Sullins (2:33)
+**** Egghead
+***** TODO Build Interactive JS Charts w/ D3 v4 : Ben Clinkenbeard (2:33)
 *** node
 **** Pluralsight
 ***** DONE Real-Time Web w/ Node.js : Kyle Simpson (5:23)
@@ -288,6 +302,12 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** egghead
 ***** WATCHEDONLY How to Contribute to an Open Source Project on Github
 ***** TODO Using Webpack for Production JS Apps
+***** Debug the DOM in Chrome with the Devtools Elements Panel : Mykola Biloknsky
+***** Debug JS in Chrom DevRool Sources : Mykola Biloknsky
+***** Debug HTTP with Chrome DevTools Network Panel : Mykola Biloknsky
+*** elixir
+**** Pluralsight
+***** OPEN Getting Started with Elixir : Nate Taylor (2:49)
 
 
 * Horizon
