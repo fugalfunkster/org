@@ -1,0 +1,5 @@
+* Getting Started with Elixir : 
+
+#+BEGIN_SRC elixir
+  40 + 2
+#+END_SRC
