@@ -1,0 +1,15 @@
+
+
+
+#+BEGIN_SRC typescript :results output
+function foo (x) {
+  return x;
+}
+
+console.log(foo("Hello World"));
+
+#+END_SRC
+
+#+RESULTS:
+: Hello World
+
