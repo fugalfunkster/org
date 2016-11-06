@@ -1,52 +1,3 @@
-* DONE Reasoning about Asynchronous JavaScript - Wes Higbee (2:05)
-** Concurrency Model and Event Loop : https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop
-*** JavaScript is single threaded, JS cannot execure processes in parallel
-*** The event loop and the event queue interface with the function stack
-*** async function calls stage functions and their dependency 
-*** once the function's dependency arrives, the function will be conj'd onto the queue
-*** js supports concurrency through non-blocking
-** Avoid Blocking
-*** each process runs to completion
-*** callbacks go onto the event queue, and won't be called until the current process finishes
-*** browser rendering is async!
-*** use webworkers to run intensive code in the background to avoid blocking the front-End of the app.
-** Cooperative Concurrency
-*** concurrency permits multiple processes to execute alternately
-*** our programs are composed of async processes: 'little programs'
-*** think explicitly about asynchronous seams
-** Sources of Async
-*** Timers
-**** timer delay not guaranteed, pushed to queue after time elapsed, delay is a minimum.
-*** user interactions
-**** event listeners are synchronous!
-*** network & disk I/O
-*** Node stuff (see docs)
-**** fs
-**** process.nextTick (beats out setTimeout, jups to the front of the event queue, guaranteed ordered execution)
-**** setImmediate (also async, guaranteed ordered execution)
-**** disk I/O
-**** IPC - interprocess communication EX: webworkers
-*** Web Workers
-** Not all function calls aren't async
-** race conditions in order of queue
-** Debugging in the browser
-*** sources, call stack,
-*** check async, call stack will display source of current stack 
-
-
-* Modern Asynchronous JavaScript : Wes Higbee (6:34)
-
-
-* CSP-JS
-The Library: https://github.com/ubolonton/js-csp
-** Communicating with Channels (video) https://www.youtube.com/watch?v=W2DgDNQZOwo
-** CSP - FullStackFest (video) https://www.youtube.com/watch?v=r7yWWxdP_nc
-** David Nolan
-- CSP http://swannodette.github.io/2013/07/12/communicating-sequential-processes
-- ES6 generators http://swannodette.github.io/2013/08/24/es6-generators-and-csp
-** Generators and Channels in JS https://medium.com/javascript-inside/generators-and-channels-in-javascript-594f2cf9c16e#.448z7n5na
-** Taming the Async Beast w/ CSP in JS http://jlongster.com/Taming-the-Asynchronous-Beast-with-CSP-in-JavaScript
-
 
 * TODO Rethinking Asynchronous JavaScript : Kyle Simpson 
 ** Parallel, Concurrent, and Asynchronous
@@ -168,7 +119,6 @@ maintain state, removing time as a complecting factor of state. This helps us
 to abstract away time based complexity in ordering processes.
 ** Promises
 Promises represent future values. They allow you to retain control over callback execution, by allowing you to subscribe to "completion events." In native promises, the completion event is the .then method. Because promises permit you to retain control over what happens when a requested value arrives, promises address the inversion of control problem inherent with vanilla callbacks.
-
 *** Promises You Can Trust
 Promises were designed to solve the inversion of control that plagued vanilla callbacks. To do this, promises make certain guarantees.
 1. Promises can only resolve once
@@ -177,12 +127,12 @@ Promises were designed to solve the inversion of control that plagued vanilla ca
 4. Exceptions become errors, nothing is swallowed
 5. Once a promise resolves, it's value is immutable
 
-*** Promise API
-When a promise resolves, the value passed to resolve =resolve(data)= is propagated forward, 
-and becomes the argument to the callback in that promise's .then method. 
 *** TODO Catch(ing?)
 *** Promise Flow Control - dot chaining
-Promises allow us to express flow control by chaining promises together. AWhenever a promise's .then method is called, it will return a promise (what promise?) by default. However, we can order sequential promises by returning a different promise in the then method's callback.
+When a promise resolves, the value passed to resolve =resolve(data)= is propagated forward, 
+and becomes the argument to the callback in that promise's .then method. 
+  Promises allow us to express flow control by chaining promises together. Whenever a 
+promise's .then method is called, it will return a promise (what promise?) by default. However, we can order sequential promises by returning a different promise in the then method's callback.
 **** dot chaining Example:
 #+BEGIN_SRC js :results output
   function getData(d) {
@@ -276,18 +226,240 @@ file1
  : The middle text
  : The last text
 
-*** Abstractions
-*** Sequences and Gates
-** Generators
-*** Example
-*** Messaging
+*** Exercise #4 (using map/reduce)
+
+#+BEGIN_SRC js :results output
+
+function fakeAjax(url,cb) {
+	var fake_responses = {
+		"file1": "The first text",
+		"file2": "The middle text",
+		"file3": "The last text"
+	};
+	var randomDelay = (Math.round(Math.random() * 1E4) % 8000) + 1000;
+
+	console.log("Requesting: " + url);
+
+	setTimeout(function(){
+		cb(fake_responses[url]);
+	},randomDelay);
+}
+
+function output(text) {
+	console.log(text);
+}
+
+function getFile(file) {
+	return new Promise(function(resolve){
+		fakeAjax(file,resolve);
+	});
+}
+
+// **************************************
+
+// Render as each one finishes,
+// but only once previous rendering
+// is done.
+
+// Represent our ajax request targets as a list
+let URLs = ["file1", "file2", "file3"];
+// Map the urls to create a list of promise objects
+let promises = URLs.map(getFile);
+// Reduce the list of promises, starting with a pre-resolved promise, and .chaining
+let answers = promises.reduce(function combine(chain, pr) {
+                                return chain.then(function() {
+                                  return pr 
+                                }).then(output);
+                              }, Promise.resolve());
+
+// Note this happens first! The callback passed to the promises in the reduce, execute
+// upon the promises completion event firing, causing the chain reaction
+answers.then(output("Complete!"));
+
+#+END_SRC
+
+#+RESULTS:
+: Requesting: file1
+: Requesting: file2
+: Requesting: file3
+: Complete!
+: The first text
+: The middle text
+: The last text
+
+*** Abstractions: Promise.all and Promise.race
+**** Promise.all (gate)
+Promise.all allows you to avoid race conditions, by providing an interface to multiple promises that "completes" only after all promises successfully complete. Promise.all takes an array of promises, and passes in an array of results to the .then method. The order of the promise array matches the order of the results array.
+
+#+BEGIN_SRC js
+
+#+END_SRC
+
+**** promise.race (first to succeed/fail)
+Promise.race also accepts an array of promises, but only calls the .then method with the first promise that completes, regardless of its outcome. Any remaining promises are thrown away to be garbage collected.
+
+#+BEGIN_SRC js :results output
+
+var p = new Promise(function(resolve, reject){
+    setTimeout(function(){
+      resolve("The Data!");
+    }, 2000);
+  });
+
+function success(d){
+  console.log("Success:", d);
+}
+
+function error(e){
+  console.log("Failure: ", e);
+}
+
+Promise.race([
+  p,
+  new Promise(function(resolve, reject){
+    setTimeout(function(){
+      reject("Timeout!");
+    }, 3000);
+  })
+]).then(success, error);
+
+
+
+#+END_SRC
+
+#+RESULTS:
+: Success:The Data!
+
+*** ASQ - Asynquence: Sequences and Gates
+A sequence is a list of automatically chained promises.
+This is Kyle's pet async/promise library
+** TODO Generators
+Generators are functions that do not express run to completion behavior. In fact a generator function need never finish execution. Instead, generators produce lazy iterables. The Generator/Iterator pair represent syntatic sugar for state machines. The iterable object can step through the generator function body: pausing at specified points, and only resuming upon commands by the iterable. 
+  Generators help us order processes, and make synchronous code more reasonable. They don't do 
+anything regarding the inversion of control. To solve both problems, we compost promises and generators.
+*** Basic Example:
+Calling a generator function returns an interable object - an iterator. To 'start' a generator, 
+you must call .next() on the iterator. The generator function will then execute until it reaches a yield keyword, at which point the generator will pause.
+
+#+BEGIN_SRC js :results output
+function* gen() {
+  console.log("Hello");
+  yield;
+  console.log("World");
+}
+
+var iterator = gen();
+iterator.next();
+//iterator.next();
+
+#+END_SRC
+
+#+RESULTS:
+: Hello
+
+*** Message Passing
+We can pass an expression from a generator to the iterable object by placing the expression after the yield keyword. During the generator's execution, the experssion will be evaluated, the generator function will pause, and the value will be returned as an object with a value and done property. So long as the generator has values to pass out, the done property will be 'false'. Only after the last yield, or a return, will the done property be 'true'.
+  Conversely, we can pass an expression or value into a generator function by passing that 
+expression as an argument to the .next method on the iterator.  That value will replace the yield keyword - which must be enclosed in parens - where the generator last paused.
+**** Getting Values Out:
+
+#+BEGIN_SRC js
+function *gen() {
+  yield 1;
+  yield 2;
+  yield 3;
+  //return 4;
+}
+
+var it = gen();
+
+console.log(it.next());
+console.log(it.next());
+console.log(it.next());
+console.log(it.next());
+
+#+END_SRC
+
+#+RESULTS:
+: { value: 1, done: false }
+: { value: 2, done: false }
+: { value: 3, done: false }
+: { value: undefined, done: true }
+: undefined
+
+**** Putting Values In
+When you call .next on an iterator, you can pass a value into the generator function to replace the yield expression where the generator function paused. Note, this means that the first .next call of the iterator - which starts the generator function - cannot pass a value into the generator. 
+
+#+BEGIN_SRC js :results output
+function coroutine(g){
+  var it = g();
+  return function(){
+    return it.next.apply(it, arguments);
+  };
+}
+
+var run = coroutine(function*(){
+  var x = 1 + (yield);
+  var y = 1 + (yield);
+  // on the third yield, the generator yields a value (x + y)
+  // accessible via the iterator's .value property
+  yield (x + y); 
+});
+
+run();
+run(10); // 10 replaces the first yield keyword
+console.log('Meaning of Life: ' + run(30).value); // 30 replaces the second yield keyword
+
+#+END_SRC
+
+#+RESULTS:
+: Meaning of Life: 42
+
 *** Async Generators
-*** Promises and Generators
-** Observables
+Here's where the rubber meets the use case. We're able to write synchronous looking code, that abstracts away asynchronous execution, by passing the means to resume execution to the async process, to trigger upon 'completion.'
+
+#+BEGIN_SRC js :results output
+function coroutine(g){
+  var it = g();
+  return function(){
+    return it.next.apply(it, arguments);
+  };
+}
+
+var run = coroutine(function*(){
+  var x = 1 + (yield getData(10));
+  var y = 1 + (yield getData(30));
+  var answer = (yield getData("Meaning of Life: " + (x + y)));
+  console.log(answer);
+});
+
+function getData(d){
+  setTimeout(function(){ run(d)}, 1000);
+}
+
+run();
+#+END_SRC
+
+#+RESULTS:
+: Meaning of Life: 42
+
+*** TODO Promises and Generators
+In order to use generator functions for synchronous reasonability, and promises for callback controll, we have to wire them together. Our generators can yield Promises, and the iterator object can resume the generator upon the completion of the promise, by nesting the call to .next inside the promise's .then method.
+  Most async libraries have a "driver" that wires generators and promises together. See YDKS 
+for the code snipet that demonstrates this wiring.
+
+#+BEGIN_SRC js
+
+#+END_SRC
+
+*** Exercise #7
+** TODO Observables
 *** Events and Promises
-*** Observables
+Promises work well with a single request. What about a stream of data?
+*** Observables (in Rx.js)
+
 *** Reactive Sequences
-** CSP
+** TODO CSP
 *** Concurrency and Chanels
 *** Blocking Channels
 *** Event Channels
@@ -325,3 +497,77 @@ file1
 *** Cenerator Concurrency
 *** Thunks
 *** Pre-ES6 Generators
+
+
+* Asynchronous JavaScript : Wes Higbee (2:05 + 6:34)
+** Reasoning About Async
+*** JavaScript's Concurrency Model and Event Loop
+JavaScript is single threaded, and thus cannot execute processes in parallel. Instead, JS affects concurrency through a process queue and an event loop. Processes on the queue are executed in-turn. However, because processes run to completion, a process that 'blocks' the execution of the next process will hold up the engine. At best, this model permits processes to execute 'alternately.'
+  The event loop is responsible for populating the process queue. A function execution that has 
+has all of its dependencies available can be moved directly to the process queue. Async function calls stage functions in the 'event loop,' which regularly checks whether the dependencies for functions are met. Once all of a function's dependencies arrive, the event loop will push the function onto the queue for execution.
+**** https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop
+*** Cooperative Concurrency: Don't Write Code that Blocks
+Because each process runs to completion, we have to structure our processes to accomodate JavaScript's concurrency model. This means breaking apart processes at asynchronous seams so that the beginning of a process can execute until it reaches the async seam. Once the async action is initiated, the process that depends on the result of that async action can be staged in the event loop, and the queue can execute the next process. Upon completion of the async action, the event loop will move the dependent process into the queue for execution.
+**** Sources of Asynchronicity
+***** Timers
+****** timer delay not guaranteed, pushed to queue after time elapsed, delay is a minimum.
+***** user interactions
+****** browser rendering is async!
+****** event listeners are synchronous!
+***** network & disk I/O
+***** Node stuff (see docs)
+****** fs
+****** process.nextTick (beats out setTimeout, jups to the front of the event queue, guaranteed ordered execution)
+****** setImmediate (also async, guaranteed ordered execution)
+****** disk I/O
+****** IPC - interprocess communication EX: webworkers
+***** Web Workers
+****** use webworkers to run intensive code in the background to avoid blocking the front-End of the app.
+*** Asynchronous Control Flow
+**** Race Conditions
+*** Debugging in the browser
+**** sources, call stack,
+**** check async, call stack will display source of current stack
+** Callbacks
+*** Asynchronous Seams are Hard to Reason About
+*** We have to manually synchronise related requests
+*** Inversion of Control
+*** Error Handling is Harder To Manage
+** Building a Promise Framework
+We can build a promise framework incrementally, by starting with a node.js style callback and 
+*** Split Success and Error Callbacks
+
+*** Pass the Callbacks Later
+This lets us decouple the initiation of an async operation from the registration of success and error handlers.
+*** Register Multiple Callbacks
+*** Split Registration of Success and Error Callbacks
+*** 
+** Chaining Operations (Promises)
+** Cushioning Promises
+** ES6 Promises and Beyond
+** Building a Generator-based Control Flow Function
+
+* CSP-JS
+The Library: https://github.com/ubolonton/js-csp
+** David Nolan
+- CSP http://swannodette.github.io/2013/07/12/communicating-sequential-processes
+- http://swannodette.github.io/2013/07/31/extracting-processes
+- http://swannodette.github.io/2013/08/02/100000-dom-updates
+- http://swannodette.github.io/2013/08/02/100000-processes
+- http://swannodette.github.io/2013/08/17/comparative
+- http://swannodette.github.io/2013/08/23/make-no-promises
+- ES6 generators http://swannodette.github.io/2013/08/24/es6-generators-and-csp
+- http://swannodette.github.io/2013/08/31/asynchronous-error-handling
+** Lucas Reis
+*** http://lucasmreis.github.io/blog/quick-introduction-to-csp-in-javascript/
+*** http://lucasmreis.github.io/blog/using-csp-as-application-architecture/
+** Taming the Async Beast w/ CSP in JS http://jlongster.com/Taming-the-Asynchronous-Beast-with-CSP-in-JavaScript
+** Communicating with Channels (video) https://www.youtube.com/watch?v=W2DgDNQZOwo
+*** CSP-JS API
+**** CHAN - Creates a channel
+**** GO - Creates a process
+**** PUT - Puts a value
+**** TAKE - Takes a value
+*** 
+** Generators and Channels in JS https://medium.com/javascript-inside/generators-and-channels-in-javascript-594f2cf9c16e#.448z7n5na
+** CSP - FullStackFest (video) https://www.youtube.com/watch?v=r7yWWxdP_nc
