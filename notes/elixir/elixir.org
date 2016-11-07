@@ -1,5 +1,484 @@
-* Getting Started with Elixir : 
+* Getting Started with Elixir : Nate Taylor (2:49)
+** Why Elixir?
+"Elixir is a dynamic, functional language designed for building scalable and maintainable applications." Elixir excells at parallelization, ditribution, error handling. Elixir is built on the Erlang VM. This allows for high-availibility, multi-core, distributed systems. Elixir is able to monitor and restart internal processes. This is ideal for web development.
+  Elixir's syntax is influenced by the ruby programming language, and language features include 
+UTF strings, pattern matching, concurrency and metaprogramming are highlights of Elixir.
+** Basic Types
+Data in Elixir is immutable!
+*** iex at the cli
+iex is the interactive elixir command line REPL. It's a good sandbox for running elixir code, but I have installed ob-elixir, in order to execute elixir from org docs.
+*** inspect =i=
+You can use the keyword =i= to inspect a value. Doing so returns the Term, Data type, and reference modules:
 
 #+BEGIN_SRC elixir
-  40 + 2
+i 29
 #+END_SRC
+
+#+RESULTS:
+: Term
+:   29
+: Data type
+:   Integer
+: Reference modules
+:   Integer
+
+*** numbers
+**** ints
+
+#+BEGIN_SRC elixir
+  i 1 + 1
+#+END_SRC
+
+#+RESULTS:
+: Term
+:   2
+: Data type
+:   Integer
+: Reference modules
+:   Integer
+
+#+BEGIN_SRC elixir
+i div(10, 5)
+#+END_SRC
+
+#+RESULTS:
+: Term
+:   2
+: Data type
+:   Integer
+: Reference modules
+:   Integer
+
+**** floats
+
+#+BEGIN_SRC elixir
+  i 4.2
+#+END_SRC
+
+#+RESULTS:
+: Term
+:   4.2
+: Data type
+:   Float
+: Reference modules
+:   Float
+
+#+BEGIN_SRC elixir
+  i 10/5
+#+END_SRC
+
+#+RESULTS:
+: Term
+:   2.0
+: Data type
+:   Float
+: Reference modules
+:   Float
+
+**** hex, binary, exponents
+
+#+BEGIN_SRC elixir
+  0xFF + 0x02
+#+END_SRC
+
+#+RESULTS:
+: 257
+
+#+BEGIN_SRC elixir
+  0b1101
+#+END_SRC
+
+#+RESULTS:
+: 13
+
+#+BEGIN_SRC elixir
+  2.0e2
+#+END_SRC
+
+#+RESULTS:
+: 200.0
+
+**** big numbers
+Elixir permits the use of underscores to make large integers more readable. And the only limits on integer sizes are those imposed by your machine's memory.
+
+#+BEGIN_SRC elixir
+  1_000_000_000
+#+END_SRC
+
+#+RESULTS:
+: 1000000000
+
+*** Atoms
+An atom, in Elixir, is a constant where its name is also its value. It is similar to symbols in Clojure. An atom consists of a colon and its name. Atom names can include whitespaces, in which case the name must be represented as a string - enclosed in quotations.
+**** i :atom
+#+BEGIN_SRC elixir
+  i :atom
+#+END_SRC
+
+#+RESULTS:
+: Term
+:   :atom
+: Data type
+:   Atom
+: Reference modules
+:   Atom
+
+**** i :"too am an atom"
+
+#+BEGIN_SRC elixir
+  i :"too am an atom"
+#+END_SRC
+
+#+RESULTS:
+: Term
+:   :"too am an atom"
+: Data type
+:   Atom
+: Reference modules
+:   Atom
+
+**** The ok and error atoms
+If we pass an atom to the IO.puts function, we recieve atom's name, and the :ok atom. The ok atom and the error atom appear frequently in tuples returned from a function, where the tuple contains the ok atom and the content of the function call, or an error atom and the reason for the error. The atom appears first in these tuples, allowing pattern matching to quickly determine whether an operation succeded or failed.
+
+#+BEGIN_SRC elixir
+  IO.puts(:atom)
+#+END_SRC
+
+#+RESULTS:
+: atom
+: :ok
+
+**** Memory efficient
+Atoms are very memory efficient, and are stored in the atom table for value comparison.
+**** booleans
+Elixir doesn't have separate boolean types. Instead, true and false are atoms represented by :true and :false. However, you don't have to use colons with true and false, some nice sugar.
+
+#+BEGIN_SRC elixir
+  true == :true
+#+END_SRC
+
+#+RESULTS:
+: true
+
+**** nil
+Similarly to true and false, nil is an atom in elixir. The nil atom and the false atom are the only falsey values in Elixir.
+
+#+BEGIN_SRC elixir
+  :nil == false
+#+END_SRC
+
+#+RESULTS:
+: false
+
+Like true and false, nil need not be preceded by a colon. We can demonstrate that both nil and false are falsey values using the or operator, which returns the first truthy value it encounters.
+
+#+BEGIN_SRC elixir
+  nil || false || :atom || true
+#+END_SRC
+
+#+RESULTS:
+: :atom
+
+*** Strings
+Strings are UTF8 encoded, meaning that Elixir supports unicode. This means you can handle all characters as if they were standard ASCII characters.
+**** concatenation
+
+#+BEGIN_SRC elixir
+  hello = "Hello, "
+  name = "Matthew"
+  hello <> name
+#+END_SRC
+
+#+RESULTS:
+: "Hello, Matthew"
+
+**** interpolation
+
+#+BEGIN_SRC elixir
+  handle = "fugalfunkster"
+  "My twitter handle is @#{handle}."
+#+END_SRC
+
+#+RESULTS:
+: "My twitter handle is @fugalfunkster."
+
+**** binaries
+In Elixir, strings are binaries. If we attempt to interpolate a list of numbers, the result will be a group of UTF 8 charcodes. Binaries are a sequence of bytes surrounded by << and >>.
+This format can be helpful when working with IO that produces streams of bytes.
+
+#+BEGIN_SRC elixir
+  "Test #{[1, 2, 3]}"
+#+END_SRC
+
+#+RESULTS:
+: <<84, 101, 115, 116, 32, 1, 2, 3>>
+
+*** Tuples
+Tuples are ordered collections, usually of two, three, or four values. Tuple literals appear as comma seperated values, enclosed in curly brackets. Tuples can contain any value type.
+
+#+BEGIN_SRC elixir
+  {:ok, "string", 283}
+#+END_SRC
+
+#+RESULTS:
+: {:ok, "string", 283}
+
+**** elem and put_elem
+We can access values in a tuple using the elem function, which takes a tuple and the index of the value we wish to access. put_elem accepts a tuple and, an index, and a value, and returns a new tuple containing the values of the old tuple with the specified index containg the new value.
+
+#+BEGIN_SRC elixir
+  book = {"Programming Elixir", "Dave Thomas", 25.00}
+  # elem(book, 2)
+  put_elem(book, 2, 24.99)
+#+END_SRC
+
+#+RESULTS:
+: {"Programming Elixir", "Dave Thomas", 24.99}
+
+**** pattern matching
+Instead of manually accessing values in a tuple using elem, we can use pattern matching. The structure of both tuples must match, however, if values are not needed, we can match them to underscores.
+
+#+BEGIN_SRC elixir
+  book = {"Programming Elixir", "Dave Thomas", 25.00}
+  {title, author, price} = book
+  title
+#+END_SRC
+
+#+RESULTS:
+: "Programming Elixir"
+
+#+BEGIN_SRC elixir
+  book = {"The Joy of Clojure", "Fogus", 25.99}
+  {_, _, price} = book
+  price
+#+END_SRC
+
+#+RESULTS:
+: 25.99
+
+*** Lists
+Tuples are useful for small ordered collections, but for collections larger than 4, it is best to use lists. In elixir, lists are represented as comma separated values enclosed in square brackets. Like in lisp, elixir's lists are singly-linked. 
+**** Making Lists
+Lists can be contructed using the pipe character. This is like cons, meaning "return a list with the first argument at the beginning of the list in the second argument.
+
+#+BEGIN_SRC elixir
+  [1 | [2, 3]]
+#+END_SRC
+
+#+RESULTS:
+: [1, 2, 3]
+
+**** Heads and Tails
+Unsurprisingly, elixir lets you easily access the first element in a list, or the rest of a list. 
+
+#+BEGIN_SRC elixir
+  ourList = [1, 2, 3, 4, 5]
+  #hd(ourList)
+  tl(ourList)
+#+END_SRC
+
+#+RESULTS:
+: [2, 3, 4, 5]
+
+And, pattern matching allows us to grab the head and tail of a list easily.
+
+#+BEGIN_SRC elixir
+myList = [1, 2, 3, 4, 5]
+[head | tail] = myList
+tail
+#+END_SRC
+
+#+RESULTS:
+: [2, 3, 4, 5]
+
+**** Keyword Lists
+Keyword lists are lists of two element tuples, where the first value in the tuple is an atom, and the second value is any type.
+
+#+BEGIN_SRC elixir
+  options = [{:is_active, false}, {:notify_user, true}, {:create_if_not_exists, true}]
+  options[:notify_user]
+#+END_SRC
+
+#+RESULTS:
+: true
+
+*** Immutability
+Once a list, or tuple, is created, it cannot be changed. Instead, we create new values using methods that populate the new value with pointers to the shared values - structural sharing. 
+
+#+BEGIN_SRC elixir
+  languages = ["JavaScript", "Clojure", "Elm", "Rust"]
+  List.insert_at(languages, 2, "Elixir")
+#+END_SRC
+
+#+RESULTS:
+: ["JavaScript", "Clojure", "Elixir", "Elm", "Rust"]
+
+Immutability is super helpful for managing concurrency, and performance - as structural sharing avoids needless copying.
+
+*** Vars can be rebound!
+Note that although values cannot be mutated, vars can be reassigned! Check it:
+
+#+BEGIN_SRC elixir
+  var = 1
+  var = var + 1
+  var
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+*** Maps
+In elixir, maps are collections of key value pairs. Maps, unlike keyword lists, can have any type as keys, but can only have one instance of each key. Finally, maps are super efficient, for index access...
+**** making maps 
+Maps are defined using %{}. We use the fat arrow syntax to associate a key with a value. Note that keys within a map need not be the same type.
+
+#+BEGIN_SRC elixir
+  %{1 => {"Nate", "Taylor", "taylor@gmail.com"},
+    :two => {"Charles", "Spurgeon", "charles.spurgeon@example.com"}}
+#+END_SRC
+
+#+RESULTS:
+: %{1 => {"Nate", "Taylor", "taylor@gmail.com"},
+:   :two => {"Charles", "Spurgeon", "charles.spurgeon@example.com"}}
+**** value access
+We can access values in a map using the square bracket notation, with the desired key.
+
+#+BEGIN_SRC elixir
+  names = %{:first => ["Matthew", "Lauren", "Dave"],
+            :last => ["Hoselton", "Morse", "Vohden"]}
+  names[:first]
+#+END_SRC
+
+#+RESULTS:
+: ["Matthew", "Lauren", "Dave"]
+
+We can also use dot notation for keys that are atoms.
+
+#+BEGIN_SRC elixir
+  names = %{:first => ["Matthew", "Lauren", "Dave"],
+            :last => ["Hoselton", "Morse", "Vohden"]}
+  names.first
+#+END_SRC
+
+#+RESULTS:
+: ["Matthew", "Lauren", "Dave"]
+
+**** pattern matching
+As with other data tuples and lists, we can use pattern matching with maps. Note in the first example, that we were able to destructure a map without completly matching, unlike how we pattern match with tuples. With maps, we can match on a key for assignment to a variable.
+
+#+BEGIN_SRC elixir
+  names = %{:first => ["Matthew", "Lauren", "Dave"],
+            :last => ["Hoselton", "Morse", "Vohden"]}
+  %{:last => last_names} = names
+  last_names
+#+END_SRC
+
+#+RESULTS:
+: ["Hoselton", "Morse", "Vohden"]
+
+#+BEGIN_SRC elixir
+  names = %{:first => ["Matthew", "Lauren", "Dave"],
+            :last => ["Hoselton", "Morse", "Vohden"]}
+  [m, l, d] = names[:first]
+  m
+#+END_SRC
+
+#+RESULTS:
+: "Matthew"
+
+** Modules and Functions
+*** Defining a Module
+Elixir has two file types: .ex and .exs. .exs is for scripting, and code from these files stays in memory, while .ex files are compiled to bytecode. To create a module, at the top of a file we declare a module. The name of the module should be in PASCAL case, with capital letters at the beginning of each word. The module begins at =do= and ends at =end=.
+  Elixir does not use curly brackets, instead elixir uses do end/blocks. Note that defmethod 
+is not a function but a macro.
+
+#+BEGIN_SRC elixir
+  defmodule ModuleA do
+    def say_here do
+      IO.puts "I'm here"
+    end
+  end
+#+END_SRC
+
+From the cli, we can load this module, and execute the function within our module. 
+
+#+BEGIN_SRC shell
+iex "ModuleFileName.exs"
+iex(1)> ModuleA.say_here
+#+END_SRC
+
+If we change our file, we can reload it into iex:
+
+#+BEGIN_SRC shell
+iex(2)> r(ModuleA)
+#+END_SRC
+
+*** TODO Module Directives
+**** Import
+Previously, we have invoked functions from other modules, like IO.puts, or List.insert_at. These are fully qualified names, meaning that we must use the name of the module inwhich these functions reside, in order to use them in out current module. To avoid this hassle, we can import a module, and dispense with the lengthy naming.
+
+#+BEGIN_SRC elixir
+  import IO
+  puts "Hello!"
+#+END_SRC
+
+#+RESULTS:
+: Hello!
+
+**** only
+It is considered prudent to only import those functions that you want, to avoid name collisons. To do so, we pass a second argument to the import function, an option consisting of =only:= and a list of the functions we wish to import with an integer representing their arity (the number of arguments the function takes).
+
+#+BEGIN_SRC elixir
+  import IO, only: [puts: 1]
+  puts "Hello!"
+#+END_SRC
+
+#+RESULTS:
+: Hello!
+: :ok
+
+**** except
+Finally, note that some modules are automatically imported. Kernal is one such module, and you cannot use names that would conflict with kernals. However, we can exclude functions using except. But it is bad practice to shadow built in functions.
+
+#+BEGIN_SRC elixir NONWORKING CODE - EXECUTE IN IEX
+defmodule Module do
+  import Kernel, except: [inspect: 1]
+
+  def inspect(param1) do
+    puts "Starting output"
+    puts param1
+    puts "Ending Output"
+  end
+end
+# in iex
+Module.inspect("hello")
+#+END_SRC
+
+**** TODO alias
+
+*** DONE Functions
+Named functions must be declared in a module. The def macro defines a function, just as defmodule defines a module. After a function's name come its parameters, in parens. And, like modules, a function's block is delimited by =do= and =end=.
+  In some contexts, Elixir functions are referenced by their name and arity. For example, if a function foo 
+takes two arguments, it might be referred to as =foo/2=.
+  Note that functions do not have a return value, and instead return the last evaluated expression.
+
+#+BEGIN_SRC elixir NONWORKING CODE - EXECUTE IN IEX
+defmodule ModuleC do
+  def func(param) do
+    IO.puts "Hello" <> param
+  end
+end
+# in iex:
+ModuleC.func(" world!")
+#+END_SRC
+
+*** Matching
+*** Guard Clauses
+*** Default Parameters
+*** Functions as First-Class Citizens
+*** Anonymous Functions
+** Control Flow
+** Elixir Ecosystem
+** Creating an Application
+** Testing Elixir
+** Where to Go Now
