@@ -1,15 +1,612 @@
 
+* Up and Running with TypeScript : John Lindquist (0:43)
+** Install from NPM
+** Using the TypeScript Compiler
+From the command line, we can pass a .ts file to the compiler to recieve a .js file of the same name. 
 
+#+BEGIN_SRC shell
+  $ tsc scratch.ts
+#+END_SRC
 
-#+BEGIN_SRC typescript :results output
-function foo (x) {
-  return x;
+Alternately, we can specify a separate out file: 
+
+#+BEGIN_SRC shell
+  $ tsc --out bundle.js fileToCompile.ts
+#+END_SRC
+
+We can also ask the TypeScript compiler to automatically recompile a file when it changes, using the watch option.
+
+#+BEGIN_SRC shell
+  $ tsc -watch --out bundle.js fileToCompile.ts
+#+END_SRC
+
+The TS compiler has many options, which are accessible from the --help option.
+** Configuring a New TypeScript Project
+In a project's root directory, we can generate a TS configuration file by using the --init option. This places a default =tsconfig.json= file in the directory.
+
+#+BEGIN_SRC shell
+  $ tsc --init
+#+END_SRC
+
+The default configs exclude the node_modules directory, permitting us to forego specifying the file to compile. Thus, we can simply run =$ tsc= to compile each .ts file in the current directory.
+
+Also note that changes to the tsconfig are not hot-reloaded, and you must manually restart the tsc for those changes to take effect.
+** Specifying Which Files to Compile, and Output
+In the tsconfig.json, we can remove the exclude property, and instead use a "files" property, which takes an array of filenames to compile. Like webpack, the tsc will walk any files for their dependencies, and bundle them. The module format used in the tsc's output is determined in the config, under =compilerOptions.module=.
+
+To configure where tsc puts its output, we can assign a string - representing the relative path to the desired output directory - to the =compilerOptions.outDir= property.
+
+#+BEGIN_SRC js tsconfig.json
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "outDir": "./dist"
+  },
+  "files": [
+    "main.ts"
+  ]
+}
+#+END_SRC
+** Stopping a TS build When Errors are Found
+The tsc will compile your code, even if it finds errors - it will however print those errors to the console. In order to prevent compilation of erroneous code, set the config's =compilerOptions.noEmitOnError= property to true.
+** Loading Compiled TS Files in Browser with SystemJS (SKIPPED)
+SystemJS lets you load any js module formatted files from an html script tag. It can also transpile with Babel or Traceur, or in this case TS.
+
+SKIPPED TO FOCUS ON WEBPACK BASED CONFIG
+** Compiling TS with WebStorm (SKIPPED)
+** TODO Using =exclude= and =rootDir= until File Globs lands in 2.0
+** What Happens to Compiled Interfaces
+When we declare interfaces, the tsc will report whether instances of the interface are properly implemented. For this to work, there must be a project config. Tide automatically highlights tsc errors in buffer on save, and reports in the minibuffer. Pretty cool.
+*** Interface example:
+In this code block, attempt deviations from the defined interface. For example, if the string "John" is replaced with a number, this would not properly implement the Person interface, and the tsc will err.
+
+#+BEGIN_SRC typescript
+  interface Person {
+    name:String;
+  }
+
+  interface SocialNetwork {
+    getUsers():Person[];
+  }
+
+  class App implements SocialNetwork {
+    getUsers() {
+      return [{name: "John"}];
+    }
+  }
+#+END_SRC
+
+#+RESULTS:
+*** After Compilation
+The tsc doesn't bring any of the type checking artifacts - in this case the interfaces - into its output.
+** TODO Using Lodash in TypeScript with Typings and SystemJS TODO FOR WEBPACK
+When using a third-party library, it would be nice to have access to type information. We can use the =typings= package manager to search for and install type definitons for libraries.
+
+#+BEGIN_SRC shell
+  $ npm install -g typings
+  $ typings install lodash --save
+#+END_SRC
+
+This installs a typings.json configuration file in the project's directory - analagous to the package.json created by npm - and a typings directory, which contains the typings files: =d.ts= aka definition files.
+
+Note that if you are using the =compilerOptions.rootDir= property, and the =exclude= property in your tsconfig.json, you will want to also exclude the "typings/main.d.ts" and "typings/main" directories. 
+
+** Using Typings and Loading from node_modules
+Some libraries require ES6 features, and after tsc compilation, would throw an error. For example, when our tsconfig has a target of ES5, and we include a library like rxjs, which uses ES6's native promises, the tsc output will throw errors because Promise is not defined. 
+  To remedy this, we can use typings to install ES6 shims. We can also specify the tsc target ES6, and 
+use our bundle/build tool to transpile to ES5.
+  
+** Understanding Decorators
+Decorators are function that creates a closure around its arguments, and returns a function that accepts an object. The returned function returns its object-argument with modifications corresponding to the enclosing functions original arguments.
+*** Example Decorator:
+
+#+BEGIN_SRC typescript
+  const person = { name: "Matthew" };
+
+function addAge(age: Number) {
+    return function(person) {
+        return person.age = age;
+    };
 }
 
-console.log(foo("Hello World"));
+addAge(31)(person);
+
+console.log(person);
+#+END_SRC
+
+#+RESULTS:
+: ../../../../../../../var/folders/g_/g848zjzd0wb7bvcwskj1qkf40000gn/T/babel-15753bpM/ts-src-15753uVE.ts(5,23): error TS2339: Property 'age' does not exist on type 'Object'.
+: { name: 'Matthew', age: 31 }
+
+*** Experimental Decorator Syntax
+To enable this experimental syntax, we must set out config's =compilerOptions.experimentalDecorators= property to true. Note, in the example below, that the @addAge() is not followed by a semicolon, and must be immediately followed by the class it decorates. Also note that all instances of the Person class will be decorated statically. Why would you want to do this, it seems like it would better be internal to the class?
+
+#+BEGIN_SRC typescript
+function addAge(age) {
+    return function(targetClass) {
+        return class {
+            name = new targetClass().name;
+            age = age;
+        };
+    };
+}
+
+@addAge(31)
+class Person {
+    name = "Matthew";
+}
+
+console.log(new Person());
+#+END_SRC
+** Reflection and Decorator Metadata
+We can also configure the tsc to produce metadata on decorators, by setting the =compilerOptions.emitDecoratorMetadata= property to true. This allows reflection, which lets you access a list of the types used by a constructor, which can be helpful when working with dependency injection - with Angular for example.
+** Definition Files
+There are many different formats of definition files. Some libraries don't include their own definiton files, like lodash. Other libraries, like rxjs, include their own definiton files. Other definition files may relate to polyfills, modules, etc.
+  This means that when you want to use a library, some exploration may be necessary to find the 
+definition files and figure out how they integrate.
+** Generating Definition Files (SKIPPED)
+You can create your own definiton files. 
+
+
+* Using Types Effectively in TypeScript : Ari Picker (0:26)
+** Intro to Static Typing
+The tsc associates types with variables, not merely values. In order to declare a variable's type, the name is followed by a colon and a type name
+
+#+BEGIN_SRC typescript
+  let someString: string = "I'm a string";
+#+END_SRC
+
+Once a type is declared for variable, the tsc will throw an error if that variable is assigned a value other than it's declared typq. Note, however, this will not automatically prevent compilation.
+
+Static typing changes an editor into an IDE. With a variable's type declared, the editor can better intuit autocompletion, provide function signatures (in the minibuffer), and alert you to improper assignments.
+
+** Using Type Inference in TS
+*** Vars
+When we don't give a variable a type annotation, but we do assign a value to the var at declaration time, the compiler will assign a type to the variable based on the assigned value, and the tsc will err if we reassign a different type to the var later.
+
+#+BEGIN_SRC typescript
+let userName = "string value";
+userName = ["silver", "surfer"];
+#+END_SRC
+
+If we don't assign a value at declaraion, the tsc will not err, because it cannot infer a type from the declaration. 
+
+*** Functions
+The tsc also infers the type of a function's return value. Normally, a function's arguments and return type would be annotated like so:
+
+#+BEGIN_SRC typescript
+  let userId = (a: string, b: number): string => a + b;
+#+END_SRC
+
+However, if we make an incorrect return-value annotation, the tsc will err. This is a form of bottom up inference, the tsc knows what a function's return type is based on the function's arguments.
+
+#+BEGIN_SRC typescript
+  let userId = (a: string, b: number):number => a + b;
+#+END_SRC
+
+*** Contextual Inference
+Contextual inference is top-down, and occurs when attempting to pass an argument to a function with an incorrect type for that function's arguments. For example, HTML elements are DOM objects with onclick methods that accept an event argument. If we attempt to set the event type to anything but MouseEvent, the tsc will err.
+
+#+BEGIN_SRC typescript
+  let target = document.getElementById("target");
+  target.onClick = (event: HTMLButtonElement) => event.button;
+#+END_SRC
+
+** Union Types and Type Aliases
+We can annotate variables to have more than one type. This is called a Union Type. Declaring Union Types is easy enough, but to pass a variable set as a union type to a function, the function signature must mirror the variables type flexibility.
+
+#+BEGIN_SRC typescript
+  let thing: string | number = 23;
+
+  let returnSomething = (someThing: string | number) => {
+        return someThing;
+  }
+
+  console.log(returnSomething(thing));
+  thing = "twenty three";
+  console.log(returnSomething(thing));
+#+END_SRC
+
+#+RESULTS:
+: 23
+: twenty three
+
+This can be onerous for variables that have lengthy type annotations. Thankfully TS gives us the =type= keyword. The type keyword lets us associate a union type with a new type name. In out var declarations and function signatures, we can use this new type name.
+
+#+BEGIN_SRC typescript
+  type thing = string | number | string[] | boolean;
+  let returnSomeThing = (someThing: thing) => {
+    return someThing;
+  }
+  let foo = "bar";
+  console.log(returnSomeThing(foo));
+  foo = "baz";
+  console.log(returnSomeThing(foo));
+#+END_SRC
+
+#+RESULTS:
+: bar
+: baz
+
+** Type Guards
+Sometimes we want a function to behave differently, depending on the type of one of its arguments. We can use type guards as predicates that accept a variable and return its type. TS gives us access to =typeof= and =instanceof=. When using instanceof, the tsc will be able to provide its IDE features after a successful check. In the example below, we had access to autocompletion in the second if block for Array methods, because the tsc knew someThing was an array in that block.
+
+#+BEGIN_SRC typescript
+type thing = string | number | string[] | boolean;
+let returnSomeThing = (someThing: thing) => {
+  if (typeof someThing === "string"  ||
+      typeof someThing === "number" ||
+      typeof someThing === "boolean") {
+     console.log("something = ", someThing);
+  }
+  if (someThing instanceof Array) {
+      let joinedThings = "";
+      someThing.forEach((thing) => {
+          joinedThings += `${thing}`;
+      });
+      console.log("joinedThings: ", joinedThings);
+  }
+};
+
+//returnSomeThing(2343);
+//returnSomeThing("Matthew");
+//returnSomeThing(true);
+returnSomeThing(["Hello", " ", "world", "!"]);
+#+END_SRC
+
+#+RESULTS:
+: joinedThings:  Hello world!
+
+** Union Typing with Objects and Disparate Types
+Be careful when union typing with objects. When the tsc cannot know whether a variable is an object or not, or which of multiple unique objects it is, the tsc will not provide inference and will complain that there is no common type. However, when union typing different objects that share common property names, common properties will be accessible through tsc, but not any unique properties.
+
+*** No Commonality Between Objects
+
+#+BEGIN_SRC typescript
+type coolThings = {name: string;} | {id: number;};
+let gimmeCoolThings = (thing: coolThings) => {
+  if (typeof thing.name === "string") { return thing.name; }
+  if (typeof thing.id === "number") { return thing.id; }
+};
+#+END_SRC
+
+*** Some Commonality
+
+#+BEGIN_SRC typescript
+type stuffAndThings = {cool: string; meh: string;} | {cool: string; lame: string;};
+let gimmeStuffAndThings = (sat: stuffAndThings) => {
+  return sat.cool || sat.lame; 
+};
+#+END_SRC
+** Distinguishing Between Type of Strings
+We can annotate types with the string type, or we can annotate a type with a string literal. Once done, that variable can only be assigned null, undefined, or that string literal.
+
+#+BEGIN_SRC typescript
+let unit: string = "julez";
+let miles: "MILES" = "julez";
+#+END_SRC
+
+String related errors are common, but using string literal types can help us avoid errors by signaling that a string doesn't match an expected argument. With type aliases and union types, string literal types can help document code and represent larger concepts.
+
+#+BEGIN_SRC typescript
+  type distanceMetric = "MILES" | "KILOMETERS" | "METERS" | "FEET";
+  function move(distance: number, value: distanceMetric) {
+    console.log(`You moved ${distance} ${value}`);
+  }
+
+  move(3, "YARDS")
+#+END_SRC
+
+** Using Interfaces to Describe Types
+Interfaces describe the shape of a type. This is somewhat analagous to a database schema. 
+  Interfaces are declared with the =interface= keyword, a name, and an object literal with 
+=parameter: type= pairs, which correspond to object properties and the corresponding types of those properties. When an object is declared, it can recieve an interface as a type annotation.
+  Interfaces do not set properties on a type, so it is up to us to supply objects of an 
+interface with property values. Normally, objects of an interface type must contain each parameter specified in the interface. However, we can declare optional parameters in the interface, by using a =?= after the property name.
+  We can also use interfaces in functions to annotate arguments, or we can create inferfaces for 
+a function. In the example below, we inline a type for the opponent argument of the AttackFunction interface. This function interface describes the shape of the function: the types that the function recieves as arguments, and the type returned from the function. 
+  Also note that we can annotate an interface parameter with an interface. In the example, the 
+attackFunction interface appears as the type annotation for the comicBookCharacter interface's attack parameter.
+  The tsc will err if interface objects access properties not present on the interface. Instead of filling interfaces with optional parameters, consider creating an interface containing optional properties, and extending one interface with another. 
+
+
+#+BEGIN_SRC typescript
+  interface OptionalAttributes {
+    strength?: number;
+    insanity?: number;
+    dexterity?: number;
+    healingFactor?: number;
+}
+
+  interface AttackFunction {
+    (opponent: {alias: string; health: number; }, attackWith: number): number;
+  }
+
+  interface ComicBookCharacter extends OptionalAttributes {
+    secretIdentity?: string;
+    alias: string;
+    health: number;
+    attack: AttackFunction;
+  }
+
+function attackFunc(opponent, attackWith) {
+  opponent.health -= attackWith;
+  console.log(`${this.alias} attacked ${opponent.alias}, who's health = ${opponent.health}`);
+  return opponent.health;
+}
+
+let superHero: ComicBookCharacter = {
+  alias: "She-Hulk",
+  health: 5000,
+  strength: 5000,
+  attack: attackFunc
+};
+
+let superVillan: ComicBookCharacter = {
+  secretIdentity: "Jack Napier",
+  alias: "Joker",
+  health: 75,
+  insanity: 100
+};
+
+superHero.attack(superVillan, superHero.strength);
+
+function getSecretIdentity(character: ComicBookCharacter) { 
+  if (character.secretIdentity) {
+    console.log(`${character.alias} is ${character.secretIdentity}`);
+  } else { 
+    console.log(`${character.alias} has no secret identity`;)
+  }
+}
+
+getSecretIdentity(superHero);
+#+END_SRC
+
+#+RESULTS:
+: ../../../../../../../var/folders/g_/g848zjzd0wb7bvcwskj1qkf40000gn/T/babel-163805sU/ts-src-16380kWu.ts(45,60): error TS1005: ')' expected.
+: ../../../../../../../var/folders/g_/g848zjzd0wb7bvcwskj1qkf40000gn/T/babel-163805sU/ts-src-16380kWu.ts(45,61): error TS1128: Declaration or statement expected.
+: She-Hulk attacked Joker, who's health = -4925
+: She-Hulk has no secret identity
+
+** Creating a Class
+A TypeScript Class is a function. Functions are objects, so they can have properties and methods. By default, all Class properties are public, though we could add a =public= modifier for some reason... More useful is the =private= modifier. Private properties cannot be accessed outside of the class.
+  We can set properties of a class at the time of instantiation if the Class has a constructor 
+method. The Constructor method accepts arguments that can be used to set properties on the instance. Because the constructor is internal to the class, it can access private properties. We could also expose the private property through explicit getter methods, like the getSecretIdentity method below.
+  TS gives a handy way to make our constructor more concise. We can preface the arguments of a 
+constructor with modifiers to indicate that they are properties of the class, and they will be duly assigned as such.
+  TS classes also have static properties, properties that are associated with the class, not the 
+instances. To access them, you must call the method directly on the class. See createTeam below. While static methods cannot be called from an instance, they can access the private properties of the class's instances. (prototypal magic perhaps?)
+
+#+BEGIN_SRC typescript
+interface Opponent {
+  alias: string;
+  health: number;
+}
+
+class ComicBookCharacter {
+  constructor(
+    public alias: string,
+    public health: number,
+    public strength: number, 
+    private secretIdentity: string) {
+    
+  /* THIS WAS DEPRECATED BY ADDITION OF ACCESS MODIFIERS TO CONSTRUCTOR SIGNATURE
+    this.alias = alias;
+    this.health = health;
+    this.strength = strength;
+    this.secretIdentity = secretIdentity;
+  */
+
+  }
+  /* THIS WAS DEPRECATED BY ADDITION OF ACCESS MODIFIERS TO CONSTRUCTOR SIGNATURE
+    alias: string;
+    health: number;
+    strength: number;
+    private secretIdentity: string;
+  */
+
+  static createAndAssignTeam(teamName: string, members: ComicBookCharacter[]) {
+    let team = {
+      name: teamName,
+      members: members
+    };
+
+    members.forEach((member) => {
+      member.team = team;
+    });
+  }
+
+  private team: {
+    name: string,
+    members: ComicBookCharacter[]
+  }
+
+  getTeamName() { console.log(`${this.alias} is on Team ${this.team.name}`);};
+
+  getSecretIdentity() { 
+    console.log(`${this.alias}'s secret identity is ${this.secretIdentity}`);
+  }
+
+  attackFunc(opponent: Opponent, attackWith: number) {
+    opponent.health -= attackWith;
+    console.log(`${this.alias} attacked ${opponent.alias} who's health = ${opponent.health}`);
+  }
+}
+
+let storm = new ComicBookCharacter("Storm", 100, 100, "Ororo Munroe");
+let theBlob = new ComicBookCharacter("The Blob", 1000, 5000, "Fred J. Dukes");
+
+/* THIS WAS DEPRICATED BY ADDITION OF THE CONSTRUCTOR METHOD
+
+let storm = new ComicBookCharacter();
+storm.alias = "Storm";
+storm.health = 100;
+storm.strength = 100;
+storm.secretIdentity = "Ororo Munroe"; // this fails because secretIdentity is a private property
+
+let theBlob = new ComicBookCharacter();
+theBlob.alias = "The Blob";
+theBlob.health = 1000;
+theBlob.strength = 5000;
+theBlob.secretIdentity = "Fred J. Dukes";  // this fails because secretIdentity is a private property 
+
+*/
+
+storm.attackFunc(theBlob, storm.strength);
+storm.getSecretIdentity(); 
+
+ComicBookCharacter.createAndAssignTeam("oddCouple", [storm, theBlob]);
+storm.getTeamName();
+#+END_SRC
+
+#+RESULTS:
+: Storm attacked The Blob who's health = 900
+: Storm's secret identity is Ororo Munroe
+: Storm is on Team oddCouple
+
+** Sharing Class Behavior with Inheritance
+We can use the =extends= keyword to permit one class to inherit the constructor and properties of another class. Private properties are still private to their containing class, but =protected= properties can be accessed by derived classes.
+  We can add functionality to derived classes. When you extend a class, without using a 
+constructor, the derived class will use the base class's constructor. In order to augment the base class's contructor method, a derived class can have its own constructor method, but it must have a call to =super= as its first statement. Calling super is like calling the base classes constructor, and it is necessary to pass the arguments that were passed to the derived class into the call to super, so as to relay those arguments to the base class constructor. In the example below, the only arguments to the derived class are those needed by the base class, so the rest and spread operators manage the relay - though the tsc does complain.
+
+#+BEGIN_SRC typescript
+class ComicBookCharacter {
+  constructor(
+    public alias: string, public health: number,
+    public strength: number,
+    protected secretIdentity: string
+  ) {}
+}
+
+class SuperHero extends ComicBookCharacter {
+  traits = ["empathy", "strong moral code"];
+}
+
+class SuperVillan extends ComicBookCharacter {
+  flaws = ["hubris", "always explains evil plan"];
+  getSecretId() { console.log(this.secretIdentity); }
+
+  constructor(...args) {
+    super(...args);
+    console.log(`${this.alias} eats kittens!`);
+  }
+}
+
+let jubilee = new SuperHero("Jubilee", 23, 233, "Jubilation Lee");
+let scarletWitch = new SuperVillan("Scarlet Witch", 233, 4444, "Wanda Maximoff");
+
+console.log(scarletWitch.getSecretId());
+#+END_SRC
+
+#+RESULTS:
+: ../../../../../../../var/folders/g_/g848zjzd0wb7bvcwskj1qkf40000gn/T/babel-163805sU/ts-src-16380ctb.ts(17,15): error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
+: ../../../../../../../var/folders/g_/g848zjzd0wb7bvcwskj1qkf40000gn/T/babel-163805sU/ts-src-16380ctb.ts(18,5): error TS2346: Supplied parameters do not match any signature of call target.
+: Scarlet Witch eats kittens!
+: Wanda Maximoff
+: undefined
+
+** Using Assertions to Convert Types
+We can use type assertion to tell the tsc to trust us - for example when using a method on a var that is of ambiguous type, say from union typing, but we want the compiler to accept our assertion that the type is what we say it is.
+  Assertions can be written with the =as= syntax, and the angle bracket syntax. But it's 
+probably best to avoid the angle bracket syntax when using jsx. When we make an assertion, we encapsulate the syntax in parens, before the property access via . notation.
+  Type assertions only have effect at compile time, and do not survive compilation.
+
+#+BEGIN_SRC typescript
+interface SuperHero {
+  powers: string[];
+  savesTheDay: () => void;
+}
+
+let dazzler: SuperHero = {
+  powers: ["transduces sonic vibrations into light"],
+  savesTheDay() { console.log(`Dazzler ${this.powers} to save the day!`) }
+};
+
+interface BadGuy = {
+  badDeeds: string[];
+  getRandomBadDeed: () => string;
+  commitBadDeed: () => void;
+}
+
+let badGuy: BadGuy = {
+  badDeeds: ["farts on old folks", "doesn't pick up his dog's poop", "steals from babies"],
+  getRandomBadDeed() { return this.badDeeds[Math.floor(Math.random() * this.badDeeds.length)]; }
+  commitBadDeed() { console.log(`BadGuy ${this.getRandomBadDeed()}`); }
+};
+
+function saveDayOrBadDeed(someone: SuperHero | BadGuy) {
+  if ((someone as SuperHero).powers) {}
+  // previously if ((<SuperHero>someone).powers){}
+}
+#+END_SRC
+** The Basics of Generics
+We can use generics to declare that a function's arguments will be of a specific type, but that type will be determined dynamically, when the function is called. In the function signature, a set of anglebrackets follows the function name, and contains some identifier that we can use to type the function's arguments.
+  When the function is called, the compiler will infer the generic type based on the types 
+of the arguments. In the example below, the first call to push has no anglebrackets after the function name, and the compiler errs, reporting that the first argument - a string - cannot be inferred by the second type - an array of objects. The types don't match...
+  But, if we want to control the generic type, the function name should also be followed 
+by anglebrackets, containing the type that will be passed into the function. This allowsus to set the generic type when the function is called.
+
+#+BEGIN_SRC typescript
+function push<T>(something: T, collection: T[]) {
+  collection.push(something);
+  console.log(collection);
+}
+
+let jeanGrey = {name: "Jean Grey"};
+let wolverine = {name: "Wolverine"};
+
+let superHeroes = [jeanGrey];
+let powers = ["teleinesis", "esp"];
+
+interface SuperHero {name: string;}
+
+//push("meh", superHeroes);
+//push<SuperHero>("meh", superHeroes);
+push<string>("adamantium claws", powers);
 
 #+END_SRC
 
 #+RESULTS:
-: Hello World
+: [ 'teleinesis', 'esp', 'adamantium claws' ]
 
+** Practical Generics
+Generic types can contain anything, making them great containers. In the example, we have a generic interface - container - that lets us build crocContainers and taxContainers. If we want to be more specific about what we want to contain, we can use a generic constraint. A genric contraint can contain anything that has the constraint type. Our example has a CrocContainer interface, which can only contain objects that 
+  For class generic constraints, we can assign the class a generic constraint, and forgo 
+the use of the constructor, and still get autocompletion for the constraint type. We can also set a type at instantiation to get autocompletion on both the constraint type and the declared type. If we add a property, that's not in the constraint or the declaredtype, the tsc will complain.
+  If we want to use a constructor to set properties at instantiation, we get the same 
+story: tsc will recognize properties from both the class's generic contraint, and any declared types. And, other properties will sound an error.
+  As long as the instance has the constraint, we can add extra properties.
+
+#+BEGIN_SRC typescript
+interface Crocodile { personality: string; }
+interface Taxes { year: number; }
+interface Container<T> { unit: T; }
+
+let crocContainer: Container<Crocodile> = { unit: { personality: "mean" } };
+let taxContainer: Container<Taxes> = { unit: { year: 2011 } };
+
+interface RedCroc extends Crocodile { color: "red"; }
+interface BlueCroc extends Crocodile { color: "blue"; }
+interface CrocContainer<T extends Crocodile> { crocUnit: T; }
+
+let redCrocContainer: CrocContainer<RedCroc> = { crocUnit: { personality: "irate", color: "red" } };
+let blueCrocContainer: CrocContainer<BlueCroc> = { crocUnit: { personality: "cool", color: "blue" } };
+
+class ClassyContainer<T extends Crocodile> {
+    classyCrosUnit: T;
+}
+
+let classyCrocContainer = new ClassyContainer<RedCroc>();
+classyCrocContainer.classyCrocUnit = { personality: "classy", color: "red" };
+
+class CCC<T extends Crocodile> {
+    constructor(public cccUnit: T) { }
+}
+
+let ccc = new CCC<BlueCroc>({ personality: "ultra classy", 
+                              likesCheetos: true, 
+                              color: "blue" })
+#+END_SRC
