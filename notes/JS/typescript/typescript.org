@@ -57,7 +57,7 @@ SystemJS lets you load any js module formatted files from an html script tag. It
 
 SKIPPED TO FOCUS ON WEBPACK BASED CONFIG
 ** Compiling TS with WebStorm (SKIPPED)
-** TODO Using =exclude= and =rootDir= until File Globs lands in 2.0
+** Using =exclude= and =rootDir= until File Globs lands in 2.0
 ** What Happens to Compiled Interfaces
 When we declare interfaces, the tsc will report whether instances of the interface are properly implemented. For this to work, there must be a project config. Tide automatically highlights tsc errors in buffer on save, and reports in the minibuffer. Pretty cool.
 *** Interface example:
@@ -82,7 +82,7 @@ In this code block, attempt deviations from the defined interface. For example, 
 #+RESULTS:
 *** After Compilation
 The tsc doesn't bring any of the type checking artifacts - in this case the interfaces - into its output.
-** TODO Using Lodash in TypeScript with Typings and SystemJS TODO FOR WEBPACK
+** Using Lodash in TypeScript with Typings and SystemJS  (skipped)
 When using a third-party library, it would be nice to have access to type information. We can use the =typings= package manager to search for and install type definitons for libraries.
 
 #+BEGIN_SRC shell
@@ -92,8 +92,7 @@ When using a third-party library, it would be nice to have access to type inform
 
 This installs a typings.json configuration file in the project's directory - analagous to the package.json created by npm - and a typings directory, which contains the typings files: =d.ts= aka definition files.
 
-Note that if you are using the =compilerOptions.rootDir= property, and the =exclude= property in your tsconfig.json, you will want to also exclude the "typings/main.d.ts" and "typings/main" directories. 
-
+Note that if you are using the =compilerOptions.rootDir= property, and the =exclude= property in your tsconfig.json, you will want to also exclude the "typings/main.d.ts" and "typings/main" directorie
 ** Using Typings and Loading from node_modules
 Some libraries require ES6 features, and after tsc compilation, would throw an error. For example, when our tsconfig has a target of ES5, and we include a library like rxjs, which uses ES6's native promises, the tsc output will throw errors because Promise is not defined. 
   To remedy this, we can use typings to install ES6 shims. We can also specify the tsc target ES6, and 

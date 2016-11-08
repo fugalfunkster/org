@@ -21,6 +21,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 * TODO heap(s)
 ** OPEN Getting Started with Elixir : Nate Taylor (2:49)
+** TODO Build Interactive JS Charts w/ D3 v4 : Ben Clinkenbeard (2:33)
 ** React
 *** OPEN Update react-router Notes for v.4
 *** OPEN Advanced React and Redux : Stephen Girder (12:00)
@@ -33,9 +34,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** A Practical Start with TypeScript : Roland Guijt (1:39)
 **** TypeScript Fundamentals : Dan Wahlin & John Papa (4:25)
 **** TypeScript In-Depth : Brice Wilson (4:40)
-*** Egghead
-**** Up and Running with TypeScript : John Lindquist (0:43)
-**** Use Types Effectively in TypeScript : Ari Picker (0:29)
 ** Env: Webpack / eslint / etc
 *** TODO Add readme to redux-starter-kit
 **** colocate links to survive / keathly / react.js boilerplate / create-react-app
@@ -212,8 +210,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** TypeScript Fundamentals : Dan Wahlin & John Papa (4:25)
 ***** TypeScript In-Depth : Brice Wilson (4:40)
 **** Egghead
-***** Up and Running with TypeScript : John Lindquist (0:43)
-***** Use Types Effectively in TypeScript : Ari Picker (0:29)
+***** DONE Up and Running with TypeScript : John Lindquist (0:43)
+***** DONE Use Types Effectively in TypeScript : Ari Picker (0:29)
 *** react
 **** DONE React.js Program: Fundamentals : Tyler McGinnis
 **** DONE Facebook Official React Tutorial
