@@ -622,7 +622,7 @@ let ccc = new CCC<BlueCroc>({ personality: "ultra classy",
   "description": "",
   "main": "webpack",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
@@ -700,5 +700,287 @@ module.exports = {
 };
 #+END_SRC
 
+** Handbook
+*** Basic Types
+**** boolean
 
-** 
+#+BEGIN_SRC typescript
+  let isDone: boolean = false;
+#+END_SRC
+
+**** number
+
+#+BEGIN_SRC typescript
+  let decimal: number = 6;
+  let hex: number = 0xf00d;
+  let binary: number = 0b1010;
+  let octal: number = 0o744;
+#+END_SRC
+
+**** string
+
+#+BEGIN_SRC typescript
+let color: string = "blue";
+color = 'red';
+
+let fullName: string = `Bob Bobbington`;
+let age: number = 37;
+let sentence: string = `Hello, my name is ${ fullName }.
+
+#+END_SRC
+
+**** array
+The second declaration's type is a genric: the generic array type.
+
+#+BEGIN_SRC typescript
+let arrayOfNums: number[] = [1, 2, 3];
+
+let genericArrayOfNums: Array<number> = [1, 2, 3];
+#+END_SRC
+
+**** tuple
+Tuples are arrays that with (at least some) elements of a known type. For xample, you might have a tuple whose first element is a string and whose second element is a number:
+
+#+BEGIN_SRC typescript
+  // Declare a tuple type
+  let x: [string, number] = ["hello", 10];
+  // Initialize it
+  x = ["hello", 10]; // OK
+   // Initialize it incorrectly
+  x = [10, "hello"]; // Error
+#+END_SRC
+
+Index access also errs if the array contains a value of the incorrect type:
+
+#+BEGIN_SRC typescript
+  let x: [string, number] = ["hello", 10];
+  console.log(x[0].substr(1)); // OK
+  console.log(x[1].substr(1)); // Error, 'number' does not have 'substr'
+#+END_SRC
+
+Accessing other elements in the aray, for which a type has not been declared, will not err so long as the value is of a type of any designated type in the tuple. This is an early glance at union types...
+
+#+BEGIN_SRC typescript
+  let x: [string, number] = ["hello", 10];
+  x[3] = "world"; // OK, 'string' can be assigned to 'string | number'
+  console.log(x[3].toString()); // OK, 'string' and 'number' both have 'toString'
+  x[6] = true; // Error, 'boolean' isn't 'string | number'
+#+END_SRC
+
+**** enum
+An enum is a way of giving more friendly names to sets of numeric values. Think of enums as an ordered set of keys with numeric values. By default, enums begin numbering their members at 0, but you can manually assign numbers to members, just keep in mind that subsequent members are assigned +1= the last member in the enum.
+
+#+BEGIN_SRC typescript
+  enum Color {Red, Green, Blue};
+  let cr: Color = Color.Red;
+  let cg: Color = Color.Green;
+  let cb: Color = Color.Blue;
+  console.log(cr);
+  console.log(cg);
+  console.log(cb);
+
+  enum bizzaroColor {Red , Green = 34857, Blue};
+  let bcr: bizzaroColor = bizzaroColor.Red;
+  let bcg: bizzaroColor = bizzaroColor.Green;
+  let bcb: bizzaroColor = bizzaroColor.Blue;
+  console.log(bcr);
+  console.log(bcg);
+  console.log(bcb);
+#+END_SRC
+
+One handy feature of enums, is that you can also get a member based on its number.
+
+#+BEGIN_SRC typescript
+  enum Color {Red, Green, Blue};
+  console.log(Color[1]);
+#+END_SRC
+
+#+RESULTS:
+: Green
+
+**** any
+Sometimes, we don't know the type of a variable, but still want to describe its type. Perhaps the value will come from a user, or a third party library. We can use the =any= or =any[]= keywords to let variables escape the scrutiny of the tsc. This is especially useful for working with existing code.
+
+#+BEGIN_SRC typescript
+let notSure: any = 4;
+notSure = "maybe a string instead";
+notSure = false; // okay, definitely a boolean
+notSure = [1, true, "free"];
+console.log(notSure[1]);
+#+END_SRC
+
+#+RESULTS:
+: true
+
+The =Object= type permits any type of assignment, but errs when you call built in methods on primitives.
+
+#+BEGIN_SRC typescript
+  let notSure: any = 4;
+  notSure.ifItExists(); // okay, ifItExists might exist at runtime
+  notSure.toFixed(); // okay, toFixed exists (but the compiler doesn't check)
+
+  let prettySure: Object = 4;
+  prettySure.toFixed(); // Error: Property 'toFixed' doesn't exist on type 'Object'.
+
+#+END_SRC
+**** void
+=void= is the absence of a type... It is used as the return type for functions that do not return a value (return undefined).
+**** null and undefined
+the =null= and =undefined= types are subtypes of all other types. So, you can assign a variable with type =string= to =null= or =undefined=. 
+  However, when using the --strictNullChecks flag, null and undefined are only assignable to void and their respective types. 
+This helps avoid many common errors. In cases where you want to pass in either a string or null or undefined, you can use the union type string | null | undefined.
+
+**** never
+The never type represents the type of values that never occur. For instance, never is the return type for a function expression or an arrow function expresssion that always throws an exception or one that never returns; Variables also acquire the type never when narrowed by any type guards that can never be true.
+
+The never type is a subtype of, and assignable to, every type; however, no type is a subtype of, or assignable to, never (except never itself). Even any isn’t assignable to never.
+
+Some examples of functions returning never:
+
+#+BEGIN_SRC typescript
+  // Function returning never must have unreachable end point
+  function error(message: string): never {
+      throw new Error(message);
+  }
+
+  // Inferred return type is never
+  function fail() {
+      return error("Something failed");
+  }
+
+  // Function returning never must have unreachable end point
+  function infiniteLoop(): never {
+      while (true) {
+      }
+  }
+#+END_SRC
+**** Type Assertions
+See egghead: Using Types Effectively - Using Assertions
+*** Interfaces
+**** Optional Properties
+**** Readonly Properties
+**** Excess Property Checks
+**** Function Types
+**** Indexable Types
+**** Class Types
+**** Extending Interfaces
+**** Hybrid Types
+**** Interfaces Extending Classes
+*** Classes (static, private, public)
+*** Functions
+*** Generics
+*** Enums
+See also enums in basic types.
+
+The numeriv value associated with enum members can be either constant or computed. An enum member is considered constant if:
+
+- It does not have an initializer and the preceding enum member was constant. In this case the value of the current enum member will be the value of the preceding enum member plus one. One exception to this rule is the first element on an enum. If it does not have initializer it is assigned the value 0.
+- The enum member is initialized with a constant enum expression. A constant enum expression is a subset of TypeScript expressions that can be fully evaluated at compile time. An expression is a constant enum expression if it is either:
+  - numeric literal
+  - reference to previously defined constant enum member (it can be defined in different enum). If member is defined in the same enum it can be referenced using unqualified name.
+  - parenthesized constant enum expression
+  - +, -, ~ unary operators applied to constant enum expression
+  - +, -, *, /, %, <<, >>, >>>, &, |, ^ binary operators with constant enum expressions as operands It is a compile time error for constant enum expressions to be evaluated to NaN or Infinity.
+
+Otherwise, the member's numeric value is considered computed.
+
+#+BEGIN_SRC typescript
+enum FileAccess {
+    // constant members
+    None,
+    Read    = 1 << 1,
+    Write   = 1 << 2,
+    ReadWrite  = Read | Write,
+    // computed member
+    G = "123".length
+}
+#+END_SRC
+
+Note that to preserve the forward and reverse mappings between members and their numeric values, the tsc compiles enums to objects. Though this creates a small overhead, it can be avoided for non-computed enums. To do so, use the const declaration before the enum, and the enum will 
+ 
+*** Advanced Types (union types, type guards, etc.)
+*** Declaration Merging
+*** TODO JSX
+**** The =as= operator
+When using JSX, type assertions using greater-than less-than signs is difficult to parse in files that use JSX. So, in .tsx files, angle-bracket type assertions are not allowed. Instead, you can use the =as= keyword. The following examples are functionally equivalent:
+
+#+BEGIN_SRC typescript
+var foo = <foo>bar;
+#+END_SRC
+
+#+BEGIN_SRC typescript
+var foo = bar as foo;
+#+END_SRC
+
+**** TODO Type Checking
+***** Intrinsic Elements
+***** Value-based elements
+*** Mixins (implements)
+** Project Configuration
+*** tsconfig.json
+The tsc compiles our TypeScript code, and it has a few ways to determine what to compile. When run from the cli, with no arguments, the tsc will search for a a =tsconfig.json= file, and recieve instruction regarding what to compile from there. alternately, the tsc command can recieve agrument(s) from the cli, which will tell the tsc what to compile.
+**** "files"
+If paths to particular files are provided in the config, the tsc will only compile those files.
+
+#+BEGIN_SRC js
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true
+    },
+    "files": [
+        "core.ts",
+        "sys.ts",
+        "types.ts",
+        "scanner.ts",
+        "parser.ts",
+        "utilities.ts",
+        "binder.ts",
+        "checker.ts",
+        "emitter.ts",
+        "program.ts",
+        "commandLineParser.ts",
+        "tsc.ts",
+        "diagnosticInformationMap.generated.ts"
+    ]
+}
+#+END_SRC
+
+**** "include" & "exclude"
+The include and exclude properties allow globbing and inclusion or exclusion by directory.
+
+#+BEGIN_SRC js
+{
+    "compilerOptions": {
+        "module": "system",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outFile": "../../built/local/tsc.js",
+        "sourceMap": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
+#+END_SRC
+
+**** compiler options
+https://www.typescriptlang.org/docs/handbook/compiler-options.html
+***** jsx
+Supports JSX in .tsx files. "React" value will enable transpilation.
+***** module
+what module system to use
+***** moduleResolution
+how to resolve modules
+***** preserveConstEnums
+Do not erase const enum declarations in generated code.
+***** allowJs
+Allows .js files in the included directories to be compiled.
