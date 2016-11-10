@@ -609,3 +609,96 @@ let ccc = new CCC<BlueCroc>({ personality: "ultra classy",
                               likesCheetos: true, 
                               color: "blue" })
 #+END_SRC
+
+
+* TypeScript Documentation
+** React and Webpack: Quick Start Guide
+*** package.json
+
+#+BEGIN_SRC js
+{
+  "name": "typescript-react-webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "source-map-loader": "^0.1.5",
+    "ts-loader": "^1.1.0",
+    "typescript": "^2.0.8",
+    "webpack": "^1.13.3"
+  },
+  "dependencies": {
+    "@types/react": "^0.14.46",
+    "@types/react-dom": "^0.14.18",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
+  }
+}
+#+END_SRC
+
+*** tsconfig.json
+
+#+BEGIN_SRC js
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react"
+    },
+    "files": [
+        "./src/components/Hello.tsx",
+        "./src/index.tsx"
+    ]
+}
+#+END_SRC
+
+*** webpack.config.js
+
+#+BEGIN_SRC js
+module.exports = {
+    entry: "./src/index.tsx",
+    output: {
+        filename: "./dist/bundle.js",
+    },
+
+    // Enable sourcemaps for debugging webpack's output.
+    devtool: "source-map",
+
+    resolve: {
+        // Add '.ts' and '.tsx' as resolvable extensions.
+        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+    },
+
+    module: {
+        loaders: [
+            // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
+            { test: /\.tsx?$/, loader: "ts-loader" }
+        ],
+
+        preLoaders: [
+            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+            { test: /\.js$/, loader: "source-map-loader" }
+        ]
+    },
+
+    // When importing a module whose path matches one of the following, just
+    // assume a corresponding global variable exists and use that instead.
+    // This is important because it allows us to avoid bundling all of our
+    // dependencies, which allows browsers to cache those libraries between builds.
+    externals: {
+        "react": "React",
+        "react-dom": "ReactDOM"
+    },
+};
+#+END_SRC
+
+
+** 
