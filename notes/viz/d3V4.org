@@ -182,7 +182,7 @@ d3.select('.title')
 
 We can also remove a DOM element with the =.remove()= method.
 
-** Data Driven Documents
+** Data Joins: Reifying Data
 Data joins are how we associate data and DOM elements.
 *** Selections Revisited
   When we make a DOM selection, we can use the =.data= method to join (associate) 
@@ -262,14 +262,217 @@ update.merge(enter)
   .style('border', '1px solid black')
 #+END_SRC
 
-
-
 ** Output SVG Elements
+The previous section described how to bring our data into the enter state, and then append elements to that enter-state data, to reify our data in the DOM. We will often want to establish a root element for our data visualization, and an SVG element is ideal - SVG is easy to scale.
+  However, svg doesn't behave in the same way DOM elements behave. CSS property 
+names, and layout are notably different. And, when working with SVG, everything is assumed to be pixels, so no pixel postfixes are not necessary. Finally, SVGs, though scalable, are not dynamic, thus a parent SVG must be adequately sized to contain its children, or they will be cut off.
+*** Code Example 
+#+BEGIN_SRC js
+var scores = [
+  { name: 'Alice', score: 96 },
+  { name: 'Billy', score: 83 },
+  { name: 'Cindy', score: 91 },
+  { name: 'David', score: 96 },
+  { name: 'Emily', score: 88 }
+];
+
+d3.select('.chart')
+  .append('svg')
+    .attr('width', 225)
+    .attr('height', 300)
+  .selectAll('rect')
+  .data(scores)
+  .enter()
+    .append('rect')
+    .attr('y', (d, i) => i * 33)
+    .style('width', d => d.score)
+    .text(function (d) {
+      return d.name;
+    })
+    .attr('class', 'bar');
+#+END_SRC
+
+*** Layout
+SVG elements do not follow the CSS layout schemes (block, inline, etc). Instead all SVG elements have a default position there their top-left corner is at the origin (the top left corner of the containing SVG element).
+  To place elements throught the SVG element, we can set the =y= or =x= 
+attribute. of a selection. Bexause we're working with selections, we'll want our setter to be dynamic. In D3, there is an idiomatic dunction signature, in which the first argument to the function is the data node itself, and the second argument is the index of that data node. This allows us to offset elements from each other:
+
+#+BEGIN_SRC js
+  .attr('y', (d, i) => i * 33)
+#+END_SRC
+
+*** On CSS styles with svg (and when to use attr or .classed)
+SVG elements use different style elements that normal DOM elements. 
+| css        | svg          | diff                |
+|------------+--------------+---------------------|
+| background | fill         | background color    |
+| border     | stroke       | color not thickness |
+|            | stroke-width | border width        |
+ 
+
+Consider using attr to set classes to set classes statically, and using .classed for classes you might want to toggle, as classed accepts a class and a boolean as arguments. 
+
+#+BEGIN_SRC css
+.chart {
+  background: lightgray;
+  border: 1px solid black;
+  min-width: 200px;
+  min-height: 350px;
+}
+.bar {
+  height: 30px;
+  color: green;
+  fill: lightgreen;
+  stroke: black;
+  stroke-width: 1;
+}
+#+END_SRC
+
 ** SVG Graphics Containers and Text Elements
+Unlike DOM elements, SVG elements do not have text properties. Instead SVG provides a text element. But, now that we have text and rect and circle elements, we need a means of combining and organizing them.
+*** Creating a Selection of =g= elements
+The =g= element is analagous to the =div= element in html. They allow us to group 
+other elements inside of them. However, g elements do not take =xy= coordinates like other SVG element, and to position them we must transform them. The function we pass to transform uses the translate function, which accepts =x= and =y= as arguments, and sets them for the =g= element. 
+
+#+BEGIN_SRC js
+var bar = d3.select('.chart')
+  .append('svg')
+    .attr('width', 225)
+    .attr('height', 300)
+  .selectAll('g')
+  .data(scores)
+  .enter()
+    .append('g')
+    .attr('transform', (d, i) => 'translate(0, ' + i * 33 + ')');
+#+END_SRC
+
+*** Appending =rect= elements to our selection of =g= elements
+
+#+BEGIN_SRC js
+bar.append('rect')
+    .style('width', d => d.score)
+    .attr('class', 'bar');
+#+END_SRC
+
+*** Appending =text= elements to out selection of =g= elements
+Note that text elements are anchored differently than rects. The blttom left corner of a text defaults to the bottom-right corner of its parent svg element, and considers that point the origin.
+
+#+BEGIN_SRC js
+bar.append('text')
+  .attr('y', 20)
+  .text(function (d) {
+    return d.name;
+  });
+#+END_SRC
 ** Basic Interactivity
-** Better Code ORganization with selection.call()
+D3 allows us add event handlers to our SVG elements with the =.on= method, which accepts an event string, and a callback function that is invoked on the event. Note that inside our callback function, the =this= keyword refers to the element which fired the event - assuming you're not using an arrow function.
+  With the =this= keyword, we have a reference to the element that triggered the 
+event, and can use d3 to select that element so we can act on it. This behaves just like selections as covered earlier. We can manipulate the attributes of the selection, add or remove classes. We can also manipulate all elements in the parent selection by referencing =elements= in the callback we pass to the =.on= method.
+  With a reference to the parent elements, we can filter out elements in a 
+selection using =.filter=. Filter is a method that acts on an existing selection, and returns a filtered selection. In our example, we use filter to transform all of the elements from the parent selection that did not fire the event. 
+
+#+BEGIN_SRC js
+bar.append('rect')
+    .style('width', d => d.score)
+    .attr('class', 'bar')
+    .on('mouseover', function (d, i, elements) {
+      d3.select(this).style('transform', 'scaleX(2)');
+      d3.selectAll(elements)
+        .filter(':not(:hover)')
+        .style('fill-opacity', 0.5);
+    })
+    .on('mouseout', function (d, i, elements) {
+      d3.select(this).style('transform', 'scaleX(1)');
+      d3.selectAll(elements)
+        .style('fill-opacity', 1);
+    });
+#+END_SRC
+** Better Code Organization with selection.call()
+D3's API facilitates extensive dot chaining, but this can make code harder to reason about and difficult to organize and make modular. Instead of dot chaining everything, we can use =selection.call=, which accepts a function and an argument to pass to that function. 
+  When the function passed to =selection.call= is called, it recieves the selection 
+as its first argument, and the second argument passed to =.call= as its second argument. The =.call= method returns the selection - post modification - allowing further dot chaining.
+
+#+BEGIN_SRC js
+function scaleBar (selection, scale) {
+  selection.style('transform', 'scaleX(' + scale + ')');
+}
+
+function setFill (selection, color) {
+  selection.style('fill', color);
+}
+
+function fade (selection, opacity) {
+  selection.style('fill-opacity', opacity);
+}
+
+bar.append('rect')
+    .style('width', d => d.score)
+    .attr('class', 'bar')
+    .on('mouseover', function (d, i, elements) {
+      d3.select(this)
+        .call(scaleBar, 2)
+        .call(setFill, 'orange');
+
+      d3.selectAll(elements)
+        .filter(':not(:hover)')
+        .call(fade, 0.5);
+    })
+    .on('mouseout', function (d, i, elements) {
+      d3.select(this)
+        .call(scaleBar, 1)
+        .call(setFill, 'lightgreen');
+
+      d3.selectAll(elements)
+        .call(fade, 1);
+    });
+#+END_SRC
+
 ** Margin Convention
+D3 provides a way to give a chart axes, but for there to be room for those axes, we have to leave a margin around out viz. There is an idiomatic approach within the D3 community to setting margins.
+  Create a margin object, with =top=, =right=, =bottom=, and =left= properties. We 
+then create a width var, that we set equal to the width of the containing element, less the sum of out left and right margins. And we also create a height var, and set it to the height of our containing element, less the sum of the top and bottom margins.
+  With our height and width set, we can programatically set the dimensions of our 
+top level svg element, which is equal to the dimensions of the inner element with the margins added. Similarly, the dimensions of the inner element are the width and height.
+  To align the inner element within the outer element, we must translate it's 
+original position using the margin properties.
+
+Note in this example, the svg selection variable is in fact the =g= element last returned by the dotchaining. 
+
+#+BEGIN_SRC js
+var margin = { top: 10, right: 20, bottom: 25, left: 25 };
+var width = 425 - margin.left - margin.right;
+var height = 625 - margin.top - margin.bottom;
+
+var svg = d3.select('.chart')
+  .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+  .append('g')
+    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+svg.append('rect')
+  .attr('width', width / 2)
+  .attr('height', height)
+  .style('fill', 'lightblue')
+  .style('stroke', 'green');
+
+svg.append('rect')
+  .attr('x', width / 2)
+  .attr('width', width / 2)
+  .attr('height', height)
+  .style('fill', 'lightblue')
+  .style('stroke', 'green');
+#+END_SRC
 ** Create Chart Axes
+*** axes and scales = <3
+**** Linear
+**** Time
+*** Axis Layout
+*** Ticks
+**** ticks
+**** tickValues
+**** tickSize
+**** tickPadding
 ** Make Charts Responsive with the viewBox attribute
 ** Column Chart
 ** Scatter Plot
@@ -279,3 +482,13 @@ update.merge(enter)
 ** Animate Transitions
 ** Reuse Transitions
 ** Animate with the General Update Pattern
+
+
+* TODO Version4 - By Module
+** d3-selection
+** d3-scale
+** d3-axis
+** d3-shape
+** d3-heirarchy (CPC Sections)
+** d3-force
+** d3-drag
