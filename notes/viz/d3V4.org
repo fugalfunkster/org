@@ -1,0 +1,281 @@
+* JS Charts with D3 v4
+** Getting started
+D3 v4 was rewritten to take advantage of ES6 modules. This means you can create custom bundles instead of using the whole library. Treeshaking tools, like rollup, do this for you. Or you can manually include different modules as needed.
+** Linear Scales
+Scales let you proportionally map inputs to output. When scaling, you first set the boundaries of your input, this is called the domain, and is represented as an array containing two numbers. Next, we set the boundaries of the output, this is called the range, and is represented as an array of two numbers.
+  Linear scales are a type of continuous scale, and any value withing a domain will 
+map to a value within the range - a continuous spectrum of values. When we input numbers into our scale, the output is a function of the domain and range. 
+
+output = input * ( range[1] - range[0] / domain[1] - domain[0] )
+
+*** clamp
+If the input falls outside of the domain, the scale will return a number that is outside of the range. If we want to prevent this from happening, we can use clamp. clamp manipulates any input that falls outside of the domain to be the maximum or minimum domain value.
+
+*** invert
+invert allows us to reverse the flow, effectively using the range as the domain and the domain as the range, resulting in an inversion of the proportional mapping.
+
+*** code sample
+
+#+BEGIN_SRC js
+var linearScale = d3.scaleLinear()
+  .domain([0, 100])
+  .range([0, 600])
+  .clamp(true);
+
+console.log(linearScale(-20));           // 0    = 0 (clamped)
+console.log(linearScale(50));            // 300  = 50 * (600 / 600) = 50 * 6
+console.log(linearScale(75));            // 450  = 75 * (600 / 100) = 75 * 6
+console.log(linearScale.invert(300));    // 50   = 300 * (100 / 600) = 300 / 6
+#+END_SRC
+
+** Time Scales - Converting Dates to Numeric Values
+Working with time in JavaScript can already be frustrating. Thankfully D3 provides a time scale, that allows you to map input t output proportionately. This comes in handy when you have a range of dates, and you need to translate that to x,y coordinates for a visualization.
+*** Code sample
+
+#+BEGIN_SRC js
+var timeScale = d3.scaleTime()
+  .domain([new Date(2016, 0, 1), new Date()])
+  .range([0, 100]);
+
+console.log(timeScale(new Date(2016, 0, 15)));   // 4.451286110285363
+console.log(timeScale(new Date(2016, 3, 15)));   // 33.37139795181199
+console.log(timeScale(new Date()));              // 100.00000005887945
+console.log(timeScale.invert(50));     // Mon Jun 06 2016 07:11:24 GMT-0700 (PDT)
+
+#+END_SRC
+** Quantize Scales - Creating Labels from Numeric Data
+When you want to map numeric input to a non-continuous set of output values, you aren't going to be able to use a continuous scale. 
+  The quantize scale only permits output values that appear in the range 
+array, and breaks the domain into 'chunks' that map to the values in the range. Each chunk represents a fraction of the domain, equal to the total domain and the number of values in the range.
+  This is helpful for mapping numeric values to string values. 
+*** invertExtent
+We can use an output value to receive the delimiters of the domain chunk that maps to that output value. When working with numeric values, this doesn't work.
+*** Code sample:
+
+#+BEGIN_SRC js
+
+var numberScale = d3.scaleQuantize()
+  .domain([0, 100])
+  .range([0, 100]);
+
+console.log(quantizeScale(22));    // 0
+console.log(quantizeScale(50));    // 100
+console.log(quantizeScale(88));    // 100
+console.log(quantizeScale.invertExtent(88));  // NAN, NAN
+
+var colorScale = d3.scaleQuantize()
+  .domain([0, 100])
+  .range(["red", "white", "green"]);
+
+console.log(quantizeScale(22));    // red
+console.log(quantizeScale(50));    // white
+console.log(quantizeScale(88));    // green
+console.log(quantizeScale.invertExtent('white'));  // 33.3, 66.6
+
+#+END_SRC
+
+** Ordinal Scales - Create Labels from Non-Numeric Data
+Whereas quantize scales map a continuous domain to a discrete range, when you want to map a discrete domain to a discrete range, we use a ordinal scale. There is a one to one mapping going on here.
+  Note, that if the length of the domain if more than the length of the range, the 
+range will wimply repeat its contents - in order - to match the domain's length
+*** Code Sample
+#+BEGIN_SRC js
+var ordinalScale = d3.scaleOrdinal()
+  .domain(['poor', 'good', 'great'])
+  .range(['red', 'white', 'green']);
+
+console.log(ordinalScale('good'));  // white
+console.log(ordinalScale('great')); // green
+console.log(ordinalScale('poor'));  // red
+#+END_SRC
+** Load and Inspect Data
+D3 provides multiple data formatting methods. These accept a data source, and a callback that will recieve the formatted data. =d3.json= - =d3.csv= - =d3.tsv=
+
+#+BEGIN_SRC js
+d3.json(dataSource, (data) => {
+  // do stuff with =data=
+}
+#+END_SRC
+
+*** min, max, & extent
+=min= returns the lowest value from a data set for a given key, using a reduce like function. =max= does the opposite. And extent returns an array containing the min and the max.
+
+#+BEGIN_SRC js
+  let min = d3.min(data, function(d) {
+    return d.keyOfInterest;
+  });
+#+END_SRC
+
+Extent is super handy, because it allows you to programatically generate a domain value for a data set. =extent= returns an array of two numbers.
+
+#+BEGIN_SRC js
+  var extent = d3.extent(data, function (d) {
+    return d.keyOfInterest;
+  });
+#+END_SRC
+
+*** set
+Sometimes you only want to have unique values in your data. the .set method returns an array of only unique values.
+
+#+BEGIN_SRC js
+const set = d3.set(data, function (d) {
+  return d.keyOfInterest;
+});
+#+END_SRC
+
+** Select DOM Elements
+Selections are fundamental to doing work in D3. the select and selectAll methods take a css selector string as their argument, and return a single DOM node. =.select()= returns the first dom node that matches the selector, and =.selectAll()= returns an array of all DOM nodes that match the selector.
+  Note that you can call select on prior selections. See line 2 of the code sample.
+
+#+BEGIN_SRC js
+var div = d3.select('div');
+var divLinks = div.selectAll('a');
+var secondLink = d3.selectAll('a:nth-child(2)');
+var allLinks = d3.selectAll(document.links);
+#+END_SRC
+
+** Modify DOM Elements
+Once we have a DOM node, we can access properties of that node, and modify them.  Say we had a link element, and wanted to inspect the href attribute, we access it with:
+
+#+BEGIN_SRC js
+d3.selectAll('a:nth-child(2)')
+  .attr('href');
+#+END_SRC
+
+If we want to set properties, we pass the name of the property, and the value we want it to have:
+
+#+BEGIN_SRC js
+d3.selectAll('a:nth-child(2)')
+  .attr('href', 'http://google.com')
+//.style('color', 'red') inline style
+  .classed('red', true)
+//.text('Inner Text')
+  .html('Inventory <b>SALE</b>');
+
+/* 
+this is functionally the same as 
+  let node = d3.selectAll('a:nth-child(2)');
+  node.attr('href', 'http://google.com')
+  node.classed('red', true)
+  node.html('Inventory <b>SALE</b>');
+*/
+#+END_SRC
+
+Mind the dot chaining. When D3 has the reference to the dom node, it will return that node wrapped in a D3 object, so you can call these with methods.
+
+** Create DOM Elements
+Once we have selected a dom element, we can mutate that dom element. The =.append= method appends a new HTML element on the selected node.
+  Mind the dot! The DOM element that is returned by the .append method is the newly 
+created node. Not the original DOM element. It is idiomatic to indent DOM modifications relative to the DOM element selected.
+  In the example below, we select a div with the .title class, we'll call this the 
+parent div. Then we append a div to the parent, appending creates the element as the last element in the parent. We format that inner div, and then append a button, which places it inside the inner div. 
+
+#+BEGIN_SRC js
+d3.select('.title')
+  .append('div')
+    .style('color', 'red')
+    .html('Inventory <b>SALE</b>')
+  .append('button')
+    .style('display', 'block')
+    .text('submit');
+#+END_SRC
+
+We can also remove a DOM element with the =.remove()= method.
+
+** Data Driven Documents
+Data joins are how we associate data and DOM elements.
+*** Selections Revisited
+  When we make a DOM selection, we can use the =.data= method to join (associate) 
+data with that selection. This is pretty abstract, because we can associate data - say an array of objects - with a selection - say all of the divs in the element(s) with the .chart class. 
+  Remember that the selection method allows us to access DOM elements through D3. 
+However, we might make a selection for DOM elements that do not exist. The selection is empty. Regardless, we can still associate data with an empty selection.
+*** Joining Data
+Under the hood, a data join assigns a UID to each piece datum or element, and 
+uses the index of the datum or element by default. This pairs the first element in the selection with the first datum in the data. If there are no elements, only datum recieve UIDs. If only elements, likewise. Etc. To they extent that the elements and data have parallel indicies, they are joined.
+
+*** Data Join State
+Once data is joined to a selection, the relationship between data and elements 
+can be represented as a venn diagram of three states: 
+  - =enter= is a state in which data is associated with a selection that contains no elements;
+  - =update= is a state in which data is mapped to elements
+  - =exit= is a state where elements do not have corresponding data
+
+"The update selection is returned by =selection.data=, while the =.enter= and =.exit= selections hang off the update selection; =updateSelection.enter()= thus returns the enter selection." And =updateSelection.exit()= thus returns the exit selection. 
+*** Joining Data to Existing Elements
+When you perform a data join, the =.data= method takes an optional second argument: the 'key' function, which independently pairs data and elements with unique IDs. The key function takes each element in the selection, and each data point in the join as input, and assigns each a key based on the return value of the key function - for example a string, such as a name. 
+  Once the elements and data have recieved their uids, the two are matched - data 
+and elements that share a uid are joined. These represent the update state. Some elements, however, may not have a data to join, and will thus express the exit state. And, data may not be joined to an element, and will thus expresses the enter state.
+  In our example, the function assigns elements and data to a unique 
+identifier: its .innerText or .name.
+*** The Update Selection API
+**** enter
+When we call =updateSelection.enter()=, we recieve data that is not associated 
+with dom elements, and thus we can append elements to our selection for data that does not already have a dom node associated with it. 
+**** exit
+The exit selection is useful to clean up the DOM after elments or data has 
+changed. =updateSelection.exit()= returns those elements that do not have corresponding data. Calling =.remove()= on those elements removes them from the DOM.
+**** merge
+Once we have selections, we can merge them together, to manipulate them in tandem. The update selection exposes the =.merge()= method, which accepts another selection. By using merge, we can update all elements or data in the update and enter or exit selection. 
+*** More on Selections, Joins, and Constancy
+More on Selections and Data Joins: https://bost.ocks.org/mike/selection/
+For more on the theory of data joins: https://bost.ocks.org/mike/join/
+More on Constancy:  https://bost.ocks.org/mike/constancy/
+*** Code Example
+
+#+BEGIN_SRC html
+ <div class="chart">
+    <div>Billy</div>
+    <div>Cindy</div>
+    <div>Walter</div>
+  </div>
+#+END_SRC
+
+#+BEGIN_SRC js
+var scores = [
+  { name: 'Alice', score: 96 },
+  { name: 'Billy', score: 83 },
+  { name: 'Cindy', score: 91 },
+  { name: 'David', score: 96 },
+  { name: 'Emily', score: 88 }
+];
+
+var update = d3.select('.chart')          // this selects the .chart div
+  .selectAll('div')                       // this selects all divs in .chart
+  .data(scores, function (d) {            // this goes through each data point,
+    return d ? d.name : this.innerText;   //   and creates an id using d.name or
+    })                                    //   the inner text of the div 
+  .style('color', 'blue');                //  
+
+var enter = update.enter()                // enter selects those data that lack
+  .append('div')                          // an element, appends an element, and
+  .text(function (d) {
+    return d.name;
+  })
+  .style('color', 'green');
+
+update.exit().remove();
+
+update.merge(enter)
+  .style('width', d => d.score + 'px')
+  .style('height', '50px')
+  .style('background', 'lightgreen')
+  .style('border', '1px solid black')
+#+END_SRC
+
+
+
+** Output SVG Elements
+** SVG Graphics Containers and Text Elements
+** Basic Interactivity
+** Better Code ORganization with selection.call()
+** Margin Convention
+** Create Chart Axes
+** Make Charts Responsive with the viewBox attribute
+** Column Chart
+** Scatter Plot
+** Line Chart
+** Area Chart
+** Debug with Dev Tools
+** Animate Transitions
+** Reuse Transitions
+** Animate with the General Update Pattern
