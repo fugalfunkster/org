@@ -464,16 +464,151 @@ svg.append('rect')
   .style('stroke', 'green');
 #+END_SRC
 ** Create Chart Axes
-*** axes and scales = <3
-**** Linear
-**** Time
+Axes and scales are linked: An axis is a visual representation of a scale, where the domain represents the boundaries of the data being graphed, and the range represents the dimensions of the graph itself.
+*** Linear
+To create an axis based off of a linear scale, we create the scale as above, but for the range we use the dimensions of the visualization - out width and height variables. For a =y= axis, it begins at the bottom of the vis, and thus starts at the =height= value, and moves to 0. For an =x= axis, the range would start at 0 and go to the =width=.
+  Once the scale is made, we pass it to the =d3.axisLeft= method, which automatically generates a axes with sensibly 
+generated tick marks. This axis is then appended to the parent selection by passing the axis to the selection's =.call= method.
+
+#+BEGIN_SRC js
+var yScale = d3.scaleLinear()
+  .domain([0, 100])
+  .range([height, 0]);
+var yAxis = d3.axisLeft(yScale);
+svg.call(yAxis);
+#+END_SRC
+
+*** Time
+Time axes are similar, but the creation of the scale differs. 
+
+#+BEGIN_SRC js
+var xScale = d3.scaleTime()
+  .domain([new Date(2016, 0, 1, 6), new Date(2016, 0, 1, 9)])
+  .range([0, width]);
+
+var xAxis = d3.axisBottom(xScale);
+svg.call(xAxis);
+#+END_SRC
+
 *** Axis Layout
+When we create an xAxis, using =.axisBottom=, notice that the tick labels appear below the axis, but the axis appears at the top of the visualization. To remedy this, we need to append a =g= element to our svg so that we can transform and translate the location of the =g= element to the borrom of the parent, and append the axis to that positioned =g= element.
+
+#+BEGIN_SRC js
+svg
+  .append('g')
+    .attr('transform', `translate(0, ${height})`)
+  .call(xAxis);
+#+END_SRC
+
 *** Ticks
-**** ticks
-**** tickValues
-**** tickSize
-**** tickPadding
+D3 will set default ticks values based on its interpretation of your data. However, we can make suggestions or override defaults entirely:
+- The =.ticks= method accepts a number - which suggests to D3 how many ticks there should be - and a string that will appear after the tick label content, which can be used to clarify the data's units of measurement.
+  - d3 has many methods that can produce values that you can pass to the =.ticks= method, to set the tick interval and output.
+- =.tickValues= sets the values that will appear on the access, overriding the default tick values.
+- =.tickSize= sets the lengths of each tick.
+  - You can also set =.tickSizeInner=, and =.tickSizeOuter= individually.
+- =.tickPadding= offsets the tick text from the tick itself.
+
+#+BEGIN_SRC js
+var xAxis = d3.axisBottom(xScale)
+  .ticks(5, "%")
+  .tickSize(10)
+  .tickPadding(5);
+#+END_SRC
+
 ** Make Charts Responsive with the viewBox attribute
+"The viewport is the viewing area where the SVG will be visible. ... You specify the size of the viewport using the width and height attributes on the outermost SVG element." This is what we do when we follow the D3 margin conventions, and provide calcualted values to the root SVG element for width and height.
+  The viewbox is the actual coordinate system, used to draw the SVG elements onto the canvas. The viewbox takes a 
+minimum x and y, width and height. These dimensions crop the SVG graphic, and then scale up the SVG graphic to fill the entire viewport.
+
+For more on the SVG coordinate system: https://sarasoueidan.com/blog/svg-coordinate-systems/
+*** Manually Setting the ViewBox
+#+BEGIN_SRC js
+var margin = { top: 10, right: 20, bottom: 30, left: 30 };
+var width = 400 - margin.left - margin.right;
+var height = 600 - margin.top - margin.bottom;
+var fullWidth = width + margin.left + margin.right;
+var fullHeight = height + margin.top + margin.bottom;
+
+var svg = d3.select('.chart')
+  .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .attr('viewBox', `0 0 ${fullWidth / 2} ${fullHeight / 2}`)
+  .append('g')
+    .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+#+END_SRC
+
+*** Using responsivefy
+This utility allows you to programatically resize the viewport while preserving the aspect ratio of the visualization. The utility measures the parent element that our SVG appends to, and calculates the aspect ratio of our SVG, as rendered from the width and height values we assign in accordance with D3 and the margin convention. The utility then sets the viewbox to equal the width and height of the SVG, before setting the dimension of the viewbox to equal the width of the parent element and the height as appropriate for the aspect ratio.
+  This utility also sets up a resize listener, to recalculate the viewport when the browser is resized. Thus, on a 
+resize, the viewbox does not change, but the viewport does, and the viewbox scales to match the viewport.
+
+#+BEGIN_SRC js
+var margin = { top: 10, right: 20, bottom: 30, left: 30 };
+var width = 400 - margin.left - margin.right;
+var height = 600 - margin.top - margin.bottom;
+
+var svg = d3.select('.chart')
+  .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .call(responsivefy)
+  .append('g')
+    .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+svg.append('rect')
+  .attr('width', width)
+  .attr('height', height)
+  .style('fill', 'lightblue')
+  .style('stroke', 'green');
+
+var yScale = d3.scaleLinear()
+  .domain([0, 100])
+  .range([height, 0]);
+var yAxis = d3.axisLeft(yScale);
+svg.call(yAxis);
+
+var xScale = d3.scaleTime()
+  .domain([new Date(2016, 0, 1, 6), new Date(2016, 0, 1, 9)])
+  .range([0, width]);
+
+var xAxis = d3.axisBottom(xScale)
+  .ticks(5)
+  .tickSize(10)
+  .tickPadding(5);
+svg
+  .append('g')
+    .attr('transform', `translate(0, ${height})`)
+  .call(xAxis);
+
+function responsivefy(svg) {
+  // get container + svg aspect ratio
+  var container = d3.select(svg.node().parentNode),
+      width = parseInt(svg.style("width")),
+      height = parseInt(svg.style("height")),
+      aspect = width / height;
+
+  // add viewBox and preserveAspectRatio properties,
+  // and call resize so that svg resizes on inital page load
+  svg.attr("viewBox", "0 0 " + width + " " + height)
+      .attr("preserveAspectRatio", "xMinYMid")
+      .call(resize);
+
+  // to register multiple listeners for same event type,
+  // you need to add namespace, i.e., 'click.foo'
+  // necessary if you call invoke this function for multiple svgs
+  // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+  d3.select(window).on("resize." + container.attr("id"), resize);
+
+  // get width of container and resize svg to fit it
+  function resize() {
+      var targetWidth = parseInt(container.style("width"));
+      svg.attr("width", targetWidth);
+      svg.attr("height", Math.round(targetWidth / aspect));
+  }
+}
+#+END_SRC
 ** Column Chart
 ** Scatter Plot
 ** Line Chart
