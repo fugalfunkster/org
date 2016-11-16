@@ -2556,12 +2556,55 @@ Note that the splicing reader conditional can't be used to splice multiple top l
 
 
 * TODO Tooling
-** Getting Set Up With a Clojure Editor (lc)
 ** Lein / Boot
 *** Creating Our Project with Lein (lc)
+We can create new projects from the CLI with lein:
+
+#+BEGIN_SRC shell
+  lein new project-name
+#+END_SRC
+
+This command generates a directory - =project-name= - that contains the following:
+- LICENSE
+- README.md
+- doc/intro.md : the doc directory is for documentation, a noble aspiration
+- project.clj : the main configuration file for out project
+- resources/ : a directory for supplimental files (images, text, etc.)
+- src/=project-name=/core.clj : the main clojure code file
+- test/=project-name=/core_test.clj : the automatically generated test file
+
+**** Filename / Namespace idioms
+It is idiomatic to use underscores for directory names, and dashes for namespace names. This is necessary because dashes are not valid in Java class names. 
+
+*** Configuration and Dependency Management
+**** project.clj - our intrepid configuration file
+The automatically generated config contains a function (what else?) =defproject=. The arguments to =defproject= provide lein with all the information it needs to build our project:
+1. the project's name (also the name of the dir created by lein)
+2. the project version
+3. :desctiption, a string describing the project for other humans
+4. :url
+5. :license
+6. :dependencies - a vector containing vectors of [name "version"] pairs
+
+**** dependency management with lein
+Each dependency in our project is accounted for in lein using a three part id:
+
+#+BEGIN_SRC clojure
+  [group.id/artifact-id "version"]
+#+END_SRC
+
+On execution of your project, lein will - if necessary - download the dependencies your project needs from clojars and/or maven central (the default clojure respositories).
+
 *** Dep Management with Lein (lc)
 *** Building and Developing with Leiningen (brave)
 *** Boot, the Fancy Clojure Build Framework (brave)
+
+** clojure.test
+Clojure has a standard testing libray, which can be lpaded into out test files.
+- deftest : defines a test function
+- testing : a string that is used withing deftest to provide context to what is being tested
+- is : is the assertion function, which accepts an argument and reports whether the argument is truthy.
+
 
 
 * TODO Web Libs
