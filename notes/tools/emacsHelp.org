@@ -1,5 +1,66 @@
 EMACS
 
+* Chord Exploration for ergodox and typescript
+Used C-h k  to discover C/M bindings in org more.
+** TODO Use C-h b (describe-bindings) for a complete list.
+** TODO Get list of Popular emacs bindings for editing text, JS, clojure
+** TODO Get list of popular vim bindings
+** TODO Compile snippets, and rank priority
+** Chords
+*** Ctrl
+- C-q : quoted-insert (REPLACE)
+- C-w : kill-region
+- C-e : org-end-of-line 
+- C-r-
+- C-t : transpose characters (REPLACE PRIORITY)
+- C-a : org-beginning-of-line 
+- C-s : avy-goto-char-timer
+- C-d : org-delete-char (REPLACE PRIORITY)
+- C-f : forward-char 
+- C-g : keyboard-quit 
+- C-z : suspend frame (REPLACE)
+- C-x-
+- C-c-
+- C-v : scroll-up-command
+- C-b : back-char
+- C-y : yank
+- C-u : universal argument (REAPLACE)
+- C-i : yasnippet?  (REPLACE)
+- C-o : org-open-line (REPLACE?)
+- C-p : previous-line
+- C-h-  
+- C-j : org-return-indent (REPLACE?)
+- C-k : org-kill-line
+- C-l : recenter-top-bottom
+- C-n : next-line
+- C-m : org-command-return (REPLACE)
+*** Meta
+- M-q : command-fill-paragraph (REPLACE)
+- M-w : kill-ring-save (INVESTIGATE)
+- M-e : org-forward-sentence
+- M-r : move-to-window-line-top-bottom (REPLACE PRIORITY)
+- M-t : org-transpose words (REPLACE PRIORITY)
+- M-a : org-backward-sentence
+- M-s-  
+- M-d : kill-word
+- M-f : forward-word
+- M-g-
+- M-z : zap-to-char (INVESIGATE)
+- M-x- 
+- M-c : capitalize-word
+- M-v : scroll-down-command
+- M-b : backward-word
+- M-y : yank-pop
+- M-u : upcase-word (INVESTIGATE)
+- M-i : tab-to-tab-stop (INVESTIGATE)
+- M-o : ??? set-face
+- M-p : UNDEFINED
+- M-h : org-mark-element (REPLACE)
+- M-j : indent-new-comment-line (REPLACE)
+- M-k : kill-sentence
+- M-l : downcase-word
+- M-n : UNDEFINED (REPLACE PRIORITY)
+- M-m : back-to-indentation  
 * Chords by Package
 ** emacs
 *** files
@@ -217,7 +278,7 @@ EMACS
 **** org-publish : lets you process a dir structure into a website
 *** org-drill : flashcards! maybe for litle clojurian?
 *** org google calendar (org g cal?)
-* Packages
+* TODO Packages
 ** currently installed
 *** async
 **** http://elpa.gnu.org/packages/async.html
