@@ -6,12 +6,12 @@
 [X] Chapter 2 : Flow and Functional Transformations
 [X] Chapter 3 : State and Concurrency
 [X] Chapter 4 : Java Interop and Polymorphism
-[ ] Chapter 5 : How to Use Clojure Projects and Libraries
+[X] Chapter 5 : How to Use Clojure Projects and Libraries
 [ ] Chapter 6 : Communication with core.async
 [ ] Chapter 7 : Creating Web Applications with Clojure
 [X] Chapter 8 : The Power of Macros
-[ ] Training Plan Week 1
-[ ] Training Plan Week 2
+[X] Training Plan Week 1
+[X] Training Plan Week 2
 [ ] Training Plan Week 3
 [ ] Training Plan Week 4
 [ ] Training Plan Week 5
@@ -1527,6 +1527,7 @@ expression. This is Clojure's way of recursion without consuming the stack.
 
 
 * State, Concurrency, Parallelism, and Asynchronicity
+** Communication with core.async (lc)
 ** TODO State Management: Atoms, Volatiles, Refs, & Agents (brave)
 Useful programs have state, we need to model data that retains a consistent identity but changes value over time. Bindings like let and def allow us to redefine a var in a namespace, but we cannot know (programmatically) when a redefinition occurs. And, when we're outside of that namespace, we cannot redefine a var. 
 *** Using Atoms for Independent and Synchronous Changes
@@ -2388,6 +2389,86 @@ copyable values implementing ICloneable (Eg. ClojureScript collections)
 
 
 
+* Tooling
+** The Clojure Compiler
+** The REPL
+** The Closure Library
+** TODO Building with Lein and Boot
+*** Lein / Boot
+**** Creating Projects with Lein
+We can create new projects from the CLI with lein:
+
+#+BEGIN_SRC shell
+  lein new project-name
+#+END_SRC
+
+This command generates a directory - =project-name= - that contains the following:
+- LICENSE
+- README.md
+- doc/intro.md : the doc directory is for documentation, a noble aspiration
+- project.clj : the main configuration file for out project
+- resources/ : a directory for supplimental files (images, text, etc.)
+- src/=project-name=/core.clj : the main clojure code file
+- test/=project-name=/core_test.clj : the automatically generated test file
+
+***** Filename / Namespace idioms
+It is idiomatic to use underscores for directory names, and dashes for namespace names. This is necessary because dashes are not valid in Java class names. 
+
+**** Configuration and Dependency Management
+***** project.clj - our intrepid configuration file
+The automatically generated config contains a function (what else?) =defproject=. The arguments to =defproject= provide lein with all the information it needs to build our project:
+1. the project's name (also the name of the dir created by lein)
+2. the project version
+3. :desctiption, a string describing the project for other humans
+4. :url - just a stub for your project
+5. :license - defaults to the eclipse public liscense
+6. :dependencies - a vector containing vectors of [name "version"] pairs
+
+We can also add:
+
+7. :repositories - a vector of repositories to check for dependencies
+8. :main - designates a file, from which lein will execute the =-main= function
+
+***** Dependency Management with lein
+Each dependency in our project is accounted for in lein using a three part id:
+
+#+BEGIN_SRC clojure
+  [group.id/artifact-id "version"]
+#+END_SRC
+
+On execution of your project, lein will - if necessary - download the dependencies your project needs from clojars and/or maven central (the default clojure respositories). These dependencies are stored in the maven home directory:
+
+#+BEGIN_SRC shell
+  ls ~/.m2/repository/org/clojure/clojure/1.7.0/
+#+END_SRC
+
+Remember that additional repositories can be used by including a =:repositories= key in the config.
+
+***** Running Projects with lein
+We can ask lein to execute the -main function in any namespace. If we wish to invoke a specific namespace manually, we pass the filename of that name space to lein:
+
+#+BEGIN_SRC shell
+  $ lein run -m file-name.clj "Agruments to Main"
+#+END_SRC
+
+And, if we have specified a =:main= namespace in out config, we can be terser.
+
+#+BEGIN_SRC shell
+  $ lein run "Arguments to main"
+#+END_SRC
+
+**** Building and Developing with Leiningen (brave)
+**** Boot, the Fancy Clojure Build Framework (brave)
+** Dependency Management
+** External Dependencies
+** Unit Testing
+*** clojure.test
+Clojure has a standard testing libray, which can be lpaded into out test files.
+- deftest : defines a test function
+- testing : a string that is used withing deftest to provide context to what is being tested
+- is : is the assertion function, which accepts an argument and reports whether the argument is truthy.
+
+
 * Metaprogramming with Macros: "Screw the next guy"
 Macros permit you to alter the evaluation paradigm from eager evaluation to normal 
 order evaluation. Macros allow us to rewrite our code at compile time, giving us 
@@ -2553,82 +2634,6 @@ Note that the splicing reader conditional can't be used to splice multiple top l
 - http://clojure.org/guides/reader_conditionals
 - https://danielcompton.net/2015/06/10/clojure-reader-conditionals-by-example
 - https://github.com/funcool/cuerdas (example small project that uses reader conditionals)
-
-
-* TODO Building with Lein and Boot
-** Lein / Boot
-*** Creating Projects with Lein
-We can create new projects from the CLI with lein:
-
-#+BEGIN_SRC shell
-  lein new project-name
-#+END_SRC
-
-This command generates a directory - =project-name= - that contains the following:
-- LICENSE
-- README.md
-- doc/intro.md : the doc directory is for documentation, a noble aspiration
-- project.clj : the main configuration file for out project
-- resources/ : a directory for supplimental files (images, text, etc.)
-- src/=project-name=/core.clj : the main clojure code file
-- test/=project-name=/core_test.clj : the automatically generated test file
-
-**** Filename / Namespace idioms
-It is idiomatic to use underscores for directory names, and dashes for namespace names. This is necessary because dashes are not valid in Java class names. 
-
-*** Configuration and Dependency Management
-**** project.clj - our intrepid configuration file
-The automatically generated config contains a function (what else?) =defproject=. The arguments to =defproject= provide lein with all the information it needs to build our project:
-1. the project's name (also the name of the dir created by lein)
-2. the project version
-3. :desctiption, a string describing the project for other humans
-4. :url - just a stub for your project
-5. :license - defaults to the eclipse public liscense
-6. :dependencies - a vector containing vectors of [name "version"] pairs
-
-We can also add:
-
-7. :repositories - a vector of repositories to check for dependencies
-8. :main - designates a file, from which lein will execute the =-main= function
-
-**** Dependency Management with lein
-Each dependency in our project is accounted for in lein using a three part id:
-
-#+BEGIN_SRC clojure
-  [group.id/artifact-id "version"]
-#+END_SRC
-
-On execution of your project, lein will - if necessary - download the dependencies your project needs from clojars and/or maven central (the default clojure respositories). These dependencies are stored in the maven home directory:
-
-#+BEGIN_SRC shell
-  ls ~/.m2/repository/org/clojure/clojure/1.7.0/
-#+END_SRC
-
-Remember that additional repositories can be used by including a =:repositories= key in the config.
-
-**** Running Projects with lein
-We can ask lein to execute the -main function in any namespace. If we wish to invoke a specific namespace manually, we pass the filename of that name space to lein:
-
-#+BEGIN_SRC shell
-  $ lein run -m file-name.clj "Agruments to Main"
-#+END_SRC
-
-And, if we have specified a =:main= namespace in out config, we can be terser.
-
-#+BEGIN_SRC shell
-  $ lein run "Arguments to main"
-#+END_SRC
-
-*** Building and Developing with Leiningen (brave)
-*** Boot, the Fancy Clojure Build Framework (brave)
-
-
-* TODO Testing
-** clojure.test
-Clojure has a standard testing libray, which can be lpaded into out test files.
-- deftest : defines a test function
-- testing : a string that is used withing deftest to provide context to what is being tested
-- is : is the assertion function, which accepts an argument and reports whether the argument is truthy.
 
 
 
