@@ -11,7 +11,8 @@ Used C-h k  to discover C/M bindings in org more.
 - C-q : quoted-insert (REPLACE)
 - C-w : kill-region
 - C-e : org-end-of-line 
-- C-r-
+- C-r- b : regex backward
+- C-r f : regex forward
 - C-t : transpose characters (REPLACE PRIORITY)
 - C-a : org-beginning-of-line 
 - C-s : avy-goto-char-timer
@@ -24,8 +25,8 @@ Used C-h k  to discover C/M bindings in org more.
 - C-v : scroll-up-command
 - C-b : back-char
 - C-y : yank
-- C-u : universal argument (REAPLACE)
-- C-i : yasnippet?  (REPLACE)
+- C-u : universal argument (C-u M-x - opens another eshell)
+- C-i : yasnippet?  (REPLACE Priority)
 - C-o : org-open-line (REPLACE?)
 - C-p : previous-line
 - C-h-  
