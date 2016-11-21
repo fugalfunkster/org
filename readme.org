@@ -20,7 +20,21 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 
 * TODO heap(s)
-** OPEN Getting Started with Elixir : Nate Taylor (2:49)
+** SVG / CSS / Animations
+*** TODO Animated SVG Animation : Sarah Drasner (2:53) FEM
+*** JavaScript Animation with GSAP : Todd Shelton (3:12)
+*** Motion Design with CSS : Rachel Nabors (4:01) FEM
+*** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
+*** VIEWONLY CSS Animation with Transition and Transform : Sandy Ludosky (2:10) PL
+*** VIEWONLY Creating Elegant Nav. Using CSS3 Transitions : Susam Simkins (1:02) PL
+** TypeScript
+*** Pluralsight
+**** A Practical Start with TypeScript : Roland Guijt (1:39)
+**** TypeScript Fundamentals : Dan Wahlin & John Papa (4:25)
+**** TypeScript In-Depth : Brice Wilson (4:40)
+*** Egghead
+**** DONE Up and Running with TypeScript : John Lindquist (0:43)
+**** DONE Use Types Effectively in TypeScript : Ari Picker (0:29)
 ** TODO Build Interactive JS Charts w/ D3 v4 : Ben Clinkenbeard (2:33)
 ** React
 *** OPEN Update react-router Notes for v.4
@@ -39,7 +53,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** colocate links to survive / keathly / react.js boilerplate / create-react-app
 *** eslint configs : template strings, bodil, fp, etc.
 *** make ergodox config repo
-*** Advanced Webpack Talk : Jonathan Creamer (0:31) https://www.youtube.com/watch?v=MzVFrIAwwS8
 ** Asynchronicity
 *** OPEN Modern Asynchronous JavaScript : Wes Higbee (6:34)
 *** csp-js
@@ -50,25 +63,23 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** OPEN React Testing Cookbook
 *** VIEWONLY Mastering React Testing with Jest : Daniel Stern (1:57)
 ** Clojure
-*** Chapters 5, 6, 7 in Living Clojure
-*** https://howistart.org/posts/clojure/1
 *** Living Clojure Week 3
 *** Chapter 4 in ClojureScript Unraveled
 *** Anki Flash Cards for .core function signatures
 ** emacs
 *** Elisp Talks
-**** notify meetup of my org repo
 **** begin work on buffers, frames, windows, etc.
 **** learn org-tree-slide for next month: https://github.com/takaxp/org-tree-slide
 
 
 * BackBurner
+** OPEN Getting Started with Elixir : Nate Taylor (2:49)
 ** JS
 *** OPEN Practical Design Patterns in JavaScript : Jonathan Mills (3:10)
 ** CSS
 *** OPEN Learn CSS Layout: the Pendatic Way
-*** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
 ** Webpack
+*** Advanced Webpack Talk : Jonathan Creamer (0:31) https://www.youtube.com/watch?v=MzVFrIAwwS8
 *** OPEN Survive JS - Webpack
 *** OPEN Webpack Fundamentals : Joe Eames (2:23)
 ** Node
@@ -88,14 +99,14 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** Survive JS - React
 ***** Learning React Native
 **** Clojure
-***** OPEN Living Clojure
+***** DONE Living Clojure
 ***** OPEN ClojureScript Unraveled
 ***** Clojure for the Brave and True
 ***** Web Development with Clojure
 ***** Etudes for ClojureScript
 ***** Clojure Applied
 **** Scheme
-***** OPEN The Little Schemer
+***** DONE The Little Schemer
 ***** HtDP [5/43]
     I. Processing Simple Forms of Data
  - [X] Students, Teachers, Computers
@@ -161,12 +172,13 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE Responsive Web Images : Robert Boedigheimer (1:55)
 ***** DONE Web Accessibility: Getting Started (1:30)
 ***** Making a Web Form Accessible (1:47)
-*** html/css
+*** html/css/SVG
 **** OPEN pendaticLayout
 **** Pluralsight
 ***** DONE CSS Positioning : Susan Sumkins (0:50)
 ***** DONE Responsive Web Design : Ben Callahan (4:31)
 ***** DONE Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
+***** DONE SVG Fundamentals : Brian Treese (1:29)
 ***** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
 ***** HTML5 Advanced Topics : Craig Shoemaker (2:45)
 ***** HTML5 Browser Caching : Ben Schwarz (1:01)
@@ -191,6 +203,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** TODO Testing Clientside JavaScript : Joe Eames (4:50)
 ***** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
 ***** TODO Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
+***** TODO JavaScript Animation with GSAP : Todd Shelton (3:12)
 ***** Shifting JS into High Gear w/ Web Workers : Kasia Zmokia (3:13)
 ***** JavaScript Design Patterns : Aaron Powell (2:02)
 **** Egghead
@@ -245,11 +258,8 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** D3
 **** Pluralsight
 ***** WATCHEDONLY D3: The Big Picture : Ben Sullins (1:26)
-***** D3.js Data Visualization Fundamentals : Ben Sullins (4:35)
-***** Geospatial mapping with D3 : Ben Sullins (2:39)
-***** Force LAyout Graphs in D3 : Ben Sullins (2:33)
 **** Egghead
-***** TODO Build Interactive JS Charts w/ D3 v4 : Ben Clinkenbeard (2:33)
+***** OPEN Build Interactive JS Charts w/ D3 v4 : Ben Clinkenbeard (2:33)
 *** node
 **** Pluralsight
 ***** DONE Real-Time Web w/ Node.js : Kyle Simpson (5:23)
@@ -292,9 +302,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 ***** DONE NPM Playbook : Joe Eames (0:58)
 ***** WATCHEDONLY Meet Emacs : Phil Hagelberg (0:58)
 ***** TODO Advanced Git : Ben Hoskings (1:00)
-***** TODO Babel: Get Started : Craig McKeachie (2:03)
 ***** Using the Chrome Dev. Tools : John Sonmez (2:50)
-***** Getting Started with Emmet : Kristian Freeman (0:55)
 **** FrontEndMasters
 ***** Mastering Chrome Developer Tools : Jon Kuperman (4:15)
 **** egghead
