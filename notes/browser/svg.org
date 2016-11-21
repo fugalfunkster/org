@@ -283,3 +283,93 @@ SMIL has little to no support in IE.
 
 
 * Animated SVG Animation : Sarah Drasner (2:53)
+** Why SVG?
+SVG are images made with math.
+
+1. Crisp on any display
+2. Less HTTP Requests to handle
+3. Easily Scalable for responsive design
+4. Small filesize if you design for performance
+5. Easy to animate
+6. Easy to make accesible
+** The SVG DOM
+*** Platonic Shapes
+See other course...
+*** viewport and viewBox
+The viewport is declared using the width and height attributes on the SVG element. You can declare the svg element's width and heith inline, but this makes it more 
+difficult to override with CSS. For responsive design, set the svg element's width and height using CSS. This allows the SVG to scale to the layout.
+  The viewBox for an SVG should be declared inline. The viewBox declares the 
+coordinate system for the SVG. You can use the viewBox to crop things, which can be helpful to hide elements when animating.
+
+https://sarasoueidan.com/blog/svg-coordinate-systems/
+*** preserveAspectRatio
+The default setting for preserveAspectRatio is "xMidYMid meet", which uniformly scales an svg element, like "background-size: cover" in CSS.
+
+See also other course.
+
+*** Groups
+We can put attributes, like fill and stroke for example, on a g (for group) element, and it will apply to any elements inside the g element. 
+
+*** Polylines
+Polylines are easy to use for data visualizations.
+
+*** Paths
+Paths require more than a list of points, and accept path letters.
+
+Capital letters are absolute, lowercase are relative.:
+
+| Path Data                                           |
+|-------------+---------------------------------------|
+| Path Letter | Path Meaning                          |
+|-------------+---------------------------------------|
+| M, m        | moveTo                                |
+| L, l        | lineTo                                |
+| H, h        | horizontal line drawn from position   |
+| V, v        | vertical line drawn from position     |
+| Z, z        | joins the end of a path (ending path) |
+
+| Path Curve Commands                                       |
+|---------------------+-------------------------------------|
+| Path Letter         | Path Meaning                        |
+|---------------------+-------------------------------------|
+| C, c                | cubic bezier                        |
+| S, s                | reflecting cubic-bexier             |
+| Q, q                | quadratic bezier point              |
+| T, t                | command point that's been reflected |
+| A, a                | elliptical arc                      |
+
+https://codepen.io/anthonydugois/pen/mewdyZ
+
+** Optimization
+After export, before implementation: Optimize!
+- SVGOMG
+- Peter Collingridge's SVG Editor
+- SVGO / SVGO-GUI
+** CSS Animations
+SMIL is being deprecated...
+*** keyframes
+*** transform
+** TODO Exercise 1
+Make a simple SVG with 4+ attributes, optimize it, and animate at least two elements.
+** Step Animations & Rolling Backgrounds
+** Responsive Sprites
+** Atmospheric and Elemental Motion
+** Benchmarks
+** CSS Properties
+** Greensock Workflow
+** Greensock Syntax
+** Staggering Animations
+** Timelines
+** Exercise 3
+** Illustrator Workflow
+** UI/UX Animation Overview
+** Animation with Interaction
+** Draggable Animations
+** Draw SVG
+** Motion Along a Path
+** SplitText Plugin
+** Relative Tweens
+** Exercise 5
+** Exercise 6
+** Storyboarding Animations
+** Resources and Course Wrap-Up
