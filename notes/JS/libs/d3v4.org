@@ -609,13 +609,37 @@ function responsivefy(svg) {
   }
 }
 #+END_SRC
-** Column Chart
+** TODO Column Chart
 ** Scatter Plot
 ** Line Chart
 ** Area Chart
-** Debug with Dev Tools
-** Animate Transitions
-** Reuse Transitions
+** DONE Debug with Dev Tools
+When we select an element in the chrome dev tools, we can reference that selected element with =$0= in the console. This allows us to access attributes on that dom node through the console. We can't directly modify the property because there is no two-way binding. We could use the D3 global to select and modify though: =d3.select($0).attr('r', 50)=.
+  When D3 associates data with a DOM element, it attaches that data using as the 
+=__data__= property on that DOM object.
+** DONE Animate Transitions
+D3 provides animation methods using its stylistic dot-chaining. Note that when chaining transitions, anything that is not explicitly set on a second transition, but is set on the prior one, will inherit from the prior transition!
+
+#+BEGIN_SRC js
+d3.select('#block')
+  .transition()
+    .duration(500)
+    .delay(750)
+    .ease(d3.easeBounceOut)     // easeCubicOut, easeElasticOut
+    .style('width', '400px');
+/* We can also dot-chain transitions, to create sequences of transitions
+  .transition()
+    .duration(500)
+    .delay(750)
+    .ease(d3.easeBounceOut)     // easeCubicOut, easeElasticOut
+    .style('height', '600px')
+  .transition()
+    .duration(2000)
+    .ease(d3.easeQuadOut)
+    .style('background-color', 'purple'); 
+*/
+#+END_SRC
+** TODO Reuse Transitions
 ** Animate with the General Update Pattern
 
 
