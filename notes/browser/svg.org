@@ -1,0 +1,285 @@
+* SVG Fundamentals : Brian Treese (1:29)
+** Intro
+SVG - scalable vector graphics, a 2D vector based image format that can look crisp regardless of the device and display resolution. SVG elements are xml elements, and can be manipulated by hand, with CSS, or in JS.
+  SVG shines where a bitmap is not necessary: icons, illustrations, logos, 
+animations, and charts and graphs.
+** Using SVG in HTML
+  When embedding SVG elements in a website, we can do so by hand, using the html tags, or programatically. 
+*** By Hand (inline) <svg>
+We can embed svg elements within a parent <svg> element with height, width, and viewbox attributes.
+*** <img>
+The image tag can have an .svg file as the value of its =src= attribute.
+*** <embed>
+Similar to <img>, <embed> takes a =src= but has a type="image/svg+xml" attribtue.
+*** <object>
+Similar to <embed> takes a =src= and a type="image/svg+xml" attribtue. Note that we can still manipulate the underlying xml of an object tag with css and JS. And, we can embed a fallback <img> tag witing an object tag, for browsers that don't support object tags.
+*** <iframe> (skipped)
+** SVG Layout
+SVG layout is different from any css layout schemes, and uses a coordinate system.
+*** viewport
+The viewport is set by the parent svg element's =width= and =height= attributes. The units for these attribtues is flexible, like font, accepting px and ems (at least*). The viewport establishes the browsers coordinate system, where 0,0 is in the top-left corner of the parent <svg> element.
+*** viewBox
+The svg element also has a =viewBox= attribute. This attribute has four comma separated values, x-coordinate, y-coordinate, width and height. The height and width values of the viewBox describe size of the visible boundaries of the svg coordinate system. For example, if we had a viewport of 500px by 500px, the browser would create a 500px by 500px box that the svg graphic would be contained in. But, the viewBox could specify a 1000px by 1000px grid, and that would scale to fit the viewport. Thus every pixel of viewport width would map to to two pixels of viewbox width.
+*** preserveAspectRatio
+When the height and width values of the viewport and view box are not porportional, we can use the preserveAspectRatio attribute, to center the viewbox within the viewport.
+  preserveAspectRatio takes an align value and a     value.
+**** Align Values
+- =none= : allows the graphic to be stretched or squeezed to fill the viewport
+- xMinYMin : Left Top
+- xMidYMin : Middle Top
+- xMaxYMin : Right Top
+- xMinYMid : Left Middle
+- xMidYMid : Middle Middle
+- xMaxYMid : Right Middle
+- xMinYMax : Left Bottom
+- xMidYMax : Middle Bottom
+- xMaxYMax : Right Bottom
+**** Other Values
+- slice : trims off excess
+- meet : shrinks image so all edges are contained within the viewport
+*** SVG Graphical Elements
+These elements have many common attribtutes:
+ - fill : color
+ - stroke : sets stroke color
+ - strokeWidth : width of stroke
+**** circle
+The cx and cy values position the center of the cirle in the coordinate system. The r value is the radius.
+
+#+BEGIN_SRC xml
+  <circle cx="5" cy="5" r="3" />
+#+END_SRC
+
+**** ellipse
+rx and ry are the radius along the x axis and y axis
+
+#+BEGIN_SRC xml
+  <ellipse cx="150" cy="150" rx="150" ry="100" />
+#+END_SRC
+
+**** rect
+The x and y values mark the position of the rect's top left corner in the svg coordinate system. Rects can also ahve rx and ry attributes, that give rects rounded corners on the x axis or the y axis.
+
+#+BEGIN_SRC xml
+  <rect x="0" y="0" width="50" height="40" />
+#+END_SRC
+
+**** line
+A straight line
+
+#+BEGIN_SRC xml
+  <line x1="10" y1="5" x2="15" y2="20" />
+#+END_SRC
+
+**** polyline
+A series of points, between which are straight lines
+
+#+BEGIN_SRC xml
+  <polyline points="20,200 80,50 160,150 200,90 280,160" />
+#+END_SRC
+**** polygon
+Like the poly line, but the first and last points are connected by a line.
+
+#+BEGIN_SRC xml
+  <polygon points="20,200 80,50 160,150 200,90 280,160" />
+#+END_SRC
+
+**** path
+Just about any basic shape can be created with a path. Paths contain points and descriptive data about how to draw from point to point. Though it is unlikely we would manipulate path data by hand, or even programatically, we can use:
+- moveto = M (as if the pen were lifted and moved to another location)
+- lineto = L (straight lines)
+- Arcs, cubic, and quadratic beziers (complex curve data)
+- closepath = Z (connects current point to initial point)
+
+**** text
+Provides fully accessible text within svg. Use x and y attributes to define its position, like a rect.
+
+#+BEGIN_SRC xml
+  <text x="70" y="175" fill="#FFFFFF" font-size="72"> TEXT </text>
+#+END_SRC
+
+**** use
+Use lets you reference other svg graphics, facilitating reuse. 
+
+#+BEGIN_SRC xml
+  <defs>
+    <g id="itemForReuse">
+      <circle cx="50" cy="50" r="25" />
+    </g>
+  <defs>
+<!-- LATER -->
+  <use xlink:href="#itemForReuse" x="0" y="120" />
+#+END_SRC
+
+*** SVG Container Elements
+**** svg
+**** defs
+Contains items defined for later reuse. Anything in a defs element will not be rendered, but instead can be referenced by a use element.
+**** g
+USed to group items, mush like the div of the SVG world.
+**** symbol
+USed to store graphics that will be used multiple times. Like defs, its contents are rendered by use elements only. symbol can have its own viewBox and preserveAspectRation attributes.
+
+*** SVG Gradient Elements
+These gradients are not to be used on their own, and instead should be declared in a defs block, and require an id so that other elements can reference them. Other elements reference gradients in their fill or stroke attributes or via CSS within the SVG element.
+  Gradients contain stops, that tell the gradient what color it should 
+be at different points. Stops have offset (the point), stop-color (the color), and stop-opacity attributes.
+  Stop offsets should range from 0% to 100%. 
+
+**** linearGradient
+linearGradients require a line to tell the gradient its direction, which defaults to horizontal.
+
+#+BEGIN_SRC xml
+  <defs>
+    <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#FCC1A7" />
+      <stop offset="100%" stop-color="#F16823" />
+    </linearGradient>
+  </defs>
+<!-- LATER -->
+  <rect fill="url(gradient)" ...
+#+END_SRC
+
+**** radialGradient
+radialGradients require a circle to be defined, where the radius represents the 100% mark. The center (0%) defaults to cx/cy but you can specify an fx/fy (focal values) which set the 0% point.
+
+#+BEGIN_SRC xml
+  <defs>
+    <radialGradient id="gradient" cx="50" cy="50" r="50">
+      <stop offset="0%" stop-color="#FCC1A7" />
+      <stop offset="100%" stop-color="#F16823" />
+    </radialGradient>
+  </defs>
+<!-- LATER -->
+  <rect fill="url(gradient)" ...
+#+END_SRC
+
+*** Animation Elements
+**** SMIL (Synchronized Multimedia Integration Language)
+A standard for animal within XML documents.
+***** animate
+The animate attribute animates a single attribute or property of another element over time. This example moves a rectangle across the screen from off-screen to off-screen, left to right, over a 5s duration, repeatedly.
+
+#+BEGIN_SRC xml
+  <svg width="300" height="300">
+    <rect x="0" y="0" width="300" height="200">
+      <animate attributeName="x" from="-300" to="300" 
+               dur="5s" repeatCount="indefinite" />
+    </rect>
+  </svg>
+#+END_SRC
+
+***** animateMotion
+Uses path data from a path element to create a motion path for an SVG element to move along.
+
+#+BEGIN_SRC xml
+  <svg width="300" height="300" >
+    <path id="motionPath"
+          d="M-141.333,218C-60......."
+          stroke="#ccc" stroke-width="3" fill="none" />
+<!-- LATER -->
+    <circle cx="" cy="" r="40" >
+      <animateMotion dur="3s" repeatCount="indefinite" >
+        <mpath xlink:href="#motionPath" />
+      </animateMotion>
+    </circle>
+  </svg>
+#+END_SRC
+
+***** AnimateTransform
+Animates the translation, scaling, rotation or skewing of another element over time. This example rotates a rectangle clockwise.
+
+#+BEGIN_SRC xml
+  <svg width="300" height="300" >
+    <rect x="75" y="75" width="150" height="150" >
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        from="0 150 150"
+                        to="360 150 150"
+                        dur="5s"
+                        repeatCount="indefinite" />
+    </rect>
+  </svg>
+#+END_SRC 
+
+***** set
+Sets the value of an attribute for a specified duration. (punctuated equilibrium).
+
+#+BEGIN_SRC xml
+  <svg width="300" height="300" >
+    <circle cx="150" cy="150" r="10" >
+      <set attributeName="r"
+           to="100"
+           begin="3s"
+           fill="freeze" />
+    </circle>
+  </svg>
+#+END_SRC
+*** Styling SVG with CSS
+We don't have to set attributes inline on our SVG elements. We can give SVG elements class attributes, so that we can use style sheets. We can embed stylesheets in svg, using a style tag. And we can reference external stylesheets.
+  
+** SVG Sprites (skipped)
+** Animating SVG
+There are three main methods for animating SVGs.
+*** with CSS (only animates CSS properties)
+When we use CSS for animations, we can only animate sn SVG element's CSS properties, but not the element's attributes.
+  Additionally, browser support for CSS animations is spotty. For 
+example, with transforms, different browsers implement transform values differently.
+  Finally, if we're using an <img> tag to display our SVG, we cannot 
+reference external stylesheets for that SVG. 
+**** @keyframes
+From MDN: "The @keyframes CSS at-rule lets authors control the intermediate steps in a CSS animation sequence by establishing keyframes (or waypoints) along the animation sequence that must be reached by certain points during the animation. This gives you more specific control over the intermediate steps of the animation sequence than you'd get when letting the browser handle everything automatically."
+  Be sure to use autoprefixer with keyframes!
+**** transforms
+From MDN : "The CSS transform property lets you modify the coordinate space of the CSS visual formatting model. Using it, elements can be translated, rotated, scaled, and skewed." 
+*** with SMIL (not available in IE)
+SVG has its own animation standard, which lets us animate SVG presentation attributes. NOT SUPPORTED IN IE!
+**** animate
+This example repeatedly changes the fill attribute from one color to another, over the course of one second.
+
+#+BEGIN_SRC xml
+  <polygon id="box01" ... />
+<!-- LATER -->
+  <animate xlink:href="#box01" attributeName="fill"
+           from="#538B93" to="#0F5156" dur="1s" repeatCount="indefinite" />
+#+END_SRC
+
+If the =from= attribute is omitted, it defaults to the element's current fill value.
+**** =begin=
+The begin attribute gives us lots of power to time the animation. Values like "click" or "1s" which waits for a click or 1 second, respectively,  before the animation begins. You can also sync animations between elements by using an element's id as a reference:
+
+#+BEGIN_SRC xml
+  <circle cx="80" cy="200" r="40" fill="#f16823">
+    <animate attributeName="cx" from="80" to="700" dur="1s"
+             begin="click" id="item-01" fill="freeze" />
+  </circle>
+
+  <circle cx="80" cy="400" r="40" fill="#f16823">
+      <animate attributeName="cx" from="80" to="700" dur="1s"
+             begin="item-01.begin + 0.5s" fill="freeze" />
+  </circle>
+#+END_SRC
+
+*** With JS
+**** snap.svg
+A JS SVG manipulation library. 
+**** vivus.js
+Animates strokes on paths, so works well with line art, animating the "drawing" of the svg, like watching someone draw the svg with a pen.
+**** D3
+** Optimization
+- Sprites allow optimization of image loading, by bundling images
+- SVGs can be optimized manually, by removing non-visible elements, merging paths/polylines, removing text if the text is not neded by the browser, and cropping the image.
+- Tools can further reduce filesize by removing metadata, simplifying path data, etc.
+    https://petercollingridge.appspot.com/svg-editor
+
+** Browser Support
+
+http://www.caniuse.com
+
+SVG basics are green across the board, but some bugs remain re: responsiveness with SVGs; Must use the padding hack in IE. 
+
+Fragment identifiers have recent support.
+
+SMIL has little to no support in IE.
+
+
+* Animated SVG Animation : Sarah Drasner (2:53)
