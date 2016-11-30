@@ -86,12 +86,12 @@
 ** Immutability and Persistence
 Collections have two important features: immutability and persistence. Immutable 
 collections cannot be changed. Instead, the data in a collection is shared by 
-collections created from the original collection. Thus, a function that "adds" a new 
-value to an existing collection does no such thing; It instead returns a 
+collections created from the original collection. Thus, a function that "adds" a
+new value to an existing collection does no such thing; It instead returns a 
 new collection, containing the new value, and references to each value in the 
 original collection. This is called structural sharing.
-  We can observe structural sharing using identical?, a predicate that tells us whether
-two valuesa are the same object in memory:
+  We can observe structural sharing using identical?, a predicate that tells us
+whether two valuesa are the same object in memory:
 
 #+BEGIN_SRC clojure :results output
   (let [xs (list 1 2 3)
@@ -2389,17 +2389,18 @@ copyable values implementing ICloneable (Eg. ClojureScript collections)
 
 
 
-* Tooling
+* Reader, Compiler, REPL and Build Tools
 ** The Clojure Compiler
 ** The REPL
 ** The Closure Library
-** TODO Building with Lein and Boot
-*** Lein / Boot
-**** Creating Projects with Lein
+** Building with Lein and Boot
+*** Leiningen
+Lein is a build tool that bridges Clojure and Java's library ecosystems. Lein lets us require clojure dependencies, and defaults to using the clojars repository. Lein is also compatable with Maven, a popular Java library repository and build tool.
+**** Creating New Projects with Lein
 We can create new projects from the CLI with lein:
 
 #+BEGIN_SRC shell
-  lein new project-name
+  lein new <project-name>
 #+END_SRC
 
 This command generates a directory - =project-name= - that contains the following:
@@ -2457,7 +2458,14 @@ And, if we have specified a =:main= namespace in out config, we can be terser.
   $ lein run "Arguments to main"
 #+END_SRC
 
-**** Building and Developing with Leiningen (brave)
+**** Using Lein Templates
+Many templates exist for different kinds of projects. Instead of frameworks, the clojure community prefers libraries, and provides templates that provide the boilerplate needed to compose libraries into a useful framework. Many templates exist, for various uses, and aim to provide everything beside the custom domain logic. 
+  At the cli, lein accepts a template name parameter after the =new= parameter.
+This will cause lein to download the specified template, install its dependencies, and create a project in the template's image.
+***** Profiles
+When using templates to generate new projects with lein, we can specify default settings by configuration of a profiles.clj file in the root .lein directory.
+
+NOTE: I modified =~/.lein/profiles.clj= to pin the luminus version for projects relating to "Web Dev. w/ Clojure"
 **** Boot, the Fancy Clojure Build Framework (brave)
 ** Dependency Management
 ** External Dependencies
@@ -2469,6 +2477,374 @@ Clojure has a standard testing libray, which can be lpaded into out test files.
 - is : is the assertion function, which accepts an argument and reports whether the argument is truthy.
 
 
+** Web Libs
+*** Ring
+"Ring adapters for the Java HTTP servlet API allow applications to be deployed on any servlet container, such as Tomcat. However, the most common approach is to run Clojure applications standalone using an embedded HTTP server wish as Immutant or Jetty." -WDwC
+**** Ring applications consist of four basic components:
+***** the Handler
+The handler is a function that accepts an HTTP request, and returns an HTTP response. Ring uses =adapters= that represent HTTP requests and responses as maps and convert to and from the container's underlying HTTP interface.
+***** the Request map
+Requests have the following keys, based on the servlet API and HTTP standards:
+
+| :server-port     | The port on which the server is handling the request  |
+| :server-name     | The server's IP addr, or the name it resolves to      |
+| :remote-addr     | The client's IP address                               |
+| :query-string    | The request's query string                            |
+| :scheme          | The spec. protocol (http -or- https)                  |
+| :request-method  | :get() :head() :options() :put() :post() :delete()    |
+| :content-type    | The request body's MIME type                          |
+| :content-length  | The number of bytes in the request                    |
+| :headers         | A map, containing the request headers                 |
+| :body            | An input stream for the body of the request           |
+| :context         | The app's context when it is not deployed as root     |
+| :uri             | The request URI path on this server, w/ :context opt. |
+| :ssl-client-cert | The client's SSL certificate                          |
+
+In addition to these standard keys, middleware may extent the request map with application specific keys. 
+
+***** the Response map
+Responses contain three keys:
+
+| :status  | The response HTTP status        |
+| :headers | Any HTTP headers for the client |
+| :body    | The response body               |
+
+****** response headers
+Headers take are key value pairs of strings. Optionally, some values may be sequences of strings:
+
+#+BEGIN_SRC clojure
+ {:headers {"content/type" "text/html"}
+  :body "<html><body>Hello World!</body></html>"}
+;; or 
+ {:headers {"content/type" ["text/plain" "text/html"]}
+  :body "<html><body>Hello World!</body></html>"}
+#+END_SRC
+
+****** response body
+Response bodies can be a string, which is sent to the client as a sequence and strings reperesnting elements in that sequence are sent subsequently. 
+
+Alternately, responses can be files, sequences, or input streams. 
+
+***** Middleware
+Middleware functions are basically handler decorators that augment how the handler processes HTTP requests. Middleware functions accept a handler and return the handler with modifications. We can compose middleware functions to provide complex behavior. The result is that request and response maps travel through an ordered chain of functional transformations.
+  Ring comes with a middleware library, including the =wrap-reload= 
+middleware, which will reload server code on file saves, to avoid having to restart the server.
+**** Extending Ring
+***** ring-defaults lib
+The ring-defaults lib provides default middleware for both websites and APIs. Luminus defaults to using the site-defaults middleware. 
+
+https://github.com/ring-clojure/ring-defaults
+
+***** ring-http-response lib
+This lib provides human-readable parralels for HTTP status codes, making it easier to write response handlers
+
+#+BEGIN_SRC clojure
+  (response/ok ...)
+  (response/found ...)
+  (response/continue ...) 
+#+END_SRC
+
+***** ring-middleware-format 
+This lib handles external data formatting, and will serialize or deserialize data based on the =Accept= and =context/type= request headers.
+
+*** Compojure
+Compojure is a routing library that lets you accociate handler functions with URLs and HTTP methods. Compojure also allows you to selectively wrap routes using its =wrap-routes= macro, allowing selective - as opposed to global - application of middleware. 
+**** Defining Routes
+Compojure routes return Ring handlers - functions that accept a request map and return a response map. Routes contain an HTTP method macro, a URL matching string, an argument list, and a body. When Compojure receives a request, it will attempt each route, in order, to find a match.
+
+#+BEGIN_SRC clojure
+  (compojure/GET "/user/:id" [id] (str "<h1>Hello user " id "</h1>"))
+#+END_SRC
+
+***** HTTP Method Macro
+When a route is tested, it will first attempt to match the request's HTTP method and the method specified by the route's HTTP macro. If there is no match, the route will return nil, and the next route is tested. 
+  Compojure provides HTTP method macros for GET, POST, PUT, DELETE, OPTIONS, PATCH, 
+HEAD, and ANY.
+
+***** URI Matching
+If the HTTP methods match, then Compojure will attempt to match the URI in the request to the route's URI string. If they do not match, the route will return nil, and the next route will be tested.
+****** Dynamic Routes
+Like in Sinatra or Express, route strings can contain dynamic routes, where a =:<name>= will match any sub-path up to the next "/" or ".", and store the match in the parameters map, using the <name> key, within the request map. 
+  In the example above, the "/user/:id" would match "/user/sakelees" and store 
+'sakeless' on the request map under the =id= key in the =:params= map.
+
+#+BEGIN_SRC clojure
+  (compojure/GET "/:foo" {{foo :foo} :params}
+    (str "Foo = " foo))
+#+END_SRC
+
+***** Destructuring the Request Map and Params
+If the HTTP method and URI match, the third argument to the macro is the request map, and allows destructuring the request map with the resulting bindings available in the scope of the macro's fourth argument. 
+  Destructuring the request map can be done with let style destructuring, by using a 
+symbol or map. But Compojure also provides sugar that allows you to destructure the request map's parameters using a vector of symbols that match the param names. 
+  To bind remaining params, whose names did not appear in the vector, use =&=.
+  And, to access the request map in addition to destructuring params, the =:as= 
+keyword will assign the entire request map to a symbol. 
+
+  For more on Compojure destructuring: 
+https://github.com/weavejester/compojure/wiki/Destructuring-Syntax
+
+***** The Response
+Now that the request map has been destructured, the third argument to the macro is "encased in an implicit =do= block", with the request map, or any destructured vars, in scope.
+  The return value is coerced to a response map, using the 
+=compojure.response/renderable= protocol. If the return value is a string, the response map defaults to a "standard response":
+
+#+BEGIN_SRC clojure
+  {:status 200
+   :headers {"Content-Type" "text/html; charset=utf-8"}
+   :body "This string was the return value of the route's third argument."}
+#+END_SRC
+
+**** Combining Routes
+The =routes= function accepts a variadic number of routes, and returns a Ring handler. 
+  These routes are typically bound to a var. To make this terser, we can use the 
+=defroutes= macro.
+
+#+BEGIN_SRC clojure
+  (def myroutes 
+    (compojure/routes
+      (compojure/GET "/" [] "Body Text")))
+
+;; is equivalent to 
+
+  (compojure/defroutes myroutes
+      (compojure/GET "/" [] "Body Text"))
+#+END_SRC
+
+Note that routes, the routes function, and defroutes all return handlers. This makes it easy to define routes that nest in other defined routes.
+
+**** Nesting Routes
+The =context= macro provides a way of giving a set of routes a common prefix:
+
+#+BEGIN_SRC clojure
+  (defroutes user-routes
+    (context "/user/current" []
+      (GET "/" [] ...) ;the route that exists at "/user/current"
+      (GET "/profile" [] ...)
+      (GET "/posts" [] ...)))
+#+END_SRC
+
+Route parameters may be added to the context, just like a normal route:
+
+#+BEGIN_SRC clojure
+  (defroutes user-routes
+    (context "/user/:user-id" [user-id]
+      (GET "/profile" [] ...)
+      (GET "/posts" [] ...)))
+#+END_SRC
+
+Because routes are closures, the user-id symbol is available to use in the two sub routes.
+
+However, if your inner routes are defined separately, you need to manually pass any bound parameters from the context. For example:
+
+#+BEGIN_SRC clojure
+  (defn inner-routes [user-id]
+    (routes
+     (GET "/profile" [] ...)
+     (GET "/posts" [] ...)))
+
+  (defroutes user-routes
+    (context "/user/:user-id" [user-id]
+      (inner-routes user-id)))
+#+END_SRC
+
+This is because parameters are bound with a lexical, rather than dynamic scope.
+Contact GitHub API Training Shop Blog About
+
+**** Documentation
+- wiki: https://github.com/weavejester/compojure/wiki
+- API: http://weavejester.github.io/compojure/
+
+*** Selmer
+Selmer is a general-purpose templating library, that populates string templates with dynamic content. Generally, a website would have one base template, which contains references to common assets such as JS, CSS, and image files. This base tempalte would be extended by other templates, which are called by our routes, and supplied context maps for dynamic content injection.
+**** Rendering
+***** render
+The =selmer.parser/render= function accepts a template string and a context map. In the template string, regions bounded by double curly-brackets may contain keys present in the map; those keys then evaluate to the values in the map.
+
+#+BEGIN_SRC clojure
+  (selmer.parser/render "Hello {{name}}" {:name "World"})
+  => Hello World
+#+END_SRC
+
+***** render-file
+Genrally, we'll have separate template files for Selmer to render. The =selmer.parser/render-file= function accepts a path to a template file name in the form of a string, and a map. The file name path begins at the =resources= directory by default.
+
+#+BEGIN_SRC clojure
+  (selmer.parser/render "hello.html" {:name "world"})
+#+END_SRC
+
+***** set-resource-path
+When working with text files, Selmer looks in the resources dir in the project root. However, we can declare a different path string.
+
+#+BEGIN_SRC clojure 
+  (selmer.parser/set-resource-path! "/resources/html/templates/")
+#+END_SRC
+
+***** The Context Map
+Maps are the most common context for a template, swapping values for keys in the template string. To access nested keys within a map, we can use dot notation.
+
+#+BEGIN_SRC clojure
+  (selmer.parser/render "<p>Hello {{user.first}} {{user.last}}</p>"
+    {:user {:first "Jean-Luc" :last "Picard"}})
+#+END_SRC
+
+If a symbol appears in a template, but is not a key in the map, no dynamic content is generated. 
+  Although we generally will supply string values to our templates, we can 
+pass any valid clojure values. See the Block Tag: For example. 
+
+**** Filters
+Filters allow you to process the dynamic content before inserting it into the template. The syntax simply uses a pipe symbol to pass the value to the filter: ={{valueKey|filterName}}=. 
+  Filters are simply a function that accepts a value and returns the value 
+transformed. Selmer has multiple filters predefined: upper, date, and pluralize.
+  We can write our own filters using the =selmer.filters/add-filter!=
+function, which accepts a keyword for the filter name, and a function. 
+
+#+BEGIN_SRC clojure
+  (selmer.filters/add-filter! :empty? empty?)
+  (selmer.parser/render "{% if names|empty? %}No Names{% else %}{{names}}{% endif %}" {:names []})
+#+END_SRC
+
+***** Unescaping Content
+Selmer will automatically escape dynamic content. But we can override this behavior - with caution!
+
+#+BEGIN_SRC clojure
+  (selmer.filters/add-filter! :escape 
+    (fn [x] [:safe x]))
+#+END_SRC
+  
+**** Tags
+***** Inline Tags
+****** Inheriting Templates
+Selmer can next templates within each other.
+******* =extends=
+The =extends= tag allows a template to extend another template possessing a content "block" interface. The base template's "blocks" are shadowed by the referring template blocks of the same name. When a child template does not contain a block that the parent template contains, the parent block's content will be displayed.
+******** Example:
+#+BEGIN_SRC html
+<!-- base.html -->
+  <html>
+    <head>
+      <title>{% block title %}My Default Title{% endblock %}</title>
+    </head>
+    <body>
+      <div id="content">
+        {% block content %}Default Content{% endblock %}
+      </div>
+    </body>
+  </html>
+#+END_SRC
+
+#+BEGIN_SRC html
+<!-- hello.html -->
+  {% extends "base.html" %}
+
+  {% block content %}
+    <h2>{{heading}}</h2>
+    <ul>
+      {% for item in items %}
+        <li>{{item}}</li>
+      {% endfor %}
+    </ul>
+  {% endblock %}
+#+END_SRC
+******** Super
+From the extendeding tempalte, can include the content contained in the parent template's block using {{block.super}}.
+******* =include=
+The include tag allows a template to inject another template into itself. 
+******** Example:
+
+#+BEGIN_SRC html
+<!-- register.html -->
+  <form action="/register" method="POST">
+    <label for="id">user id</label>
+    <input id="id" name="id" type="text" />
+    <input pass="pass" name="pass" type="text" />
+    <input type="submit" value="register" />
+  </form>
+#+END_SRC
+
+#+BEGIN_SRC html
+<!-- hello.html -->
+  {% extends "base.html" %}
+  
+  {% block content %}
+    {% include "register.html" %}
+    <h2>{{heading}}</h2>
+    <ul>
+      {% for item in items %}
+        <li>{{item}}</li>
+      {% endfor %}
+    </ul>
+  {% endblock %}
+#+END_SRC
+
+******* Memoized by Default
+Templates are memoized by default. This can be toggled with the =selmer.parser/cache-on!= and =selmer.parser/cache-off!= functions. When in development, it is best to turn memoization off. 
+***** Block Tags
+****** if/else/endif
+****** for/endfor
+
+#+BEGIN_SRC clojure
+  (selmer.parser/render "list.html" {:items (range 10)})
+#+END_SRC
+
+#+BEGIN_SRC html
+<!-- list.html -->
+  <ul>
+    {% for item in items %}
+      <li>{{item}}</li>
+    {% endfor %}
+  </ul>
+#+END_SRC
+***** Defining Custom Tags
+Selmer provides the =selmer.parser/add-tag!= macro, which accepts a keyword-name, a function (which accepts arguments and a context map), and - optionally - content (for creating block tags).
+**** Handling Errors
+Selmer attempts to provide meaningful error messages, and provides the =selmer.middleware/wrap-error-page= function which serves an error page should the template compilation fail. This middleware is enabled by default in Luminus, but probably should be disabled for production.
+
+*** TODO Hiccup
+https://github.com/weavejester/hiccup
+
+*** Luminus
+**** Project Management
+To make managing a Luminus project easier, we can specify different profiles under the :profiles key in our project.clj. Lein uses profiles to define different build outcomes: :uberjar for production, :dev for development, :test for testing, etc.
+  Profiles affect the global project.clj configuration settings. For example, 
+dependencies specified in the :dev profile will be added to the global vector of dependencies when the app uses the :dev profile. This allows us to configure variables for each environment. 
+  Environment configuration is stored in profile spcific directories, located 
+within the env/ directory at the project's root. These profile directories contain a resources dir - including a config.edn file for port and nrepl numbers - and a clj dir - including .clj files that supply settings, middleware, etc. within unique namespaces.
+  
+**** Application Components Architecture
+Instead of an "MVC" approach, Luminus encouraged separating concerns into namespaces of related functionality:
+***** .core - Manages the HTTP Server Lifecycle
+The core namespace contains the -main function, which is the entry point for the app. The hyphen before =main=, and the =:gen-class= hint in the .core ns declaration, denotes that this function will be compiled to a Java class, which can be invoked as bytecode. 
+  The core namespace contains the =start-app= and =stop-app= functions, which 
+initialize or terminate an http server, repl, and logger. These functions also manage state resources using Mount, providing specific code to execute on start and stop.
+***** .config - Manages a Map, Containing Configuration Variables
+The config namespace uses the cprop library to merge base env configs and profile-based configs, and translating between clojure data and the host's format.
+***** .handler - The Root Handler for HTTP Req/Res
+The handler namespace aggregates the application's routes from the routes namespaces, then selectively applies middleware, and exposes a ring handler for the export.
+***** .middleware - Supplies Custom Middleware
+This namespace contains middleware functions that modify the request and response maps, including wrap-base, wrap-formats, wrap-csrf, wrap-internal-error, and wrap-context.
+***** .routes - The Root for Routes
+THe routes namespace(s) supply routes for the handler namespace. When an app has many routes, they should be grouped into namespaces that facilitate modular application of middleware.
+***** .db - A Namespace for our Database
+The db.core namespace uses the conman library to connect to a sql database and manage queries ala HugSQL.
+- https://github.com/luminus-framework/conman
+- http://www.hugsql.org/
+Thankfully, no ORM is necessary, and database queries are represented as sequences of maps, where the keys represent the column names of the table. 
+
+Note also that our database connection is not hardcoded, but is instead supplied by the config namespace, which in turn refrences a lein profile.
+***** .layout - The Logic for Generating Pages
+The layout namespace contains the templating logic for the application. Luminus uses Selmer, and this namespace includes a path modification, custom tags, and custom filters. 
+  The namespace contains a render function, which exposes Selmer's 
+render-file function while providing default settings, and an error-page function to handle bad requests.
+  The namespace also contains the *app-context* declaration, which 
+disambiguates the application from other applications running on the same server, and appropriately routes requests and responses. 
+**** Mount (Managing Stateful Components)
+Mount serves as an interface to stateful variables, providing them as if they were vars in a namespace. This allows us to separate our business logic from the application's state, while colocating Mount's state interface with those functions that interact directly on the state in a shared namespace.
+  We create state resources with Mount's =defstate= macro, which allows us to 
+instantiate a stateful resource - like a database connection, or an http server.  We manage these state resources with =mount/start= and stop them with =mount/stop=. These commands trigger =:start= and =:stop= keys in each =defstate= declaration to initialize and wind-down state resources.
+  Mount uses the Clojure compiler's namespace dependency tree to determine 
+which state resources to start first, moving from the leaves to the root. We can also omit specific states, or specify only specific state resources.
+- https://github.com/tolitius/mount
 * Metaprogramming with Macros: "Screw the next guy"
 Macros permit you to alter the evaluation paradigm from eager evaluation to normal 
 order evaluation. Macros allow us to rewrite our code at compile time, giving us 
