@@ -1,5 +1,5 @@
 
-* Up and Running with TypeScript : John Lindquist (0:43)
+* DONE Up and Running with TypeScript : John Lindquist (0:43)
 ** Install from NPM
 ** Using the TypeScript Compiler
 From the command line, we can pass a .ts file to the compiler to recieve a .js file of the same name. 
@@ -150,7 +150,7 @@ definition files and figure out how they integrate.
 You can create your own definiton files. 
 
 
-* Using Types Effectively in TypeScript : Ari Picker (0:26)
+* TODO Using Types Effectively in TypeScript : Ari Picker (0:26)
 ** Intro to Static Typing
 The tsc associates types with variables, not merely values. In order to declare a variable's type, the name is followed by a colon and a type name
 
@@ -158,7 +158,7 @@ The tsc associates types with variables, not merely values. In order to declare 
   let someString: string = "I'm a string";
 #+END_SRC
 
-Once a type is declared for variable, the tsc will throw an error if that variable is assigned a value other than it's declared typq. Note, however, this will not automatically prevent compilation.
+Once a type is declared for variable, the tsc will throw an error if that variable is assigned a value other than it's declared type. Note, however, this will not automatically prevent compilation.
 
 Static typing changes an editor into an IDE. With a variable's type declared, the editor can better intuit autocompletion, provide function signatures (in the minibuffer), and alert you to improper assignments.
 
@@ -213,7 +213,7 @@ We can annotate variables to have more than one type. This is called a Union Typ
 : 23
 : twenty three
 
-This can be onerous for variables that have lengthy type annotations. Thankfully TS gives us the =type= keyword. The type keyword lets us associate a union type with a new type name. In out var declarations and function signatures, we can use this new type name.
+This can be onerous for variables that have lengthy type annotations. Thankfully TS gives us the =type= keyword. The type keyword lets us associate a union type with a new type name. In our var declarations and function signatures, we can use this new type name.
 
 #+BEGIN_SRC typescript
   type thing = string | number | string[] | boolean;
@@ -280,7 +280,8 @@ let gimmeStuffAndThings = (sat: stuffAndThings) => {
   return sat.cool || sat.lame; 
 };
 #+END_SRC
-** Distinguishing Between Type of Strings
+
+** Wrangling Strings with String Literal Types
 We can annotate types with the string type, or we can annotate a type with a string literal. Once done, that variable can only be assigned null, undefined, or that string literal.
 
 #+BEGIN_SRC typescript
@@ -300,7 +301,7 @@ String related errors are common, but using string literal types can help us avo
 #+END_SRC
 
 ** Using Interfaces to Describe Types
-Interfaces describe the shape of a type. This is somewhat analagous to a database schema. 
+Interfaces describe the shape of an object type. This is somewhat analagous to a database schema. 
   Interfaces are declared with the =interface= keyword, a name, and an object literal with 
 =parameter: type= pairs, which correspond to object properties and the corresponding types of those properties. When an object is declared, it can recieve an interface as a type annotation.
   Interfaces do not set properties on a type, so it is up to us to supply objects of an 
@@ -309,7 +310,8 @@ interface with property values. Normally, objects of an interface type must cont
 a function. In the example below, we inline a type for the opponent argument of the AttackFunction interface. This function interface describes the shape of the function: the types that the function recieves as arguments, and the type returned from the function. 
   Also note that we can annotate an interface parameter with an interface. In the example, the 
 attackFunction interface appears as the type annotation for the comicBookCharacter interface's attack parameter.
-  The tsc will err if interface objects access properties not present on the interface. Instead of filling interfaces with optional parameters, consider creating an interface containing optional properties, and extending one interface with another. 
+  The tsc will err if interface objects access properties not present on the interface. Instead of filling 
+interfaces with optional parameters, consider creating an interface containing optional properties, and extending one interface with another. 
 
 
 #+BEGIN_SRC typescript
@@ -370,7 +372,7 @@ getSecretIdentity(superHero);
 : She-Hulk attacked Joker, who's health = -4925
 : She-Hulk has no secret identity
 
-** Creating a Class
+** Creating a Class: Static, Private, and Public Properties
 A TypeScript Class is a function. Functions are objects, so they can have properties and methods. By default, all Class properties are public, though we could add a =public= modifier for some reason... More useful is the =private= modifier. Private properties cannot be accessed outside of the class.
   We can set properties of a class at the time of instantiation if the Class has a constructor 
 method. The Constructor method accepts arguments that can be used to set properties on the instance. Because the constructor is internal to the class, it can access private properties. We could also expose the private property through explicit getter methods, like the getSecretIdentity method below.
@@ -466,10 +468,10 @@ storm.getTeamName();
 : Storm's secret identity is Ororo Munroe
 : Storm is on Team oddCouple
 
-** Sharing Class Behavior with Inheritance
+** Sharing Class Behavior with Inheritance, and Protected Properties
 We can use the =extends= keyword to permit one class to inherit the constructor and properties of another class. Private properties are still private to their containing class, but =protected= properties can be accessed by derived classes.
   We can add functionality to derived classes. When you extend a class, without using a 
-constructor, the derived class will use the base class's constructor. In order to augment the base class's contructor method, a derived class can have its own constructor method, but it must have a call to =super= as its first statement. Calling super is like calling the base classes constructor, and it is necessary to pass the arguments that were passed to the derived class into the call to super, so as to relay those arguments to the base class constructor. In the example below, the only arguments to the derived class are those needed by the base class, so the rest and spread operators manage the relay - though the tsc does complain.
+constructor, the derived class will use the base class's constructor. In order to augment the base class's contructor method, a derived class can have its own constructor method, but it must have a call to =super= as its first statement. Calling super is like calling the base class's constructor, and it is necessary to pass the arguments that were passed to the derived class into the call to super, so as to relay those arguments to the base class constructor. In the example below, the only arguments to the derived class are those needed by the base class, so the rest and spread operators manage the relay - though the tsc does complain.
 
 #+BEGIN_SRC typescript
 class ComicBookCharacter {
@@ -509,8 +511,8 @@ console.log(scarletWitch.getSecretId());
 
 ** Using Assertions to Convert Types
 We can use type assertion to tell the tsc to trust us - for example when using a method on a var that is of ambiguous type, say from union typing, but we want the compiler to accept our assertion that the type is what we say it is.
-  Assertions can be written with the =as= syntax, and the angle bracket syntax. But it's 
-probably best to avoid the angle bracket syntax when using jsx. When we make an assertion, we encapsulate the syntax in parens, before the property access via . notation.
+  Assertions can be written with the =as= syntax, and the angle bracket syntax. But avoid the angle bracket 
+syntax when using jsx. When we make an assertion, we encapsulate the syntax in parens, before the property access via . notation.
   Type assertions only have effect at compile time, and do not survive compilation.
 
 #+BEGIN_SRC typescript
@@ -571,12 +573,12 @@ push<string>("adamantium claws", powers);
 #+RESULTS:
 : [ 'teleinesis', 'esp', 'adamantium claws' ]
 
-** Practical Generics
-Generic types can contain anything, making them great containers. In the example, we have a generic interface - container - that lets us build crocContainers and taxContainers. If we want to be more specific about what we want to contain, we can use a generic constraint. A genric contraint can contain anything that has the constraint type. Our example has a CrocContainer interface, which can only contain objects that 
+** TODO Practical Generics
+Generic types can contain anything, making them great containers. In the example, we have a generic interface - container - that lets us build crocContainers and taxContainers. If we want to be more specific about what we want to contain, we can use a generic constraint. A genric contraint can contain anything that has the constraint type. Our example has a CrocContainer interface, which can only contain objects that have a personality property, and a taxContainer interface, which can only contain objects with a year property.
   For class generic constraints, we can assign the class a generic constraint, and forgo 
 the use of the constructor, and still get autocompletion for the constraint type. We can also set a type at instantiation to get autocompletion on both the constraint type and the declared type. If we add a property, that's not in the constraint or the declaredtype, the tsc will complain.
-  If we want to use a constructor to set properties at instantiation, we get the same 
-story: tsc will recognize properties from both the class's generic contraint, and any declared types. And, other properties will sound an error.
+  If we want to use a constructor to set properties at instantiation, we get the same story: tsc will 
+recognize properties from both the class's generic contraint, and any declared types. And, other properties will sound an error.
   As long as the instance has the constraint, we can add extra properties.
 
 #+BEGIN_SRC typescript
@@ -609,6 +611,195 @@ let ccc = new CCC<BlueCroc>({ personality: "ultra classy",
                               likesCheetos: true, 
                               color: "blue" })
 #+END_SRC
+
+#+RESULTS:
+: ../../../../../../../var/folders/rp/2kdmdq3d1fjcs2f98lm2dc900000gq/T/babel-6080wZ/ts-src-6082VW.ts(20,21): error TS2339: Property 'classyCrocUnit' does not exist on type 'ClassyContainer<RedCroc>'.
+: ../../../../../../../var/folders/rp/2kdmdq3d1fjcs2f98lm2dc900000gq/T/babel-6080wZ/ts-src-6082VW.ts(27,31): error TS2345: Argument of type '{ personality: string; likesCheetos: boolean; color: "blue"; }' is not assignable to parameter of type 'BlueCroc'.
+:   Object literal may only specify known properties, and 'likesCheetos' does not exist in type 'BlueCroc'.
+
+
+* TypeScript Fundamentals : Dan Wahlin and John Papa (4:25) ((2:29))
+** Typing, Variables, and Functions
+*** Static and Dynamic Typing
+Typescript doesn't require you to use static types. But static types give you "type safety." Type safety comes in multiple forms, for example, if you have a var of a specific type, the tsc will alert you if you assign an incorrect type to that var.  
+**** compile time or runtime errors 
+calling a method on a string, then calling that string method on an object later errs
+**** 
+*** Grammar, Declarations & Assignment, Type Inference & Annotations
+type inference => annotations
+
+If you assign a value to a var in the declaration, the tsc will infer that the variable's type using the value you assign to it.
+
+If you do not give a variale a type annotation when you declare it, the var the tsc will infer the =any= type for that var. 
+
+Note that annotations do not prevent or cause coercion
+**** EXAMPLE:
+#+BEGIN_SRC typescript
+const num1 = 100;
+const num2: number = 50;
+const num3 = "twenty-five";
+
+function addNumbers(n1, n2, n3) {
+    var result = n1 + n2 + n3;
+    var msg = 'Sum is = ' + result;
+    console.log(msg);
+}
+
+addNumbers(num1, num2, num3);
+
+function addOnlyNumbers(n1: number, n2: number, n3: number) {
+    var result = n1 + n2 + n3;
+    var msg = 'Sum is = ' + result;
+    console.log(msg);
+}
+
+addOnlyNumbers(num1, num2, num3); 
+// in the editor, num3 is underlined, because it doesn't match the type of the call target
+#+END_SRC
+
+#+RESULTS:
+: ../../../../../../../var/folders/rp/2kdmdq3d1fjcs2f98lm2dc900000gq/T/babel-6080wZ/ts-src-608Q4K.ts(5,21): error TS7006: Parameter 'n1' implicitly has an 'any' type.
+: ../../../../../../../var/folders/rp/2kdmdq3d1fjcs2f98lm2dc900000gq/T/babel-6080wZ/ts-src-608Q4K.ts(5,25): error TS7006: Parameter 'n2' implicitly has an 'any' type.
+: ../../../../../../../var/folders/rp/2kdmdq3d1fjcs2f98lm2dc900000gq/T/babel-6080wZ/ts-src-608Q4K.ts(5,29): error TS7006: Parameter 'n3' implicitly has an 'any' type.
+: ../../../../../../../var/folders/rp/2kdmdq3d1fjcs2f98lm2dc900000gq/T/babel-6080wZ/ts-src-608Q4K.ts(19,28): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+: Sum is = 150twenty-five
+: Sum is = 150twenty-five
+
+*** TODO Grammar
+*** Ambient Declarations and Type Definition Files
+Often, we have to interact with 3rd party libraries. TS provides the =declare= keyword, which creates an ambient declaration. Ambient declarations tell TS that the var references something external. For example, if we wanted to get TS to recognize the =document= object:
+
+#+BEGIN_SRC typescript
+  declare var document;
+  document.title = "Hello"; // tide reports properties of document in line 2. 
+#+END_SRC
+
+This works because the tsc has type definitions for browser objects defined in =lib.d.ts=. This is a 'typings definitions' file, which provides types to our code. When we work with 3rd party libraries, we have to manually import typings definition files. 
+
+**** Using Typings
+In order for our editor and the tsc to take advantage of the typings, we need to insert a reference to the typings file in our source. (See line 1 of the jQuery example). It is idiomatic to store typings files in a common directory, to make them easily accessible from your source.
+
+**** jQuery Example
+With a reference to our typings file, the tsc and our editor will be able to provide type safety for third party code. 
+
+#+BEGIN_SRC typescript
+  /// <reference path="jquery.d.ts" />
+  declare var $;  // Notice, this is type any, but we can annotated it to : $
+  var data = "Hello Matthew";
+  $("div").text(data);
+#+END_SRC
+
+*** Types
+**** =any=
+The =any= type is the root type in TS, and thus a variable with type =any= could be any JavaScript value. When we declare a variable, but do not assign a value, the tsc infers a type of =any= to that variable. We can also give a variable an annotation of :any, but that wouldn't provide any type safety.
+**** Primitive types
+- : number
+- : boolean
+- : string
+**** Array Types
+Sometimes you know the type of each element in an array.
+- : string[]
+- : number[]
+etc...
+**** null
+Any of type can have the null value. The null 'type' is a subtype of all primitives, except for void and undefined.
+**** undefined
+Any of these types can have the undefined value, which is also a subtype of all types.
+*** TODO Objects
+**** Examples:
+- Functions
+- class
+- module
+- interface
+- literal types
+**** May Contain
+- Properties
+  - public or private
+  - required or optional
+- Call Signatures
+- Construct Signatures
+- Index Signatures
+*** Functions
+*** Arrow Functions and Debugging
+*** Functions and Interfaces
+*** Static Typing Recap
+** Classes and Interfaces
+*** Defining Classes
+*** Casting and Type Definition Files
+*** Extending Types
+*** Using Interfaces
+*** Extending an Interface
+
+
+* TS In-depth : Brice Wilson (4:40)
+** Basics
+*** Declaring Variables
+*** Basic Types and Type Annotations
+*** Enums, Arrays, and Tuples
+** Functions
+*** Parameter Types and Return Types
+*** Arrow Functions
+**** Handling This
+*** Function Types
+*** Optional and Default Params
+*** Rest Params
+*** Function Overloads
+** Interfaces
+*** Defining an Interface
+*** Function Types
+*** Extending Interfaces
+*** Class Types
+** Classes
+*** Constructors
+*** Properties and Methods
+*** Access Modifiers
+*** Extending Classes with Inheritance
+*** Abstract Classes
+** Modules and Namespaces
+*** Modules vs. Namespaces
+*** Creating and Using Namespaces
+*** Reasons to Use Modules
+*** Module Formats and Loaders
+*** Exporting / Importing / Default Exports
+** Generics
+*** What are Generics and Type Parameters
+*** Using Array <T>
+*** Generic Functions
+*** Generic Interfaces and Classes
+*** Generic Constraints
+** Compiler Options and Project Configuration (SKIP)
+** Type Definitions 
+*** Ambient Modules
+*** DefinitelyTyped
+*** Managing Type Definitions with tsd
+*** Managing Type Definitions with typings
+
+
+* Advanced TS : Brice Wilson (2:55)
+** Overview
+** Maximizing TS
+** Going Further with Basic Types
+*** Destructuring Arrays and Objects
+*** The Spread Operator
+*** Tuple Types
+*** Union Types and Intersection Types
+*** String Literal Types and Type Aliases
+** Using Advanced Type Features
+*** Polymorphic this Types
+*** Declaration Merging
+*** Type Guards
+*** Symbols
+** Creating and Using Decorators
+*** Decorator Syntax and Factory Functions
+*** Class Decorators
+*** Property and Parameter Decorators
+*** Property Descriptors and Method Decorators
+** Implementing Asynchronous Patterns
+*** Callback Functions
+*** Promises
+*** async/await
+** Writing Cleaner Code with TSLint
+
 
 
 * TypeScript Documentation
@@ -857,6 +1048,41 @@ Some examples of functions returning never:
 **** Type Assertions
 See egghead: Using Types Effectively - Using Assertions
 *** Interfaces
+Type-checking focus on the shape that data takes, a sort of duck typing, or "structural subtyping." Interfaces name types, and allow you to define the contracts within your code and between programs.
+**** Declaring an Interface
+
+
+#+BEGIN_SRC typescript
+  function printLabel(labelledObj: { label: string }) {
+    console.log(labelledObj.label);
+  }
+
+  let myObj = {size: 10, label: "Size 10 Object"};
+  printLabel(myObj);
+#+END_SRC
+
+#+RESULTS:
+: Size 10 Object
+
+We can store the notion of an object that has a label property of type string in an Interface. We declare an interface with the =interface= keyword, give it a name, and then detail an object literal with the desired properties and types.
+
+#+BEGIN_SRC typescript
+  interface LabelledValue {
+    label: string;
+  }
+
+  function printLabel(labelledObj: LabelledValue) {
+    console.log(labelledObj.label);
+  }
+
+  let myObj = {size: 10, label: "Size 10 Object"};
+  printLabel(myObj);
+#+END_SRC
+
+#+RESULTS:
+: Size 10 Object
+
+
 **** Optional Properties
 **** Readonly Properties
 **** Excess Property Checks
@@ -872,7 +1098,7 @@ See egghead: Using Types Effectively - Using Assertions
 *** Enums
 See also enums in basic types.
 
-The numeriv value associated with enum members can be either constant or computed. An enum member is considered constant if:
+The numeric value associated with enum members can be either constant or computed. An enum member is considered constant if:
 
 - It does not have an initializer and the preceding enum member was constant. In this case the value of the current enum member will be the value of the preceding enum member plus one. One exception to this rule is the first element on an enum. If it does not have initializer it is assigned the value 0.
 - The enum member is initialized with a constant enum expression. A constant enum expression is a subset of TypeScript expressions that can be fully evaluated at compile time. An expression is a constant enum expression if it is either:
