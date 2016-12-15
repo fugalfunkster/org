@@ -1,0 +1,77 @@
+* CSS Transition Fundamentals
+** CSS Transition Properties
+CSS Transition allows property changes in CSS Values to occur smoothly over a specified duration. The CSS rendering engine accepts a starting value and an ending value and a duration, and does the work of tweening.
+  There are three main transition properties to specify:
+- =transition-property= specified the name or names of CSS properties to transiton
+- =transition-duration= specifies the duration of the animation, in seconds
+- =transition-delay= specified the amount of time before the transiton will begin, in seconds
+- =transition-timing-function= lets you specify the timing of the transition states
+
+#+BEGIN_SRC css
+/* initial state */
+  .box {
+    height: 100px;
+    width: 100px;
+    background-color: red;
+    transition-property: background-color, border-radius;
+    transition-duration: 1s, 2s;
+    transition-delay: 2s, 1s;
+  }
+
+/* final state */
+  .box:hover {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    background-color: blue;
+  }
+#+END_SRC
+
+Like many CSS properties, these transiton properties can be combined into a shorthand: the =transiton:= property. This property takes a comma separated list of values for each transition-property transiton-duration transiton-delay. The initial state example would look like this:
+
+#+BEGIN_SRC css
+  .box {
+    height: 100px;
+    width: 100px;
+    background-color: red;
+    transition: background-color 1s 2s, border-radius 2s 1s;
+  }
+#+END_SRC
+
+** 2D Transform
+CSS Transform allows elements styled in CSS to be transformed in a two-dimensional space. 
+*** skew
+*** scale : increases or decreases the size of an element
+
+#+BEGIN_SRC css
+  .square {
+    background: #000;
+    position: absolute;
+    left: 25%;
+    top: 25%;
+    width: 75px;
+    height: 75px;
+    transition: transform 5s;
+  }
+
+  .square:hover {
+    transform: scale(2,2);
+  }
+#+END_SRC
+
+*** rotate
+*** translate : 
+
+#+BEGIN_SRC css
+  .square {
+    background-color: orange;
+    transition: transform 5s;
+  }
+
+  .square:hover {
+    transform: translateX(900px);
+  }
+
+#+END_SRC
+
+*** transition timing function

@@ -79,7 +79,6 @@
 *** booleans (true false)
 *** (nil)
 *** TODO Regular Expressions (brave)
-** TODO Forms (brave)
 
 
 * Compound Data: Collections & Seqs
@@ -831,7 +830,7 @@ Pure functions always return the same output when given the same input. Pure fun
 
 
 * You must learn Control (flow)
-** Boolean Logic 
+** Boolean Logic
 *** Predicates: Basic Logic Tests
 Only two values evaluate to false in logic operations: false and nil. nil is 
 logically false. In Clojure, functions that return a boolean value as their result typically end with a question mark.
@@ -972,9 +971,9 @@ But be wary of falsey values!
 #+RESULTS:
 : nil
 ** Control Flow
-There are no statements in Clojure, only expressions.
+There are no statements in Clojure, only expressions. Every expression returns a value.
 *** do
-The do expression accepts any number of arguments, evaluates them in turn, and returns the value of the last expression. This is how Clojure does 'blocks.' Idiomatically, do expressions are useful for side effects, like sdtout or logging. 
+The do form accepts any number of arguments, evaluates them in turn, and returns the value of the last expression. This is how Clojure does 'blocks.' Idiomatically, do expressions are useful for side effects, like sdtout or logging. 
 
 #+BEGIN_SRC clojure
   (do 
@@ -1007,8 +1006,8 @@ The when-let function works similarly to when, but has a symbol-binding in the p
 : true is great!
  
 *** if
-The if function takes three parameters: a predicate, an expression to evaluate in the event of 
-a true result, and an expression to evaluate in the event of a false result.
+The if function takes three parameters: an expression to assess, an expression to evaluate in the event of 
+a true assessment, and - optionally - an expression to evaluate in the event of a false assessment.
 
 #+BEGIN_SRC clojure
   (if false
@@ -2845,6 +2844,7 @@ instantiate a stateful resource - like a database connection, or an http server.
   Mount uses the Clojure compiler's namespace dependency tree to determine 
 which state resources to start first, moving from the leaves to the root. We can also omit specific states, or specify only specific state resources.
 - https://github.com/tolitius/mount
+
 * Metaprogramming with Macros: "Screw the next guy"
 Macros permit you to alter the evaluation paradigm from eager evaluation to normal 
 order evaluation. Macros allow us to rewrite our code at compile time, giving us 
