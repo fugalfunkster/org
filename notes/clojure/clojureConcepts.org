@@ -2475,7 +2475,6 @@ Clojure has a standard testing libray, which can be lpaded into out test files.
 - testing : a string that is used withing deftest to provide context to what is being tested
 - is : is the assertion function, which accepts an argument and reports whether the argument is truthy.
 
-
 ** Web Libs
 *** Ring
 "Ring adapters for the Java HTTP servlet API allow applications to be deployed on any servlet container, such as Tomcat. However, the most common approach is to run Clojure applications standalone using an embedded HTTP server wish as Immutant or Jetty." -WDwC
@@ -2844,6 +2843,7 @@ instantiate a stateful resource - like a database connection, or an http server.
   Mount uses the Clojure compiler's namespace dependency tree to determine 
 which state resources to start first, moving from the leaves to the root. We can also omit specific states, or specify only specific state resources.
 - https://github.com/tolitius/mount
+
 
 * Metaprogramming with Macros: "Screw the next guy"
 Macros permit you to alter the evaluation paradigm from eager evaluation to normal 
