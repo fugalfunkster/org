@@ -1,0 +1,29 @@
+* Preface
+Unlike HtDP, which focuses on "the design process", SICP aims to instill the "techniques used to control the intellectual complexity of large software systems." In some sense, HtDP's design process offers an interative approach: "first do this, then do this." =How are the techniques provided in SICP offered? Are they considerations? Patterns? Instructions?=
+
+* 1. Building Abstractions with Procedures
+** 1. The Elements of Programming
+*** 1. Expressions
+*** 2. Naming and the Environment
+*** 3. Evaluating Combinations
+*** 4. Compound Procedures
+*** 5. The Substitution Model for Procedure Application
+*** 6. Conditional Expressions and Predicates
+*** 7. Example: Square Roots by Newton's Method
+*** 8. Procedures as Black-Box Abstractions
+** 2. Procedures and the Processes They Generate
+*** 1. Linear Recursion and Iteration
+*** 2. Tree Recursion
+*** 3. Orders of Growth
+*** 4. Exponentiation
+*** 5. Greatest Common Divisors
+*** 6. Example: Testing for Primality
+** 3. Formulating Abstractions with Higher-Order Procedures
+*** 1. Procedures as Arguments
+*** 2. Constructing Procedures Using Lambda
+*** 3. Procedures as General Methods
+*** 4. Procedures as Returned Values
+* 2. Building Abstractions with Data
+* 3. Modularity, Objects, and State
+* 4. Metalinguistic Abstraction
+* 5. Computing with Register Machines

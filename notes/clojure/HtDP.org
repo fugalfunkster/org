@@ -1,0 +1,82 @@
+* Preface
+Whelp, I just finished a read-through of HtDP. Because the text is designed to be an introuction to programming concepts, many of the concepts felt - sometimes overly - familiar. But I cannot say I've mastered the programming concepts presented within. Additionally, I believe the book stands out from others I've casually read, like SICP, in emphasizing a design process, "that leads from problem statements to well-organized solutions" through the application of explicit guidelines.
+** The Design Recipe
+
+** The Learning Environment
+HtDP also employs a novel programming environment, designed to aid beginners. Chief among this environments benefits are: The use of DrScheme, and its simple syntax; and an interactive evaluation environment, that supplies meaningful error messages.
+
+
+
+Though transcriptions from DrScheme to Clojure should be straightforward, I anticipate some inventiveness on my part to emulate DrScheme's =define-struct= and =set!= with Clojure maps and atoms.
+*** Comparing the core grammar of Advanced Student Scheme to Clojure
+
+ |       | DrScheme                            | Clojure |
+ |-------+-------------------------------------+---------|
+ | <def> | (define ({<var>}*) <exp>)           | define  |
+ |       | (define <var> <exp>)                |         |
+ |       | (define-struct <var> ({<var>}*))    |         |
+ |-------+-------------------------------------+---------|
+ | <var> | <var>                               |         |
+ |       | <con>                               |         |
+ |       | <prm>                               |         |
+ |       | ({<exp>}*)                          |         |
+ |       | (cond ({<exp> <exp>}*)              |         |
+ |       | (cond ({<exp> <exp>}* (else <exp>)) |         |
+ |       | (local ({<def>}*) <exp>)            |         |
+ |       | (lambda ({<var>}*) <exp>)           |         |
+ |       | (set! <var> <exp>)                  |         |
+ |       | (begin {<exp>}*)                    |         |
+
+*** 
+* I. Processing Simple Forms of Data
+** Students, teachers, Computers
+** Numbers, Expressions, Simple Programs
+** Programs are Functon Plus Variable Definitions
+** Conditional Expressions and Functions
+** Symbolic Information
+** Compound Data, Part 1: Structures
+** The Varietie of Data
+* Intermezzo 1: Syntax and Semantics
+* II. Processing Arbitrarily Large Data
+ - [ ] Compound Data, Part 2: Lists
+ - [ ] More on Processing Lists
+ - [ ] Natural Numbers
+ - [ ] Composing Functions, Revisited Again
+ - [ ] Intermezzo 2: List Abbreviations
+* III. More on Processing Arbitrarily Large Data
+ - [ ] More Self-referential Data Definitions
+ - [ ] Mutually Referential data Definitions
+ - [ ] Development through Iterative Refinement
+ - [ ] Processing Two Complex Pieces of Data
+ - [ ] Intermezzo 3: Local Definitions and Lexical Scope
+* IV. Abstracting Designs
+ - [ ] Similarities in Definitions
+ - [ ] Functions as Values
+ - [ ] Designing Abstractions from Examples
+ - [ ] Designing Abstractions with First-Class Functions
+ - [ ] Mathematical Examples
+ - [ ] Intermezzo 4: Defining Functions on the Fly
+* V. Generative Recursion
+ - [ ] A New Form of Recursion
+ - [ ] Designing Algorithms
+ - [ ] Variations on a Theme
+ - [ ] Algorithms that Backtrack
+ - [ ] Intermezzo 5: The Cost of Computing and Vectors
+* VI. Accumulating Knowledge
+ - [ ] The Loss of Knowledge
+ - [ ] Designing Accumulator-Style Functions
+ - [ ] More Uses of Accumulation
+ - [ ] Intermezzo 6: The Nature of Inexact Numbers
+* VII. Changing the State of Variables
+ - [ ] Memory for Functions
+ - [ ] Assignment to Variables
+ - [ ] Designating Functions with Memory
+ - [ ] Examples of Memory Usage
+ - [ ] Intermezzo 7: The Final Syntax and Semantics
+* VIII. Changing Compound Values
+ - [ ] Encapsulation
+ - [ ] Mutable Structures
+ - [ ] Designing Functions that Change Structures
+ - [ ] Equality
+ - [ ] Changing Structures, Vectors, and Objects
+* Epilogue
