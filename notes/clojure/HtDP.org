@@ -1,14 +1,34 @@
 * Preface
-Whelp, I just finished a read-through of HtDP. Because the text is designed to be an introuction to programming concepts, many of the concepts felt - sometimes overly - familiar. But I cannot say I've mastered the programming concepts presented within. Additionally, I believe the book stands out from others I've casually read, like SICP, in emphasizing a design process, "that leads from problem statements to well-organized solutions" through the application of explicit guidelines.
-** The Design Recipe
+Whelp, I just finished a read-through of HtDP. Because the text is designed to be an introuction to programming concepts, many of the concepts were familiar. But the book stands out from others I've perused, like SICP, in emphasizing a design process "that leads from problem statements to well-organized solutions" through the application of explicit guidelines. I think I'd benefit from the practice of doing the exercises, focusing on using the design process. So, I'm going to restart the book, take some notes, and complete the exercises in Clojure.
+** On the Design Process and Design Recipes
+The design process articulated by the authors is a step-by-step set of instructions, guiding the student in the construction of a "design recipe."
 
-** The Learning Environment
-HtDP also employs a novel programming environment, designed to aid beginners. Chief among this environments benefits are: The use of DrScheme, and its simple syntax; and an interactive evaluation environment, that supplies meaningful error messages.
+The authors present a collection of design recipes, each defined to accommodate different categories of problems - namely, structural recursion, generative recursion, accumulation, history sensitivity, and abstraction over existing programs. From this collection, multiple recipes may be appropriate for a single problem, and the authors hope that students will better chose between approaches by fully understanding the available strategies.
 
+Each design recipe consists of a:
+1. Problem Analysis & Data Definition
+   - describing the class of problem data
+2. Contract, Purpose & Effect Statements, Header
+   - specifying the program's behavior
+3. Examples
+   - illustrating the behavior
+4. Function Template
+   - forming an outline
+5. Function Definition
+   - filling in the details
+6. Tests
+   - discovering errors through testing
 
+I approach design recipes as etudes - or as the authors put it, "soccer ball handling techniques."
 
-Though transcriptions from DrScheme to Clojure should be straightforward, I anticipate some inventiveness on my part to emulate DrScheme's =define-struct= and =set!= with Clojure maps and atoms.
-*** Comparing the core grammar of Advanced Student Scheme to Clojure
+** On the Learning Environment
+HtDP was designed alongside a programming environment designed to aid beginners. Chief among this environments benefits are: The use of DrScheme, and its simple syntax; and an interactive evaluation environment, that supplies meaningful error messages.
+
+Because I'll be using Clojure, I bear the burden of environmental complexity. However, I hope to use this opportunity to familiarize myself with REPL driven development, using emacs, org mode, cider/nREPL, node REPLs, and sayid.
+
+Though transcriptions from DrScheme to Clojure should be straightforward, I anticipate some inventiveness on my part to emulate DrScheme's =define-struct= and =set!= with Clojure maps and atoms. I also hope to explore spec to provide some data validation and predicate logic.
+
+** From DrScheme to Clojure (a syntax table)
 
  |       | DrScheme                            | Clojure |
  |-------+-------------------------------------+---------|
@@ -27,10 +47,129 @@ Though transcriptions from DrScheme to Clojure should be straightforward, I anti
  |       | (set! <var> <exp>)                  |         |
  |       | (begin {<exp>}*)                    |         |
 
-*** 
 * I. Processing Simple Forms of Data
-** Students, teachers, Computers
-** Numbers, Expressions, Simple Programs
+** 1. Students, Teachers, and Computers -or- Data and Operations
+"A computer's language of instruction and information is a PROGRAMMING LANGUAGE. Information expresed in a programming language called DATA. There are many flavors of data. /Numbers/ are one class of data. /Number series/ belong to the class of COMPOUND DATA, because each series is made up of other pieces of smaller pieces of data, namely, numbers. To contrast the two kinds of data, we also call numbers ATOMIC DATA. Letters are other examples of atomic data; family trees are compound data.
+Data represents information, but the concrete interpretation is up to us. For example, a number like 37.51 may represent a temperature, a time, or a distance. A letter like "A" may denote a school grade, a quality symbol for eggs, or part of an address.
+Like data, instructions, also called OPERATIONS, come in several flavors. Each class of data comes with a set of PRIMITIVE OPERATIONS. For numbers, we naturally get +, 0, *, and so on. Programmers compose primitive operations into PROGRAMS. Thus, we may think of primitive operations as the words of a foreign language and of programming as forming sentences in this language."
+** 2. Numbers, Expressions, Simple Programs
+*** 1. Numbers and Aritimetic
+**** Exercise 2.1.1
+#+BEGIN_SRC clojure
+;;(* 7 7) ;; no primitive for squaring a number in Clojure
+;;(Math/sin 90) ;; from Java's Math Class
+(max 1 4 3 2) 
+#+END_SRC
+**** Ex 2.1.2
+#+BEGIN_SRC clojure
+;;(Math/sqrt 4) ;; from Java's Math class
+;;(Math/sqrt 2) ;; from Java's Math class
+;;(Math/sqrt -1) ;; from Java's Math class //NaN
+(Math/tan 90) ;; from Java's Math class
+#+END_SRC
+*** 2. Variables and Programs
+"In algebra we learn to formulate dependencies between quantities using VARIABLE EXPRESSIONS. A variable is a placeholder for an unknown quantity." A known quantity can take the place of a variable if the variable is defined. 
+In programming, variables declaration binds symbols to expressions. Expressions can be a value, like a number, or variable expression that evaluates to a value.
+**** Exercise 2.2.1
+#+BEGIN_SRC clojure
+(defn farenheitToCelcius [degF] (/ (* 5 (- degF 32.0)) 9))
+(farenheitToCelcius 32)
+#+END_SRC
+**** Ex 2.2.2
+#+BEGIN_SRC clojure
+(defn dollarsToEuro [dollars] (* dollars 0.94))
+(dollarsToEuro 15)
+#+END_SRC
+**** Ex 2.2.3
+#+BEGIN_SRC clojure :results value
+(defn areaOfTriangle [base, height] (/ (* base height) 2))
+(areaOfTriangle 14 7)
+#+END_SRC
+**** Ex 2.2.4
+#+BEGIN_SRC clojure
+(defn convert3 [a b c] (+ a (* 10 b) (* 100 c)))
+(convert3 1 2 3)
+#+END_SRC
+**** Ex 2.2.5
+#+BEGIN_SRC clojure
+;;(defn f [n] (+ (/ n 3) 2))
+;;(defn f [n] (+ 10 (* n n)))
+;;(defn f [n] (* 1/2 (+ 20 (* n n))))
+(defn f [n] (- 2 (/ 1 n)))
+(f 2)
+(f 9)
+#+END_SRC
+
+#+RESULTS:
+: #'user/f3/217/9
+*** 3. Word Problems
+**** Exercise 2.3.1
+#+BEGIN_SRC clojure
+(defn tax [grossPay] (* grossPay 0.15))
+(defn netpay [hoursWorked]
+  (let [hourlyRate 12
+        grossPay (* hourlyRate hoursWorked)
+        witholding (tax grossPay)]
+    (-  grossPay witholding)))
+(netpay 10)
+#+END_SRC
+**** Exercise 2.3.2
+#+BEGIN_SRC clojure
+(defn sum-coins [p n d q] 
+  (cl-format "%.2f"
+    (+ (* p 0.01)
+       (* n 0.05)
+       (* d 0.10)
+       (* q 0.25))))
+(sum-coins 1 1 1 1)
+#+END_SRC
+
+#+RESULTS:
+: 0.41
+
+**** Exercise 2.3.3
+#+BEGIN_SRC clojure
+(defn total-profit [attendees]
+    (- (* 5.00 attendees) 
+       (+ 20.00 (* attendees 0.50))))
+(total-profit 50)
+#+END_SRC
+
+#+RESULTS:
+: #'user/total-profit205.0
+
+*** TODO 4. Errors
+"Expressions are either ATOMIC, that is, numbers and variables; or they are COMPOUND EXPRESSIONS..."
+Three categories of errors:
+- Syntax Errors
+- Run Time Errors
+- Logical Errors : A logical error omits no error, only erroneous output
+**** Exercise 2.4.1
+#+BEGIN_SRC clojure
+;;(+ (10) 20)
+;;(10 + 20)
+(+ +)
+#+END_SRC
+**** Exercise 2.4.2
+#+BEGIN_SRC clojure
+;;(defn f [x] (+ x 10)) ;;(defn f [1] (+ x 10))
+;;(defn g [x] (+ x 10)) ;;(defn g [x] + x 10)
+(defn h [x] (+ x 10)) ;;(defnh [x] (+ x 10)
+#+END_SRC
+**** Exercise 2.4.3
+#+BEGIN_SRC clojure
+;;(+ 5 (/ 1 0))
+;;(Math/sin 10 20)
+(somef 10)
+#+END_SRC
+**** Exercise 2.4.4
+#+BEGIN_SRC clojure
+(define somef [x] (Math/sin x x))
+;;(somef 10 20)
+(someof 10)
+#+END_SRC
+*** 5. Designing Programs
+
 ** Programs are Functon Plus Variable Definitions
 ** Conditional Expressions and Functions
 ** Symbolic Information
