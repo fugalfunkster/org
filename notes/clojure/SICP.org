@@ -86,13 +86,13 @@ We can also associate a symbol with a procedure, denoted as:
     (=a procedure to apply the operands to=))
 
 For example:
-#+BEGIN_SRC scheme
-  (define square (lambda (x) (* x x)))
+#+BEGIN_SRC clojure
+  (define square (fn [x] (* x x)))
 #+END_SRC
 
 Scheme provides sugar for this pattern, which we prefer:
-#+BEGIN_SRC scheme
-  (define (square x) (* x x))
+#+BEGIN_SRC clojure
+  (defn square [x] (* x x))
 #+END_SRC
 
 Once a symbol is associated with an expression, we can use it as if it were a primitive in our language. This form of abstraction allows us to write our programs at a higher conceptual level than the primitives provided by the language.
@@ -100,17 +100,19 @@ Once a symbol is associated with an expression, we can use it as if it were a pr
 This elevation of our abstractions to parity with a languages primitives enables our use of black box abstraction, conventional interfaces, and metalinguistic abstraction.
 
 Scheme also provides a form of case analysis (control flow) in the =cond= and =if= procedures. Compare:
-#+BEGIN_SRC scheme
-  (define (abs x) 
-    (cond ((< x 0) (- x))
-          ((= x 0) 0)
-          ((> x 0) x)))
+
+#+BEGIN_SRC clojure :results output
+  (defn abs [x]
+    (cond 
+      (< x 0) (- x)
+      (= x 0) 0
+      (> x 0) x))
 #+END_SRC
 
-#+BEGIN_SRC scheme
-  (define (abs x)
+#+BEGIN_SRC clojure :results output
+  (defn abs [x]
     (if (< x 0) 
-      (-x)
+      (- x)
       x))
 #+END_SRC
 
@@ -135,6 +137,37 @@ Next we will discuss how it is that we make a link between the procedures we wri
 
 ** 1B - Procedures & Processes: Substitution Model
 *** 1 - Ch. 1.2
+Procedures that we write to direct a process to accomplish some end. We seek to understand the relationship between the procedure we incant and the process it animates. Particular patterns of procedural expression beget particular patterns of process execution - behavior.
+
+As engineers do, we rely on models to understand our domain. A model is useful for a purpose, and its veracity beyond that purpose is irrelevant.
+
+The substitution model describes a method the machine uses to evaluate expressions.
+
+To evaluate an application (a combination)
+  - Evaluate the operator to get procedure
+  - Evaluate the operands to get arguments
+  - Apply the procedure to the arguments
+    - Copy the body of the procedure, substituting the arguments supplied for the formal parameters of the procedure.
+    - Evaluate the resulting new body
+
+To evaluate an IF expression (a special form)
+  - Evaluate the predicate expression
+    - if it yields TRUE
+      - evaluate the consequent expression
+    - otherwise
+      - evaluate the alternative expression
+
+#+BEGIN_SRC clojure :results output
+  (defn add [x y]
+    (if (= x 0)
+      y
+      (add (dec x) (inc y))))
+#+END_SRC
+
+*** 2 - Ch. 1.2 (cont.)
+
+
+
 ** 2A - Higher-Order Processes
 ** 2B - Compound Data
 ** 3A - Henderson Escher Example
