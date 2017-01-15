@@ -1,29 +1,156 @@
-* Preface
+
+* Book Notes
+** Preface
 Unlike HtDP, which focuses on "the design process", SICP aims to instill the "techniques used to control the intellectual complexity of large software systems." In some sense, HtDP's design process offers an interative approach: "first do this, then do this." =How are the techniques provided in SICP offered? Are they considerations? Patterns? Instructions?=
 
-* 1. Building Abstractions with Procedures
-** 1. The Elements of Programming
-*** 1. Expressions
-*** 2. Naming and the Environment
-*** 3. Evaluating Combinations
-*** 4. Compound Procedures
-*** 5. The Substitution Model for Procedure Application
-*** 6. Conditional Expressions and Predicates
-*** 7. Example: Square Roots by Newton's Method
-*** 8. Procedures as Black-Box Abstractions
-** 2. Procedures and the Processes They Generate
-*** 1. Linear Recursion and Iteration
-*** 2. Tree Recursion
-*** 3. Orders of Growth
-*** 4. Exponentiation
-*** 5. Greatest Common Divisors
-*** 6. Example: Testing for Primality
-** 3. Formulating Abstractions with Higher-Order Procedures
-*** 1. Procedures as Arguments
-*** 2. Constructing Procedures Using Lambda
-*** 3. Procedures as General Methods
-*** 4. Procedures as Returned Values
-* 2. Building Abstractions with Data
-* 3. Modularity, Objects, and State
-* 4. Metalinguistic Abstraction
-* 5. Computing with Register Machines
+** 1. Building Abstractions with Procedures
+*** 1. The Elements of Programming
+**** 1. Expressions
+**** 2. Naming and the Environment
+**** 3. Evaluating Combinations
+**** 4. Compound Procedures
+**** 5. The Substitution Model for Procedure Application
+**** 6. Conditional Expressions and Predicates
+**** 7. Example: Square Roots by Newton's Method
+**** 8. Procedures as Black-Box Abstractions
+*** 2. Procedures and the Processes They Generate
+**** 1. Linear Recursion and Iteration
+**** 2. Tree Recursion
+**** 3. Orders of Growth
+**** 4. Exponentiation
+**** 5. Greatest Common Divisors
+**** 6. Example: Testing for Primality
+*** 3. Formulating Abstractions with Higher-Order Procedures
+**** 1. Procedures as Arguments
+**** 2. Constructing Procedures Using Lambda
+**** 3. Procedures as General Methods
+**** 4. Procedures as Returned Values
+** 2. Building Abstractions with Data
+** 3. Modularity, Objects, and State
+** 4. Metalinguistic Abstraction
+** 5. Computing with Register Machines
+
+
+* Lecture Notes ('86)
+** 1A - Overview: Introduction to Lisp
+*** 1 - Introduction
+We are learning to formalize intuitions about process: how to do things, so called imperative knowledge - as opposed to what is true, so called declarative knowledge.
+
+What is a process? A spirit in the machine? Processes are directed by patterns of rules, called procedures.
+
+This course is about learning the technqiues for controlling the complexity of large computer systems. Our work differs from that of engineers of physical systems in that our materials are not real. Computer science deals with idealized components: little separates what we can build and what we can imagine. Our constraints are those of specificity; as engineers of abstractions, we can define our materials as vaguely or specifically as we desire. 
+
+The techniques we should employ are not unique to computer science:
+- Black Box Abstraction
+  - WHY?
+    - modularity: provide composablility through delineation
+    - supress details: think at a more abstract conceptual level
+    - generalize a process: "method for finding a fixed-point" example, HOFs
+  - Primitive Objects
+    - Primitive Procedures
+    - PRimitive Data
+  - Means of Combination
+    - Procedure Definition
+    - Simple Data Abstraction
+  - Means of Abstraction
+    - Procedure Definition
+    - Simple Data Abstraction
+  - Capturing Common Patterns
+    - High-Order Procedures
+    - Data As Procedures
+- Conventional Interfaces
+  - Generic Operations
+  - Large-Scale Structure and Modularity
+    - Object Oriented Programming
+    - Operations on Aggregates - Stream Processing
+- Metalinguistic Abstraction
+  - Interpretation (Apply/Eval)
+  - Example - Logic Programming
+  - Register Machines
+*** 2 - Ch. 1.1
+We understand programming languages through a general framework:
+- Primitive Elements
+- Means of Combination
+- Means of Abstraction
+
+Scheme provides symbolic representations of numbers and procedures, as primitive elements. 
+
+We can combine these primitive elements into combinations, comprised of an operator and operands, enclosed in parens. Significantly, operands can themselves be combinations, begetting a hierarchically nested structure called a "syntax tree."
+
+Combinations are expressions, which evaluate to a value, by applying the operanns of a combinations to its operator. 
+
+The =define= keyword permits us to associate a symbolic representation with a combination. 
+
+We can also associate a symbol with a procedure, denoted as:
+  (lambda (=an arbitrary number or operands=)
+    (=a procedure to apply the operands to=))
+
+For example:
+#+BEGIN_SRC scheme
+  (define square (lambda (x) (* x x)))
+#+END_SRC
+
+Scheme provides sugar for this pattern, which we prefer:
+#+BEGIN_SRC scheme
+  (define (square x) (* x x))
+#+END_SRC
+
+Once a symbol is associated with an expression, we can use it as if it were a primitive in our language. This form of abstraction allows us to write our programs at a higher conceptual level than the primitives provided by the language.
+
+This elevation of our abstractions to parity with a languages primitives enables our use of black box abstraction, conventional interfaces, and metalinguistic abstraction.
+
+Scheme also provides a form of case analysis (control flow) in the =cond= and =if= procedures. Compare:
+#+BEGIN_SRC scheme
+  (define (abs x) 
+    (cond ((< x 0) (- x))
+          ((= x 0) 0)
+          ((> x 0) x)))
+#+END_SRC
+
+#+BEGIN_SRC scheme
+  (define (abs x)
+    (if (< x 0) 
+      (-x)
+      x))
+#+END_SRC
+
+*** 3 - Ch. 1.1 (cond)
+
+Heron of Alexandria's procedure for finding a square root by successive averaging.
+
+Recursion allows us to continue to indefinitely sustain a process until something is true.
+
+|----------------------+----------------+--------|
+|                      | Procedures     | Data   |
+|----------------------+----------------+--------|
+| Primitive Elements   | + * < =        | 12 1.7 |
+|----------------------+----------------+--------|
+| Means of Combination | () composition |        |
+|                      | cond  if       |        |
+|----------------------+----------------+--------|
+| Means of Abstraction | define         |        |
+|----------------------+----------------+--------|
+
+Next we will discuss how it is that we make a link between the procedures we write, and the processes that happen in the machine; and how to describe general processes of doing things.
+
+** 1B - Procedures & Processes: Substitution Model
+*** 1 - Ch. 1.2
+** 2A - Higher-Order Processes
+** 2B - Compound Data
+** 3A - Henderson Escher Example
+** 3B - Symbolic Differentiation, Quotation
+** 4A - Pattern Matching and Rule-Based Substitution
+** 4B - Generic Operations
+** 5A - Assignment, State, and Side-Effects
+** 5B - Computational Objects
+*** 1 - Ch. 3.3
+** 6A - Streams I
+** 6B - Streams II
+** 7A - Metacircular Evaluator I
+** 7B - Metacircular Evaluator II 
+** 8A - Logic Programming I
+** 8B - Logic Programming II
+** 9A - Register Machines
+** 9B - Explicit Control Evaluator
+** 10A - Compilation
+** 10B - Storage Allocation and Garbage Collection
