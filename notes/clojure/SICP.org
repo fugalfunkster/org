@@ -360,19 +360,20 @@ Let's look at the most complex problem we have approached yet, Huron of Alexandr
 
 #+BEGIN_SRC clojure :results output
   (defn sqrt [x]
-    (let [tolerance 0.0001
-          abs #(max % (-' %))
+    (let [tolerance 0.00001
+          abs #(if (< % 0) (- %) %)
           good-enuf? #(< (abs (- (* % %) x)) tolerance)
           average #(/ (+ %1 %2)  2)
           improve #(average (/ x %) %)
-          try #(if (good-enuf? [%]) % (try (improve %)))]
-      (try 1)))
+          attempt #(loop [n %]
+                (if (good-enuf? n) n (recur (improve n))))]
+      (attempt 1)))
       
-(println (sqrt 9))
+(println (float (sqrt 9)))
 #+END_SRC
 
 #+RESULTS:
-: 1
+: 3.0
 
 ** 2B - Compound Data
 ** 3A - Henderson Escher Example
