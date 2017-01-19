@@ -264,6 +264,115 @@ The way we construct a recursive process is by wishful thinking. If we are to mo
 This is also a recursive process, which takes the shape of a tree. Is it posible to write a procedure to accomplish this goal using an interative approach? How could we pass the information required to sustain the process into the next recursion of the procedure?
 
 ** 2A - Higher-Order Processes
+*** 1 - Ch. 1.3
+We are going to build an abstraction upon a set of procedures that are similar.
+
+In mathematics, we express summation of a series of numbers using Sigma notation: https://en.wikipedia.org/wiki/Summation
+
+If we want to take the sum of integers from a to b, we can readily express this in Clojure:
+
+#+BEGIN_SRC clojure :results output
+  (defn sum-int [a b]
+    (if (> a b)
+      0
+      (+ a (sum-int (+ a 1) b))))
+  ;;(println (sum-int 1 ))
+#+END_SRC
+
+Likewise, we can represent the sum of squares from a to b:
+
+#+BEGIN_SRC clojure :results output
+  (defn sum-squares [a b]
+    (if (> a b)
+      0
+      (+ (square a) (sum-squares (+ a 1) b))))
+  (println (sum-squares 1 10))
+#+END_SRC
+
+These definitions are very similar. They share a common, underlying idea, that of summation.
+
+When designing large, complex/complicated systems, it is crucial to deconstruct pieces of the program into understandable component parts, which can be understood separately. Here, we would like to understand the idea of adding things up independently of what it is we are adding up. This allows us to verify that the implementation of addition is correct once, instead of each time we use the idea of addition.
+
+To do this, we must be able to give the idea of addition a name, and a procedural representation that we can compose with the procedure that describes what it is we are adding up:
+
+#+BEGIN_SRC clojure :results output
+  (defn addition [a b procedure]
+    (if (> a b)
+      0
+      (+ (procedure a) (addition (+ a 1) b procedure))))
+
+  (defn identity [a] a)
+  ;;(println (addition 1 10 identity))
+
+  (defn square [a] (* a a)) ;; note this definition shadows the built in square
+  ;;(println (addition 1 10 square))
+#+END_SRC
+
+We can further generalize this so that the interval between numbers in the summation is also represented by a procedural argument:
+
+#+BEGIN_SRC clojure :results output
+  (defn addition [a b procedure interval]
+    (if (> a b)
+      0
+      (+ (procedure a) (addition (interval a) b procedure interval))))
+
+  (defn identity [a] a)
+  (defn add1 [a] (+ a 1))
+  ;;(println (addition 1 10 identity add1))
+#+END_SRC
+
+Now that we can name each component part, we can compose them, and name the resulting composite:
+
+#+BEGIN_SRC clojure :results output
+  (defn addition [a b procedure interval]
+    (if (> a b)
+      0
+      (+ (procedure a) (addition (interval a) b procedure interval))))
+
+  (defn identity [x] x)
+  (defn add1 [a] (+ a 1))
+
+  (defn sum-int [a b] (addition a b identity add1))
+  (println (sum-int 1 10))
+#+END_SRC
+
+Here is an iterative implementation of addition. Note that we can change the implementation of our addition procedure without further modifications to our program:
+
+#+BEGIN_SRC clojure :results output
+  (defn addition-iter
+    ([a b procedure interval] (addition-iter a b procedure interval 0))
+    ([a b procedure interval ans] 
+      (if (> a b)
+        ans
+        (addition-iter (interval a) b procedure interval (+ (procedure a) ans)))))
+
+  (defn identity [x] x)
+  (defn add1 [a] (+ a 1))
+
+  (defn sum-int [a b] (addition-iter a b identity add1))
+  (println (sum-int 1 10))
+#+END_SRC
+
+*** 2 - Ch. 1.3
+Abstraction is for our own benefit, it allows us to disambiguate ideas, name them, and compose them. The result is a clearer understanding of the composite procedure, readable code, and potentially reusable components.
+
+Let's look at the most complex problem we have approached yet, Huron of Alexandria's method for finding the square root of a number.
+
+#+BEGIN_SRC clojure :results output
+  (defn sqrt [x]
+    (let [tolerance 0.0001
+          abs #(max % (-' %))
+          good-enuf? #(< (abs (- (* % %) x)) tolerance)
+          average #(/ (+ %1 %2)  2)
+          improve #(average (/ x %) %)
+          try #(if (good-enuf? [%]) % (try (improve %)))]
+      (try 1)))
+      
+(println (sqrt 9))
+#+END_SRC
+
+#+RESULTS:
+: 1
 
 ** 2B - Compound Data
 ** 3A - Henderson Escher Example
