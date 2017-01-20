@@ -356,24 +356,95 @@ Here is an iterative implementation of addition. Note that we can change the imp
 *** 2 - Ch. 1.3
 Abstraction is for our own benefit, it allows us to disambiguate ideas, name them, and compose them. The result is a clearer understanding of the composite procedure, readable code, and potentially reusable components.
 
-Let's look at the most complex problem we have approached yet, Huron of Alexandria's method for finding the square root of a number.
+Let's look at the most complex problem we have approached yet, Huron of Alexandria's method for finding the square root of a number. 
 
 #+BEGIN_SRC clojure :results output
-  (defn sqrt [x]
+  (defn sq-rt [x]
     (let [tolerance 0.00001
-          abs #(if (< % 0) (- %) %)
-          good-enuf? #(< (abs (- (* % %) x)) tolerance)
-          average #(/ (+ %1 %2)  2)
-          improve #(average (/ x %) %)
-          attempt #(loop [n %]
-                (if (good-enuf? n) n (recur (improve n))))]
+          abs (fn [z] (if (< z 0) (- z) z))
+          good-enuf? (fn [z] (< (abs (- (* z z) x)) tolerance))
+          average (fn [a b] (/ (+ a b)  2))
+          improve (fn [z] (average (/ x z) z))
+          attempt (fn [z] 
+                    (loop [n z]
+                      (if (good-enuf? n) n (recur (improve n)))))]
       (attempt 1)))
       
-(println (float (sqrt 9)))
+(println (float (sq-rt 49)))
 #+END_SRC
 
 #+RESULTS:
-: 3.0
+: 7.0
+
+SIDE NOTE: Scheme's =define= special form creates bindings scoped to the procedure block. Clojure does not. Observe:
+
+#+BEGIN_SRC clojure :results output
+  (defn square-rt [x]
+    (def tolerance 0.00001)
+    (defn abs [z] (if (< z 0) (- z) z))
+    (defn good-enuf? [z] (< (abs (- (* z z) x)) tolerance))
+    (defn average [a b] (/ (+ a b)  2))
+    (defn improve [z] (average (/ x z) z))
+    (defn attempt [z] 
+                    (loop [n z]
+                      (if (good-enuf? n) n (recur (improve n)))))
+      (attempt 1))
+      
+(println (float (square-rt 49)))
+(println (str tolerance))
+#+END_SRC
+
+See also: http://stackoverflow.com/questions/9890888/what-is-the-standard-way-to-write-nested-define-statements-like-in-scheme-for
+
+Anyway, what is the esssential idea of this procedure? The procedure is one for improving a guess for the square root of a number. The procedure does this by averaging the guess with the number divided by the guess. In other words, if the guess is the square root of x, then x/guess is also the square root of x, adding them gives us 2 * the square root of x, and dividing by 2 gives us the square root of x. We determine whether the guess is in fact the square root of x by comparing it to a prior guess, and improving it if the two guesses are too dissimilar.
+
+This general procedure is called "looking for a fixed point." When a function takes a value and returns that same value, that value is said to be the function's fixed point. Some functions have the property that we can find their fixed point by iterating the function.
+
+Here, the squre root of a number is the fixed point of a procedure that averages a guess for the fixed point and the number divided by the guess. Let's try to express this in clojure:
+
+#+BEGIN_SRC clojure
+  (defn sqrt [x]
+    (fixed-point #(average (/ x %) %))
+    1)
+#+END_SRC
+
+Now we must define the procedure of finding a fixed point of a function, any function. 
+
+ #+BEGIN_SRC clojure 
+  (defn fixed-point [f start] 
+    (loop [old start
+           new (f start)]
+      (if (good-enuf? old new)
+        new
+        (recur new (f new)))))
+#+END_SRC
+
+Average damp is a procedure that accepts a procedure as an argument, and returns a procedure as a value. 
+
+#+BEGIN_SRC clojure :results output
+  (defn average [a b] (/ (+ a b) 2))
+  (defn fixed-point [f start]
+    (let [tolerance 0.0001
+          abs (fn [z] (if (< z 0) (- z) z))
+          good-enuf? (fn [a b] (< (abs (- a b)) tolerance)) 
+          attempt (fn [n]
+                    (loop [old n
+                           new (f n)]
+                      (if (good-enuf? old new)
+                        new
+                        (recur new (f new)))))]
+      (attempt start)))
+  (defn average-damp [f] 
+    (fn [x] (average (f x) x)))
+  (defn sqroot [x]
+    (fixed-point (average-damp #(/ x %)) 1))
+
+  (println (float (sqroot 49)))
+#+END_SRC
+
+#+RESULTS:
+: 7.0
+
 
 ** 2B - Compound Data
 ** 3A - Henderson Escher Example
