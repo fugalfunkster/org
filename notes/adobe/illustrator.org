@@ -1,0 +1,71 @@
+* Illustrator CC Fundamentals : Matthew Pizzi (4:30)
+** Understanding Illustrator
+** Working in Illustrator
+** Core Drawing Principles
+** Working with Type
+*** Point and Area Text
+Point text is the default. In point text, typing produces text, return creates a new line. Esc ejects from the type box, and returns you to the selection tool to select point text, which produces a bounding box around the text. 
+
+You can hide the bounding box : View -> Hide Bounding Box. Or, you can use the direct selection tool, which shows the anchor point, but not the bounding box. This anchor point is the reference for alignment, text moves relative to the anchor point.
+
+Area text can be created from the text tool, or by clicking and dragging when in the point text tool to define the "area." When typing in an area, text wraps. Return creates a new line. But if you add text beyond the area, you will see an overset mark. If you select the overset mark, you will get a new text area that continues the text from the previous area. You can remove the new area text by double clicking on the same overset mark.
+
+You can resize the area for area text. But, if you resize point text, it will scale the text size.
+
+When a text area is selected, you can modify options like width, height, number of rows and columns, padding, etc. from : Type -> Area Type Options.
+
+You can also create text areas by using a shape tool, making a shape, selecting the area type tool, then clicking in the new shape.
+*** Character Panel
+The character panel provides font options, like family, weight, style, size, kerning, line-height (ledding). Also, the hamburger menu lets you show options, which provides goodies like SMALL CAPS, super/sub script, and decoration.
+
+Options can apply to an area, or selected text. Illustrator provides a check spelling feature: Cmd-i. The character panel provides an option for which dictionary specific text is checked against.
+
+We can select all, and control a region of text at a time.
+- Increase Size (maintain relative sizes) : Cmd->
+- Decrease Size : Cmd-<
+
+We can also sample styling of textby selecting the text to style, then select the text to emulate using the eyedropper tool.
+*** Selecting Fonts
+*** Kerning and Tracking
+Adope provides a kerning algorithm, optical, that seems to work well to apply sensible kerning across a region of text. 
+*** Paragraph Panel
+Typically, paragraphs are also going to be area text. This panel contains options for alignment, justification, indentation, hyphenation, and top/bottom margins.
+*** Text Threading (with text areas)
+All text areas have an "in port" and an "out port." The out can feed into another text area.
+*** Text on an Open Path
+You can create a path, with a stroke but no fill color, we can then use the type tool (type on a path tool automatically when you click on a path).
+*** Text on a Closed Path
+Similar, just make sure to use the text on path tool - with closed paths, text tool defaults to area text. Also, you can only have text on one side of a path. To get that effect, you have to make two paths. To have text under a path, but not inverted, adjust the baseline.
+*** Convert Point Text to Area Text
+You can convert Point Text to Area Text by double clicking the handle right of the point text's bounding box.
+*** Touch Type
+Recognizes touch input, like from a touch monitor or a wacom tablet thing.
+
+But, it's all about playing around with single characters. You can grab a single character, and move it, rotate it, stretch it, shrink it, etc.
+*** Vertical Type Tools
+Same set of tools, but type is placed vertically, instead of horizontally.
+*** Creating Outlines
+Text in illustrator is vector based. But you can't directly access the vector info, unless! you convert your text to outlines : Type -> Create Outlines
+
+This converts font info to vector info, which makes it much slower to print.
+
+Warning, converting to outlines removes the ability to modify type using the type tool.
+
+
+
+
+
+
+
+
+* Tips from Videos
+- Selection Tool : v
+- Direct Selecton Tool : a
+- Text Tool : t
+- Character panel: Cmd-t
+- clicking and holding down on icons w/ corner arrow in toolbar reveals hidden tools
+* Tips and tricks from coworkers
+- Crop an image to contain content : Object -> Artboards -> Fit To Artwork Bounds
+- Set units globally : Illustrator CC -> Preferences -> Units
+- Preview Outline : Cmd-y // View -> Outline
+
