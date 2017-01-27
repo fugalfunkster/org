@@ -734,9 +734,126 @@ Any of these types can have the undefined value, which is also a subtype of all 
 * TS In-depth : Brice Wilson (4:40)
 ** Basics
 *** Declaring Variables
-*** Basic Types and Type Annotations
-*** Enums, Arrays, and Tuples
-** Functions
+**** var
+- Globally available in the function in which it is declared.
+- "Hoisted" to the top of the scope in which it is declared.
+- Variable name may be declared a second time in the same function.
+**** let and const
+- Only available in the block in which it is declared.
+- Not hoisted.
+- Variable name may only be declared once within a block.
+- const prevents reassignment but not mutation
+*** TODO Basic Types and Type Annotations
+- Boolean
+- Number
+- String
+- Arrays
+- Enum
+- Any
+- Void
+*** TODO Type Inference
+*** TODO Adding Type Annotations
+*** Example 1:
+
+#+BEGIN_SRC typescript
+function GetAllBooks() {
+    let books = [
+        { title: 'Ulysses', author: 'James Joyce', available: true },
+        { title: 'A Farewell to Arms', author: 'Ernest Hemingway', available: false },
+        { title: 'I Know Why the Caged Bird Sings', author: 'Maya Angelou', available: true }
+    ];
+
+    return books;
+}
+
+function LogFirstAvailable(books): void {
+    let numberOfBooks: number = books.length;
+    let firstAvailable: string = "";
+    for (let currentBook of books) {
+        if (currentBook.available) {
+            firstAvailable = currentBook.title;
+            break;
+        }
+    }
+    console.log('Total Books: ' + numberOfBooks);
+    console.log('First Available: ' + firstAvailable);
+}
+
+LogFirstAvailable(GetAllBooks());
+#+END_SRC
+
+*** TODO Enums
+*** Arrays
+Arrays can be declared in two different ways.
+
+#+BEGIN_SRC typescript
+  let strArray1: string[] = ['here', 'there', 'and everywhere'];
+  // or the generic notation:
+  let strArray2: Array<string> = ['strawberry', 'fields', 'forever'];
+  // sometimes you need an array of disparate types:
+  let anyArray: any[] = [42, true, 'big think'];
+#+END_SRC
+
+*** Tuples
+Tuples are arrays where types for the first few elements are explicitly specified. The types do not have to be the same, and additional elements in the array can be any type from those previously specified.
+
+#+BEGIN_SRC typescript
+  let myTuple: [number, string] = [150, 'Ford'];
+  myTuple[2] = 'F Series';
+#+END_SRC
+
+*** Example 2:
+
+#+BEGIN_SRC typescript
+function GetAllBooks() {
+    let books = [
+        { title: 'Ulysses', author: 'James Joyce', available: true, category: Category.Fiction },
+        { title: 'A Farewell to Arms', author: 'Ernest Hemingway', available: false, category: Category.Fiction },
+        { title: 'I Know Why the Caged Bird Sings', author: 'Maya Angelou', available: true, category: Category.Poetry },
+        { title: 'Moby Dick', author: 'Hermal Melville', available: true, category: Category.Fiction }
+    ];
+
+    return books;
+}
+
+function LogFirstAvailable(books): void {
+    let numberOfBooks: number = books.length;
+    let firstAvailable: string = "";
+    for (let currentBook of books) {
+        if (currentBook.available) {
+            firstAvailable = currentBook.title;
+            break;
+        }
+    }
+    console.log('Total Books: ' + numberOfBooks);
+    console.log('First Available: ' + firstAvailable);
+}
+
+enum Category { Biography, Poetry, Fiction, History, Children };
+
+function GetBookTitlesByCategory(categoryFilter: Category): Array<string> {
+    console.log('Getting books in category: ' + Category[categoryFilter]);
+    const allBooks = GetAllBooks();
+    const filteredTitles: string[] = [];
+    for (let currentBook of allBooks) {
+        if (currentBook.category === categoryFilter) {
+            filteredTitles.push(currentBook.title);
+        }
+    }
+    return filteredTitles;
+}
+
+function LogBookTitles(titles: string[]): void {
+    for (let title of titles) {
+        console.log(title);
+    }
+}
+
+const poetryBooks = GetBookTitlesByCategory(Category.Poetry);
+LogBookTitles(poetryBooks);
+#+END_SRC
+
+** Function
 *** Parameter Types and Return Types
 *** Arrow Functions
 **** Handling This
