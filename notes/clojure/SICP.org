@@ -1,0 +1,466 @@
+
+* Book Notes
+** Preface
+Unlike HtDP, which focuses on "the design process", SICP aims to instill the "techniques used to control the intellectual complexity of large software systems." In some sense, HtDP's design process offers an interative approach: "first do this, then do this." =How are the techniques provided in SICP offered? Are they considerations? Patterns? Instructions?=
+
+** 1. Building Abstractions with Procedures
+*** 1. The Elements of Programming
+**** 1. Expressions
+**** 2. Naming and the Environment
+**** 3. Evaluating Combinations
+**** 4. Compound Procedures
+**** 5. The Substitution Model for Procedure Application
+**** 6. Conditional Expressions and Predicates
+**** 7. Example: Square Roots by Newton's Method
+**** 8. Procedures as Black-Box Abstractions
+*** 2. Procedures and the Processes They Generate
+**** 1. Linear Recursion and Iteration
+**** 2. Tree Recursion
+**** 3. Orders of Growth
+**** 4. Exponentiation
+**** 5. Greatest Common Divisors
+**** 6. Example: Testing for Primality
+*** 3. Formulating Abstractions with Higher-Order Procedures
+**** 1. Procedures as Arguments
+**** 2. Constructing Procedures Using Lambda
+**** 3. Procedures as General Methods
+**** 4. Procedures as Returned Values
+** 2. Building Abstractions with Data
+** 3. Modularity, Objects, and State
+** 4. Metalinguistic Abstraction
+** 5. Computing with Register Machines
+
+
+* Lecture Notes ('86)
+** 1A - Overview: Introduction to Lisp
+*** 1 - Introduction
+We are learning to formalize intuitions about process: how to do things, so called imperative knowledge - as opposed to what is true, so called declarative knowledge.
+
+What is a process? A spirit in the machine? Processes are directed by patterns of rules, called procedures.
+
+This course is about learning the technqiues for controlling the complexity of large computer systems. Our work differs from that of engineers of physical systems in that our materials are not real. Computer science deals with idealized components: little separates what we can build and what we can imagine. Our constraints are those of specificity; as engineers of abstractions, we can define our materials as vaguely or specifically as we desire. 
+
+The techniques we should employ are not unique to computer science:
+- Black Box Abstraction
+  - WHY?
+    - modularity: provide composablility through delineation
+    - supress details: think at a more abstract conceptual level
+    - generalize a process: "method for finding a fixed-point" example, HOFs
+  - Primitive Objects
+    - Primitive Procedures
+    - PRimitive Data
+  - Means of Combination
+    - Procedure Definition
+    - Simple Data Abstraction
+  - Means of Abstraction
+    - Procedure Definition
+    - Simple Data Abstraction
+  - Capturing Common Patterns
+    - High-Order Procedures
+    - Data As Procedures
+- Conventional Interfaces
+  - Generic Operations
+  - Large-Scale Structure and Modularity
+    - Object Oriented Programming
+    - Operations on Aggregates - Stream Processing
+- Metalinguistic Abstraction
+  - Interpretation (Apply/Eval)
+  - Example - Logic Programming
+  - Register Machines
+*** 2 - Ch. 1.1
+We understand programming languages through a general framework:
+- Primitive Elements
+- Means of Combination
+- Means of Abstraction
+
+Scheme provides symbolic representations of numbers and procedures, as primitive elements. 
+
+We can combine these primitive elements into combinations, comprised of an operator and operands, enclosed in parens. Significantly, operands can themselves be combinations, begetting a hierarchically nested structure called a "syntax tree."
+
+Combinations are expressions, which evaluate to a value, by applying the operanns of a combinations to its operator. 
+
+The =define= keyword permits us to associate a symbolic representation with a combination. 
+
+We can also associate a symbol with a procedure, denoted as:
+  (lambda (=an arbitrary number or operands=)
+    (=a procedure to apply the operands to=))
+
+For example:
+#+BEGIN_SRC clojure
+  (define square (fn [x] (* x x)))
+#+END_SRC
+
+Scheme provides sugar for this pattern, which we prefer:
+#+BEGIN_SRC clojure
+  (defn square [x] (* x x))
+#+END_SRC
+
+Once a symbol is associated with an expression, we can use it as if it were a primitive in our language. This form of abstraction allows us to write our programs at a higher conceptual level than the primitives provided by the language.
+
+This elevation of our abstractions to parity with a languages primitives enables our use of black box abstraction, conventional interfaces, and metalinguistic abstraction.
+
+Scheme also provides a form of case analysis (control flow) in the =cond= and =if= procedures. Compare:
+
+#+BEGIN_SRC clojure :results output
+  (defn abs [x]
+    (cond 
+      (< x 0) (- x)
+      (= x 0) 0
+      (> x 0) x))
+#+END_SRC
+
+#+BEGIN_SRC clojure :results output
+  (defn abs [x]
+    (if (< x 0) 
+      (- x)
+      x))
+#+END_SRC
+
+*** 3 - Ch. 1.1 (cond)
+
+Heron of Alexandria's procedure for finding a square root by successive averaging.
+
+Recursion allows us to continue to indefinitely sustain a process until something is true.
+
+|----------------------+----------------+--------|
+|                      | Procedures     | Data   |
+|----------------------+----------------+--------|
+| Primitive Elements   | + * < =        | 12 1.7 |
+|----------------------+----------------+--------|
+| Means of Combination | () composition |        |
+|                      | cond  if       |        |
+|----------------------+----------------+--------|
+| Means of Abstraction | define         |        |
+|----------------------+----------------+--------|
+
+Next we will discuss how it is that we make a link between the procedures we write, and the processes that happen in the machine; and how to describe general processes of doing things.
+
+** 1B - Procedures & Processes: Substitution Model
+*** 1 - Ch. 1.2
+Procedures that we write to direct a process to accomplish some end. We seek to understand the relationship between the procedure we incant and the process it animates. Particular patterns of procedural expression beget particular patterns of process execution - behavior.
+
+As engineers do, we rely on models to understand our domain. A model is useful for a purpose, and its veracity beyond that purpose is irrelevant.
+
+The substitution model describes a method the machine uses to evaluate expressions.
+
+To evaluate an application (a combination)
+  - Evaluate the operator to get procedure
+  - Evaluate the operands to get arguments
+  - Apply the procedure to the arguments
+    - Copy the body of the procedure, substituting the arguments supplied for the formal parameters of the procedure.
+    - Evaluate the resulting new body
+
+To evaluate an IF expression (a special form)
+  - Evaluate the predicate expression
+    - if it yields TRUE
+      - evaluate the consequent expression
+    - otherwise
+      - evaluate the alternative expression
+
+#+BEGIN_SRC clojure :results output
+  (defn add [x y]
+    (if (= x 0)
+      y
+      (add (dec x) (inc y))))
+#+END_SRC
+
+*** 2 - Ch. 1.2 (cont.)
+Now, we will devlop some intuition regarding how procedures shape processes. Consider two procedures for peano artithmetic:
+
+#+BEGIN_SRC clojure :results output
+  (defn addR [x y]
+    (if (= x 0)
+      y
+      (addR (- x 1) (+ y 1))))
+
+  ;; 
+
+  (defn addI [x y]
+    (if (= x 0)
+      y
+      (+ 1 (addI (- x 1) y))))
+
+  ;;(println (addR 5 7))
+  ;;(println (addI 4 6))
+#+END_SRC
+
+If we use the substitution model to examine each procedure, we learn that each has the same number of substitution steps. Both procedures require a number of substitution steps equal to the x.
+
+When a procedure proceeds in such a way, we say that the process generated by the procedure takes an order of x time :: time=O(x).
+
+However, these procedures differ in their use of space. 
+
+When the first procedure enters a new substitution step, nothing remains of the previous expression; that is, all of the information necesary to continue the process is passed into the next substituted procedure. Because only one procedure is in memory after each substitution step, we say that the procedure takes space on the  order of 1 :: space=O(1).
+
+We call a procedure of the first type a linear iterative process, one that has time=O(x) and space=O(1).
+
+The second procedure, however, maintains a memory of operations that it has yet to perform: delaying an increment of a value from an unevaluated expression. Because the machine must remember to perform these increment operations when the expression is evaluated, the machine must allocate memory space for these deferred procedures.
+
+When a procedure delays evaluation in this way, where the machine defers an operation on each substitution step, we say that the procedure takes space on the order of x :: space=O(x)
+
+We call a procedure of the second type a linear recursive process, one that has time=O(x) and space=O(x).
+
+Note that both procedures are recursive, they refer to themselves. But the processes they animate are different.
+
+*** 3 - Ch. 1.2 (cont.)
+
+Computing the nth Fibonacci numbers:
+
+#+BEGIN_SRC clojure :results output
+  (defn fibR [x]
+    (if (< x 2)
+      x
+      (+ (fibR (- x 1)) 
+         (fibR (- x 2)))))
+
+  ;;(println (fibR 10))
+#+END_SRC
+
+This procedure is recursive, but the process it evolves is not linear. For each substitution, the execution of two more procedures is necessary. The shape of this process is that of a tree. Note theinefficiency of this structure, in which there is redundant computation. For this procedure, the number of substitutions is still bound to x, but in an exponential way: the time is O=(fib(x)).
+
+The space the process occupies is linear, for each substitution step results in one deferred operation, - despite spawning two processes. As x grows, the number of deferred operations grows proportionately. Thus, the space the process consumes is O=(n).
+
+On the Towers of Hanoi:
+
+The way we construct a recursive process is by wishful thinking. If we are to move a 4 high tower, we start by wishfully assuming that we can move a three high tower, off of the base tower, move the base tower to its position, anv place the three high tower on top of the base. We can make this assumption knowing that the recursion of such a process will eventually result in moving a 0 high tower - a base case - which is trivial. 
+
+#+BEGIN_SRC scheme pseudocode
+  (defn move [n from to spare] 
+    (if (= n 0)
+      nil
+      (do 
+        (move (- n 1) from spare to)
+        (print-move from to)
+        (move (- n 1) spare to from))))
+
+  (move 4 1 2 3)
+
+;; evaluating by hand 
+
+  (move 3 1 3 2) 
+  - (move 2 1 2 3)
+    - (move 1 1 3 2)
+      - etc...
+    - (print-move 1 3)
+    - (move 1 3 2 1)
+      - etc...
+  - (print-move 1 2)
+  - (move 2 2 3 1)
+    - (move 1 2 1 3)
+      - etc...
+    - (print-move 
+    - (move 1 1 3 1)
+      - etc...
+  (print-move move 1 2)
+  (move 3 3 2 1)
+  - (move 2 3 1 2)
+    - etc...
+  - (print-move 3 2)
+  - (move 2 1 2 3)
+    - etc...
+  
+#+END_SRC
+
+This is also a recursive process, which takes the shape of a tree. Is it posible to write a procedure to accomplish this goal using an interative approach? How could we pass the information required to sustain the process into the next recursion of the procedure?
+
+** 2A - Higher-Order Processes
+*** 1 - Ch. 1.3
+We are going to build an abstraction upon a set of procedures that are similar.
+
+In mathematics, we express summation of a series of numbers using Sigma notation: https://en.wikipedia.org/wiki/Summation
+
+If we want to take the sum of integers from a to b, we can readily express this in Clojure:
+
+#+BEGIN_SRC clojure :results output
+  (defn sum-int [a b]
+    (if (> a b)
+      0
+      (+ a (sum-int (+ a 1) b))))
+  ;;(println (sum-int 1 ))
+#+END_SRC
+
+Likewise, we can represent the sum of squares from a to b:
+
+#+BEGIN_SRC clojure :results output
+  (defn sum-squares [a b]
+    (if (> a b)
+      0
+      (+ (square a) (sum-squares (+ a 1) b))))
+  (println (sum-squares 1 10))
+#+END_SRC
+
+These definitions are very similar. They share a common, underlying idea, that of summation.
+
+When designing large, complex/complicated systems, it is crucial to deconstruct pieces of the program into understandable component parts, which can be understood separately. Here, we would like to understand the idea of adding things up independently of what it is we are adding up. This allows us to verify that the implementation of addition is correct once, instead of each time we use the idea of addition.
+
+To do this, we must be able to give the idea of addition a name, and a procedural representation that we can compose with the procedure that describes what it is we are adding up:
+
+#+BEGIN_SRC clojure :results output
+  (defn addition [a b procedure]
+    (if (> a b)
+      0
+      (+ (procedure a) (addition (+ a 1) b procedure))))
+
+  (defn identity [a] a)
+  ;;(println (addition 1 10 identity))
+
+  (defn square [a] (* a a)) ;; note this definition shadows the built in square
+  ;;(println (addition 1 10 square))
+#+END_SRC
+
+We can further generalize this so that the interval between numbers in the summation is also represented by a procedural argument:
+
+#+BEGIN_SRC clojure :results output
+  (defn addition [a b procedure interval]
+    (if (> a b)
+      0
+      (+ (procedure a) (addition (interval a) b procedure interval))))
+
+  (defn identity [a] a)
+  (defn add1 [a] (+ a 1))
+  ;;(println (addition 1 10 identity add1))
+#+END_SRC
+
+Now that we can name each component part, we can compose them, and name the resulting composite:
+
+#+BEGIN_SRC clojure :results output
+  (defn addition [a b procedure interval]
+    (if (> a b)
+      0
+      (+ (procedure a) (addition (interval a) b procedure interval))))
+
+  (defn identity [x] x)
+  (defn add1 [a] (+ a 1))
+
+  (defn sum-int [a b] (addition a b identity add1))
+  (println (sum-int 1 10))
+#+END_SRC
+
+Here is an iterative implementation of addition. Note that we can change the implementation of our addition procedure without further modifications to our program:
+
+#+BEGIN_SRC clojure :results output
+  (defn addition-iter
+    ([a b procedure interval] (addition-iter a b procedure interval 0))
+    ([a b procedure interval ans] 
+      (if (> a b)
+        ans
+        (addition-iter (interval a) b procedure interval (+ (procedure a) ans)))))
+
+  (defn identity [x] x)
+  (defn add1 [a] (+ a 1))
+
+  (defn sum-int [a b] (addition-iter a b identity add1))
+  (println (sum-int 1 10))
+#+END_SRC
+
+*** 2 - Ch. 1.3
+Abstraction is for our own benefit, it allows us to disambiguate ideas, name them, and compose them. The result is a clearer understanding of the composite procedure, readable code, and potentially reusable components.
+
+Let's look at the most complex problem we have approached yet, Huron of Alexandria's method for finding the square root of a number. 
+
+#+BEGIN_SRC clojure :results output
+  (defn sq-rt [x]
+    (let [tolerance 0.00001
+          abs (fn [z] (if (< z 0) (- z) z))
+          good-enuf? (fn [z] (< (abs (- (* z z) x)) tolerance))
+          average (fn [a b] (/ (+ a b)  2))
+          improve (fn [z] (average (/ x z) z))
+          attempt (fn [z] 
+                    (loop [n z]
+                      (if (good-enuf? n) n (recur (improve n)))))]
+      (attempt 1)))
+      
+(println (float (sq-rt 49)))
+#+END_SRC
+
+#+RESULTS:
+: 7.0
+
+SIDE NOTE: Scheme's =define= special form creates bindings scoped to the procedure block. Clojure does not. Observe:
+
+#+BEGIN_SRC clojure :results output
+  (defn square-rt [x]
+    (def tolerance 0.00001)
+    (defn abs [z] (if (< z 0) (- z) z))
+    (defn good-enuf? [z] (< (abs (- (* z z) x)) tolerance))
+    (defn average [a b] (/ (+ a b)  2))
+    (defn improve [z] (average (/ x z) z))
+    (defn attempt [z] 
+                    (loop [n z]
+                      (if (good-enuf? n) n (recur (improve n)))))
+      (attempt 1))
+      
+(println (float (square-rt 49)))
+(println (str tolerance))
+#+END_SRC
+
+See also: http://stackoverflow.com/questions/9890888/what-is-the-standard-way-to-write-nested-define-statements-like-in-scheme-for
+
+Anyway, what is the esssential idea of this procedure? The procedure is one for improving a guess for the square root of a number. The procedure does this by averaging the guess with the number divided by the guess. In other words, if the guess is the square root of x, then x/guess is also the square root of x, adding them gives us 2 * the square root of x, and dividing by 2 gives us the square root of x. We determine whether the guess is in fact the square root of x by comparing it to a prior guess, and improving it if the two guesses are too dissimilar.
+
+This general procedure is called "looking for a fixed point." When a function takes a value and returns that same value, that value is said to be the function's fixed point. Some functions have the property that we can find their fixed point by iterating the function.
+
+Here, the squre root of a number is the fixed point of a procedure that averages a guess for the fixed point and the number divided by the guess. Let's try to express this in clojure:
+
+#+BEGIN_SRC clojure
+  (defn sqrt [x]
+    (fixed-point #(average (/ x %) %))
+    1)
+#+END_SRC
+
+Now we must define the procedure of finding a fixed point of a function, any function. 
+
+ #+BEGIN_SRC clojure 
+  (defn fixed-point [f start] 
+    (loop [old start
+           new (f start)]
+      (if (good-enuf? old new)
+        new
+        (recur new (f new)))))
+#+END_SRC
+
+Average damp is a procedure that accepts a procedure as an argument, and returns a procedure as a value. 
+
+#+BEGIN_SRC clojure :results output
+  (defn average [a b] (/ (+ a b) 2))
+  (defn fixed-point [f start]
+    (let [tolerance 0.0001
+          abs (fn [z] (if (< z 0) (- z) z))
+          good-enuf? (fn [a b] (< (abs (- a b)) tolerance)) 
+          attempt (fn [n]
+                    (loop [old n
+                           new (f n)]
+                      (if (good-enuf? old new)
+                        new
+                        (recur new (f new)))))]
+      (attempt start)))
+  (defn average-damp [f] 
+    (fn [x] (average (f x) x)))
+  (defn sqroot [x]
+    (fixed-point (average-damp #(/ x %)) 1))
+
+  (println (float (sqroot 49)))
+#+END_SRC
+
+#+RESULTS:
+: 7.0
+
+
+** 2B - Compound Data
+** 3A - Henderson Escher Example
+** 3B - Symbolic Differentiation, Quotation
+** 4A - Pattern Matching and Rule-Based Substitution
+** 4B - Generic Operations
+** 5A - Assignment, State, and Side-Effects
+** 5B - Computational Objects
+*** 1 - Ch. 3.3
+** 6A - Streams I
+** 6B - Streams II
+** 7A - Metacircular Evaluator I
+** 7B - Metacircular Evaluator II 
+** 8A - Logic Programming I
+** 8B - Logic Programming II
+** 9A - Register Machines
+** 9B - Explicit Control Evaluator
+** 10A - Compilation
+** 10B - Storage Allocation and Garbage Collection

@@ -1,0 +1,37 @@
+* Python Fundamentals : Austin Bingham & Robert Smallshire (5:04)
+** Getting Started
+- Python is strongly typed. Every object in the language has a definite type, and there is generally no way to circumvent this.
+- Python is dynamically typed, employing duck typing at runtime.
+- Python is a general purpose programming language.
+- Python is an interpreted language (sort of).
+- Python is clear, readable and expressive. Whitespace is syntatically significant, reducing the need for punctuation.
+- There are multiple implementations of python, the most common of which is "C Python."
+- There are two versions of the language in common use. Python 2 and 3. These are not intercompatible! 
+- Python has a batteries included philosophy, and sports a large standard library.
+- Python has code principles. See the Zen of Python.
+
+
+
+#+BEGIN_SRC python :session
+def foo(x):
+  if x>0:
+    return x+1
+
+  else:
+    return x-1
+
+return foo(5)
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+** Strings and Collections
+** Modularity
+** Built-In Types and the Object Model
+** Collection Types
+** Handling Exceptions
+** Comprehensions, Iterables, and Generators
+** Defining New Types with Classes
+** Files and Resource Management
+** Shipping Working and Maintable Code
