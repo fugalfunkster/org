@@ -1,0 +1,88 @@
+* Getting Started with django CMS
+** 4. Site Templates
+Django's templating system is based on three design principles:
+*** Inheritance
+Block tags are placeholders that can be overriden by a child template that inherits from another template. 
+*** Separation of logic and presentation
+Django provides four programmatic tag types:
+ - Variables : ={{ value }}= evaluate python data
+ - Filters : ={{ value|filter}}= used for modifying how variables are displayed.
+ - Tags : ={% tag %}= can do many different things, like create text in the output, control program flow and perform logic, or load external information.
+ - Comments : ={# comment #}= 
+
+For an more thorough intro to Django's Templating system:
+http://djangobook.com/django-templates/
+
+For comprehensive list of built in tags and filters:
+http://djangobook.com/builtin-template-tags-filters/
+
+*** Extensibility
+The django templating system is extendible in so far as it permits developers to write custom tags.
+
+Django CMS takes advantage of this, and provides three extended tag libraries:
+- cms_tags
+- sekizai_tags
+- menu_tags
+
+These extensions must be explicitly loaded in the parent-most template, usually "base.html."
+
+**** CMS tags (placeholders)
+***** placeholder tags
+Placeholder tags define a place in a template that you can populate with a plugin when editing the page from the front-end editor. Placeholders accept any plugin available in the editor, and plugins can nest, allowing you to create columns and populate those columns with text, images, etc.
+
+Placeholders are unique to a specific page. If you want a placeholder to be common to more than one page, you can use the static_placeholder tag.
+
+Placeholders can inherit from patent pages with a placeholder of the same name.
+
+***** static_placeholder tags
+Static placeholders can appear in multiple templates, but the same content appears in each. No matter where you edit a static placeholder, in the front end editor, it will modify the template's content globally.
+
+***** cms_toolbar tags
+This tag renders the admin toolbar, and should be placed in the base.html, just after the <body> tag.
+
+**** sekizai tags (for js & css)
+These tags allow you to add css and js files to templates without having to edit the underlying python files. They come in two tag flavors:
+- render_block (must be included in the base.html file)
+- addtoblock (included in block tags in template files)
+
+**** menu tags
+The menus application implements additional template tags:
+- show_menu
+- show_menu_below_id
+- show_sub_menu
+- show_breadcrumb
+
+The show_menu tag renders the default navigation menu for the page, in a location determined by the template.  This tag takes optional arguments:
+- =from_level= // 0 : The node level to start rendering the menu from.
+- =to_level= // 100 : Node depth to render, 100 is effectively all child nodes.
+- =extra_inactive= // 0 : The number of nodes to render under the current inactive node. The default is 0, which effectively hides all child nodes under the current active menu item.
+- =extra_active= // 100 : The number of nodes to render under the current active node. The default effectively expands all of the child nodes under the current active menu.
+- =template= : If a template is specified (for example "menu.html"), django CMS will render the file /templates/menu.html in your applicatio folder. Otherwiese, the default menu.html file (in django's site-packages dir). It's always a good idea to supply a template, because (for portability) all active templates should reside in the application's template directory, and not in the django CMS's internal defaults.
+- =namespace= ...
+- =root_id= ...
+- =next_page= ...
+
+Here's what a menu tag might look like:
+{% show_menu 0 100 0 100 "menu.html" %}
+
+*** Styling with Bootstrap
+**** The grid system
+**** CSS Classes
+** 6. django CMS Plugins
+Plugin are content modules that you can place into template placeholders from the front end editor. django CMS comes with built in plugins, and you can also create your own.
+
+In the editor, you can view a page's template structure to see the placeholders, and access a menu of available plugins.
+
+The 11 default plugins:
+- Text : similar to a browser-based text editor
+- Link : unfortunately, you still need to create the anchors yourself...
+- Picture
+- File
+- Video
+- Multi-Columns: 
+- Style : allows you to add custom styling to its child elements
+- Teaser : displays an image with a heading above and block of text below.
+- Flash
+- Google Map
+- Create Alias : Allows you to use a selected plugin on any page, and links their content, much like a static_placeholder, but created in the front-end editor.
+

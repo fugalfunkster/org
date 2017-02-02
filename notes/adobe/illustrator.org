@@ -1,10 +1,145 @@
 * Illustrator CC Fundamentals : Matthew Pizzi (4:30)
 ** Understanding Illustrator
+*** Bitmap v. Vector
+You know the drill...
+
+Illustrator is object based, you select objects, not pixels, and manipulate them.
+
+*** Start Workspace 
+*** Understanding Paths
+All artwork in Illustrator is made of paths.
+Open paths have ends, closed paths create shapes
+
+Paths have anchor points.
+A corner anchor point denotes a terminus.
+A smooth anchor point creates smooth paths, these usually extend from a corner anchor point.
+
+*** Fills and Strokes
+Paths have styles, like fills and strokes.
+- stroke weight : thickness
+- stroke color : color of thickness
+- profile : ex: brush, variable width
+- brush : character of brush
+
+Paths are inherently separate from their appearance.
+
+Closed paths can also take a fill, an interior color of the shape.
+Shapes can also take gradients, or patterns.
+*** Selections and Stacking Order
+The selection tool selects a whole group of objects.
+The direct selection tool only selects a single object.
+
+Note, if you use the direct selection tool but click on sometihng other than an anchor point, you'll select an entire path.
+If you click on an anchor point, you subsequently modify just that point.
+
+Each object has its own level in the stacking order.
+Check the layers panel : Objects -> Layers
+In the layers panel, the topmost objects are higher in the stacking order.
+You can also arrange objects individually: Object -> Arrange -> ...
+
+*** Isolation Mode
+You group objects by selecting them, and then grouping them: Objects -> Group
+
+When selecting, if we double click in a group, we enter into isolation mode.
+This lets you select individual components, by double clicking agin.
+
+Once you're deep in a drill down, you can navigate back one layer at a time using the back button in the selection menu below the main menubar.
+
+Once you're in isolation mode, remember new objects will be scoped to your context.
+*** Creating New Documents
+
+*** Anatomy of a Document
+*** Multiple Artboards
+
+*** Illustrator Templates
+
+*** Saving Documents
 ** Working in Illustrator
+*** Working with Panels
+*** The Control Panel
+*** Rulers and Guides
+To create a guide, all you have to do is click on the ruler, drag, and move the guide into place, before mouseup. You can even switch axes using option before the guide is placed.
+
+Guides can be locked into place, or made invisible, to avoid their getting in the way.
+
+*** Guides and the Grid
+Snap to Point
+Snap to Grid
+*** Smart Guides
+*** Align Panel
+The align panel is available via : Window -> Align Panel
+This lets us align multiple objects.
+*** Hide / Show Edges
+When we click on a object in a group, it will show the vector points in the highlighted object, and the bounding box.
+
+We can hide the bounding box, and we can hide edges, from : View -> 
+
+This can be confusing because we might not be able to see what is highlighted.
+
+*** Preview and Outline Modes
+Double clicking brings you into isolation mode. This can help remove interference from the surrounding objects. But, it does nothing to reduce visual color.
+
+The outline mode : View -> Outline Mode || Cmd-Y
+
+The default is preview mode.
+
+*** Document Navigation
+ZOOMING! 
+Cmd + || Cmd -
+Also a zoom tool: z, click, and alt-click, or click and drag a marquee
+
+Fit options are available in the view menu.
+
+MOVING 
+The hand tool, also SPACE-mousemove
+
+*** Bounding Box
+Bounding boxes are handles that let you resize objects. 
+When dragging handle, holding down SHIFT constrains the aspect ratio.
+
+*** Workspaces
+Let you customize the working environment to optimize for specific types of work.
+
 ** Core Drawing Principles
+*** Drawing Basic Shapes
+holding down shift makes width and height equal
+holding down space lets you move the shape before drawing
+alt lets you draw a shape out from the center (the click point)
+*** Polygon Star Tools
+*** Drawing Modes
+- Normal Drawing Mode
+- Draw Behind
+- Draw Inside
+
+*** Live Corners
+Lets you modify corners after the fact.
+
+*** Open Path Tools
+- line segment tool
+- arc tool
+- spiral tool 
+
+*** Pencil Tool
+Freehand drawing tool, best with a tablet.
+Fidelity lets you choose between accuracy and smoothing.
+Cool.
+*** Paintbrush Tool
+Like the pencil tool, but brush definition doesn't default to basic.
+*** Pen Tool
+SUPER IMPORTANT
+shift-click lets you keep going
+
+
+
+*** Complex Paths
+*** Pen Modifier Tools
+*** Pen Tool Preferences
+*** Reshaping a Path Segment
+*** Smooth and Path Eraser Tools
+** Combining Paths and Shapes
 ** Working with Type
 *** Point and Area Text
-Point text is the default. In point text, typing produces text, return creates a new line. Esc ejects from the type box, and returns you to the selection tool to select point text, which produces a bounding box around the text. 
+Point text is the default. In point text, typing produces text, return creates a new line. ESC ejects from the type box, and returns you to the selection tool to select point text, which produces a bounding box around the text. 
 
 You can hide the bounding box : View -> Hide Bounding Box. Or, you can use the direct selection tool, which shows the anchor point, but not the bounding box. This anchor point is the reference for alignment, text moves relative to the anchor point.
 
@@ -52,20 +187,18 @@ This converts font info to vector info, which makes it much slower to print.
 Warning, converting to outlines removes the ability to modify type using the type tool.
 
 
-
-
-
-
-
-
 * Tips from Videos
 - Selection Tool : v
 - Direct Selecton Tool : a
 - Text Tool : t
 - Character panel: Cmd-t
 - clicking and holding down on icons w/ corner arrow in toolbar reveals hidden tools
+- measure tool, behind eye-dropper tool
+- for better alignment: View -> Smart Guides {checked} && View -> Snap to Point {checked}
+
 * Tips and tricks from coworkers
 - Crop an image to contain content : Object -> Artboards -> Fit To Artwork Bounds
 - Set units globally : Illustrator CC -> Preferences -> Units
 - Preview Outline : Cmd-y // View -> Outline
+- Use Type -> Create Outlines to convert text to SVG.
 
