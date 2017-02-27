@@ -1,3 +1,4 @@
+
 #+TODO: TODO NEXT OPEN | DONE
 
 * Index
@@ -63,8 +64,101 @@
 [ ] 13. Creating & Extending Abstractions w/ Multimethods, Protocols, and Records
 [ ] A. Building and Developing with Leiningen
 [ ] B. Boot, the Fancy Clojure Build Framework
-** Web Development with Clojure
 ** Clojure Applied
+*** [ ] I. Foundations
+**** [ ] A. Model Your Domain
+- [] . Modeling Entities
+- [] . Constructing Entities
+- [] . Modeling Relationships
+- [] . Validating Entities excerpt
+- [] . Domain Operations
+**** [ ] B. Collect and Organize Your Data
+- [] . Choosing the Right Collection
+- [] . Updating Collections
+- [] . Accessing Collections
+- [] . Building Custom Collections
+**** [ ] C. Processing Sequential Data
+- [] . Mapping Values
+- [] . Reducing to a Value
+- [] . Filtering and Removing Values
+- [] . Take and Drop
+- [] . Sorting and Duplicate Removal
+- [] . Grouping Values
+- [] . Putting It All Together excerpt
+*** [ ] II. Applications
+**** [ ] A. State, Identity, and Change
+- [] . Modeling a Change
+- [] . Tools for Managing Change
+- [] . Living with Change
+**** [ ] B. Use Your Cores
+- [] . Push Waiting to the Background
+- [] . Queues and Workers
+- [] . Parallelism with Reducers
+- [] . Thinking in Processes
+**** [ ] C. Creating Components excerpt
+- [] . Organizing with Namespaces
+- [] . Designing Component APIs
+- [] . Connecting Components with Channels
+- [] . Implementing Components
+**** [ ] D. Compose Your Application
+- [] . Taking Things Apart
+- [] . Implementing with Component
+- [] . Putting Things Together
+- [] . System Configuration
+*** [ ] III. Practices
+**** [ ] A. Testing Clojure
+- [] . Interactive REPL Tests
+- [] . Example-Based Tests with clojure.test
+- [] . Organizing and Running Your Tests
+- [] . Example-Based Tests with expectations
+- [] . Property-Based Tests with test.check
+**** [ ] B. Formatting Data
+- [] . Data Serialization Formats
+- [] . Extensible Data Notation
+- [] . JSON
+- [] . Transit
+**** [ ] C. Getting Out The Door
+- [] . Publish your Code
+- [] . Choose a Deployment Environment
+- [] . Deploy to a Platform
+- [] . Provision Your Own Servers
+**** [ ] D. Roots
+- [] . Reasonability
+- [] . Lisp
+- [] . Macros and Metraprogramming
+- [] . Persistent Data Structures
+- [] . Lazy and Delayed Evaluation
+- [] . Futures and Promises
+- [] . Concurrent Channels
+- [] . Multiversion Concurrency Control
+**** [ ] E. Thinking in Clojure
+- [] . Make Reasoned Choices
+- [] . Be Reasonable
+- [] . Keep It Simple
+- [] . Build Just Enough
+- [] . Compose
+- [] . Be Precise
+- [] . Use What Works
+** The Joy of Clojure
+*** PART 1: FOUNDATIONS
+1. CLOJURE PHILOSOPHY
+2. DRINKING FROM THE CLOJURE FIREHOSE
+3. DIPPING OUR TOES INTO THE POOL
+*** PART 2. DATA TYPES
+4. ON SCALARS
+5. COMPOSITE DATA TYPES
+*** PART 3. FUNCTIONAL PROGRAMMING
+6. BEING LAZY AND SET IN YOUR WAYS
+7. FUNCTIONAL PROGRAMMING
+*** PART 4. LARGE-SCALE DESIGN
+8. MACROS
+9. COMBINING DATA AND CODE
+10. JAVA.NEXT
+11. MUTATION
+*** PART 5. TANGENTIAL CONSIDERATIONS
+12. PERFORMANCE
+13. CLOJURE CHANGES THE WAY YOU THINK
+** Web Development with Clojure
 
 
 * Simple Expressions, Forms, and Simple Values
@@ -557,90 +651,6 @@ eagerly creating a whole new sequence. Lazy sequences generate their contents as
 requested, usually when iterating over them. Laziness ensures that we don't do more work than 
 we need to and gives us the possibility of treating potentially infinite sequences as regular 
 ones."
-** TODO WHAT IS LAZINESS?
-** Lazy Sequences and Side Effects
-The flip side is that then you're applying functions that produce side-effects to lazy sequences, the side-effects won't occur until the sequence is iterated over to retrieve its contents. This is common when mapping over a lazy sequence.
-
-#+BEGIN_SRC clojure :results output
-  (def animals (map #(println %) '('monkey 'bear ' bird 'bee)))
-#+END_SRC
-
-#+RESULTS:
-
-#+BEGIN_SRC clojure :results output
-  (def animals (map #(println %) '("monkey" "bear" "bird" "bee")))
-  animals
-#+END_SRC
-
-#+RESULTS:
-: monkey
-: bear
-: bird
-: bee
-
-#+BEGIN_SRC clojure :results output
-  (def animals (doall (map #(println %) '("monkey" "bear" "bird" "bee"))))
-#+END_SRC
-
-#+RESULTS:
-: monkey
-: bear
-: bird
-: bee
-
-*** range (lc)
-The range function, in the absence of any arguments, returns a lazy, infinite sequence of all the integers. Thankfully, range is polymorphic. With one argument, range returns a lazy sequence of integers from 0 until the argument. With two arguments, range returns a lazy sequence beginning at the first argument and ending before the second. If a third argument is provided, the difference between integers in the returned seq will reflect the third argument.
- 
-#+BEGIN_SRC clojure
-  (range 6 19 2.5)
-#+END_SRC
-
-#+RESULTS:
-| 6 | 8.5 | 11.0 | 13.5 | 16.0 | 18.5 |
-
-*** take (lc)
-The take function accepts an integer and a lazy sequence, then returns the number of items from the sequence corresponding to its integer argument.
-
-#+BEGIN_SRC clojure
-  (take 5 (range))
-#+END_SRC
-
-#+RESULTS:
-| 0 | 1 | 2 | 3 | 4 |
-
-*** repeat (lc)
-The repeat function takes an integer and an expression as arguments, and returns a lazy sequence containg the value of its second argument repeated as many times as the integer.
-
-#+BEGIN_SRC clojure
-  (repeat 3 "beetlejuice")
-#+END_SRC
-
-#+RESULTS:
-| beetlejuice | beetlejuice | beetlejuice |
-
-*** repeatedly (lc)
-repeatedly works similarly to repeat, but instead of accepting an expression to repeat, repeatedly accepts a function.
-
-#+BEGIN_SRC clojure
-  (repeatedly 10 #(rand-int 10))
-#+END_SRC
-
-#+RESULTS:
-| 5 | 5 | 9 | 1 | 8 | 5 | 0 | 4 | 9 | 1 |
-
-*** cycle (lc)
-The cycle function accepts a collection and returns a lazy sequence containing the items in 
-that collection repeated infinitely.
-
-#+BEGIN_SRC clojure
-  (take 5 (cycle '("Dave Brubeck" "Herbie Hancock" "Thelonious Monk" "Bill Evans")))
-#+END_SRC
-
-#+RESULTS:
-| Dave Brubeck | Herbie Hancock | Thelonious Monk | Bill Evans | Dave Brubeck |
-
-*** Demonstrating Lazy Seq Efficiency (brave)
-*** Infinite Sequences (brave)
 ** Sequence Comprehension with =for=
 The for function accepts a vector of bindings and an expression, and returns a 
 sequence of the result of evaluating the expression. for can accept multiple 
@@ -1090,7 +1100,7 @@ evaluated.
 : #'user/translate"French""Unknown"
 
 
-* Naming Things
+* Naming Things and Namespaces
 ** Binding Values to Symbols / Vars
 "Clojure symbols refer to values. When a symbol is evaluated, it returns the 
 thing it refers to." (lc) 
@@ -1525,514 +1535,14 @@ expression. This is Clojure's way of recursion without consuming the stack.
 *** Function Composition Instead of Attribute Mutation
 
 
-* State, Concurrency, Parallelism, and Asynchronicity
-** Communication with core.async (lc)
-** TODO State Management: Atoms, Volatiles, Refs, & Agents (brave)
-Useful programs have state, we need to model data that retains a consistent identity but changes value over time. Bindings like let and def allow us to redefine a var in a namespace, but we cannot know (programmatically) when a redefinition occurs. And, when we're outside of that namespace, we cannot redefine a var. 
-*** Using Atoms for Independent and Synchronous Changes
-Atoms are objects with values that we can change at will. We can also use watcher functions to observe the atom for changes, and validation functions to ensure that the atoms value is valid.
-**** Declaring and dereferencing an atom
-To declare an atom, we use the atom function.
-
-#+BEGIN_SRC clojure
-  (def h (atom "Hydrogen"))
-#+END_SRC
-
-#+RESULTS:
-: #'user/h
-
-In order to get the current value of the atom, we have to dereference the binding. We can use the =deref= function, or the @ shorthand.
-
-#+BEGIN_SRC clojure
-  (def h (atom "Hydrogen"))
-  (deref h)
-  @h
-#+END_SRC
-
-#+RESULTS:
-: #'user/h"Hydrogen""Hydrogen"
-
-**** Altered states with swap! and reset!
-To change the value of an atom, we can either use =swap!=, in conjunction with a function 
-that returns a new state value, or we can use =reset!= to overwrite the atom's value 
-directly. Functions that end in a bang =!= indicate that we're messing with state in clojure.
-***** swap!
-The swap! function takes an atom and a function that accepts that atom's current value and returns that atom's new value. The function we pass swap must be free of side effects, because swap! is an 'atomic transaction.' Under the hood, swap! applies its function to its atom, and then checks to ensure that the atom hasn't been changed since the function began execution - via a process in another thread for example. If it has changed, swap! will start over, passing the changed atom to the function. This means any side effects could potentially execute multiple times as swap! attempts to ensure that it transforms the atom's state correctly. 
-
-#+BEGIN_SRC clojure :results output
-  (def h (atom "In the beginning..."))
-  (defn nextAtom [currentAtom] (if (= currentAtom "Hydrogen" ) "Helium" "Hydrogen"))
-  (println @h)
-  (swap! h nextAtom)
-  (println @h)
-  (swap! h nextAtom)
-  (println @h)
-#+END_SRC
-
-#+RESULTS:
-: In the beginning...
-: Hydrogen
-: Helium
-
-***** reset!
-The reset! function will overwrite the value of an atom directly. 
-
-#+BEGIN_SRC clojure :results output
-  (def h (atom "Hydrogen")) 
-  (println @h)
-  (reset! h "Helium")
-  (println @h)
-#+END_SRC
-
-#+RESULTS:
-: Hydrogen
-: Helium
-
-**** Observation (cu) / Watches and Validators (brave)
-=add-watch= and =remove-watch= are functions that tie an atom to a watcher function (a keyword-function pair) or remove that tie. Whenever an atom's value changes, all of that atom's watcher functions will be called. Each watcher function must have a key (keyword) associated with it, so that the watcher can be removed. 
-
-#+BEGIN_SRC clojure :results output
-  (def a (atom 0))
-  (add-watch a :logger (fn [key the-atom old-value new-value]
-                         (println "Key:" key "Old:" old-value "New:" new-value)))
-  (reset! a 42)
-  (swap! a inc)
-  (remove-watch a :logger)
-
-
-#+END_SRC
-
-#+RESULTS:
-: Key: :logger Old: 0 New: 42
-: Key: :logger Old: 42 New: 43
-*** Volatiles - atoms without watchers
-Volatiles are -essentially- atoms that lack an option to attach watchers. This makes them more performant. Note that the volatile constructor uses =volatile!=.
-
-#+BEGIN_SRC clojure :results output
- 
-(def vol (volatile! "Voldemort"))
-(println (volatile? vol))
-(println (deref vol))
-(vswap! vol #(when (= "Voldemort" %) "The One Who Must Not Be Named"))
-(println (deref vol))
-(vreset! vol "Vanquished")
-(println (deref vol))
-#+END_SRC
-
-#+RESULTS:
-: true
-: Voldemort
-: The One Who Must Not Be Named
-: Vanquished
-
-*** Using Refs for Coordinated and Synchronous Changes
-Refs can only be changed within a transaction. Transactions have a few characteristics that are database-like:
-- Atomic: Within a transaction, multiple refs may be changed, but it's an all or nothing proposition. Either all changes succeed, or all fail. We do this by using =dosync= which coordinates any state changes within its body.
-- Consistent: An optional validator function can check the refs values before the transaction commits.
-- Isolated: Transactions are ignorant of each other. Transactions in separate threads cannot affect each other.
-**** declaring and dereferencing a ref
-
-#+BEGIN_SRC clojure
-  (def ump (ref "Steve"))
-  (deref ump)
-  @ump
-#+END_SRC
-
-#+RESULTS:
-: #'user/ump"Steve""Steve"
-
-**** alter
-The =alter= function behaves similarly to swap!, it accepts a ref and a function that accepts a ref and returns the new state of the ref. In order to coordinate state changes across multiple refs, we must run our alter forms in a dosync form. This ensures that we get the do or die guarantees of an atomic transaction. And, like swap!, if the transaction fails, the program will retry, so the functions passed to alter must be side-effect free.
-
-#+BEGIN_SRC clojure :results output
-  (def alice-height (ref 3))
-  (def right-hand-bites (ref 10))
-  (defn eat-from-right-hand []
-    (dosync (when (pos? @right-hand-bites)
-              (alter right-hand-bites dec)
-              (alter alice-height #(+ % 24)))))
-  (let [n 2]
-    (future (dotimes [_ n] (eat-from-right-hand)))
-    (future (dotimes [_ n] (eat-from-right-hand)))
-    (future (dotimes [_ n] (eat-from-right-hand))))
-
-  (println @alice-height)
-  (println @right-hand-bites)
-#+END_SRC
-
-#+RESULTS:
-: 147
-: 4
-
-**** TODO commute
-Unlike alter, commute will not retry upon failure. Instead, commute will use an 'in-transaction-value' after a failure, and set the ref valueat the commit point in the transaction. WHAT IS THE COMMIT POINT?
-
-#+BEGIN_SRC clojure :results output
-  (def alice-height (ref 3))
-  (def right-hand-bites (ref 10))
-  (defn eat-from-right-hand []
-    (dosync (when (pos? @right-hand-bites)
-              (commute right-hand-bites dec)
-              (commute alice-height #(+ % 24)))))
-  (let [n 2]
-    (future (dotimes [_ n] (eat-from-right-hand)))
-    (future (dotimes [_ n] (eat-from-right-hand)))
-    (future (dotimes [_ n] (eat-from-right-hand))))
-
-  (println @alice-height)
-  (println @right-hand-bites)
-#+END_SRC
-
-#+RESULTS:
-: 147
-: 4
-
-**** ref-set
-When one ref's value is defined in terms of another ref's value, we must use ref-set instead of alter or commute to ensure that the dependency is respected. =ref-set= directly sets the value.
-
-#+BEGIN_SRC clojure :results output
-  (def x (ref 1))
-  (def y (ref 1))
-  (defn new-values []
-    (dosync
-      (alter x inc)
-      (ref-set y (+ 2 @x))))
-  (let [n 2]
-    (dotimes [_ n] (new-values))
-    (dotimes [_ n] (new-values)))
-  (println @x)
-  (println @y)
-#+END_SRC
-
-#+RESULTS:
-: 5
-: 7
-*** TODO Using Agents for Independent and Synchronous Changes
-Living Clojure's treatment was anemic... revisit...
-**** creation and dereferencing
-Creation and dereferencing is similar to an atom.
-#+BEGIN_SRC clojure :results output
-  (def secret (agent "man"))
-  (println @secret)
-#+END_SRC
-
-#+RESULTS:
-: man
-
-**** send
-The send function lets us change the state of the agent. It works in a similar way to an atom's swap! function. But, unlike swap!, send does not block. Instead, send opens a separate thread and dispatches the action to the agent in that thread. Thus, when you deref an agent after a change, it my not have changed yet. Unlike swap! and alter, send returns immediately...
-
-#+BEGIN_SRC clojure :results output
-  (def secret (agent "russian"))
-  (println @secret)
-  (defn bribe [state]
-    (case state
-      "russian" "american"
-      "american" "russian"))
-  (send secret bribe)
-  (println @secret)
-#+END_SRC
-
-#+RESULTS:
-: russian
-: american
-
-**** send-off
-send-off is best for potentially blocking I/O actions. "Using send uses a fixed thread pool, which is good for CPU-bound operations, whereas send-off uses an expandable thread pool necessary to avoid an I.O-bound thread pool from blocking." -lc
-
-#+BEGIN_SRC clojure :results output
-  (def secret (agent "russian"))
-  (println @secret)
-  (defn bribe [state]
-    (case state
-      "russian" "american"
-      "american" "russian"))
-  (send-off secret bribe)
-  (println @secret)
-#+END_SRC
-
-#+RESULTS:
-: russian
-: american
-
-**** transactions
-
-** TODO Concurrency and Parallelism Concepts
-*** Synchronous and Asynchronous
-*** Concurrent and Parallel
-*** Threads and the JVM
-**** Reference Cells
-**** Mutual Exclusion
-*** Futures
-The future function accepts a 'body' and executes it in another thread. The following example demonstrates the importance of keeping our swap! functions side effect free.
-
-#+BEGIN_SRC clojure :results output
-  (def counter (atom 0))
-  (println @counter)
-  (defn inc-print [a] 
-    (println a)
-    (inc a))
-  (let [n 3]
-    (future (dotimes [_ n] (swap! counter inc-print)))
-    (future (dotimes [_ n] (swap! counter inc-print)))
-    (future (dotimes [_ n] (swap! counter inc-print))))
-#+END_SRC
-
-#+RESULTS:
-#+begin_example
-0
-0
-0
-0
-1
-2
-21
-
-3
-3
-2
-4
-4
-5
-5
-6
-7
-8
-#+end_example
-
-*** Delays
-*** Promises
-** TODO CSP with core.async (brave)
-*** Getting Started with Processes (brave)
-*** queues (brave)
-*** channels (lc)
-
-
-* Host Interop
-Clojure is a hosted language, and borrows heavily from the types provided by its host. In Clojure, a string is a java.lang.String; in ClojureScript a string is a JavaScript string. This common ground lets Clojure inter-operate with its host, including access to classes, objects,, libraries, and APIs of its host
-** Javascript
-Note, cider is not configured to execute clojurescript. So don't lean on these code-blocks.
-*** Accessing the global object
-#+BEGIN_SRC clojure
-  (js/console.log "222")
-#+END_SRC
-*** Method Invocation
-To call the method of a JS object, the property access call is first in the s-exp, followed by the object's var. Alternately, the object and method call can be combined.
-
-#+BEGIN_SRC clojure
-  (def re (js/RegExp "^Clojure"))
-  (.test re "ClojureScript") ; => true
-
-  (.sqrt js/Math 49) ; => 7
-  (js/Math.sqrt 49) ; => 7
-#+END_SRC
-*** Property Access
-Property access is similar to method invocation, but instead of using a period, you use a period and hyphen.
-#+BEGIN_SRC clojure
-  (.-multiline re) ; => false
-  (.-PI js.Math) ; => 3.14....
-#+END_SRC
-
-The techniques described above have a convienent shorthand:
-#+BEGIN_SRC clojure
-  (jsMath.PI) ; => 3.14...
-#+END_SRC
-
-*** Creating JavaScript Objects
-There are two methods to create JS objects:
-1. =js-obj= is a function that accepts a map and returns a JavaScript object. The return value can be passed to third party libraries that communicate in POJOs.
-2. =#js= is a reader macro that ou prepend to a map or vector to transform it to a POJO.
-**** js-obj Example:
-#+BEGIN_SRC clojure
-  (js-obj "name" "value") ;; => #js {:name "value"}
-#+END_SRC
-**** #js Example:
-#+BEGIN_SRC clojure
-  (def myObj #js {:name "value"})
-  ; Equivalent to:
-  #+BEGIN_SRC js
-  var myObj = {name: "value"}
-  #+END_SRC
-#+END_SRC
-**** Mutation with =set!=
-In JavaScript, objects are mutable, and ClojureScript permits you to mutate an object's state with the set! function.
-#+BEGIN_SRC clojure
-  (def myObj #js {:name "value"})
-  (set! (myObj.name) "cost")
-#+END_SRC
-*** Conversions
-The previously discussed form of making objects do not recursively transform data types. So, if you have nested objects, the nexted objects will not be converted. To affect deep conversions, use the =clj->js= and =js->clj= functions. Note that conversions from JS to CLJ changes keywords in parent data structures into strings. 
-
-#+BEGIN_SRC clojure
- (def clj-map {:country {:code "FR" :name "France"}})
-  ;; => {:country {:code "FR", :name "France"}}
-  (:code (:country clj-map)
-  ;; => "FR"
-
-  (def js-obj #js {:country {:code "FR" :name "France"}})
-  ;; => #js {:country {:code "FR", :name "France"}
-  (.-country js-obj)
-  ;; => {:code "FR", :name "France"}
-  (.-code (.-country js-obj)
-  ;; => nil
-#+END_SRC
-
-#+BEGIN_SRC clojure
-  (clj->js {:foo {:bar "baz"}})
-  ;; => #js {:foo #js {:bar "baz"}}
-  (js->clj #js {:country {:code "FR" :name "France"}})
-  ;; => {"country" {:code "FR", :name "France"}}
-#+END_SRC
-
-*** JavaScript Arrays
-JS arrays are similar to vectors, we can even use the sequence abstraction overthem. Property access is the same as for POJOs.
-**** Creating JS Arrays
-You can create an aray in two ways:
-1. =into-array= is a function that accepts a vector and returns a JS array.
-2. =make-array= accepts a integer and returns a JS array with a preallocated length equal to the integer, and nil as the value for each index.
-
-#+BEGIN_SRC clojure
-  (into-array ["England" "France" "Germany" "Spain"])
-  (def array (make-array 7))
-#+END_SRC
-**** Access and Mutation
-You can use =aget= and =aset= for property access and mutation, not just for arrays, but for POJOs as well.
-
-#+BEGIN_SRC clojure
-  (def countries (into-array ["England" "France" "Germany" "Spain"]))
-  (aset countries 0 "USA")
-  (aget countries 0) ; => "USA"
-
-  (def b #js {:hour 16})
-  ;; => #js {:hour 16}
-  (aget b "hour")
-  ;; => 16
-  (aset b "minute" 22)
-  ;; => 22
-  b
-  ;; => #js {:hour 16, :minute 22}
-#+END_SRC
-
-**** Iterating Over JS Arrays Using the Sequence Abstraction
-
-#+BEGIN_SRC clojure
-  (def array (make-array 7))
-  (count a) ; => 7
-#+END_SRC
-
-*** Creating Instances of Other Built-In Object Types
-#+BEGIN_SRC clojure
-  (new js/RegExp "^foo$")
-  ; or the dot special form - the preferred, idiomatic way
-  (js/RegExp. "^foo$")
-#+END_SRC
-** Java and the JVM
-Basic types in Clojure are the types provided by its host. For example a Clojure string is an instance of java.lang.String. We can inspect a type using the class function:
-*** Using Class for Introspection
-#+BEGIN_SRC clojure :results output
-(println (class "string"))
-(println (class 5))
-(println (class 5.2))
-(println (class false))
-(println (class nil))
-(println (class symbol))
-(println (class keyword))
-#+END_SRC
-
-#+RESULTS:
-: java.lang.String
-: java.lang.Long
-: java.lang.Double
-: nil
-: java.lang.Boolean
-: clojure.core$symbol
-: clojure.core$keyword
-
-*** Calling Object Methods
-When we want to access the method of an object, we can use dot notation or dot shorthand.
-First comes the dot, then the object, next the method, and last any additional arguments. With the shorthand, the dot and method come first, then the object, and other arguments. 
-**** dot notation
-
-#+BEGIN_SRC clojure :results output
-  (println (. "string" toUpperCase))
-#+END_SRC
-
-#+RESULTS:
-: STRING
-
-#+BEGIN_SRC clojure :results output
-  (println (. "string" indexOf "tring"))
-#+END_SRC
-
-#+RESULTS:
-: 1
-
-**** dot shorthand
-
-#+BEGIN_SRC clojure
-  (.toUpperCase "another string" )
-#+END_SRC
-
-#+RESULTS:
-: ANOTHER STRING
-
-#+BEGIN_SRC clojure :results output
-  (println (.indexOf "string" "r"))
-#+END_SRC
-
-#+RESULTS:
-: 2
-
-*** Creating new Java objects
-We can create new Java objects with the new function or with a a dot following the class name.
-
-#+BEGIN_SRC clojure :results output
-  (println (String. "I'm a real string"))
-  (println (new String "I'm a new string!"))
-#+END_SRC
-
-#+RESULTS:
-: I'm a string
-: I'm a new string!
-
-*** Importing Java Objects and Calling Static Methods
-We can use java objects by importing them into our namespace or using their fully qualified names. To use a static method on a Java class, use the forward slash. 
-#+BEGIN_SRC clojure :results output
-  ; import and use
-  (ns caterpillar.network
-    (:import (java.net InetAddress)))
-  (println (InetAddress/getByName "localhost"))
-
-  ; using the fully qualified name:
-  (println (java.net.InetAddress/getByName "localhost"))
-
-  ;access the imported object using dot notation 
-  (println (.getHostName (InetAddress/getByName "localhost")))
-#+END_SRC
-
-#+RESULTS:
-: #object[java.net.Inet4Address 0x677d8d86 localhost/127.0.0.1]
-: #object[java.net.Inet4Address 0x677d8d86 localhost/127.0.0.1]
-: localhost
-
-*** the =doto= macro
-The doto macro lets us to order operations and execute them on a Java object.
-
-#+BEGIN_SRC clojure :results output
-  (def sb (doto (StringBuffer. "One ")
-            (.append "ring ")
-            (.append "to ")
-            (.append "rule ")
-            (.append "them ")
-            (.append "all.")))
-  (println (.toString sb))
-#+END_SRC
-
-#+RESULTS:
-: One ring to rule them all.
-
-
-* Abstractions and Polymorphism
+* Polymorphism a-la carte
+** Multimethods
+** Protocols
+** Records
+** Types
+** Structs
+
+* Data Abstractions and Polymorphism
 ** Abstractions and Polymorphism (brave)
 *** Protocols Dispatch on Type (brave)
 Protocols are Clojure's way to create interfaces that provide a type-based polymorphism. Protocols allow you to associate multiple functions with a single name, then dispatch based on the type of the interface invocation's first argument. 
@@ -2386,12 +1896,1160 @@ copyable values implementing ICloneable (Eg. ClojureScript collections)
 : #'user/a{}
 
 
+* Laziness
+** TODO WHAT IS LAZINESS?
+** Lazy Sequences and Side Effects
+The flip side is that then you're applying functions that produce side-effects to lazy sequences, the side-effects won't occur until the sequence is iterated over to retrieve its contents. This is common when mapping over a lazy sequence.
+
+#+BEGIN_SRC clojure :results output
+  (def animals (map #(println %) '('monkey 'bear ' bird 'bee)))
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC clojure :results output
+  (def animals (map #(println %) '("monkey" "bear" "bird" "bee")))
+  animals
+#+END_SRC
+
+#+RESULTS:
+: monkey
+: bear
+: bird
+: bee
+
+#+BEGIN_SRC clojure :results output
+  (def animals (doall (map #(println %) '("monkey" "bear" "bird" "bee"))))
+#+END_SRC
+
+#+RESULTS:
+: monkey
+: bear
+: bird
+: bee
+
+*** range (lc)
+The range function, in the absence of any arguments, returns a lazy, infinite sequence of all the integers. Thankfully, range is polymorphic. With one argument, range returns a lazy sequence of integers from 0 until the argument. With two arguments, range returns a lazy sequence beginning at the first argument and ending before the second. If a third argument is provided, the difference between integers in the returned seq will reflect the third argument.
+ 
+#+BEGIN_SRC clojure
+  (range 6 19 2.5)
+#+END_SRC
+
+#+RESULTS:
+| 6 | 8.5 | 11.0 | 13.5 | 16.0 | 18.5 |
+
+*** take (lc)
+The take function accepts an integer and a lazy sequence, then returns the number of items from the sequence corresponding to its integer argument.
+
+#+BEGIN_SRC clojure
+  (take 5 (range))
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 | 3 | 4 |
+
+*** repeat (lc)
+The repeat function takes an integer and an expression as arguments, and returns a lazy sequence containg the value of its second argument repeated as many times as the integer.
+
+#+BEGIN_SRC clojure
+  (repeat 3 "beetlejuice")
+#+END_SRC
+
+#+RESULTS:
+| beetlejuice | beetlejuice | beetlejuice |
+
+*** repeatedly (lc)
+repeatedly works similarly to repeat, but instead of accepting an expression to repeat, repeatedly accepts a function.
+
+#+BEGIN_SRC clojure
+  (repeatedly 10 #(rand-int 10))
+#+END_SRC
+
+#+RESULTS:
+| 5 | 5 | 9 | 1 | 8 | 5 | 0 | 4 | 9 | 1 |
+
+*** cycle (lc)
+The cycle function accepts a collection and returns a lazy sequence containing the items in 
+that collection repeated infinitely.
+
+#+BEGIN_SRC clojure
+  (take 5 (cycle '("Dave Brubeck" "Herbie Hancock" "Thelonious Monk" "Bill Evans")))
+#+END_SRC
+
+#+RESULTS:
+| Dave Brubeck | Herbie Hancock | Thelonious Monk | Bill Evans | Dave Brubeck |
+
+*** Demonstrating Lazy Seq Efficiency (brave)
+*** Infinite Sequences (brave)
 
 
-* Reader, Compiler, REPL and Build Tools
+* State, Concurrency, Parallelism, and Asynchronicity
+** TODO State Management: Atoms, Volatiles, Refs, & Agents (brave)
+Useful programs have state, we need to model data that retains a consistent identity but changes value over time. Bindings like let and def allow us to redefine a var in a namespace, but we cannot know (programmatically) when a redefinition occurs. And, when we're outside of that namespace, we cannot redefine a var. 
+*** Using Atoms for Independent and Synchronous Changes
+Atoms are objects with values that we can change at will. We can also use watcher functions to observe the atom for changes, and validation functions to ensure that the atoms value is valid.
+**** Declaring and dereferencing an atom
+To declare an atom, we use the atom function.
+
+#+BEGIN_SRC clojure
+  (def h (atom "Hydrogen"))
+#+END_SRC
+
+#+RESULTS:
+: #'user/h
+
+In order to get the current value of the atom, we have to dereference the binding. We can use the =deref= function, or the @ shorthand.
+
+#+BEGIN_SRC clojure
+  (def h (atom "Hydrogen"))
+  (deref h)
+  @h
+#+END_SRC
+
+#+RESULTS:
+: #'user/h"Hydrogen""Hydrogen"
+
+**** Altered states with swap! and reset!
+To change the value of an atom, we can either use =swap!=, in conjunction with a function 
+that returns a new state value, or we can use =reset!= to overwrite the atom's value 
+directly. Functions that end in a bang =!= indicate that we're messing with state in clojure.
+***** swap!
+The swap! function takes an atom and a function that accepts that atom's current value and returns that atom's new value. The function we pass swap must be free of side effects, because swap! is an 'atomic transaction.' Under the hood, swap! applies its function to its atom, and then checks to ensure that the atom hasn't been changed since the function began execution - via a process in another thread for example. If it has changed, swap! will start over, passing the changed atom to the function. This means any side effects could potentially execute multiple times as swap! attempts to ensure that it transforms the atom's state correctly. 
+
+#+BEGIN_SRC clojure :results output
+  (def h (atom "In the beginning..."))
+  (defn nextAtom [currentAtom] (if (= currentAtom "Hydrogen" ) "Helium" "Hydrogen"))
+  (println @h)
+  (swap! h nextAtom)
+  (println @h)
+  (swap! h nextAtom)
+  (println @h)
+#+END_SRC
+
+#+RESULTS:
+: In the beginning...
+: Hydrogen
+: Helium
+
+***** reset!
+The reset! function will overwrite the value of an atom directly. 
+
+#+BEGIN_SRC clojure :results output
+  (def h (atom "Hydrogen")) 
+  (println @h)
+  (reset! h "Helium")
+  (println @h)
+#+END_SRC
+
+#+RESULTS:
+: Hydrogen
+: Helium
+
+**** Observation (cu) / Watches and Validators (brave)
+=add-watch= and =remove-watch= are functions that tie an atom to a watcher function (a keyword-function pair) or remove that tie. Whenever an atom's value changes, all of that atom's watcher functions will be called. Each watcher function must have a key (keyword) associated with it, so that the watcher can be removed. 
+
+#+BEGIN_SRC clojure :results output
+  (def a (atom 0))
+  (add-watch a :logger (fn [key the-atom old-value new-value]
+                         (println "Key:" key "Old:" old-value "New:" new-value)))
+  (reset! a 42)
+  (swap! a inc)
+  (remove-watch a :logger)
+
+
+#+END_SRC
+
+#+RESULTS:
+: Key: :logger Old: 0 New: 42
+: Key: :logger Old: 42 New: 43
+*** Volatiles - atoms without watchers
+Volatiles are -essentially- atoms that lack an option to attach watchers. This makes them more performant. Note that the volatile constructor uses =volatile!=.
+
+#+BEGIN_SRC clojure :results output
+ 
+(def vol (volatile! "Voldemort"))
+(println (volatile? vol))
+(println (deref vol))
+(vswap! vol #(when (= "Voldemort" %) "The One Who Must Not Be Named"))
+(println (deref vol))
+(vreset! vol "Vanquished")
+(println (deref vol))
+#+END_SRC
+
+#+RESULTS:
+: true
+: Voldemort
+: The One Who Must Not Be Named
+: Vanquished
+
+*** Using Refs for Coordinated and Synchronous Changes
+Refs can only be changed within a transaction. Transactions have a few characteristics that are database-like:
+- Atomic: Within a transaction, multiple refs may be changed, but it's an all or nothing proposition. Either all changes succeed, or all fail. We do this by using =dosync= which coordinates any state changes within its body.
+- Consistent: An optional validator function can check the refs values before the transaction commits.
+- Isolated: Transactions are ignorant of each other. Transactions in separate threads cannot affect each other.
+**** declaring and dereferencing a ref
+
+#+BEGIN_SRC clojure
+  (def ump (ref "Steve"))
+  (deref ump)
+  @ump
+#+END_SRC
+
+#+RESULTS:
+: #'user/ump"Steve""Steve"
+
+**** alter
+The =alter= function behaves similarly to swap!, it accepts a ref and a function that accepts a ref and returns the new state of the ref. In order to coordinate state changes across multiple refs, we must run our alter forms in a dosync form. This ensures that we get the do or die guarantees of an atomic transaction. And, like swap!, if the transaction fails, the program will retry, so the functions passed to alter must be side-effect free.
+
+#+BEGIN_SRC clojure :results output
+  (def alice-height (ref 3))
+  (def right-hand-bites (ref 10))
+  (defn eat-from-right-hand []
+    (dosync (when (pos? @right-hand-bites)
+              (alter right-hand-bites dec)
+              (alter alice-height #(+ % 24)))))
+  (let [n 2]
+    (future (dotimes [_ n] (eat-from-right-hand)))
+    (future (dotimes [_ n] (eat-from-right-hand)))
+    (future (dotimes [_ n] (eat-from-right-hand))))
+
+  (println @alice-height)
+  (println @right-hand-bites)
+#+END_SRC
+
+#+RESULTS:
+: 147
+: 4
+
+**** TODO commute
+Unlike alter, commute will not retry upon failure. Instead, commute will use an 'in-transaction-value' after a failure, and set the ref valueat the commit point in the transaction. WHAT IS THE COMMIT POINT?
+
+#+BEGIN_SRC clojure :results output
+  (def alice-height (ref 3))
+  (def right-hand-bites (ref 10))
+  (defn eat-from-right-hand []
+    (dosync (when (pos? @right-hand-bites)
+              (commute right-hand-bites dec)
+              (commute alice-height #(+ % 24)))))
+  (let [n 2]
+    (future (dotimes [_ n] (eat-from-right-hand)))
+    (future (dotimes [_ n] (eat-from-right-hand)))
+    (future (dotimes [_ n] (eat-from-right-hand))))
+
+  (println @alice-height)
+  (println @right-hand-bites)
+#+END_SRC
+
+#+RESULTS:
+: 147
+: 4
+
+**** ref-set
+When one ref's value is defined in terms of another ref's value, we must use ref-set instead of alter or commute to ensure that the dependency is respected. =ref-set= directly sets the value.
+
+#+BEGIN_SRC clojure :results output
+  (def x (ref 1))
+  (def y (ref 1))
+  (defn new-values []
+    (dosync
+      (alter x inc)
+      (ref-set y (+ 2 @x))))
+  (let [n 2]
+    (dotimes [_ n] (new-values))
+    (dotimes [_ n] (new-values)))
+  (println @x)
+  (println @y)
+#+END_SRC
+
+#+RESULTS:
+: 5
+: 7
+*** TODO Using Agents for Independent and Synchronous Changes
+Living Clojure's treatment was anemic... revisit...
+**** creation and dereferencing
+Creation and dereferencing is similar to an atom.
+#+BEGIN_SRC clojure :results output
+  (def secret (agent "man"))
+  (println @secret)
+#+END_SRC
+
+#+RESULTS:
+: man
+
+**** send
+The send function lets us change the state of the agent. It works in a similar way to an atom's swap! function. But, unlike swap!, send does not block. Instead, send opens a separate thread and dispatches the action to the agent in that thread. Thus, when you deref an agent after a change, it my not have changed yet. Unlike swap! and alter, send returns immediately...
+
+#+BEGIN_SRC clojure :results output
+  (def secret (agent "russian"))
+  (println @secret)
+  (defn bribe [state]
+    (case state
+      "russian" "american"
+      "american" "russian"))
+  (send secret bribe)
+  (println @secret)
+#+END_SRC
+
+#+RESULTS:
+: russian
+: american
+
+**** send-off
+send-off is best for potentially blocking I/O actions. "Using send uses a fixed thread pool, which is good for CPU-bound operations, whereas send-off uses an expandable thread pool necessary to avoid an I.O-bound thread pool from blocking." -lc
+
+#+BEGIN_SRC clojure :results output
+  (def secret (agent "russian"))
+  (println @secret)
+  (defn bribe [state]
+    (case state
+      "russian" "american"
+      "american" "russian"))
+  (send-off secret bribe)
+  (println @secret)
+#+END_SRC
+
+#+RESULTS:
+: russian
+: american
+
+**** transactions
+** TODO Concurrency and Parallelism Concepts
+*** Synchronous and Asynchronous
+*** Concurrent and Parallel
+*** Threads and the JVM
+**** Reference Cells
+**** Mutual Exclusion
+*** Futures
+The future function accepts a 'body' and executes it in another thread. The following example demonstrates the importance of keeping our swap! functions side effect free.
+
+#+BEGIN_SRC clojure :results output
+  (def counter (atom 0))
+  (println @counter)
+  (defn inc-print [a] 
+    (println a)
+    (inc a))
+  (let [n 3]
+    (future (dotimes [_ n] (swap! counter inc-print)))
+    (future (dotimes [_ n] (swap! counter inc-print)))
+    (future (dotimes [_ n] (swap! counter inc-print))))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+0
+0
+0
+0
+1
+2
+21
+
+3
+3
+2
+4
+4
+5
+5
+6
+7
+8
+#+end_example
+
+*** Delays
+*** Promises
+** TODO CSP with core.async (brave)
+*** Getting Started with Processes (brave)
+*** queues (brave)
+*** channels (lc)
+
+
+* The Reader and Compilers, and Metaprogramming with Macros
+** The Big Picture
 ** The Clojure Compiler
-** The REPL
-** The Closure Library
+** Metaprogramming with Macros: "Screw the next guy"
+Macros permit you to alter the evaluation paradigm from eager evaluation to normal order evaluation. Macros allow us to rewrite our code at compile time, giving us the option to pen our own custom syntax. 
+*** TODO Clojure Alchemy: Reading, Evaluation, and Macros (brave)
+**** Clojure's Evaluation Model
+**** The Reader
+**** The Evaluator
+*** TODO Writing Macros (brave)
+**** defmacro
+**** macroexpand
+**** templating with 'quote (lc)
+*** Threading Macros
+Threading macros aim to make nested function calls more readable.
+**** thread-first =->=
+The thread-first macro threads the first argument to the macro to the first expression as the first argument to the expression. The result of that expression is then threaded to the next expression as the first argument, and so on for each subsequent expression.
+  This is useful for transforming data structures because data transformation 
+functions in Clojure and ClojureScript consistently use the first argument to 
+recieve the dat structure.
+
+#+BEGIN_SRC clojure :results output
+  (def book {:name "Lady of the Lake"
+             :readers 0 })
+
+  (println (update (assoc book :age 1999) :readers inc))
+#+END_SRC
+
+#+RESULTS:
+: {:name Lady of the Lake, :readers 1, :age 1999}
+
+#+BEGIN_SRC clojure :results output
+  (def book {:name "The Once and Future Parrot"
+             :readers 2 })
+  ( -> book
+       (assoc :age 12)
+       (update :readers inc)
+       println)
+#+END_SRC
+
+#+RESULTS:
+: {:name The Once and Future Parrot, :readers 3, :age 12}
+
+**** thread-last =->>=
+The thread-last macro helps you combine clojure functions that work with seqs and collections, which consistently use the last argument for the data.
+
+#+BEGIN_SRC clojure :results output
+  (def numbers [1 2 3 4 5 6 7 8 9 0])
+  (println (take 2 (filter odd? (map inc numbers))))
+#+END_SRC
+
+#+RESULTS:
+: (3 5)
+
+#+BEGIN_SRC clojure :results output
+  (def numbers [1 2 3 4 5 6 7 8 9 0])
+  (->> numbers
+       (map inc)
+       (filter odd?)
+       (take 2)
+       (println))
+#+END_SRC
+
+#+RESULTS:
+: (3 5)
+
+**** thread-as =as->=
+When you need more flexibility, use the as-> macro, which accepts a value to be threaded, and a binding. In the subsequent forms, the binding is substituted for the prior expressions result. 
+
+#+BEGIN_SRC clojure :results output
+  (def numbers [1 2 3 4 5 6 7 8 9 0])
+  (as-> numbers $
+    (map inc $)
+    (filter odd? $)
+    (first $)
+    (hash-map :result $ :id 1)
+    (println $))
+#+END_SRC
+
+#+RESULTS:
+: {:result 3, :id 1}
+
+**** thread-som =some->= & =some->>=
+Sometimes the result of an expression will be nil, which might throw a null pointer exception. To avoid threading nil through, the thread-some macro will short-circuit and evaluate to nil.
+
+#+BEGIN_SRC clojure :results output
+(println 
+  (repeatedly 5 #(some-> (rand-nth [1 nil])
+                         (inc))))
+#+END_SRC
+
+#+RESULTS:
+: (2 nil nil 2 nil)
+
+**** thread-cond =cond->= & =cond->>=
+The thread-cond macros offer the ability to skip steps in the pipeline.
+
+#+BEGIN_SRC clojure :results output
+  (defn describe-number
+    [n]
+    (cond-> []
+      (odd? n) (conj "odd")
+      (even? n) (conj "even")
+      (zero? n) (conj "zero")
+      (pos? n) (conj "positive")))
+
+  (println (describe-number 3))
+  (println (describe-number -8))
+  (println (describe-number 0))
+#+END_SRC
+
+#+RESULTS:
+: [odd positive]
+: [even]
+
+**** Additional Info
+- http://www.spacjer.com/blog/2015/11/09/lesser-known-clojure-variants-of-threading-macro/
+- http://clojure.org/guides/threading_macros
+*** Reader Conditionals
+Reader conditionals allow a file to act differently based on what platform it is executed within. There are two types of reader conditionals: standard and splicing.
+  Reader conditional only work in files with the .cljc extension.
+**** Standard
+The standard reader cond behaves similarly to vanilla =cond=:
+
+#+BEGIN_SRC clojure :results output
+  (defn say-hello []
+   #?(:clj  (println "Hello from Clojure")
+      :cljs (println "Hello from ClojureScript")))
+  (say-hello)
+#+END_SRC
+
+#+RESULTS:
+: Hello from Clojure
+
+**** Splicing
+
+The splicing reader conditional branches lists into containing forms. 
+
+#+BEGIN_SRC clojure :results output
+  (defn make-list
+    []
+    (list #?@(:clj [5 6 7 8]
+              :cljs [1 2 3 4])))
+  (println (make-list))
+#+END_SRC
+
+#+RESULTS:
+: (5 6 7 8)
+
+Note that the splicing reader conditional can't be used to splice multiple top level forms.
+***** Doesn't Work Ex:
+#+BEGIN_SRC clojure
+  #?@(:cljs [(defn func-a [] :a)
+             (defn func-b [] :b)])
+#+END_SRC
+***** Does work Ex:
+#+BEGIN_SRC clojure
+  #?(:cljs (do
+      (defn func-a [] :a)
+      (defn func-b [] :b)))
+#+END_SRC
+
+**** Additional Information
+- http://clojure.org/guides/reader_conditionals
+- https://danielcompton.net/2015/06/10/clojure-reader-conditionals-by-example
+- https://github.com/funcool/cuerdas (example small project that uses reader conditionals)
+
+* Host Interop
+Clojure is a hosted language, and borrows heavily from the types provided by its host. In Clojure, a string is a java.lang.String; in ClojureScript a string is a JavaScript string. This common ground lets Clojure inter-operate with its host, including access to classes, objects,, libraries, and APIs of its host
+** Javascript
+Note, cider is not configured to execute clojurescript. So don't lean on these code-blocks.
+*** Accessing the global object
+#+BEGIN_SRC clojure
+  (js/console.log "222")
+#+END_SRC
+*** Method Invocation
+To call the method of a JS object, the property access call is first in the s-exp, followed by the object's var. Alternately, the object and method call can be combined.
+
+#+BEGIN_SRC clojure
+  (def re (js/RegExp "^Clojure"))
+  (.test re "ClojureScript") ; => true
+
+  (.sqrt js/Math 49) ; => 7
+  (js/Math.sqrt 49) ; => 7
+#+END_SRC
+*** Property Access
+Property access is similar to method invocation, but instead of using a period, you use a period and hyphen.
+#+BEGIN_SRC clojure
+  (.-multiline re) ; => false
+  (.-PI js.Math) ; => 3.14....
+#+END_SRC
+
+The techniques described above have a convienent shorthand:
+#+BEGIN_SRC clojure
+  (jsMath.PI) ; => 3.14...
+#+END_SRC
+
+*** Creating JavaScript Objects
+There are two methods to create JS objects:
+1. =js-obj= is a function that accepts a map and returns a JavaScript object. The return value can be passed to third party libraries that communicate in POJOs.
+2. =#js= is a reader macro that ou prepend to a map or vector to transform it to a POJO.
+**** js-obj Example:
+#+BEGIN_SRC clojure
+  (js-obj "name" "value") ;; => #js {:name "value"}
+#+END_SRC
+**** #js Example:
+#+BEGIN_SRC clojure
+  (def myObj #js {:name "value"})
+  ; Equivalent to:
+  #+BEGIN_SRC js
+  var myObj = {name: "value"}
+  #+END_SRC
+#+END_SRC
+**** Mutation with =set!=
+In JavaScript, objects are mutable, and ClojureScript permits you to mutate an object's state with the set! function.
+#+BEGIN_SRC clojure
+  (def myObj #js {:name "value"})
+  (set! (myObj.name) "cost")
+#+END_SRC
+*** Conversions
+The previously discussed form of making objects do not recursively transform data types. So, if you have nested objects, the nexted objects will not be converted. To affect deep conversions, use the =clj->js= and =js->clj= functions. Note that conversions from JS to CLJ changes keywords in parent data structures into strings. 
+
+#+BEGIN_SRC clojure
+ (def clj-map {:country {:code "FR" :name "France"}})
+  ;; => {:country {:code "FR", :name "France"}}
+  (:code (:country clj-map)
+  ;; => "FR"
+
+  (def js-obj #js {:country {:code "FR" :name "France"}})
+  ;; => #js {:country {:code "FR", :name "France"}
+  (.-country js-obj)
+  ;; => {:code "FR", :name "France"}
+  (.-code (.-country js-obj)
+  ;; => nil
+#+END_SRC
+
+#+BEGIN_SRC clojure
+  (clj->js {:foo {:bar "baz"}})
+  ;; => #js {:foo #js {:bar "baz"}}
+  (js->clj #js {:country {:code "FR" :name "France"}})
+  ;; => {"country" {:code "FR", :name "France"}}
+#+END_SRC
+
+*** JavaScript Arrays
+JS arrays are similar to vectors, we can even use the sequence abstraction overthem. Property access is the same as for POJOs.
+**** Creating JS Arrays
+You can create an aray in two ways:
+1. =into-array= is a function that accepts a vector and returns a JS array.
+2. =make-array= accepts a integer and returns a JS array with a preallocated length equal to the integer, and nil as the value for each index.
+
+#+BEGIN_SRC clojure
+  (into-array ["England" "France" "Germany" "Spain"])
+  (def array (make-array 7))
+#+END_SRC
+**** Access and Mutation
+You can use =aget= and =aset= for property access and mutation, not just for arrays, but for POJOs as well.
+
+#+BEGIN_SRC clojure
+  (def countries (into-array ["England" "France" "Germany" "Spain"]))
+  (aset countries 0 "USA")
+  (aget countries 0) ; => "USA"
+
+  (def b #js {:hour 16})
+  ;; => #js {:hour 16}
+  (aget b "hour")
+  ;; => 16
+  (aset b "minute" 22)
+  ;; => 22
+  b
+  ;; => #js {:hour 16, :minute 22}
+#+END_SRC
+
+**** Iterating Over JS Arrays Using the Sequence Abstraction
+
+#+BEGIN_SRC clojure
+  (def array (make-array 7))
+  (count a) ; => 7
+#+END_SRC
+
+*** Creating Instances of Other Built-In Object Types
+#+BEGIN_SRC clojure
+  (new js/RegExp "^foo$")
+  ; or the dot special form - the preferred, idiomatic way
+  (js/RegExp. "^foo$")
+#+END_SRC
+** Java and the JVM
+Basic types in Clojure are the types provided by its host. For example a Clojure string is an instance of java.lang.String. We can inspect a type using the class function:
+*** Using Class for Introspection
+#+BEGIN_SRC clojure :results output
+(println (class "string"))
+(println (class 5))
+(println (class 5.2))
+(println (class false))
+(println (class nil))
+(println (class symbol))
+(println (class keyword))
+#+END_SRC
+
+#+RESULTS:
+: java.lang.String
+: java.lang.Long
+: java.lang.Double
+: nil
+: java.lang.Boolean
+: clojure.core$symbol
+: clojure.core$keyword
+
+*** Calling Object Methods
+When we want to access the method of an object, we can use dot notation or dot shorthand.
+First comes the dot, then the object, next the method, and last any additional arguments. With the shorthand, the dot and method come first, then the object, and other arguments. 
+**** dot notation
+
+#+BEGIN_SRC clojure :results output
+  (println (. "string" toUpperCase))
+#+END_SRC
+
+#+RESULTS:
+: STRING
+
+#+BEGIN_SRC clojure :results output
+  (println (. "string" indexOf "tring"))
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+**** dot shorthand
+
+#+BEGIN_SRC clojure
+  (.toUpperCase "another string" )
+#+END_SRC
+
+#+RESULTS:
+: ANOTHER STRING
+
+#+BEGIN_SRC clojure :results output
+  (println (.indexOf "string" "r"))
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+*** Creating new Java objects
+We can create new Java objects with the new function or with a a dot following the class name.
+
+#+BEGIN_SRC clojure :results output
+  (println (String. "I'm a real string"))
+  (println (new String "I'm a new string!"))
+#+END_SRC
+
+#+RESULTS:
+: I'm a string
+: I'm a new string!
+
+*** Importing Java Objects and Calling Static Methods
+We can use java objects by importing them into our namespace or using their fully qualified names. To use a static method on a Java class, use the forward slash. 
+#+BEGIN_SRC clojure :results output
+  ; import and use
+  (ns caterpillar.network
+    (:import (java.net InetAddress)))
+  (println (InetAddress/getByName "localhost"))
+
+  ; using the fully qualified name:
+  (println (java.net.InetAddress/getByName "localhost"))
+
+  ;access the imported object using dot notation 
+  (println (.getHostName (InetAddress/getByName "localhost")))
+#+END_SRC
+
+#+RESULTS:
+: #object[java.net.Inet4Address 0x677d8d86 localhost/127.0.0.1]
+: #object[java.net.Inet4Address 0x677d8d86 localhost/127.0.0.1]
+: localhost
+
+*** the =doto= macro
+The doto macro lets us to order operations and execute them on a Java object.
+
+#+BEGIN_SRC clojure :results output
+  (def sb (doto (StringBuffer. "One ")
+            (.append "ring ")
+            (.append "to ")
+            (.append "rule ")
+            (.append "them ")
+            (.append "all.")))
+  (println (.toString sb))
+#+END_SRC
+
+#+RESULTS:
+: One ring to rule them all.
+
+* Web Libs
+** Ring
+"Ring adapters for the Java HTTP servlet API allow applications to be deployed on any servlet container, such as Tomcat. However, the most common approach is to run Clojure applications standalone using an embedded HTTP server wish as Immutant or Jetty." -WDwC
+*** Ring applications consist of four basic components:
+**** the Handler
+The handler is a function that accepts an HTTP request, and returns an HTTP response. Ring uses =adapters= that represent HTTP requests and responses as maps and convert to and from the container's underlying HTTP interface.
+**** the Request map
+Requests have the following keys, based on the servlet API and HTTP standards:
+
+| :server-port     | The port on which the server is handling the request  |
+| :server-name     | The server's IP addr, or the name it resolves to      |
+| :remote-addr     | The client's IP address                               |
+| :query-string    | The request's query string                            |
+| :scheme          | The spec. protocol (http -or- https)                  |
+| :request-method  | :get() :head() :options() :put() :post() :delete()    |
+| :content-type    | The request body's MIME type                          |
+| :content-length  | The number of bytes in the request                    |
+| :headers         | A map, containing the request headers                 |
+| :body            | An input stream for the body of the request           |
+| :context         | The app's context when it is not deployed as root     |
+| :uri             | The request URI path on this server, w/ :context opt. |
+| :ssl-client-cert | The client's SSL certificate                          |
+
+In addition to these standard keys, middleware may extent the request map with application specific keys. 
+
+**** the Response map
+Responses contain three keys:
+
+| :status  | The response HTTP status        |
+| :headers | Any HTTP headers for the client |
+| :body    | The response body               |
+
+***** response headers
+Headers take are key value pairs of strings. Optionally, some values may be sequences of strings:
+
+#+BEGIN_SRC clojure
+ {:headers {"content/type" "text/html"}
+  :body "<html><body>Hello World!</body></html>"}
+;; or 
+ {:headers {"content/type" ["text/plain" "text/html"]}
+  :body "<html><body>Hello World!</body></html>"}
+#+END_SRC
+
+***** response body
+Response bodies can be a string, which is sent to the client as a sequence and strings reperesnting elements in that sequence are sent subsequently. 
+
+Alternately, responses can be files, sequences, or input streams. 
+
+**** Middleware
+Middleware functions are basically handler decorators that augment how the handler processes HTTP requests. Middleware functions accept a handler and return the handler with modifications. We can compose middleware functions to provide complex behavior. The result is that request and response maps travel through an ordered chain of functional transformations.
+  Ring comes with a middleware library, including the =wrap-reload= 
+middleware, which will reload server code on file saves, to avoid having to restart the server.
+*** Extending Ring
+**** ring-defaults lib
+The ring-defaults lib provides default middleware for both websites and APIs. Luminus defaults to using the site-defaults middleware. 
+
+https://github.com/ring-clojure/ring-defaults
+
+**** ring-http-response lib
+This lib provides human-readable parralels for HTTP status codes, making it easier to write response handlers
+
+#+BEGIN_SRC clojure
+  (response/ok ...)
+  (response/found ...)
+  (response/continue ...) 
+#+END_SRC
+
+**** ring-middleware-format 
+This lib handles external data formatting, and will serialize or deserialize data based on the =Accept= and =context/type= request headers.
+
+** Compojure
+Compojure is a routing library that lets you accociate handler functions with URLs and HTTP methods. Compojure also allows you to selectively wrap routes using its =wrap-routes= macro, allowing selective - as opposed to global - application of middleware. 
+*** Defining Routes
+Compojure routes return Ring handlers - functions that accept a request map and return a response map. Routes contain an HTTP method macro, a URL matching string, an argument list, and a body. When Compojure receives a request, it will attempt each route, in order, to find a match.
+
+#+BEGIN_SRC clojure
+  (compojure/GET "/user/:id" [id] (str "<h1>Hello user " id "</h1>"))
+#+END_SRC
+
+**** HTTP Method Macro
+When a route is tested, it will first attempt to match the request's HTTP method and the method specified by the route's HTTP macro. If there is no match, the route will return nil, and the next route is tested. 
+  Compojure provides HTTP method macros for GET, POST, PUT, DELETE, OPTIONS, PATCH, 
+HEAD, and ANY.
+
+**** URI Matching
+If the HTTP methods match, then Compojure will attempt to match the URI in the request to the route's URI string. If they do not match, the route will return nil, and the next route will be tested.
+***** Dynamic Routes
+Like in Sinatra or Express, route strings can contain dynamic routes, where a =:<name>= will match any sub-path up to the next "/" or ".", and store the match in the parameters map, using the <name> key, within the request map. 
+  In the example above, the "/user/:id" would match "/user/sakelees" and store 
+'sakeless' on the request map under the =id= key in the =:params= map.
+
+#+BEGIN_SRC clojure
+  (compojure/GET "/:foo" {{foo :foo} :params}
+    (str "Foo = " foo))
+#+END_SRC
+
+**** Destructuring the Request Map and Params
+If the HTTP method and URI match, the third argument to the macro is the request map, and allows destructuring the request map with the resulting bindings available in the scope of the macro's fourth argument. 
+  Destructuring the request map can be done with let style destructuring, by using a 
+symbol or map. But Compojure also provides sugar that allows you to destructure the request map's parameters using a vector of symbols that match the param names. 
+  To bind remaining params, whose names did not appear in the vector, use =&=.
+  And, to access the request map in addition to destructuring params, the =:as= 
+keyword will assign the entire request map to a symbol. 
+
+  For more on Compojure destructuring: 
+https://github.com/weavejester/compojure/wiki/Destructuring-Syntax
+
+**** The Response
+Now that the request map has been destructured, the third argument to the macro is "encased in an implicit =do= block", with the request map, or any destructured vars, in scope.
+  The return value is coerced to a response map, using the 
+=compojure.response/renderable= protocol. If the return value is a string, the response map defaults to a "standard response":
+
+#+BEGIN_SRC clojure
+  {:status 200
+   :headers {"Content-Type" "text/html; charset=utf-8"}
+   :body "This string was the return value of the route's third argument."}
+#+END_SRC
+
+*** Combining Routes
+The =routes= function accepts a variadic number of routes, and returns a Ring handler. 
+  These routes are typically bound to a var. To make this terser, we can use the 
+=defroutes= macro.
+
+#+BEGIN_SRC clojure
+  (def myroutes 
+    (compojure/routes
+      (compojure/GET "/" [] "Body Text")))
+
+;; is equivalent to 
+
+  (compojure/defroutes myroutes
+      (compojure/GET "/" [] "Body Text"))
+#+END_SRC
+
+Note that routes, the routes function, and defroutes all return handlers. This makes it easy to define routes that nest in other defined routes.
+
+*** Nesting Routes
+The =context= macro provides a way of giving a set of routes a common prefix:
+
+#+BEGIN_SRC clojure
+  (defroutes user-routes
+    (context "/user/current" []
+      (GET "/" [] ...) ;the route that exists at "/user/current"
+      (GET "/profile" [] ...)
+      (GET "/posts" [] ...)))
+#+END_SRC
+
+Route parameters may be added to the context, just like a normal route:
+
+#+BEGIN_SRC clojure
+  (defroutes user-routes
+    (context "/user/:user-id" [user-id]
+      (GET "/profile" [] ...)
+      (GET "/posts" [] ...)))
+#+END_SRC
+
+Because routes are closures, the user-id symbol is available to use in the two sub routes.
+
+However, if your inner routes are defined separately, you need to manually pass any bound parameters from the context. For example:
+
+#+BEGIN_SRC clojure
+  (defn inner-routes [user-id]
+    (routes
+     (GET "/profile" [] ...)
+     (GET "/posts" [] ...)))
+
+  (defroutes user-routes
+    (context "/user/:user-id" [user-id]
+      (inner-routes user-id)))
+#+END_SRC
+
+This is because parameters are bound with a lexical, rather than dynamic scope.
+Contact GitHub API Training Shop Blog About
+
+*** Documentation
+- wiki: https://github.com/weavejester/compojure/wiki
+- API: http://weavejester.github.io/compojure/
+
+** Selmer
+Selmer is a general-purpose templating library, that populates string templates with dynamic content. Generally, a website would have one base template, which contains references to common assets such as JS, CSS, and image files. This base tempalte would be extended by other templates, which are called by our routes, and supplied context maps for dynamic content injection.
+*** Rendering
+**** render
+The =selmer.parser/render= function accepts a template string and a context map. In the template string, regions bounded by double curly-brackets may contain keys present in the map; those keys then evaluate to the values in the map.
+
+#+BEGIN_SRC clojure
+  (selmer.parser/render "Hello {{name}}" {:name "World"})
+  => Hello World
+#+END_SRC
+
+**** render-file
+Genrally, we'll have separate template files for Selmer to render. The =selmer.parser/render-file= function accepts a path to a template file name in the form of a string, and a map. The file name path begins at the =resources= directory by default.
+
+#+BEGIN_SRC clojure
+  (selmer.parser/render "hello.html" {:name "world"})
+#+END_SRC
+
+**** set-resource-path
+When working with text files, Selmer looks in the resources dir in the project root. However, we can declare a different path string.
+
+#+BEGIN_SRC clojure 
+  (selmer.parser/set-resource-path! "/resources/html/templates/")
+#+END_SRC
+
+**** The Context Map
+Maps are the most common context for a template, swapping values for keys in the template string. To access nested keys within a map, we can use dot notation.
+
+#+BEGIN_SRC clojure
+  (selmer.parser/render "<p>Hello {{user.first}} {{user.last}}</p>"
+    {:user {:first "Jean-Luc" :last "Picard"}})
+#+END_SRC
+
+If a symbol appears in a template, but is not a key in the map, no dynamic content is generated. 
+  Although we generally will supply string values to our templates, we can 
+pass any valid clojure values. See the Block Tag: For example. 
+
+*** Filters
+Filters allow you to process the dynamic content before inserting it into the template. The syntax simply uses a pipe symbol to pass the value to the filter: ={{valueKey|filterName}}=. 
+  Filters are simply a function that accepts a value and returns the value 
+transformed. Selmer has multiple filters predefined: upper, date, and pluralize.
+  We can write our own filters using the =selmer.filters/add-filter!=
+function, which accepts a keyword for the filter name, and a function. 
+
+#+BEGIN_SRC clojure
+  (selmer.filters/add-filter! :empty? empty?)
+  (selmer.parser/render "{% if names|empty? %}No Names{% else %}{{names}}{% endif %}" {:names []})
+#+END_SRC
+
+**** Unescaping Content
+Selmer will automatically escape dynamic content. But we can override this behavior - with caution!
+
+#+BEGIN_SRC clojure
+  (selmer.filters/add-filter! :escape 
+    (fn [x] [:safe x]))
+#+END_SRC
+  
+*** Tags
+**** Inline Tags
+***** Inheriting Templates
+Selmer can next templates within each other.
+****** =extends=
+The =extends= tag allows a template to extend another template possessing a content "block" interface. The base template's "blocks" are shadowed by the referring template blocks of the same name. When a child template does not contain a block that the parent template contains, the parent block's content will be displayed.
+******* Example:
+#+BEGIN_SRC html
+<!-- base.html -->
+  <html>
+    <head>
+      <title>{% block title %}My Default Title{% endblock %}</title>
+    </head>
+    <body>
+      <div id="content">
+        {% block content %}Default Content{% endblock %}
+      </div>
+    </body>
+  </html>
+#+END_SRC
+
+#+BEGIN_SRC html
+<!-- hello.html -->
+  {% extends "base.html" %}
+
+  {% block content %}
+    <h2>{{heading}}</h2>
+    <ul>
+      {% for item in items %}
+        <li>{{item}}</li>
+      {% endfor %}
+    </ul>
+  {% endblock %}
+#+END_SRC
+******* Super
+From the extendeding tempalte, can include the content contained in the parent template's block using {{block.super}}.
+****** =include=
+The include tag allows a template to inject another template into itself. 
+******* Example:
+
+#+BEGIN_SRC html
+<!-- register.html -->
+  <form action="/register" method="POST">
+    <label for="id">user id</label>
+    <input id="id" name="id" type="text" />
+    <input pass="pass" name="pass" type="text" />
+    <input type="submit" value="register" />
+  </form>
+#+END_SRC
+
+#+BEGIN_SRC html
+<!-- hello.html -->
+  {% extends "base.html" %}
+  
+  {% block content %}
+    {% include "register.html" %}
+    <h2>{{heading}}</h2>
+    <ul>
+      {% for item in items %}
+        <li>{{item}}</li>
+      {% endfor %}
+    </ul>
+  {% endblock %}
+#+END_SRC
+
+****** Memoized by Default
+Templates are memoized by default. This can be toggled with the =selmer.parser/cache-on!= and =selmer.parser/cache-off!= functions. When in development, it is best to turn memoization off. 
+**** Block Tags
+***** if/else/endif
+***** for/endfor
+
+#+BEGIN_SRC clojure
+  (selmer.parser/render "list.html" {:items (range 10)})
+#+END_SRC
+
+#+BEGIN_SRC html
+<!-- list.html -->
+  <ul>
+    {% for item in items %}
+      <li>{{item}}</li>
+    {% endfor %}
+  </ul>
+#+END_SRC
+**** Defining Custom Tags
+Selmer provides the =selmer.parser/add-tag!= macro, which accepts a keyword-name, a function (which accepts arguments and a context map), and - optionally - content (for creating block tags).
+*** Handling Errors
+Selmer attempts to provide meaningful error messages, and provides the =selmer.middleware/wrap-error-page= function which serves an error page should the template compilation fail. This middleware is enabled by default in Luminus, but probably should be disabled for production.
+
+** TODO Hiccup
+https://github.com/weavejester/hiccup
+
+** Luminus
+*** Project Management
+To make managing a Luminus project easier, we can specify different profiles under the :profiles key in our project.clj. Lein uses profiles to define different build outcomes: :uberjar for production, :dev for development, :test for testing, etc.
+  Profiles affect the global project.clj configuration settings. For example, 
+dependencies specified in the :dev profile will be added to the global vector of dependencies when the app uses the :dev profile. This allows us to configure variables for each environment. 
+  Environment configuration is stored in profile spcific directories, located 
+within the env/ directory at the project's root. These profile directories contain a resources dir - including a config.edn file for port and nrepl numbers - and a clj dir - including .clj files that supply settings, middleware, etc. within unique namespaces.
+  
+*** Application Components Architecture
+Instead of an "MVC" approach, Luminus encouraged separating concerns into namespaces of related functionality:
+**** .core - Manages the HTTP Server Lifecycle
+The core namespace contains the -main function, which is the entry point for the app. The hyphen before =main=, and the =:gen-class= hint in the .core ns declaration, denotes that this function will be compiled to a Java class, which can be invoked as bytecode. 
+  The core namespace contains the =start-app= and =stop-app= functions, which 
+initialize or terminate an http server, repl, and logger. These functions also manage state resources using Mount, providing specific code to execute on start and stop.
+**** .config - Manages a Map, Containing Configuration Variables
+The config namespace uses the cprop library to merge base env configs and profile-based configs, and translating between clojure data and the host's format.
+**** .handler - The Root Handler for HTTP Req/Res
+The handler namespace aggregates the application's routes from the routes namespaces, then selectively applies middleware, and exposes a ring handler for the export.
+**** .middleware - Supplies Custom Middleware
+This namespace contains middleware functions that modify the request and response maps, including wrap-base, wrap-formats, wrap-csrf, wrap-internal-error, and wrap-context.
+**** .routes - The Root for Routes
+THe routes namespace(s) supply routes for the handler namespace. When an app has many routes, they should be grouped into namespaces that facilitate modular application of middleware.
+**** .db - A Namespace for our Database
+The db.core namespace uses the conman library to connect to a sql database and manage queries ala HugSQL.
+- https://github.com/luminus-framework/conman
+- http://www.hugsql.org/
+Thankfully, no ORM is necessary, and database queries are represented as sequences of maps, where the keys represent the column names of the table. 
+
+Note also that our database connection is not hardcoded, but is instead supplied by the config namespace, which in turn refrences a lein profile.
+**** .layout - The Logic for Generating Pages
+The layout namespace contains the templating logic for the application. Luminus uses Selmer, and this namespace includes a path modification, custom tags, and custom filters. 
+  The namespace contains a render function, which exposes Selmer's 
+render-file function while providing default settings, and an error-page function to handle bad requests.
+  The namespace also contains the *app-context* declaration, which 
+disambiguates the application from other applications running on the same server, and appropriately routes requests and responses. 
+*** Mount (Managing Stateful Components)
+Mount serves as an interface to stateful variables, providing them as if they were vars in a namespace. This allows us to separate our business logic from the application's state, while colocating Mount's state interface with those functions that interact directly on the state in a shared namespace.
+  We create state resources with Mount's =defstate= macro, which allows us to 
+instantiate a stateful resource - like a database connection, or an http server.  We manage these state resources with =mount/start= and stop them with =mount/stop=. These commands trigger =:start= and =:stop= keys in each =defstate= declaration to initialize and wind-down state resources.
+  Mount uses the Clojure compiler's namespace dependency tree to determine 
+which state resources to start first, moving from the leaves to the root. We can also omit specific states, or specify only specific state resources.
+- https://github.com/tolitius/mount
+** TODO Reagent
+** TODO Re-frame
+** TODO Om
+** The Google Closure Libraries
+
+
+* The Development Environment
+** On REPLs
+*** Java
+*** Cider
+*** Node
+*** Browser
+*** Planck
+*** Lumo
+** Figwheel changed my life
+*** Brett Victor
+*** Hot Reloading
+** Fixing Problems
+*** Sayid
+*** ProtoREPL
+** .test and .spec
+*** clojure.test
+Clojure has a standard testing libray, which can be lpaded into out test files.
+- deftest : defines a test function
+- testing : a string that is used withing deftest to provide context to what is being tested
+- is : is the assertion function, which accepts an argument and reports whether the argument is truthy.
+
+* Building and Production
 ** Building with Lein and Boot
 *** Leiningen
 Lein is a build tool that bridges Clojure and Java's library ecosystems. Lein lets us require clojure dependencies, and defaults to using the clojars repository. Lein is also compatable with Maven, a popular Java library repository and build tool.
@@ -2466,560 +3124,6 @@ When using templates to generate new projects with lein, we can specify default 
 
 NOTE: I modified =~/.lein/profiles.clj= to pin the luminus version for projects relating to "Web Dev. w/ Clojure"
 **** Boot, the Fancy Clojure Build Framework (brave)
-** Dependency Management
-** External Dependencies
-** Unit Testing
-*** clojure.test
-Clojure has a standard testing libray, which can be lpaded into out test files.
-- deftest : defines a test function
-- testing : a string that is used withing deftest to provide context to what is being tested
-- is : is the assertion function, which accepts an argument and reports whether the argument is truthy.
-
-** Web Libs
-*** Ring
-"Ring adapters for the Java HTTP servlet API allow applications to be deployed on any servlet container, such as Tomcat. However, the most common approach is to run Clojure applications standalone using an embedded HTTP server wish as Immutant or Jetty." -WDwC
-**** Ring applications consist of four basic components:
-***** the Handler
-The handler is a function that accepts an HTTP request, and returns an HTTP response. Ring uses =adapters= that represent HTTP requests and responses as maps and convert to and from the container's underlying HTTP interface.
-***** the Request map
-Requests have the following keys, based on the servlet API and HTTP standards:
-
-| :server-port     | The port on which the server is handling the request  |
-| :server-name     | The server's IP addr, or the name it resolves to      |
-| :remote-addr     | The client's IP address                               |
-| :query-string    | The request's query string                            |
-| :scheme          | The spec. protocol (http -or- https)                  |
-| :request-method  | :get() :head() :options() :put() :post() :delete()    |
-| :content-type    | The request body's MIME type                          |
-| :content-length  | The number of bytes in the request                    |
-| :headers         | A map, containing the request headers                 |
-| :body            | An input stream for the body of the request           |
-| :context         | The app's context when it is not deployed as root     |
-| :uri             | The request URI path on this server, w/ :context opt. |
-| :ssl-client-cert | The client's SSL certificate                          |
-
-In addition to these standard keys, middleware may extent the request map with application specific keys. 
-
-***** the Response map
-Responses contain three keys:
-
-| :status  | The response HTTP status        |
-| :headers | Any HTTP headers for the client |
-| :body    | The response body               |
-
-****** response headers
-Headers take are key value pairs of strings. Optionally, some values may be sequences of strings:
-
-#+BEGIN_SRC clojure
- {:headers {"content/type" "text/html"}
-  :body "<html><body>Hello World!</body></html>"}
-;; or 
- {:headers {"content/type" ["text/plain" "text/html"]}
-  :body "<html><body>Hello World!</body></html>"}
-#+END_SRC
-
-****** response body
-Response bodies can be a string, which is sent to the client as a sequence and strings reperesnting elements in that sequence are sent subsequently. 
-
-Alternately, responses can be files, sequences, or input streams. 
-
-***** Middleware
-Middleware functions are basically handler decorators that augment how the handler processes HTTP requests. Middleware functions accept a handler and return the handler with modifications. We can compose middleware functions to provide complex behavior. The result is that request and response maps travel through an ordered chain of functional transformations.
-  Ring comes with a middleware library, including the =wrap-reload= 
-middleware, which will reload server code on file saves, to avoid having to restart the server.
-**** Extending Ring
-***** ring-defaults lib
-The ring-defaults lib provides default middleware for both websites and APIs. Luminus defaults to using the site-defaults middleware. 
-
-https://github.com/ring-clojure/ring-defaults
-
-***** ring-http-response lib
-This lib provides human-readable parralels for HTTP status codes, making it easier to write response handlers
-
-#+BEGIN_SRC clojure
-  (response/ok ...)
-  (response/found ...)
-  (response/continue ...) 
-#+END_SRC
-
-***** ring-middleware-format 
-This lib handles external data formatting, and will serialize or deserialize data based on the =Accept= and =context/type= request headers.
-
-*** Compojure
-Compojure is a routing library that lets you accociate handler functions with URLs and HTTP methods. Compojure also allows you to selectively wrap routes using its =wrap-routes= macro, allowing selective - as opposed to global - application of middleware. 
-**** Defining Routes
-Compojure routes return Ring handlers - functions that accept a request map and return a response map. Routes contain an HTTP method macro, a URL matching string, an argument list, and a body. When Compojure receives a request, it will attempt each route, in order, to find a match.
-
-#+BEGIN_SRC clojure
-  (compojure/GET "/user/:id" [id] (str "<h1>Hello user " id "</h1>"))
-#+END_SRC
-
-***** HTTP Method Macro
-When a route is tested, it will first attempt to match the request's HTTP method and the method specified by the route's HTTP macro. If there is no match, the route will return nil, and the next route is tested. 
-  Compojure provides HTTP method macros for GET, POST, PUT, DELETE, OPTIONS, PATCH, 
-HEAD, and ANY.
-
-***** URI Matching
-If the HTTP methods match, then Compojure will attempt to match the URI in the request to the route's URI string. If they do not match, the route will return nil, and the next route will be tested.
-****** Dynamic Routes
-Like in Sinatra or Express, route strings can contain dynamic routes, where a =:<name>= will match any sub-path up to the next "/" or ".", and store the match in the parameters map, using the <name> key, within the request map. 
-  In the example above, the "/user/:id" would match "/user/sakelees" and store 
-'sakeless' on the request map under the =id= key in the =:params= map.
-
-#+BEGIN_SRC clojure
-  (compojure/GET "/:foo" {{foo :foo} :params}
-    (str "Foo = " foo))
-#+END_SRC
-
-***** Destructuring the Request Map and Params
-If the HTTP method and URI match, the third argument to the macro is the request map, and allows destructuring the request map with the resulting bindings available in the scope of the macro's fourth argument. 
-  Destructuring the request map can be done with let style destructuring, by using a 
-symbol or map. But Compojure also provides sugar that allows you to destructure the request map's parameters using a vector of symbols that match the param names. 
-  To bind remaining params, whose names did not appear in the vector, use =&=.
-  And, to access the request map in addition to destructuring params, the =:as= 
-keyword will assign the entire request map to a symbol. 
-
-  For more on Compojure destructuring: 
-https://github.com/weavejester/compojure/wiki/Destructuring-Syntax
-
-***** The Response
-Now that the request map has been destructured, the third argument to the macro is "encased in an implicit =do= block", with the request map, or any destructured vars, in scope.
-  The return value is coerced to a response map, using the 
-=compojure.response/renderable= protocol. If the return value is a string, the response map defaults to a "standard response":
-
-#+BEGIN_SRC clojure
-  {:status 200
-   :headers {"Content-Type" "text/html; charset=utf-8"}
-   :body "This string was the return value of the route's third argument."}
-#+END_SRC
-
-**** Combining Routes
-The =routes= function accepts a variadic number of routes, and returns a Ring handler. 
-  These routes are typically bound to a var. To make this terser, we can use the 
-=defroutes= macro.
-
-#+BEGIN_SRC clojure
-  (def myroutes 
-    (compojure/routes
-      (compojure/GET "/" [] "Body Text")))
-
-;; is equivalent to 
-
-  (compojure/defroutes myroutes
-      (compojure/GET "/" [] "Body Text"))
-#+END_SRC
-
-Note that routes, the routes function, and defroutes all return handlers. This makes it easy to define routes that nest in other defined routes.
-
-**** Nesting Routes
-The =context= macro provides a way of giving a set of routes a common prefix:
-
-#+BEGIN_SRC clojure
-  (defroutes user-routes
-    (context "/user/current" []
-      (GET "/" [] ...) ;the route that exists at "/user/current"
-      (GET "/profile" [] ...)
-      (GET "/posts" [] ...)))
-#+END_SRC
-
-Route parameters may be added to the context, just like a normal route:
-
-#+BEGIN_SRC clojure
-  (defroutes user-routes
-    (context "/user/:user-id" [user-id]
-      (GET "/profile" [] ...)
-      (GET "/posts" [] ...)))
-#+END_SRC
-
-Because routes are closures, the user-id symbol is available to use in the two sub routes.
-
-However, if your inner routes are defined separately, you need to manually pass any bound parameters from the context. For example:
-
-#+BEGIN_SRC clojure
-  (defn inner-routes [user-id]
-    (routes
-     (GET "/profile" [] ...)
-     (GET "/posts" [] ...)))
-
-  (defroutes user-routes
-    (context "/user/:user-id" [user-id]
-      (inner-routes user-id)))
-#+END_SRC
-
-This is because parameters are bound with a lexical, rather than dynamic scope.
-Contact GitHub API Training Shop Blog About
-
-**** Documentation
-- wiki: https://github.com/weavejester/compojure/wiki
-- API: http://weavejester.github.io/compojure/
-
-*** Selmer
-Selmer is a general-purpose templating library, that populates string templates with dynamic content. Generally, a website would have one base template, which contains references to common assets such as JS, CSS, and image files. This base tempalte would be extended by other templates, which are called by our routes, and supplied context maps for dynamic content injection.
-**** Rendering
-***** render
-The =selmer.parser/render= function accepts a template string and a context map. In the template string, regions bounded by double curly-brackets may contain keys present in the map; those keys then evaluate to the values in the map.
-
-#+BEGIN_SRC clojure
-  (selmer.parser/render "Hello {{name}}" {:name "World"})
-  => Hello World
-#+END_SRC
-
-***** render-file
-Genrally, we'll have separate template files for Selmer to render. The =selmer.parser/render-file= function accepts a path to a template file name in the form of a string, and a map. The file name path begins at the =resources= directory by default.
-
-#+BEGIN_SRC clojure
-  (selmer.parser/render "hello.html" {:name "world"})
-#+END_SRC
-
-***** set-resource-path
-When working with text files, Selmer looks in the resources dir in the project root. However, we can declare a different path string.
-
-#+BEGIN_SRC clojure 
-  (selmer.parser/set-resource-path! "/resources/html/templates/")
-#+END_SRC
-
-***** The Context Map
-Maps are the most common context for a template, swapping values for keys in the template string. To access nested keys within a map, we can use dot notation.
-
-#+BEGIN_SRC clojure
-  (selmer.parser/render "<p>Hello {{user.first}} {{user.last}}</p>"
-    {:user {:first "Jean-Luc" :last "Picard"}})
-#+END_SRC
-
-If a symbol appears in a template, but is not a key in the map, no dynamic content is generated. 
-  Although we generally will supply string values to our templates, we can 
-pass any valid clojure values. See the Block Tag: For example. 
-
-**** Filters
-Filters allow you to process the dynamic content before inserting it into the template. The syntax simply uses a pipe symbol to pass the value to the filter: ={{valueKey|filterName}}=. 
-  Filters are simply a function that accepts a value and returns the value 
-transformed. Selmer has multiple filters predefined: upper, date, and pluralize.
-  We can write our own filters using the =selmer.filters/add-filter!=
-function, which accepts a keyword for the filter name, and a function. 
-
-#+BEGIN_SRC clojure
-  (selmer.filters/add-filter! :empty? empty?)
-  (selmer.parser/render "{% if names|empty? %}No Names{% else %}{{names}}{% endif %}" {:names []})
-#+END_SRC
-
-***** Unescaping Content
-Selmer will automatically escape dynamic content. But we can override this behavior - with caution!
-
-#+BEGIN_SRC clojure
-  (selmer.filters/add-filter! :escape 
-    (fn [x] [:safe x]))
-#+END_SRC
-  
-**** Tags
-***** Inline Tags
-****** Inheriting Templates
-Selmer can next templates within each other.
-******* =extends=
-The =extends= tag allows a template to extend another template possessing a content "block" interface. The base template's "blocks" are shadowed by the referring template blocks of the same name. When a child template does not contain a block that the parent template contains, the parent block's content will be displayed.
-******** Example:
-#+BEGIN_SRC html
-<!-- base.html -->
-  <html>
-    <head>
-      <title>{% block title %}My Default Title{% endblock %}</title>
-    </head>
-    <body>
-      <div id="content">
-        {% block content %}Default Content{% endblock %}
-      </div>
-    </body>
-  </html>
-#+END_SRC
-
-#+BEGIN_SRC html
-<!-- hello.html -->
-  {% extends "base.html" %}
-
-  {% block content %}
-    <h2>{{heading}}</h2>
-    <ul>
-      {% for item in items %}
-        <li>{{item}}</li>
-      {% endfor %}
-    </ul>
-  {% endblock %}
-#+END_SRC
-******** Super
-From the extendeding tempalte, can include the content contained in the parent template's block using {{block.super}}.
-******* =include=
-The include tag allows a template to inject another template into itself. 
-******** Example:
-
-#+BEGIN_SRC html
-<!-- register.html -->
-  <form action="/register" method="POST">
-    <label for="id">user id</label>
-    <input id="id" name="id" type="text" />
-    <input pass="pass" name="pass" type="text" />
-    <input type="submit" value="register" />
-  </form>
-#+END_SRC
-
-#+BEGIN_SRC html
-<!-- hello.html -->
-  {% extends "base.html" %}
-  
-  {% block content %}
-    {% include "register.html" %}
-    <h2>{{heading}}</h2>
-    <ul>
-      {% for item in items %}
-        <li>{{item}}</li>
-      {% endfor %}
-    </ul>
-  {% endblock %}
-#+END_SRC
-
-******* Memoized by Default
-Templates are memoized by default. This can be toggled with the =selmer.parser/cache-on!= and =selmer.parser/cache-off!= functions. When in development, it is best to turn memoization off. 
-***** Block Tags
-****** if/else/endif
-****** for/endfor
-
-#+BEGIN_SRC clojure
-  (selmer.parser/render "list.html" {:items (range 10)})
-#+END_SRC
-
-#+BEGIN_SRC html
-<!-- list.html -->
-  <ul>
-    {% for item in items %}
-      <li>{{item}}</li>
-    {% endfor %}
-  </ul>
-#+END_SRC
-***** Defining Custom Tags
-Selmer provides the =selmer.parser/add-tag!= macro, which accepts a keyword-name, a function (which accepts arguments and a context map), and - optionally - content (for creating block tags).
-**** Handling Errors
-Selmer attempts to provide meaningful error messages, and provides the =selmer.middleware/wrap-error-page= function which serves an error page should the template compilation fail. This middleware is enabled by default in Luminus, but probably should be disabled for production.
-
-*** TODO Hiccup
-https://github.com/weavejester/hiccup
-
-*** Luminus
-**** Project Management
-To make managing a Luminus project easier, we can specify different profiles under the :profiles key in our project.clj. Lein uses profiles to define different build outcomes: :uberjar for production, :dev for development, :test for testing, etc.
-  Profiles affect the global project.clj configuration settings. For example, 
-dependencies specified in the :dev profile will be added to the global vector of dependencies when the app uses the :dev profile. This allows us to configure variables for each environment. 
-  Environment configuration is stored in profile spcific directories, located 
-within the env/ directory at the project's root. These profile directories contain a resources dir - including a config.edn file for port and nrepl numbers - and a clj dir - including .clj files that supply settings, middleware, etc. within unique namespaces.
-  
-**** Application Components Architecture
-Instead of an "MVC" approach, Luminus encouraged separating concerns into namespaces of related functionality:
-***** .core - Manages the HTTP Server Lifecycle
-The core namespace contains the -main function, which is the entry point for the app. The hyphen before =main=, and the =:gen-class= hint in the .core ns declaration, denotes that this function will be compiled to a Java class, which can be invoked as bytecode. 
-  The core namespace contains the =start-app= and =stop-app= functions, which 
-initialize or terminate an http server, repl, and logger. These functions also manage state resources using Mount, providing specific code to execute on start and stop.
-***** .config - Manages a Map, Containing Configuration Variables
-The config namespace uses the cprop library to merge base env configs and profile-based configs, and translating between clojure data and the host's format.
-***** .handler - The Root Handler for HTTP Req/Res
-The handler namespace aggregates the application's routes from the routes namespaces, then selectively applies middleware, and exposes a ring handler for the export.
-***** .middleware - Supplies Custom Middleware
-This namespace contains middleware functions that modify the request and response maps, including wrap-base, wrap-formats, wrap-csrf, wrap-internal-error, and wrap-context.
-***** .routes - The Root for Routes
-THe routes namespace(s) supply routes for the handler namespace. When an app has many routes, they should be grouped into namespaces that facilitate modular application of middleware.
-***** .db - A Namespace for our Database
-The db.core namespace uses the conman library to connect to a sql database and manage queries ala HugSQL.
-- https://github.com/luminus-framework/conman
-- http://www.hugsql.org/
-Thankfully, no ORM is necessary, and database queries are represented as sequences of maps, where the keys represent the column names of the table. 
-
-Note also that our database connection is not hardcoded, but is instead supplied by the config namespace, which in turn refrences a lein profile.
-***** .layout - The Logic for Generating Pages
-The layout namespace contains the templating logic for the application. Luminus uses Selmer, and this namespace includes a path modification, custom tags, and custom filters. 
-  The namespace contains a render function, which exposes Selmer's 
-render-file function while providing default settings, and an error-page function to handle bad requests.
-  The namespace also contains the *app-context* declaration, which 
-disambiguates the application from other applications running on the same server, and appropriately routes requests and responses. 
-**** Mount (Managing Stateful Components)
-Mount serves as an interface to stateful variables, providing them as if they were vars in a namespace. This allows us to separate our business logic from the application's state, while colocating Mount's state interface with those functions that interact directly on the state in a shared namespace.
-  We create state resources with Mount's =defstate= macro, which allows us to 
-instantiate a stateful resource - like a database connection, or an http server.  We manage these state resources with =mount/start= and stop them with =mount/stop=. These commands trigger =:start= and =:stop= keys in each =defstate= declaration to initialize and wind-down state resources.
-  Mount uses the Clojure compiler's namespace dependency tree to determine 
-which state resources to start first, moving from the leaves to the root. We can also omit specific states, or specify only specific state resources.
-- https://github.com/tolitius/mount
-
-
-* Metaprogramming with Macros: "Screw the next guy"
-Macros permit you to alter the evaluation paradigm from eager evaluation to normal 
-order evaluation. Macros allow us to rewrite our code at compile time, giving us 
-the option to pen our own custom syntax. 
-** TODO Clojure Alchemy: Reading, Evaluation, and Macros (brave)
-*** Clojure's Evaluation Model
-*** The Reader
-*** The Evaluator
-** TODO Writing Macros (brave)
-*** defmacro
-*** macroexpand
-*** templating with 'quote (lc)
-** Threading Macros
-Threading macros aim to make nested function calls more readable.
-*** thread-first =->=
-The thread-first macro threads the first argument to the macro to the first expression as the first argument to the expression. The result of that expression is then threaded to the next expression as the first argument, and so on for each subsequent expression.
-  This is useful for transforming data structures because data transformation 
-functions in Clojure and ClojureScript consistently use the first argument to 
-recieve the dat structure.
-
-#+BEGIN_SRC clojure :results output
-  (def book {:name "Lady of the Lake"
-             :readers 0 })
-
-  (println (update (assoc book :age 1999) :readers inc))
-#+END_SRC
-
-#+RESULTS:
-: {:name Lady of the Lake, :readers 1, :age 1999}
-
-#+BEGIN_SRC clojure :results output
-  (def book {:name "The Once and Future Parrot"
-             :readers 2 })
-  ( -> book
-       (assoc :age 12)
-       (update :readers inc)
-       println)
-#+END_SRC
-
-#+RESULTS:
-: {:name The Once and Future Parrot, :readers 3, :age 12}
-
-*** thread-last =->>=
-The thread-last macro helps you combine clojure functions that work with seqs and collections, which consistently use the last argument for the data.
-
-#+BEGIN_SRC clojure :results output
-  (def numbers [1 2 3 4 5 6 7 8 9 0])
-  (println (take 2 (filter odd? (map inc numbers))))
-#+END_SRC
-
-#+RESULTS:
-: (3 5)
-
-#+BEGIN_SRC clojure :results output
-  (def numbers [1 2 3 4 5 6 7 8 9 0])
-  (->> numbers
-       (map inc)
-       (filter odd?)
-       (take 2)
-       (println))
-#+END_SRC
-
-#+RESULTS:
-: (3 5)
-
-*** thread-as =as->=
-When you need more flexibility, use the as-> macro, which accepts a value to be threaded, and a binding. In the subsequent forms, the binding is substituted for the prior expressions result. 
-
-#+BEGIN_SRC clojure :results output
-  (def numbers [1 2 3 4 5 6 7 8 9 0])
-  (as-> numbers $
-    (map inc $)
-    (filter odd? $)
-    (first $)
-    (hash-map :result $ :id 1)
-    (println $))
-#+END_SRC
-
-#+RESULTS:
-: {:result 3, :id 1}
-
-*** thread-som =some->= & =some->>=
-Sometimes the result of an expression will be nil, which might throw a null pointer exception. To avoid threading nil through, the thread-some macro will short-circuit and evaluate to nil.
-
-#+BEGIN_SRC clojure :results output
-(println 
-  (repeatedly 5 #(some-> (rand-nth [1 nil])
-                         (inc))))
-#+END_SRC
-
-#+RESULTS:
-: (2 nil nil 2 nil)
-
-*** thread-cond =cond->= & =cond->>=
-The thread-cond macros offer the ability to skip steps in the pipeline.
-
-#+BEGIN_SRC clojure :results output
-  (defn describe-number
-    [n]
-    (cond-> []
-      (odd? n) (conj "odd")
-      (even? n) (conj "even")
-      (zero? n) (conj "zero")
-      (pos? n) (conj "positive")))
-
-  (println (describe-number 3))
-  (println (describe-number -8))
-  (println (describe-number 0))
-#+END_SRC
-
-#+RESULTS:
-: [odd positive]
-: [even]
-
-*** Additional Info
-- http://www.spacjer.com/blog/2015/11/09/lesser-known-clojure-variants-of-threading-macro/
-- http://clojure.org/guides/threading_macros
-** Reader Conditionals
-Reader conditionals allow a file to act differently based on what platform it is executed within. There are two types of reader conditionals: standard and splicing.
-  Reader conditional only work in files with the .cljc extension.
-*** Standard
-The standard reader cond behaves similarly to vanilla =cond=:
-
-#+BEGIN_SRC clojure :results output
-  (defn say-hello []
-   #?(:clj  (println "Hello from Clojure")
-      :cljs (println "Hello from ClojureScript")))
-  (say-hello)
-#+END_SRC
-
-#+RESULTS:
-: Hello from Clojure
-
-*** Splicing
-
-The splicing reader conditional branches lists into containing forms. 
-
-#+BEGIN_SRC clojure :results output
-  (defn make-list
-    []
-    (list #?@(:clj [5 6 7 8]
-              :cljs [1 2 3 4])))
-  (println (make-list))
-#+END_SRC
-
-#+RESULTS:
-: (5 6 7 8)
-
-Note that the splicing reader conditional can't be used to splice multiple top level forms.
-**** Doesn't Work Ex:
-#+BEGIN_SRC clojure
-  #?@(:cljs [(defn func-a [] :a)
-             (defn func-b [] :b)])
-#+END_SRC
-**** Does work Ex:
-#+BEGIN_SRC clojure
-  #?(:cljs (do
-      (defn func-a [] :a)
-      (defn func-b [] :b)))
-#+END_SRC
-
-*** Additional Information
-- http://clojure.org/guides/reader_conditionals
-- https://danielcompton.net/2015/06/10/clojure-reader-conditionals-by-example
-- https://github.com/funcool/cuerdas (example small project that uses reader conditionals)
-
-
-
-* TODO Web Libs
-** Creating a Web Server With compojure
-** Using JSON with the Cheshire and Ring
-** Making HTTP Calls with ClojureScript and cljs-http
-** DOM control with ClojureScript and Enfocus
-** Event Handling with Enfocus
-** Hiccup, Enlive, Liberator, Transit
-** Om / OmNext
-** Using Hoplon and Luminus for Inclusive, Bundled Libraries for Web Development
-** Dealing with Databases
+*** Dependency Management
+*** External Dependencies
+** The Google Closure Compiler
