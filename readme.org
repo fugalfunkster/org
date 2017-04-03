@@ -35,7 +35,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** Egghead
 **** DONE Up and Running with TypeScript : John Lindquist (0:43)
 **** DONE Use Types Effectively in TypeScript : Ari Picker (0:29)
-** TODO Build Interactive JS Charts w/ D3 v4 : Ben Clinkenbeard (2:33)
 ** React
 *** OPEN Update react-router Notes for v.4
 *** OPEN Advanced React and Redux : Stephen Girder (12:00)
@@ -43,16 +42,10 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov (egghead)
 *** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
 *** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
-** TODO TypeScript
-*** Pluralsight
-**** A Practical Start with TypeScript : Roland Guijt (1:39)
-**** TypeScript Fundamentals : Dan Wahlin & John Papa (4:25)
-**** TypeScript In-Depth : Brice Wilson (4:40)
 ** Env: Webpack / eslint / etc
 *** TODO Add readme to redux-starter-kit
 **** colocate links to survive / keathly / react.js boilerplate / create-react-app
 *** eslint configs : template strings, bodil, fp, etc.
-*** make ergodox config repo
 ** Asynchronicity
 *** OPEN Modern Asynchronous JavaScript : Wes Higbee (6:34)
 *** csp-js
@@ -66,10 +59,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** Living Clojure Week 3
 *** Chapter 4 in ClojureScript Unraveled
 *** Anki Flash Cards for .core function signatures
-** emacs
-*** Elisp Talks
-**** begin work on buffers, frames, windows, etc.
-**** learn org-tree-slide for next month: https://github.com/takaxp/org-tree-slide
 
 
 * BackBurner
@@ -317,11 +306,6 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 
 * Horizon
-** Someday Languages
-*** Elm
-*** Elixir
-*** Java
-*** Rust
 ** MIT OpenCourseware
 *** 6.01   - Intro to EE and CompSci
 *** 18.01  - Single Variable Calculus
@@ -331,3 +315,304 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** 6.046  - Algorithms
 *** 18.310 - Principles of Discrete Applied Math
 
+
+* Foundations of Comp. Sci.
+** Mathematical Foundations
+** Functional Programming
+** Data Structures
+** Logic
+** State and Time
+** OOP
+** Interpreters and Compilers
+** Algorithms
+
+
+* Texts for F(CS)
+** The Book of Proof
+*** Fundamentals
+**** Sets
+***** Introduction to Sets
+***** The Cartesian Product
+***** Subsets
+***** Power Sets
+***** Union, Intersection, Difference
+***** Complement
+***** Venn Diagrams
+***** Indexed Sets
+***** Sets that are Number Systems
+***** Russell's Paradox
+**** Logic
+***** Statements
+***** And, Or, Not
+***** Conditional Statements
+***** Biconditional Statements
+***** Truth Tables for Statements
+***** Logical Equivalence
+***** Quantifiers
+***** More on Conditional Statements
+***** Translating English to Symbolic Logic
+***** Negating Statements
+***** Logical Inference
+***** An Important Note
+**** Counting
+***** Counting Lists
+***** Factorials
+***** Counting Subsets
+***** Pascal's Triangle and the Binomial Theorem
+***** Inclusion-Exclusion
+*** How to Prove Conditional Statements
+**** Direct Proof
+***** Theorems
+***** Definitions
+***** Direct Proof
+***** Using Cases
+***** Treating Similar Cases
+**** Contrapositive Proof
+***** Contrapositive Proof
+***** Congruence of Integers
+***** Mathematical Writing
+**** Proof by Contradiction
+***** Proving Statements with Contradiction
+***** PRoving Conditional Statements by Contradiction
+***** Combinging Techniques
+***** Some Words of Advice
+*** More on Proof
+**** Proving Non-Conditional Statements
+***** If-and-Only-If Proof
+***** Equivalent Statements
+***** Existence Proofs; Existence and Uniqueness Proofs
+***** Constructive Versus Non-constructive Proofs
+**** Proofs Involving Sets
+***** How to Prove a is a member of A 
+***** How to Prove A is a subset of B
+***** How to Prove A = B
+***** Examples: Perfect Numbers
+**** Disproof
+***** Counterexamples
+***** Disprooving Existence Statements
+***** Disproof by Contradiction
+**** Mathematical Induction
+***** Proof by Strong Induction
+***** Proof by Smallest Counterexample
+***** Fibonacci Numbers
+*** Relations, Functions and Cardinality
+**** Relations
+***** Properties of Relations
+***** Equivalence Relations
+***** Equivalence Classes and Partitions
+***** The Integers Modulo n
+***** Relations Between Sets
+**** Functions
+***** Functions
+***** Injective and Surhective Functions
+***** The Pigeonhole Principle
+***** Composition
+***** Inverse Functions
+***** Image and Preimage
+**** Cardinality of Sets
+***** Sets with Equal Cardinalities
+***** Countable and Uncountable Sets
+***** Comparing Cardinalities
+***** The Cantor-Bernstein-Shroeder Theorem
+*** Conclusion
+** Set Theory and Logic
+*** Sets & Relations
+**** Cantor's Comcept of a Set
+**** The Basis of Intuitive Set Theory
+**** Inclusion
+**** Operations for Sets
+**** The Algebra of Sets
+**** Relations
+**** Equivalence Relations
+**** Functions
+**** Composition and Inversion for Functions
+**** Operations for Collections of Sets
+**** Ordering Relations
+*** The Natural Number Sequence and its Generalization
+**** The Natural Number Sequence
+**** Proof and Definition by Induction
+**** Cardinal Numbers
+**** Sountable Sets
+**** Cardinal Arithmetic
+**** Order Types
+**** Well-ordered Sets and Ordinal Numbers
+**** The Axiom of Choice, the Well-ordering Theorem, and Zorn's Lemma
+**** Further PRoperties of Cardinal Numbers
+**** Some Theories Equivalent to the Axiom of Choice
+**** The Paradoxes of Intuitive Set Theory
+*** The Extension of the NAtural NUmbers to the Real Numbers
+**** The System of Natural Numbers
+**** Differences
+**** Integers
+**** Rational Numbers
+**** Cauchy Sequences of Rational Numbers
+**** Real Numbers
+**** Further PRoperties of the Real Number System
+*** Logic
+**** The Statement Calculus: Sentential Connectives
+**** The Statement Calculus: Truth Tables
+**** The Statement Calculus: Validity
+**** The Statement Calculus: Consequence
+**** The Statement Calculus: Applications
+**** The Predicate Calculus: Symbolizing Everyday Language
+**** The Predicate Calculus: A Formulation
+**** The Predicate Calculus: Validity
+**** The Predicate Calculus: Consequence
+*** Informal Axiomatic Mathematics
+**** The Concept of an Axiomatic Theory
+**** Informal Theories
+**** Definitions of Axiomatic Theories by Set-theoretical Predicates
+**** Further Features of Informal Theories
+*** Boolean Algebras
+**** A Definition of a Boolean Algebra
+**** Some Basic Properties of a Boolean Algebra
+**** Another Formulation of the Theory
+**** Congruence Relations for a Boolean Algebra
+**** Representations of Boolean Algebras
+**** Statement Calculi as Boolean Algebras
+**** Free Boolean Algebras
+**** Applications of the Theory of Boolean Algebras to Statement Calculi
+**** Further Interconnections b/t Boolean Algebras and Statement Calculi
+*** Informal Axiomatic Set Theory
+**** The Axioms of Extension ans Set Formation
+**** The Axiom of Pairing
+**** The Axioms of Union and Power Set
+**** The Axiom of Infinity
+**** The Axiom of Choice
+**** The Axiom of Schemas of Replacement and Restriction
+**** Ordinal Numbers
+**** Ordinal Arithmetic
+**** Cardinal Numbers and Their Arithmetic
+**** The von-neuman-Bernays-Godel Theory of Sets
+*** Several Algebraic Theories
+**** Features of Algebraic Theories
+**** Definition of a Semigroup
+**** Definition of a Group
+**** Subgroups
+**** Coset Decompositions and Congruence Relations for Groups
+**** Rings, Integral Domains, and Fields
+**** Subrings and Difference Rings
+**** A Characterization of the System of Integers
+**** A Characterization of the System of Rational Numbers
+**** A Characterization of the Real Number System
+*** First-Order Theories
+**** Formal Axiomatic Theories
+**** The Statement Calculus as a Formal Axiomatic Theory
+**** Predicate Calculi of First Order as Formal Axiomatic Theories
+**** First-order Axiomatic Theories
+**** Metamathematics
+**** Consistency and satisfiability of Sets of Formulas
+**** Consistency, Completeness, and Categoricity of First-Order Theories
+**** Turing Machines and Recursive Functions
+**** Some Undecidable and Some Decidable Theories
+**** Godels Theorems
+**** Some Further Remarks about Set Theory
+** An Intro. to FP Through Lambda Calculus
+*** Introduction
+**** Names and values in programming
+**** Names and values in imperative and functional languages
+**** Execution order in imperative and functional languages
+**** Repetition in imperative and functional languages
+**** Data structures in functional languages
+**** Functions as values
+**** The origins of functional languages
+**** Computing and the theory of computing
+**** λ calculus
+**** Summary
+*** λ Calculus
+**** Abstraction
+**** Abstraction in programming languages
+**** Introducing λ Calculus
+**** λ expressions
+**** Simple λ functions
+**** Introducing new syntax
+**** Notations for naming functions and β reduction
+**** Functions from functions
+**** Argument selections and argument pairing functions
+**** Free and Bound Variables
+**** Name clashes and α conversion
+**** Simplification through η reduction
+**** Summary
+*** Conditions, booleans and numbers
+**** Truth calues and conditional expression
+**** NOT
+**** AND
+**** OR
+**** Natural numbers
+**** Simplified notations
+**** Summary
+*** Recursion and Arithmetic
+**** Repetitions, iteration and recursion
+**** Recursion through definitions
+**** Passing a function to itself
+**** Applicative order reduction
+**** Recursion function
+**** Recursion notation
+**** Arithmetic operations
+**** Summary
+*** Types
+**** Types and programming
+**** Types as objects and operations
+**** Representing typed objects
+**** Errors
+**** Booleans
+**** Typed conditional Expression
+**** Numbers and arithmetic
+**** Characters
+**** Repetitive Type Checking
+**** Static and dynamic type checking
+**** Infix operators
+**** Case definitions and structure matching
+**** Summary
+*** Lists and strings
+**** Lists
+**** List representation
+**** Operations on lists
+**** List notation
+**** Lists and evaluation
+**** Deletion from a list
+**** List comparison
+**** Strings
+**** String comparison
+**** Numeric string to number conversion
+**** Structure matching with lists
+**** Ordered linear lists, insertion and sorting
+**** Indexed linear list access
+**** Mapping Functions
+**** Summary
+*** Composite values and trees
+**** Composite values
+**** Processing composite value sequences
+**** Selector functions
+**** Generalized structure matching
+**** Local definitions
+**** Matching composite value results
+**** List inefficiency
+**** Trees
+**** Adding values to ordered binary trees
+**** Binary tree traversal
+**** Binary tree search
+**** Binary trees of composite values
+**** Binary tree efficiency
+**** Curried and uncurried functions
+**** Partial application
+**** Structures, values and functions
+**** Summary
+*** Evaluation
+**** Termination and normal form
+**** Normal order
+**** Applicative order
+**** Consistent applicative order use
+**** Delaying evaluation
+**** Evaluation termination, the halting problem, evaluation equivalence and the Church-Rosser theorems
+**** Infinite objects
+**** Lazy evaluation
+**** Summary
+*** Functional programming in Standard ML
+*** Functional programming and LISP
+** Foundations of Computer Science: C Edition
+** Algorithms Unlocked
+** Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles, Fifth Edition
+** SICP
+** HtDP
+** EoPL

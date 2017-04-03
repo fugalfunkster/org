@@ -1,0 +1,49 @@
+
+Essentials of Programming Languages
+
+* 1. Inductive Sets of Data
+** 1.1 Recursively Specified Data
+** 1.2 Recursively Specified Programs
+** 1.3 Scoping and Binding of Variables
+* 2. Data Abstraction
+** 2.1 Specifying Data via Interfaces
+** 2.2 An Abstraction for Inductive Data Types
+** 2.3 Representation Strategies for Data Types
+** 2.4 A Queue Abstraction
+* 3. Environment-Passing Interpreters
+** 3.1 A Simple Interpreter
+** 3.2 The Front End
+** 3.3 Conditional Evaluation
+** 3.4 Local Binding
+** 3.5 Procedures
+** 3.6 Recursion
+** 3.7 Variable Assignment
+** 3.8 Parameter-Passing Variations
+** 3.9 Statements
+* 4. Types
+** 4.1 Typed Languages
+** 4.2 Type Checking
+** 4.3 Enforcing Abstraction Boundaries
+** 4.4 Type Inference
+* 5. Objects and Classes
+** 5.1 Object-Oriented Programming
+** 5.2 Inheritance
+** 5.3 The Language
+** 5.4 Four Implementations
+* 6. Objects and Types
+** 6.1 A Simple Typed Object-Oriented Language
+** 6.2 The Type Checker
+** 6.3 The Translator
+* 7. Continuation-Passing Interpreters
+** 7.1 A Continuation-Passing Interpreter
+** 7.2 Procedural Representation of Continuations
+** 7.3 An Imperative Interpreter
+** 7.4 Exceptions and Control Flow
+** 7.5 Multithreading
+** 7.6 Logic Programming
+* 8. Continuation-Passing Style
+** 8.1 Tail Form
+** 8.2 Convertinf to Continuation-Passing Style
+** 8.3 Examples of the CPS Transformation
+** 8.4 Implementing the CPS Transformation
+** 8.5 Modeling Computational Effects

@@ -445,7 +445,6 @@ Average damp is a procedure that accepts a procedure as an argument, and returns
 #+RESULTS:
 : 7.0
 
-
 ** 2B - Compound Data
 ** 3A - Henderson Escher Example
 ** 3B - Symbolic Differentiation, Quotation
