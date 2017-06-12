@@ -318,16 +318,188 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 * Foundations of Comp. Sci.
 ** Mathematical Foundations
+*** Calculus
+*** Induction
+*** Methods of Proof
+** Logic
+*** Lambda Calculus
+*** Propositional
+*** Predicate
 ** Functional Programming
 ** Data Structures
-** Logic
+*** 
 ** State and Time
+*** Thunks
+*** Promises
+*** Iterator, Generator
+*** Streams
+*** Concurrency
+*** Parallelism
+*** CSP
 ** OOP
+*** Patterns
+*** Inheritance
+*** Decorators
+*** Meta Object
 ** Interpreters and Compilers
 ** Algorithms
 
 
 * Texts for F(CS)
+** Godel, Escher, Bach
+** The Induction Book
+** Induction, Recursion, and Programming (Steven D. Johnson)
+*** Sets
+**** Set Builder Notation
+**** Set Operations
+**** Languages
+**** A Simple Algorithmic Language
+*** Relations, Functions
+**** Functions
+***** Function (and Relation) Composition
+***** Infix Notation
+**** Trees
+**** DAGs
+**** Equivalence Relations
+**** Partial Orders
+*** Propositional Logic and Boolean Algebra
+**** Propositions and Truth Tables
+***** Implication
+**** Truth Tables
+***** Logical Equivalence
+**** Boolean Algebra
+***** Duality
+**** Normal Forms
+***** Decision Diagrams
+**** Application of Boolean Algebra to Hardware Synthesis
+*** Counting
+**** Extended Operations
+**** Cardinality
+**** Permutations and Combinations
+**** Probability, Briefly
+*** Numerical Induction
+**** First Examples
+**** Base Translation
+**** "Strong" Induction
+**** More Examples of Induction
+**** Loop Invariants
+*** Program Analysis, Order, and Countability
+**** Performance Estimation Example
+***** The Program
+***** What Are We Counting?
+***** Estimation gets a lot harder
+**** Order Notation and Order Arithmetic
+**** Cardinality and Countability
+**** Decidability
+*** Induction II
+**** Introduction
+***** The Problem of Self-Reference
+***** Inductively Defined Sets
+***** The Principle of Structural Induction
+***** Defining Functions with Recursion
+***** Evaluation of Recursive Functions
+***** Reasoning About Recursive Functions
+***** Additional Problems
+***** Validity of the Induction Principle
+**** Languages and Meaning
+***** Language Definitions
+***** Defining How Languages are Interpreted
+***** Specifying Precedence
+***** Environments
+***** Backus-Naur Form
+***** Propositional Formulas
+***** Substitution
+***** The Programming Language of Statements
+***** Discussions
+****** Parenthesized Expressions
+** Induction, Recursion, and Programming (Mitchell Wand)
+*** Sets, Graphs, and Relations
+**** Sets, Relations, and Functions
+**** Relations as Graphs
+**** Equivalence Relations
+**** Trees
+**** Representations of Graphs
+**** Permutations and Combinations
+*** Induction and its Applications
+**** Mathematical Induction
+**** Defining Sets by Stages
+**** Defining Sets by Induction
+**** Defining Functions by Induction
+**** Using Global Information
+*** A Language for Programs
+**** Mathematical Data Types
+**** Languages on a Data Type
+**** The Langugage of Terms
+**** The Language of Conditionals
+**** The Language of Expressions
+**** Some Intriguing Examples
+**** Programming by Induction
+**** Proving Recursive Programs Correct
+*** Programs that Manipulate Programs
+**** The Data Type of Lists
+**** Representing Data Types as Lists
+**** The Evaluator for the Language of Expressions
+**** The Halting Problem
+*** The Language of Logic
+**** Languages for Facts and Questions
+**** The Language of Propositional Logic
+**** Substitution
+**** Disjunctive Normal Form
+**** Applications of Propositional Logic
+**** The Language of First-Order Logic
+**** Examples in First-Order Logic
+**** Degrees of Truth
+**** Provability
+*** Provering Assertions About Programs
+**** The Language of Statements
+**** The Language of Assertions
+**** The Soundness of System H
+**** Using System H
+**** Examples in System H
+**** Writing Programs Using Invariants
+**** Handling Arrays
+** MIT OPEN: Single Variable Calculus
+** MIT OPEN: Mathematics for Computer Science
+** Thinking Recursively
+*** The Idea of Recursion
+**** An Illustration of the Recursive Approach
+**** Mondrian and Computer Art
+**** Characteristics of Recursive Algorithms
+**** Nonterminating Recursion
+**** Thinking about Recursion - Two Perspectives
+*** Mathematical Preliminaries
+**** Mathematical Induction
+**** Computational Complexity
+*** Recursive Functions
+**** Functional vs. Procedural Recursion
+**** Factorials
+**** The Fibonacci Sequence
+*** The Procedural Approach
+**** Numeric Output
+**** Generating a Primer
+*** The Tower of Hanoi
+**** The Recursive Solution
+**** The Reductionist View
+*** Permutations
+*** Sorting
+**** Selection Sorting
+**** Merge Sorting
+*** Intelligent Algorithms
+**** Backtracking Through a Maze
+**** Lookahead Strategies
+*** Graphical Applications
+**** Computer Graphics in Pascal
+**** Fractal Geometry
+*** Recursive Data
+**** Representing Strings as Linked Lists
+**** Binary Trees
+**** Expression Trees
+*** Implementation of Recursion
+**** The Control Stack Model
+**** Simulating Recursion
+** The Little Prover
+** The Little Schemer
+** How to Prove It
 ** The Book of Proof
 *** Fundamentals
 **** Sets
@@ -440,7 +612,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** Further PRoperties of Cardinal Numbers
 **** Some Theories Equivalent to the Axiom of Choice
 **** The Paradoxes of Intuitive Set Theory
-*** The Extension of the NAtural NUmbers to the Real Numbers
+*** The Extension of the Natural NUmbers to the Real Numbers
 **** The System of Natural Numbers
 **** Differences
 **** Integers
@@ -611,8 +783,184 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 *** Functional programming in Standard ML
 *** Functional programming and LISP
 ** Foundations of Computer Science: C Edition
+*** Chapter 1. Computer Science: The Mechanization of Abstraction 1
+**** 1.1. What This Book Is About 3
+**** 1.2. What This Chapter Is About 6
+**** 1.3. Data Models 6
+**** 1.4. The C Data Model 13
+**** 1.5. Algorithms and the Design of Programs 20
+**** 1.6. Some C Conventions Used Throughout the Book 22
+**** 1.7. Summary of Chapter 1 23
+**** 1.8. Bibliographic Notes for Chapter 1 24
+*** Chapter 2. Iteration, Induction, and Recursion 25
+**** 2.1. What This Chapter Is About 27
+**** 2.2. Iteration 27
+**** 2.3. Inductive Proofs 34
+**** 2.4. Complete Induction 44
+**** 2.5. Proving Properties of Programs 52
+**** 2.6. Recursive Definitions 59
+**** 2.7. Recursive Functions 69
+**** 2.8. Merge Sort: A Recursive Sorting Algorithm 75
+**** 2.9. Proving Properties of Recursive Programs 84
+**** 2.10. Summary of Chapter 2 87
+**** 2.11. Bibliographic Notes for Chapter 2 88
+*** Chapter 3. The Running Time of Programs 89
+**** 3.1. What This Chapter Is About 89
+**** 3.2. Choosing an Algorithm 90
+**** 3.3. Measuring Running Time 91
+**** 3.4. Big-Oh and Approximate Running Time 96
+**** 3.5. Simplifying Big-Oh Expressions 101
+**** 3.6. Analyzing the Running Time of a Program 109
+**** 3.7. A Recursive Rule for Bounding Running Time 116
+**** 3.8. Analyzing Programs with Function Calls 127
+**** 3.9. Analyzing Recursive Functions 132
+**** 3.10. Analysis of Merge Sort 136
+**** 3.11. Solving Recurrence Relations 144
+**** 3.12. Summary of Chapter 3 154
+**** 3.13. Bibliographic Notes for Chapter 3 155
+*** Chapter 4. Combinatorics and Probability 156
+**** 4.1. What This Chapter Is About 156
+**** 4.2. Counting Assignments 157
+**** 4.3. Counting Permutations 160
+**** 4.4. Ordered Selections 167
+**** 4.5. Unordered Selections 170
+**** 4.6. Orderings With Identical Items 178
+**** 4.7. Distribution of Objects to Bins 181
+**** 4.8. Combining Counting Rules 184
+**** 4.9. Introduction to Probability Theory 187
+**** 4.10. Conditional Probability 193
+**** 4.11. Probabilistic Reasoning 203
+**** 4.12. Expected Value Calculations 212
+**** 4.13. Some Programming Applications of Probability 215
+**** 4.14. Summary of Chapter 4 220
+**** 4.15. Bibliographic Notes for Chapter 4 221
+*** Chapter 5. The Tree Data Model 223
+**** 5.1. What This Chapter Is About 223
+**** 5.2. Basic Terminology 224
+**** 5.3. Data Structures for Trees 231
+**** 5.4. Recursions on Trees 239
+**** 5.5. Structural Induction 248
+**** 5.6. Binary Trees 253
+**** 5.7. Binary Search Trees 258
+**** 5.8. Efficiency of Binary Search Tree Operations 268
+**** 5.9. Priority Queues and Partially Ordered Trees 271
+**** 5.10. Heapsort: Sorting with Balanced POTs 280
+**** 5.11. Summary of Chapter 5 284
+**** 5.12. Bibliographic Notes for Chapter 5 285
+*** Chapter 6. The List Data Model 286
+**** 6.1. What This Chapter Is About 286
+**** 6.2. Basic Terminology 287
+**** 6.3. Operations on Lists 291
+**** 6.4. The Linked-List Data Structure 293
+**** 6.5. Array-Based Implementation of Lists 301
+**** 6.6. Stacks 306
+**** 6.7. Implementing Function Calls Using a Stack 312
+**** 6.8. Queues 318
+**** 6.9. Longest Common Subsequences 321
+**** 6.10. Representing Character Strings 327
+**** 6.11. Summary of Chapter 6 334
+**** 6.12. Bibliographic Notes for Chapter 6 335
+*** Chapter 7. The Set Data Model 337
+**** 7.1. What This Chapter Is About 337
+**** 7.2. Basic Definitions 338
+**** 7.3. Operations on Sets 342
+**** 7.4. List Implementation of Sets 351
+**** 7.5. Characteristic-Vector Implementation of Sets 357
+**** 7.6. Hashing 360
+**** 7.7. Relations and Functions 366
+**** 7.8. Implementing Functions as Data 373
+**** 7.9. Implementing Binary Relations 380
+**** 7.10. Some Special Properties of Binary Relations 386
+**** 7.11. Infinite Sets 396
+**** 7.12. Summary of Chapter 7 401
+**** 7.13. Bibliographic Notes for Chapter 7 402
+*** Chapter 8. The Relational Data Model 403
+**** 8.1. What This Chapter Is About 403
+**** 8.2. Relations 404
+**** 8.3. Keys 411
+**** 8.4. Primary Storage Structures for Relations 414
+**** 8.5. Secondary Index Structures 419
+**** 8.6. Navigation among Relations 423
+**** 8.7. An Algebra of Relations 428
+**** 8.8. Implementing Relational Algebra Operations 436
+**** 8.9. Algebraic Laws for Relations 440
+**** 8.10. Summary of Chapter 8 449
+**** 8.11. Bibliographic Notes for Chapter 8 450
+*** Chapter 9. The Graph Data Model 451
+**** 9.1. What This Chapter Is About 451
+**** 9.2. Basic Concepts 452
+**** 9.3. Implementation of Graphs 459
+**** 9.4. Connected Components of an Undirected Graph 466
+**** 9.5. Minimal Spanning Trees 478
+**** 9.6. Depth-First Search 484
+**** 9.7. Some Uses of Depth-First Search 495
+**** 9.8. Dijkstra’s Algorithm for Finding Shortest Paths 502
+**** 9.9. Floyd’s Algorithm for Shortest Paths 513
+**** 9.10. An Introduction to Graph Theory 521
+**** 9.11. Summary of Chapter 9 526
+**** 9.12. Bibliographic Notes for Chapter 9 527
+*** Chapter 10. Patterns, Automata, and Regular Expressions 529
+**** 10.1. What This Chapter Is About 530
+**** 10.2. State Machines and Automata 530
+**** 10.3. Deterministic and Nondeterministic Automata 536
+**** 10.4. From Nondeterminism to Determinism 547
+**** 10.5. Regular Expressions 556
+**** 10.6. The UNIX Extensions to Regular Expressions 564
+**** 10.7. Algebraic Laws for Regular Expressions 568
+**** 10.8. From Regular Expressions to Automata 571
+**** 10.9. From Automata to Regular Expressions 582
+**** 10.10. Summary of Chapter 10 588
+**** 10.11. Bibliographic Notes for Chapter 10 589
+*** Chapter 11. Recursive Description of Patterns 591
+**** 11.1. What This Chapter Is About 591
+**** 11.2. Context-Free Grammars 592
+**** 11.3. Languages from Grammars 599
+**** 11.4. Parse Trees 602
+**** 11.5. Ambiguity and the Design of Grammars 610
+**** 11.6. Constructing Parse Trees 617
+**** 11.7. A Table-Driven Parsing Algorithm 625
+**** 11.8. Grammars Versus Regular Expressions 634
+**** 11.9. Summary of Chapter 11 640
+**** 11.10. Bibliographic Notes for Chapter 11 641
+*** Chapter 12. Propositional Logic 642
+**** 12.1. What This Chapter Is About 642
+**** 12.2. What Is Propositional Logic? 643
+**** 12.3. Logical Expressions 645
+**** 12.4. Truth Tables 649
+**** 12.5. From Boolean Functions to Logical Expressions 655
+**** 12.6. Designing Logical Expressions by Karnaugh Maps 660
+**** 12.7. Tautologies 669
+**** 12.8. Some Algebraic Laws for Logical Expressions 674
+**** 12.9. Tautologies and Methods of Proof 682
+**** 12.10. Deduction 686
+**** 12.11. Proofs by Resolution 692
+**** 12.12. Summary of Chapter 12 697
+**** 12.13. Bibliographic Notes for Chapter 12 698
+*** Chapter 13. Using Logic to Design Computer Components 699
+**** 13.1. What This Chapter is About 699
+**** 13.2. Gates 700
+**** 13.3. Circuits 701
+**** 13.4. Logical Expressions and Circuits 705
+**** 13.5. Some Physical Constraints on Circuits 711
+**** 13.6. A Divide-and-Conquer Addition Circuit 716
+**** 13.7. Design of a Multiplexer 723
+**** 13.8. Memory Elements 730
+**** 13.9. Summary of Chapter 13 731
+**** 13.10. Bibliographic Notes for Chapter 13 732
+*** Chapter 14. Predicate Logic 733
+**** 14.1. What This Chapter Is About 733
+**** 14.2. Predicates 734
+**** 14.3. Logical Expressions 736
+**** 14.4. Quantifiers 739
+**** 14.5. Interpretations 745
+**** 14.6. Tautologies 751
+**** 14.7. Tautologies Involving Quantifiers 753
+**** 14.8. Proofs in Predicate Logic 759
+**** 14.9. Proofs from Rules and Facts 762
+**** 14.10. Truth and Provability 768
+**** 14.11. Summary of Chapter 14 774
+**** 14.12. Bibliographic Notes for Chapter 14 775
 ** Algorithms Unlocked
-** Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles, Fifth Edition
-** SICP
 ** HtDP
+** SICP
 ** EoPL
