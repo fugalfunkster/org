@@ -348,6 +348,7 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 * Texts for F(CS)
 ** Godel, Escher, Bach
 ** The Induction Book
+** Elements of Mathematics
 ** Induction, Recursion, and Programming (Steven D. Johnson)
 *** Sets
 **** Set Builder Notation
@@ -459,7 +460,72 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 **** Writing Programs Using Invariants
 **** Handling Arrays
 ** MIT OPEN: Single Variable Calculus
+*** Derivatives
+**** 0 Recitation: graphing
+**** 1 Derivatives, slope, velocity, rate of change
+**** 2 Limits, continuity // Trigonometric limits
+**** 3 Derivatives of products, quotients, sine, cosine
+**** 4 Chain rule // Higher derivatives
+**** 5 Implicit differentiation, inverses
+**** 6 Exponential and log // Logarithmic differentiation; hyperbolic functions
+**** 7 Hyperbolic functions 
+**** 8 Exam 1 covering Ses #1-7
+*** Applications of Differentiation
+**** 9 Linear and quadratic approximations
+**** 10 Curve sketching
+**** 11 Max-min problems
+**** 12 Related rates
+**** 13 Newton's method and other applications
+**** 14 Mean value theorem // Inequalities
+**** 15 Differentials, antiderivatives
+**** 16 Differential equations, separation of variables
+**** 17 Exam 2 covering Ses #8-16
+*** Integration
+**** 18 Definite integrals
+**** 19 First fundamental theorem of calculus
+**** 20 Second fundamental theorem
+**** 21 Applications to logarithms and geometry
+**** 22 Volumes by disks, shells
+**** 23 Work, average value, probability
+**** 24 Numerical integration
+*** Techniques of Integration
+**** 26 Trigonometric integrals and substitution
+**** 27 Exam 3 covering Ses #18-24
+**** 28 Integration by inverse substitution; completing the square
+**** 29 Partial fractions
+**** 30 Integration by parts, reduction formulae
+**** 31 Parametric equations, arclength, surface area
+**** 32 Polar coordinates; area in polar coordinates
+**** 33 Exam 4 covering Ses #26-32
+**** 34 Indeterminate forms - L'Hôspital's rule
+**** 35 Improper integrals
+**** 36 Infinite series and convergence tests
+**** 37 Taylor's series	
 ** MIT OPEN: Mathematics for Computer Science
+*** Part I: Proofs
+**** Chapter 1: Propositions
+**** Chapter 2: Patterns of Proof
+**** Chapter 3: Induction
+**** Chapter 4: Number theory
+*** Part II: Structures
+**** Chapter 5: Graph theory
+**** Chapter 6: Directed graphs
+**** Chapter 7: Relations and partial orders
+**** Chapter 8: State machines
+*** Part III: Counting
+**** Chapter 9: Sums and asymptotics
+**** Chapter 10: Recurrences
+**** Chapter 11: Cardinality rules
+**** Chapter 12: Generating functions
+**** Chapter 13: Infinite sets
+*** Part IV: Probability
+**** Chapter 14: Events and probability spaces
+**** Chapter 15: Conditional probability
+**** Chapter 16: Independence
+**** Chapter 17: Random variables and distributions
+**** Chapter 18: Expectation
+**** Chapter 19: Deviations
+**** Chapter 20: Random walks
 ** Thinking Recursively
 *** The Idea of Recursion
 **** An Illustration of the Recursive Approach
