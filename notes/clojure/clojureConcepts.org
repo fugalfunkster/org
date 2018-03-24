@@ -187,8 +187,6 @@ original collection. This is called structural sharing.
 whether two valuesa are the same object in memory:
 
 #+BEGIN_SRC clojurescript :results output
- 
-
   (let [xs (list 1 2 3)
         ys (cons 0 xs)]
     (println "xs:" xs)
