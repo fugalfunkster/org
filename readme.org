@@ -12,6 +12,9 @@ This readme is organized via org mode headings:
 5. Horizons are the things I want to learn in the future,
    but haven't made their way into the directory.
 
+Additionally, org mode's sparse trees provide a convient way to navigate by keyword state. 
+
+Simply "C-c / /" <KEYWORD-STATE> (see ln 1)
 
 * Directory
 ** Books
