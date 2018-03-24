@@ -8,12 +8,12 @@ blog post (or series of posts), book, tutorial, etc. for which I decided to take
 This readme is composed of five major headings, which manage different aspects of my
 notes.
 
-1. The TODO list is what I'm currently taking notes on.
-2. The Queue is a staging area from the larger directory
-3. The Directory lists all past, present and future notes.
-4. App Ideas is pretty self explanatory
+1. The TODO heap contains the subjects I'm currently taking notes on.
+2. The backburner, contains subject's I'm not currently taking notes on, but began.
+3. The Queue is a staging area from the larger directory
+4. The Directory lists past, present and future notes.
 5. Horizons are the things I want to learn in the future,
-   but can't plan into the queue or directory.
+   but haven't made their way into the directory.
 
 My notes are formatted as org docs, but I only use headings, tables, TODOs, and org-babel
 source blocks extensively. For more information on org-mode see: http://orgmode.org/
@@ -77,26 +77,26 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
 
 
 
-* directory
-** Notes
-*** Books
-**** JavaScript
-***** OPEN JavaScript Allonge : Review and Refactor Portfolio
-***** TODO Professor Frisby's Mostly Adequate Guide to Functional Programming
-***** TODO YDKJS: Async
-***** OPEN Survive JS - Webpack
-***** Survive JS - React
-***** Learning React Native
-**** Clojure
-***** DONE Living Clojure
-***** OPEN ClojureScript Unraveled
-***** Clojure for the Brave and True
-***** Web Development with Clojure
-***** Etudes for ClojureScript
-***** Clojure Applied
-**** Scheme
-***** DONE The Little Schemer
-***** HtDP [5/43]
+* Directory
+** Books
+*** CompSci
+*** JavaScript
+**** OPEN JavaScript Allonge : Review and Refactor Portfolio
+**** TODO Professor Frisby's Mostly Adequate Guide to Functional Programming
+**** TODO YDKJS: Async
+**** OPEN Survive JS - Webpack
+**** Survive JS - React
+**** Learning React Native
+*** Clojure
+**** DONE Living Clojure
+**** OPEN ClojureScript Unraveled
+**** Clojure for the Brave and True
+**** Web Development with Clojure
+**** Etudes for ClojureScript
+**** Clojure Applied
+*** Scheme
+**** DONE The Little Schemer
+**** HtDP [5/43]
     I. Processing Simple Forms of Data
  - [X] Students, Teachers, Computers
  - [X] Numbers, Expressions, Simple Programs
@@ -149,884 +149,879 @@ source blocks extensively. For more information on org-mode see: http://orgmode.
  - [ ] Equality
  - [ ] Changing Structures, Vectors, and Objects
  Epilogue
-***** Structure and Interpretation of Computer Programs
-***** Essentials of Programming Languages
-**** Linux/Docker
-***** How Linux Works
-***** The Linux Command Line
-***** Using Docker
-*** design
-**** Pluralsight
-***** DONE Responsive Typography : Jason Pamental (5:55)
-***** DONE Responsive Web Images : Robert Boedigheimer (1:55)
-***** DONE Web Accessibility: Getting Started (1:30)
-***** Making a Web Form Accessible (1:47)
-*** html/css/SVG
-**** OPEN pendaticLayout
-**** Pluralsight
-***** DONE CSS Positioning : Susan Sumkins (0:50)
-***** DONE Responsive Web Design : Ben Callahan (4:31)
-***** DONE Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
-***** DONE SVG Fundamentals : Brian Treese (1:29)
-***** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
-***** HTML5 Advanced Topics : Craig Shoemaker (2:45)
-***** HTML5 Browser Caching : Ben Schwarz (1:01)
-***** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
-***** Creating Elegant Nav. Using CSS3 Transitions : Susam Simkins (1:02)
-**** FrontEndMasters
-***** Motion Design with CSS : Rachel Nabors (4:01)
-***** Animated SVG Animation : Sarah Drasner (2:53)
-**** egghead
-***** DONE Flexbox Fundamentals
-*** JavaScript
-**** Pluralsight
-***** WATCHEDONLY Advanced Javascript : Kyle Simpson ()
-***** WATCHEDONLY JS Objects and Prototypes
-***** WATCHEDONLY JS Best Practices : Jonathan Mills (2:39)
-***** WATCHEDONLY JS.Next: ES6 : Aaron Frost (5:24)
-***** DONE Reasoning About Async JS : Wes Higbee (2:05)
-***** DONE JS Module Fundamentals : Brice Wilson (2:16)
-***** CLOSED jQuery-free JS : Elijah Manor (2:26)
-***** OPEN Practical Design Patterns in JavaScript : Jonathan Mills (3:10)
-***** OPEN Modern Asynchronous JavaScript : Wes Higbee (6:34)
-***** TODO Testing Clientside JavaScript : Joe Eames (4:50)
-***** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
-***** TODO Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
-***** TODO JavaScript Animation with GSAP : Todd Shelton (3:12)
-***** Shifting JS into High Gear w/ Web Workers : Kasia Zmokia (3:13)
-***** JavaScript Design Patterns : Aaron Powell (2:02)
-**** Egghead
-***** TODO Asynchronous Programming: The End of the Loop : Jafar Husain
-***** Regex in JavaScript : Joe Maddalone
-***** Learn how to use Immutable JS : J.S. Leonard
-**** Udemy
-***** DONE JavaScript: Understanding The Weird Parts : Anthony Alicea
-***** Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:00)
-**** FrontEndMasters
-***** VIEWONLY Functional-Lite JS : Kyle Simpson (3:10)
-***** DONE Rethinking Async JS : Kyle Simpson (6:22)
-***** Asynchronous Programming in Javascript : Jafar Husain (9:36)
-*** TypeScript
-**** Pluralsight
-***** A Practical Start with TypeScript : Roland Guijt (1:39)
-***** TypeScript Fundamentals : Dan Wahlin & John Papa (4:25)
-***** TypeScript In-Depth : Brice Wilson (4:40)
-**** Egghead
-***** DONE Up and Running with TypeScript : John Lindquist (0:43)
-***** DONE Use Types Effectively in TypeScript : Ari Picker (0:29)
-*** react
-**** DONE React.js Program: Fundamentals : Tyler McGinnis
-**** DONE Facebook Official React Tutorial
-**** DONE React Router Tutorial
-**** Pluralsight
-***** WATCHEDONLY Styling React Components : Jake Trent (1:29)
-***** TODO Building Applications with React and Flux : Cory House (5:08)
-***** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
-***** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
-***** React Native Apps with Exponent and Redux : Hendrick (3:21)
-***** Building iOS Apps with React Native : Hendrik Swanepoel (1:59)
-**** FrontEndMasters
-***** React Native (feat. Redux) : Scott Moss (4:19)
-***** Intro. to React/Redux : Brian Holt (11:23)
-**** Egghead
-***** CLOSED React Fundamentals : Joe Maddalon
-***** CLOSED Getting Started with React Router (egghead)
-***** DONE Getting Started with Redux (egghead)
-***** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov
-***** React Native Fundamentals : Tyler McGinnis
-**** Udemy
-***** DONE Modern React with Redux : Stephen Girder (10:00)
-***** OPEN Advanced React and Redux : Stephen Girder (12:00)
-***** Build Apps with React Native : Stephen Grider (8:00+)
-*** perf
-**** Pluralsight
-***** Web Performance : Robert Boedigheimer (2:51)
-***** Using Google PageSpeed for Perf. : David Berry (3:19)
-**** FrontEndMasters
-***** Website Perf : Kyle Simpson (5:01)
-*** D3
-**** Pluralsight
-***** WATCHEDONLY D3: The Big Picture : Ben Sullins (1:26)
-**** Egghead
-***** OPEN Build Interactive JS Charts w/ D3 v4 : Ben Clinkenbeard (2:33)
-*** node
-**** Pluralsight
-***** DONE Real-Time Web w/ Node.js : Kyle Simpson (5:23)
-***** DONE RESTful Web Services with Node.js and Express (2:04)
-***** DONE Build Web Apps with Node.js and Express 4.0 : Jonathan Mills (4:43)
-***** DONE Securing Yours App w/ OAuth and Passport : Jonathan Mills
-***** OPEN Intro to Node JS : Paul O'Fallon (2:48)
-***** TODO Five Essential tools for REST APIs : Elton Stoneman (2:56)
-***** HTTP Fundamentals : Scott Allen (2:50)
-***** Node Application Patterns : Rob Conery (2:30)
-***** FullStack NodeJS : Geoffrey Grosenbach (2:35)
-***** Building Web Apps with Node.js : Kevin Whinnery (3:43)
-**** FrontEndMasters
-***** API Design with Node.js using Express : Scott Moss (10:18)
-**** Udemy
-***** OPEN Learn & Understand Node.js : Anthony Alicea (12:00+)
-*** docker
-**** pluralsight
-***** WATCHEDONLY Docker and Containers: The Big Picture : Nigel Poulton (1:47)
-***** Play by Play: Docker for Web Developers with John Papa and Dan Wahlin (1:34))
-***** Docker Deep Dive : Nigel Poulton (5:38)
-*** databases
-**** WATCHEDONLY Intro to Mongoose for Node.js & MongoDB : Mark Scott (1:41)
-*** testing
-**** Pluralsight
-***** WATCHEDONLY Code Testability : Misko Hevery (0:51)
-***** Testing JS w/ Jasmine and TypeScript : Tony Curtis (2:42)
-***** Testing Client-Side JS : Joe Eames (4:50)
-***** Unit Testing with Node.js : Joe Eames (1:26)
-***** Node.js Testing Strategies : Rob Conery (2:39)
-***** Mastering React Testing with Jest : Daniel Stern (1:57)
-**** Egghead
-***** OPEN React Testing Cookbook
-*** tools
-**** emacsHelp
-**** Pluralsight
-***** DONE Intro to NPM as a Build Tool : Marcus Hammarberg (1:37)
-***** DONE Git Fundamentals : James Kovacs (1:51)
-***** Mastering Git : Paolo Perrotta (2:42)
-***** DONE NPM Playbook : Joe Eames (0:58)
-***** WATCHEDONLY Meet Emacs : Phil Hagelberg (0:58)
-***** TODO Advanced Git : Ben Hoskings (1:00)
-***** Using the Chrome Dev. Tools : John Sonmez (2:50)
-**** FrontEndMasters
-***** Mastering Chrome Developer Tools : Jon Kuperman (4:15)
-**** egghead
-***** WATCHEDONLY How to Contribute to an Open Source Project on Github
-***** TODO Using Webpack for Production JS Apps
-***** Debug the DOM in Chrome with the Devtools Elements Panel : Mykola Biloknsky
-***** Debug JS in Chrom DevRool Sources : Mykola Biloknsky
-***** Debug HTTP with Chrome DevTools Network Panel : Mykola Biloknsky
-*** elixir
-**** Pluralsight
-***** OPEN Getting Started with Elixir : Nate Taylor (2:49)
+**** Structure and Interpretation of Computer Programs
+**** Essentials of Programming Languages
+*** Linux/Docker
+**** How Linux Works
+**** The Linux Command Line
+**** Using Docker
+** design
+*** Pluralsight
+**** DONE Responsive Typography : Jason Pamental (5:55)
+**** DONE Responsive Web Images : Robert Boedigheimer (1:55)
+**** DONE Web Accessibility: Getting Started (1:30)
+**** Making a Web Form Accessible (1:47)
+** html/css/SVG
+*** OPEN pendaticLayout
+*** Pluralsight
+**** DONE CSS Positioning : Susan Sumkins (0:50)
+**** DONE Responsive Web Design : Ben Callahan (4:31)
+**** DONE Modern Web Layout with Flexbox and CSS Grid : Brian Treese (1:14)
+**** DONE SVG Fundamentals : Brian Treese (1:29)
+**** OPEN CSS3 In-Depth : Estelle Weyl (6:10)
+**** HTML5 Advanced Topics : Craig Shoemaker (2:45)
+**** HTML5 Browser Caching : Ben Schwarz (1:01)
+**** CSS Animation with Transition and Transform : Sandy Ludosky (2:10)
+**** Creating Elegant Nav. Using CSS3 Transitions : Susam Simkins (1:02)
+*** FrontEndMasters
+**** Motion Design with CSS : Rachel Nabors (4:01)
+**** Animated SVG Animation : Sarah Drasner (2:53)
+*** egghead
+**** DONE Flexbox Fundamentals
+** JavaScript
+*** Pluralsight
+**** WATCHEDONLY Advanced Javascript : Kyle Simpson ()
+**** WATCHEDONLY JS Objects and Prototypes
+**** WATCHEDONLY JS Best Practices : Jonathan Mills (2:39)
+**** WATCHEDONLY JS.Next: ES6 : Aaron Frost (5:24)
+**** DONE Reasoning About Async JS : Wes Higbee (2:05)
+**** DONE JS Module Fundamentals : Brice Wilson (2:16)
+**** CLOSED jQuery-free JS : Elijah Manor (2:26)
+**** OPEN Practical Design Patterns in JavaScript : Jonathan Mills (3:10)
+**** OPEN Modern Asynchronous JavaScript : Wes Higbee (6:34)
+**** TODO Testing Clientside JavaScript : Joe Eames (4:50)
+**** TODO Front-End First: Testing and Prototyping JS Apps : Mark Zamoyta (2:27)
+**** TODO Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:03)
+**** TODO JavaScript Animation with GSAP : Todd Shelton (3:12)
+**** Shifting JS into High Gear w/ Web Workers : Kasia Zmokia (3:13)
+**** JavaScript Design Patterns : Aaron Powell (2:02)
+*** Egghead
+**** TODO Asynchronous Programming: The End of the Loop : Jafar Husain
+**** Regex in JavaScript : Joe Maddalone
+**** Learn how to use Immutable JS : J.S. Leonard
+*** Udemy
+**** DONE JavaScript: Understanding The Weird Parts : Anthony Alicea
+**** Hardcore Functional Programming in JavaScript : Brian Lonsdorf (6:00)
+*** FrontEndMasters
+**** VIEWONLY Functional-Lite JS : Kyle Simpson (3:10)
+**** DONE Rethinking Async JS : Kyle Simpson (6:22)
+**** Asynchronous Programming in Javascript : Jafar Husain (9:36)
+** TypeScript
+*** Pluralsight
+**** A Practical Start with TypeScript : Roland Guijt (1:39)
+**** TypeScript Fundamentals : Dan Wahlin & John Papa (4:25)
+**** TypeScript In-Depth : Brice Wilson (4:40)
+*** Egghead
+**** DONE Up and Running with TypeScript : John Lindquist (0:43)
+**** DONE Use Types Effectively in TypeScript : Ari Picker (0:29)
+** react
+*** DONE React.js Program: Fundamentals : Tyler McGinnis
+*** DONE Facebook Official React Tutorial
+*** DONE React Router Tutorial
+*** Pluralsight
+**** WATCHEDONLY Styling React Components : Jake Trent (1:29)
+**** TODO Building Applications with React and Flux : Cory House (5:08)
+**** TODO Building Applications with React and Redux in ES6: Cory House (6:14)
+**** TODO Building a Full-Stack App with React and Express : Daniel Stern (3:24)
+**** React Native Apps with Exponent and Redux : Hendrick (3:21)
+**** Building iOS Apps with React Native : Hendrik Swanepoel (1:59)
+*** FrontEndMasters
+**** React Native (feat. Redux) : Scott Moss (4:19)
+**** Intro. to React/Redux : Brian Holt (11:23)
+*** Egghead
+**** CLOSED React Fundamentals : Joe Maddalon
+**** CLOSED Getting Started with React Router (egghead)
+**** DONE Getting Started with Redux (egghead)
+**** TODO Building React Apps w/ Idiomatic Redux : Dan Abrimov
+**** React Native Fundamentals : Tyler McGinnis
+*** Udemy
+**** DONE Modern React with Redux : Stephen Girder (10:00)
+**** OPEN Advanced React and Redux : Stephen Girder (12:00)
+**** Build Apps with React Native : Stephen Grider (8:00+)
+** perf
+*** Pluralsight
+**** Web Performance : Robert Boedigheimer (2:51)
+**** Using Google PageSpeed for Perf. : David Berry (3:19)
+*** FrontEndMasters
+**** Website Perf : Kyle Simpson (5:01)
+** D3
+*** Pluralsight
+**** WATCHEDONLY D3: The Big Picture : Ben Sullins (1:26)
+*** Egghead
+**** OPEN Build Interactive JS Charts w/ D3 v4 : Ben Clinkenbeard (2:33)
+** node
+*** Pluralsight
+**** DONE Real-Time Web w/ Node.js : Kyle Simpson (5:23)
+**** DONE RESTful Web Services with Node.js and Express (2:04)
+**** DONE Build Web Apps with Node.js and Express 4.0 : Jonathan Mills (4:43)
+**** DONE Securing Yours App w/ OAuth and Passport : Jonathan Mills
+**** OPEN Intro to Node JS : Paul O'Fallon (2:48)
+**** TODO Five Essential tools for REST APIs : Elton Stoneman (2:56)
+**** HTTP Fundamentals : Scott Allen (2:50)
+**** Node Application Patterns : Rob Conery (2:30)
+**** FullStack NodeJS : Geoffrey Grosenbach (2:35)
+**** Building Web Apps with Node.js : Kevin Whinnery (3:43)
+*** FrontEndMasters
+**** API Design with Node.js using Express : Scott Moss (10:18)
+*** Udemy
+**** OPEN Learn & Understand Node.js : Anthony Alicea (12:00+)
+** docker
+*** pluralsight
+**** WATCHEDONLY Docker and Containers: The Big Picture : Nigel Poulton (1:47)
+**** Play by Play: Docker for Web Developers with John Papa and Dan Wahlin (1:34))
+**** Docker Deep Dive : Nigel Poulton (5:38)
+** databases
+*** WATCHEDONLY Intro to Mongoose for Node.js & MongoDB : Mark Scott (1:41)
+** testing
+*** Pluralsight
+**** WATCHEDONLY Code Testability : Misko Hevery (0:51)
+**** Testing JS w/ Jasmine and TypeScript : Tony Curtis (2:42)
+**** Testing Client-Side JS : Joe Eames (4:50)
+**** Unit Testing with Node.js : Joe Eames (1:26)
+**** Node.js Testing Strategies : Rob Conery (2:39)
+**** Mastering React Testing with Jest : Daniel Stern (1:57)
+*** Egghead
+**** OPEN React Testing Cookbook
+** tools
+*** emacsHelp
+*** Pluralsight
+**** DONE Intro to NPM as a Build Tool : Marcus Hammarberg (1:37)
+**** DONE Git Fundamentals : James Kovacs (1:51)
+**** Mastering Git : Paolo Perrotta (2:42)
+**** DONE NPM Playbook : Joe Eames (0:58)
+**** WATCHEDONLY Meet Emacs : Phil Hagelberg (0:58)
+**** TODO Advanced Git : Ben Hoskings (1:00)
+**** Using the Chrome Dev. Tools : John Sonmez (2:50)
+*** FrontEndMasters
+**** Mastering Chrome Developer Tools : Jon Kuperman (4:15)
+*** egghead
+**** WATCHEDONLY How to Contribute to an Open Source Project on Github
+**** TODO Using Webpack for Production JS Apps
+**** Debug the DOM in Chrome with the Devtools Elements Panel : Mykola Biloknsky
+**** Debug JS in Chrom DevRool Sources : Mykola Biloknsky
+**** Debug HTTP with Chrome DevTools Network Panel : Mykola Biloknsky
+** elixir
+*** Pluralsight
+**** OPEN Getting Started with Elixir : Nate Taylor (2:49)
 
 
 * Horizon
+** Foundations of Comp. Sci.
+*** Meta List of Topics
+**** Mathematical Foundations
+***** Calculus
+***** Induction
+***** Methods of Proof
+**** Logic
+***** Lambda Calculus
+***** Propositional
+***** Predicate
+**** Functional Programming
+**** Data Structures
+***** 
+**** State and Time
+***** Thunks
+***** Promises
+***** Iterator, Generator
+***** Streams
+***** Concurrency
+***** Parallelism
+***** CSP
+**** OOP
+***** Patterns
+***** Inheritance
+***** Decorators
+****** Meta Object
+**** Interpreters and Compilers
+**** Algorithms
+*** Texts for F(CS)
+**** Elements of Mathematics
+**** The Induction Book
+**** Godel, Escher, Bach
+**** Induction, Recursion, and Programming (Steven D. Johnson)
+***** Sets
+****** Set Builder Notation
+****** Set Operations
+****** Languages
+****** A Simple Algorithmic Language
+***** Relations, Functions
+****** Functions
+******* Function (and Relation) Composition
+******* Infix Notation
+****** Trees
+****** DAGs
+****** Equivalence Relations
+****** Partial Orders
+***** Propositional Logic and Boolean Algebra
+****** Propositions and Truth Tables
+******* Implication
+****** Truth Tables
+******* Logical Equivalence
+****** Boolean Algebra
+******* Duality
+****** Normal Forms
+******* Decision Diagrams
+****** Application of Boolean Algebra to Hardware Synthesis
+***** Counting
+****** Extended Operations
+****** Cardinality
+****** Permutations and Combinations
+****** Probability, Briefly
+***** Numerical Induction
+****** First Examples
+****** Base Translation
+****** "Strong" Induction
+****** More Examples of Induction
+****** Loop Invariants
+***** Program Analysis, Order, and Countability
+****** Performance Estimation Example
+******* The Program
+******* What Are We Counting?
+******* Estimation gets a lot harder
+****** Order Notation and Order Arithmetic
+****** Cardinality and Countability
+****** Decidability
+***** Induction II
+****** Introduction
+******* The Problem of Self-Reference
+******* Inductively Defined Sets
+******* The Principle of Structural Induction
+******* Defining Functions with Recursion
+******* Evaluation of Recursive Functions
+******* Reasoning About Recursive Functions
+******* Additional Problems
+******* Validity of the Induction Principle
+****** Languages and Meaning
+******* Language Definitions
+******* Defining How Languages are Interpreted
+******* Specifying Precedence
+******* Environments
+******* Backus-Naur Form
+******* Propositional Formulas
+******* Substitution
+******* The Programming Language of Statements
+******* Discussions
+******** Parenthesized Expressions
+**** Induction, Recursion, and Programming (Mitchell Wand)
+***** Sets, Graphs, and Relations
+****** Sets, Relations, and Functions
+****** Relations as Graphs
+****** Equivalence Relations
+****** Trees
+****** Representations of Graphs
+****** Permutations and Combinations
+***** Induction and its Applications
+****** Mathematical Induction
+****** Defining Sets by Stages
+****** Defining Sets by Induction
+****** Defining Functions by Induction
+****** Using Global Information
+***** A Language for Programs
+****** Mathematical Data Types
+****** Languages on a Data Type
+****** The Langugage of Terms
+****** The Language of Conditionals
+****** The Language of Expressions
+****** Some Intriguing Examples
+****** Programming by Induction
+****** Proving Recursive Programs Correct
+***** Programs that Manipulate Programs
+****** The Data Type of Lists
+****** Representing Data Types as Lists
+****** The Evaluator for the Language of Expressions
+****** The Halting Problem
+***** The Language of Logic
+****** Languages for Facts and Questions
+****** The Language of Propositional Logic
+****** Substitution
+****** Disjunctive Normal Form
+****** Applications of Propositional Logic
+****** The Language of First-Order Logic
+****** Examples in First-Order Logic
+****** Degrees of Truth
+****** Provability
+***** Provering Assertions About Programs
+****** The Language of Statements
+****** The Language of Assertions
+****** The Soundness of System H
+****** Using System H
+****** Examples in System H
+****** Writing Programs Using Invariants
+****** Handling Arrays
+**** Thinking Recursively
+***** The Idea of Recursion
+****** An Illustration of the Recursive Approach
+****** Mondrian and Computer Art
+****** Characteristics of Recursive Algorithms
+****** Nonterminating Recursion
+****** Thinking about Recursion - Two Perspectives
+***** Mathematical Preliminaries
+****** Mathematical Induction
+****** Computational Complexity
+***** Recursive Functions
+****** Functional vs. Procedural Recursion
+****** Factorials
+****** The Fibonacci Sequence
+***** The Procedural Approach
+****** Numeric Output
+****** Generating a Primer
+***** The Tower of Hanoi
+****** The Recursive Solution
+****** The Reductionist View
+***** Permutations
+***** Sorting
+****** Selection Sorting
+****** Merge Sorting
+***** Intelligent Algorithms
+****** Backtracking Through a Maze
+****** Lookahead Strategies
+***** Graphical Applications
+****** Computer Graphics in Pascal
+****** Fractal Geometry
+***** Recursive Data
+****** Representing Strings as Linked Lists
+****** Binary Trees
+****** Expression Trees
+***** Implementation of Recursion
+****** The Control Stack Model
+****** Simulating Recursion
+**** The Little Prover
+**** The Little Schemer
+**** How to Prove It
+**** The Book of Proof
+***** Fundamentals
+****** Sets
+******* Introduction to Sets
+******* The Cartesian Product
+******* Subsets
+******* Power Sets
+******* Union, Intersection, Difference
+******* Complement
+******* Venn Diagrams
+******* Indexed Sets
+******* Sets that are Number Systems
+******* Russell's Paradox
+****** Logic
+******* Statements
+******* And, Or, Not
+******* Conditional Statements
+******* Biconditional Statements
+******* Truth Tables for Statements
+******* Logical Equivalence
+******* Quantifiers
+******* More on Conditional Statements
+******* Translating English to Symbolic Logic
+******* Negating Statements
+******* Logical Inference
+******* An Important Note
+****** Counting
+******* Counting Lists
+******* Factorials
+******* Counting Subsets
+******* Pascal's Triangle and the Binomial Theorem
+******* Inclusion-Exclusion
+***** How to Prove Conditional Statements
+****** Direct Proof
+******* Theorems
+******* Definitions
+******* Direct Proof
+******* Using Cases
+******* Treating Similar Cases
+****** Contrapositive Proof
+******* Contrapositive Proof
+******* Congruence of Integers
+******* Mathematical Writing
+****** Proof by Contradiction
+******* Proving Statements with Contradiction
+******* PRoving Conditional Statements by Contradiction
+******* Combinging Techniques
+******* Some Words of Advice
+***** More on Proof
+****** Proving Non-Conditional Statements
+******* If-and-Only-If Proof
+******* Equivalent Statements
+******* Existence Proofs; Existence and Uniqueness Proofs
+******* Constructive Versus Non-constructive Proofs
+****** Proofs Involving Sets
+******* How to Prove a is a member of A 
+******* How to Prove A is a subset of B
+******* How to Prove A = B
+******* Examples: Perfect Numbers
+****** Disproof
+******* Counterexamples
+******* Disprooving Existence Statements
+******* Disproof by Contradiction
+****** Mathematical Induction
+******* Proof by Strong Induction
+******* Proof by Smallest Counterexample
+******* Fibonacci Numbers
+***** Relations, Functions and Cardinality
+****** Relations
+******* Properties of Relations
+******* Equivalence Relations
+******* Equivalence Classes and Partitions
+******* The Integers Modulo n
+******* Relations Between Sets
+****** Functions
+******* Functions
+******* Injective and Surhective Functions
+******* The Pigeonhole Principle
+******* Composition
+******* Inverse Functions
+******* Image and Preimage
+****** Cardinality of Sets
+******* Sets with Equal Cardinalities
+******* Countable and Uncountable Sets
+******* Comparing Cardinalities
+******* The Cantor-Bernstein-Shroeder Theorem
+***** Conclusion
+**** Set Theory and Logic
+***** Sets & Relations
+****** Cantor's Comcept of a Set
+****** The Basis of Intuitive Set Theory
+****** Inclusion
+****** Operations for Sets
+****** The Algebra of Sets
+****** Relations
+****** Equivalence Relations
+****** Functions
+****** Composition and Inversion for Functions
+****** Operations for Collections of Sets
+****** Ordering Relations
+***** The Natural Number Sequence and its Generalization
+****** The Natural Number Sequence
+****** Proof and Definition by Induction
+****** Cardinal Numbers
+****** Sountable Sets
+****** Cardinal Arithmetic
+****** Order Types
+****** Well-ordered Sets and Ordinal Numbers
+****** The Axiom of Choice, the Well-ordering Theorem, and Zorn's Lemma
+****** Further PRoperties of Cardinal Numbers
+****** Some Theories Equivalent to the Axiom of Choice
+****** The Paradoxes of Intuitive Set Theory
+***** The Extension of the Natural NUmbers to the Real Numbers
+****** The System of Natural Numbers
+****** Differences
+****** Integers
+****** Rational Numbers
+****** Cauchy Sequences of Rational Numbers
+****** Real Numbers
+****** Further PRoperties of the Real Number System
+***** Logic
+****** The Statement Calculus: Sentential Connectives
+****** The Statement Calculus: Truth Tables
+****** The Statement Calculus: Validity
+****** The Statement Calculus: Consequence
+****** The Statement Calculus: Applications
+****** The Predicate Calculus: Symbolizing Everyday Language
+****** The Predicate Calculus: A Formulation
+****** The Predicate Calculus: Validity
+****** The Predicate Calculus: Consequence
+***** Informal Axiomatic Mathematics
+****** The Concept of an Axiomatic Theory
+****** Informal Theories
+****** Definitions of Axiomatic Theories by Set-theoretical Predicates
+****** Further Features of Informal Theories
+***** Boolean Algebras
+****** A Definition of a Boolean Algebra
+****** Some Basic Properties of a Boolean Algebra
+****** Another Formulation of the Theory
+****** Congruence Relations for a Boolean Algebra
+****** Representations of Boolean Algebras
+****** Statement Calculi as Boolean Algebras
+****** Free Boolean Algebras
+****** Applications of the Theory of Boolean Algebras to Statement Calculi
+****** Further Interconnections b/t Boolean Algebras and Statement Calculi
+***** Informal Axiomatic Set Theory
+****** The Axioms of Extension ans Set Formation
+****** The Axiom of Pairing
+****** The Axioms of Union and Power Set
+****** The Axiom of Infinity
+****** The Axiom of Choice
+****** The Axiom of Schemas of Replacement and Restriction
+****** Ordinal Numbers
+****** Ordinal Arithmetic
+****** Cardinal Numbers and Their Arithmetic
+****** The von-neuman-Bernays-Godel Theory of Sets
+***** Several Algebraic Theories
+****** Features of Algebraic Theories
+****** Definition of a Semigroup
+****** Definition of a Group
+****** Subgroups
+****** Coset Decompositions and Congruence Relations for Groups
+****** Rings, Integral Domains, and Fields
+****** Subrings and Difference Rings
+****** A Characterization of the System of Integers
+****** A Characterization of the System of Rational Numbers
+****** A Characterization of the Real Number System
+***** First-Order Theories
+****** Formal Axiomatic Theories
+****** The Statement Calculus as a Formal Axiomatic Theory
+****** Predicate Calculi of First Order as Formal Axiomatic Theories
+****** First-order Axiomatic Theories
+****** Metamathematics
+****** Consistency and satisfiability of Sets of Formulas
+****** Consistency, Completeness, and Categoricity of First-Order Theories
+****** Turing Machines and Recursive Functions
+****** Some Undecidable and Some Decidable Theories
+****** Godels Theorems
+****** Some Further Remarks about Set Theory
+**** An Intro. to FP Through Lambda Calculus
+***** Introduction
+****** Names and values in programming
+****** Names and values in imperative and functional languages
+****** Execution order in imperative and functional languages
+****** Repetition in imperative and functional languages
+****** Data structures in functional languages
+****** Functions as values
+****** The origins of functional languages
+****** Computing and the theory of computing
+****** λ calculus
+****** Summary
+***** λ Calculus
+****** Abstraction
+****** Abstraction in programming languages
+****** Introducing λ Calculus
+****** λ expressions
+****** Simple λ functions
+****** Introducing new syntax
+****** Notations for naming functions and β reduction
+****** Functions from functions
+****** Argument selections and argument pairing functions
+****** Free and Bound Variables
+****** Name clashes and α conversion
+****** Simplification through η reduction
+****** Summary
+***** Conditions, booleans and numbers
+****** Truth calues and conditional expression
+****** NOT
+****** AND
+****** OR
+****** Natural numbers
+****** Simplified notations
+****** Summary
+***** Recursion and Arithmetic
+****** Repetitions, iteration and recursion
+****** Recursion through definitions
+****** Passing a function to itself
+****** Applicative order reduction
+****** Recursion function
+****** Recursion notation
+****** Arithmetic operations
+****** Summary
+***** Types
+****** Types and programming
+****** Types as objects and operations
+****** Representing typed objects
+****** Errors
+****** Booleans
+****** Typed conditional Expression
+****** Numbers and arithmetic
+****** Characters
+****** Repetitive Type Checking
+****** Static and dynamic type checking
+****** Infix operators
+****** Case definitions and structure matching
+****** Summary
+***** Lists and strings
+****** Lists
+****** List representation
+****** Operations on lists
+****** List notation
+****** Lists and evaluation
+****** Deletion from a list
+****** List comparison
+****** Strings
+****** String comparison
+****** Numeric string to number conversion
+****** Structure matching with lists
+****** Ordered linear lists, insertion and sorting
+****** Indexed linear list access
+****** Mapping Functions
+****** Summary
+***** Composite values and trees
+****** Composite values
+****** Processing composite value sequences
+****** Selector functions
+****** Generalized structure matching
+****** Local definitions
+****** Matching composite value results
+****** List inefficiency
+****** Trees
+****** Adding values to ordered binary trees
+****** Binary tree traversal
+****** Binary tree search
+****** Binary trees of composite values
+****** Binary tree efficiency
+****** Curried and uncurried functions
+****** Partial application
+****** Structures, values and functions
+****** Summary
+***** Evaluation
+****** Termination and normal form
+****** Normal order
+****** Applicative order
+****** Consistent applicative order use
+****** Delaying evaluation
+****** Evaluation termination, the halting problem, evaluation equivalence and the Church-Rosser theorems
+****** Infinite objects
+****** Lazy evaluation
+****** Summary
+***** Functional programming in Standard ML
+***** Functional programming and LISP
+**** Foundations of Computer Science: C Edition
+***** Chapter 1. Computer Science: The Mechanization of Abstraction 1
+****** 1.1. What This Book Is About 3
+****** 1.2. What This Chapter Is About 6
+****** 1.3. Data Models 6
+****** 1.4. The C Data Model 13
+****** 1.5. Algorithms and the Design of Programs 20
+****** 1.6. Some C Conventions Used Throughout the Book 22
+****** 1.7. Summary of Chapter 1 23
+****** 1.8. Bibliographic Notes for Chapter 1 24
+***** Chapter 2. Iteration, Induction, and Recursion 25
+****** 2.1. What This Chapter Is About 27
+****** 2.2. Iteration 27
+****** 2.3. Inductive Proofs 34
+****** 2.4. Complete Induction 44
+****** 2.5. Proving Properties of Programs 52
+****** 2.6. Recursive Definitions 59
+****** 2.7. Recursive Functions 69
+****** 2.8. Merge Sort: A Recursive Sorting Algorithm 75
+****** 2.9. Proving Properties of Recursive Programs 84
+****** 2.10. Summary of Chapter 2 87
+****** 2.11. Bibliographic Notes for Chapter 2 88
+***** Chapter 3. The Running Time of Programs 89
+****** 3.1. What This Chapter Is About 89
+****** 3.2. Choosing an Algorithm 90
+****** 3.3. Measuring Running Time 91
+****** 3.4. Big-Oh and Approximate Running Time 96
+****** 3.5. Simplifying Big-Oh Expressions 101
+****** 3.6. Analyzing the Running Time of a Program 109
+****** 3.7. A Recursive Rule for Bounding Running Time 116
+****** 3.8. Analyzing Programs with Function Calls 127
+****** 3.9. Analyzing Recursive Functions 132
+****** 3.10. Analysis of Merge Sort 136
+****** 3.11. Solving Recurrence Relations 144
+****** 3.12. Summary of Chapter 3 154
+****** 3.13. Bibliographic Notes for Chapter 3 155
+***** Chapter 4. Combinatorics and Probability 156
+****** 4.1. What This Chapter Is About 156
+****** 4.2. Counting Assignments 157
+****** 4.3. Counting Permutations 160
+****** 4.4. Ordered Selections 167
+****** 4.5. Unordered Selections 170
+****** 4.6. Orderings With Identical Items 178
+****** 4.7. Distribution of Objects to Bins 181
+****** 4.8. Combining Counting Rules 184
+****** 4.9. Introduction to Probability Theory 187
+****** 4.10. Conditional Probability 193
+****** 4.11. Probabilistic Reasoning 203
+****** 4.12. Expected Value Calculations 212
+****** 4.13. Some Programming Applications of Probability 215
+****** 4.14. Summary of Chapter 4 220
+****** 4.15. Bibliographic Notes for Chapter 4 221
+***** Chapter 5. The Tree Data Model 223
+****** 5.1. What This Chapter Is About 223
+****** 5.2. Basic Terminology 224
+****** 5.3. Data Structures for Trees 231
+****** 5.4. Recursions on Trees 239
+****** 5.5. Structural Induction 248
+****** 5.6. Binary Trees 253
+****** 5.7. Binary Search Trees 258
+****** 5.8. Efficiency of Binary Search Tree Operations 268
+****** 5.9. Priority Queues and Partially Ordered Trees 271
+****** 5.10. Heapsort: Sorting with Balanced POTs 280
+****** 5.11. Summary of Chapter 5 284
+****** 5.12. Bibliographic Notes for Chapter 5 285
+***** Chapter 6. The List Data Model 286
+****** 6.1. What This Chapter Is About 286
+****** 6.2. Basic Terminology 287
+****** 6.3. Operations on Lists 291
+****** 6.4. The Linked-List Data Structure 293
+****** 6.5. Array-Based Implementation of Lists 301
+****** 6.6. Stacks 306
+****** 6.7. Implementing Function Calls Using a Stack 312
+****** 6.8. Queues 318
+****** 6.9. Longest Common Subsequences 321
+****** 6.10. Representing Character Strings 327
+****** 6.11. Summary of Chapter 6 334
+****** 6.12. Bibliographic Notes for Chapter 6 335
+***** Chapter 7. The Set Data Model 337
+****** 7.1. What This Chapter Is About 337
+****** 7.2. Basic Definitions 338
+****** 7.3. Operations on Sets 342
+****** 7.4. List Implementation of Sets 351
+****** 7.5. Characteristic-Vector Implementation of Sets 357
+****** 7.6. Hashing 360
+****** 7.7. Relations and Functions 366
+****** 7.8. Implementing Functions as Data 373
+****** 7.9. Implementing Binary Relations 380
+****** 7.10. Some Special Properties of Binary Relations 386
+****** 7.11. Infinite Sets 396
+****** 7.12. Summary of Chapter 7 401
+****** 7.13. Bibliographic Notes for Chapter 7 402
+***** Chapter 8. The Relational Data Model 403
+****** 8.1. What This Chapter Is About 403
+****** 8.2. Relations 404
+****** 8.3. Keys 411
+****** 8.4. Primary Storage Structures for Relations 414
+****** 8.5. Secondary Index Structures 419
+****** 8.6. Navigation among Relations 423
+****** 8.7. An Algebra of Relations 428
+****** 8.8. Implementing Relational Algebra Operations 436
+****** 8.9. Algebraic Laws for Relations 440
+****** 8.10. Summary of Chapter 8 449
+****** 8.11. Bibliographic Notes for Chapter 8 450
+***** Chapter 9. The Graph Data Model 451
+****** 9.1. What This Chapter Is About 451
+****** 9.2. Basic Concepts 452
+****** 9.3. Implementation of Graphs 459
+****** 9.4. Connected Components of an Undirected Graph 466
+****** 9.5. Minimal Spanning Trees 478
+****** 9.6. Depth-First Search 484
+****** 9.7. Some Uses of Depth-First Search 495
+****** 9.8. Dijkstra’s Algorithm for Finding Shortest Paths 502
+****** 9.9. Floyd’s Algorithm for Shortest Paths 513
+****** 9.10. An Introduction to Graph Theory 521
+****** 9.11. Summary of Chapter 9 526
+****** 9.12. Bibliographic Notes for Chapter 9 527
+***** Chapter 10. Patterns, Automata, and Regular Expressions 529
+****** 10.1. What This Chapter Is About 530
+****** 10.2. State Machines and Automata 530
+****** 10.3. Deterministic and Nondeterministic Automata 536
+****** 10.4. From Nondeterminism to Determinism 547
+****** 10.5. Regular Expressions 556
+****** 10.6. The UNIX Extensions to Regular Expressions 564
+****** 10.7. Algebraic Laws for Regular Expressions 568
+****** 10.8. From Regular Expressions to Automata 571
+****** 10.9. From Automata to Regular Expressions 582
+****** 10.10. Summary of Chapter 10 588
+****** 10.11. Bibliographic Notes for Chapter 10 589
+***** Chapter 11. Recursive Description of Patterns 591
+****** 11.1. What This Chapter Is About 591
+****** 11.2. Context-Free Grammars 592
+****** 11.3. Languages from Grammars 599
+****** 11.4. Parse Trees 602
+****** 11.5. Ambiguity and the Design of Grammars 610
+****** 11.6. Constructing Parse Trees 617
+****** 11.7. A Table-Driven Parsing Algorithm 625
+****** 11.8. Grammars Versus Regular Expressions 634
+****** 11.9. Summary of Chapter 11 640
+****** 11.10. Bibliographic Notes for Chapter 11 641
+***** Chapter 12. Propositional Logic 642
+****** 12.1. What This Chapter Is About 642
+****** 12.2. What Is Propositional Logic? 643
+****** 12.3. Logical Expressions 645
+****** 12.4. Truth Tables 649
+****** 12.5. From Boolean Functions to Logical Expressions 655
+****** 12.6. Designing Logical Expressions by Karnaugh Maps 660
+****** 12.7. Tautologies 669
+****** 12.8. Some Algebraic Laws for Logical Expressions 674
+****** 12.9. Tautologies and Methods of Proof 682
+****** 12.10. Deduction 686
+****** 12.11. Proofs by Resolution 692
+****** 12.12. Summary of Chapter 12 697
+****** 12.13. Bibliographic Notes for Chapter 12 698
+***** Chapter 13. Using Logic to Design Computer Components 699
+****** 13.1. What This Chapter is About 699
+****** 13.2. Gates 700
+****** 13.3. Circuits 701
+****** 13.4. Logical Expressions and Circuits 705
+****** 13.5. Some Physical Constraints on Circuits 711
+****** 13.6. A Divide-and-Conquer Addition Circuit 716
+****** 13.7. Design of a Multiplexer 723
+****** 13.8. Memory Elements 730
+****** 13.9. Summary of Chapter 13 731
+****** 13.10. Bibliographic Notes for Chapter 13 732
+***** Chapter 14. Predicate Logic 733
+****** 14.1. What This Chapter Is About 733
+****** 14.2. Predicates 734
+****** 14.3. Logical Expressions 736
+****** 14.4. Quantifiers 739
+****** 14.5. Interpretations 745
+****** 14.6. Tautologies 751
+****** 14.7. Tautologies Involving Quantifiers 753
+****** 14.8. Proofs in Predicate Logic 759
+****** 14.9. Proofs from Rules and Facts 762
+****** 14.10. Truth and Provability 768
+****** 14.11. Summary of Chapter 14 774
+****** 14.12. Bibliographic Notes for Chapter 14 775
+**** Algorithms Unlocked
+**** HtDP
+**** SICP
+**** EoPL
 ** MIT OpenCourseware
 *** 6.01   - Intro to EE and CompSci
 *** 18.01  - Single Variable Calculus
-*** 6.042  - Mathematics for Computer Science
+**** Derivatives
+***** 0 Recitation: graphing
+***** 1 Derivatives, slope, velocity, rate of change
+***** 2 Limits, continuity // Trigonometric limits
+***** 3 Derivatives of products, quotients, sine, cosine
+***** 4 Chain rule // Higher derivatives
+***** 5 Implicit differentiation, inverses
+***** 6 Exponential and log // Logarithmic differentiation; hyperbolic functions
+***** 7 Hyperbolic functions 
+***** 8 Exam 1 covering Ses #1-7
+**** Applications of Differentiation
+***** 9 Linear and quadratic approximations
+***** 10 Curve sketching
+***** 11 Max-min problems
+***** 12 Related rates
+***** 13 Newton's method and other applications
+***** 14 Mean value theorem // Inequalities
+***** 15 Differentials, antiderivatives
+***** 16 Differential equations, separation of variables
+***** 17 Exam 2 covering Ses #8-16
+**** Integration
+***** 18 Definite integrals
+***** 19 First fundamental theorem of calculus
+***** 20 Second fundamental theorem
+***** 21 Applications to logarithms and geometry
+***** 22 Volumes by disks, shells
+***** 23 Work, average value, probability
+***** 24 Numerical integration
+**** Techniques of Integration
+***** 26 Trigonometric integrals and substitution
+***** 27 Exam 3 covering Ses #18-24
+***** 28 Integration by inverse substitution; completing the square
+***** 29 Partial fractions
+***** 30 Integration by parts, reduction formulae
+***** 31 Parametric equations, arclength, surface area
+***** 32 Polar coordinates; area in polar coordinates
+***** 33 Exam 4 covering Ses #26-32
+***** 34 Indeterminate forms - L'Hôspital's rule
+***** 35 Improper integrals
+***** 36 Infinite series and convergence tests
+***** 37 Taylor's series	
+*** 6.042 -  Mathematics for Computer Science
+**** Part I: Proofs
+***** Chapter 1: Propositions
+***** Chapter 2: Patterns of Proof
+***** Chapter 3: Induction
+***** Chapter 4: Number theory
+**** Part II: Structures
+***** Chapter 5: Graph theory
+***** Chapter 6: Directed graphs
+***** Chapter 7: Relations and partial orders
+***** Chapter 8: State machines
+**** Part III: Counting
+***** Chapter 9: Sums and asymptotics
+***** Chapter 10: Recurrences
+***** Chapter 11: Cardinality rules
+***** Chapter 12: Generating functions
+***** Chapter 13: Infinite sets
+**** Part IV: Probability
+***** Chapter 14: Events and probability spaces
+***** Chapter 15: Conditional probability
+***** Chapter 16: Independence
+***** Chapter 17: Random variables and distributions
+***** Chapter 18: Expectation
+***** Chapter 19: Deviations
+***** Chapter 20: Random walks
 *** 6.006  - Intro to Algorithms
 *** 18.02  - MultiVariable Calculus
 *** 6.046  - Algorithms
 *** 18.310 - Principles of Discrete Applied Math
-
-
-* Foundations of Comp. Sci.
-** Mathematical Foundations
-*** Calculus
-*** Induction
-*** Methods of Proof
-** Logic
-*** Lambda Calculus
-*** Propositional
-*** Predicate
-** Functional Programming
-** Data Structures
-*** 
-** State and Time
-*** Thunks
-*** Promises
-*** Iterator, Generator
-*** Streams
-*** Concurrency
-*** Parallelism
-*** CSP
-** OOP
-*** Patterns
-*** Inheritance
-*** Decorators
-*** Meta Object
-** Interpreters and Compilers
-** Algorithms
-
-
-* Texts for F(CS)
-** Godel, Escher, Bach
-** The Induction Book
-** Elements of Mathematics
-** Induction, Recursion, and Programming (Steven D. Johnson)
-*** Sets
-**** Set Builder Notation
-**** Set Operations
-**** Languages
-**** A Simple Algorithmic Language
-*** Relations, Functions
-**** Functions
-***** Function (and Relation) Composition
-***** Infix Notation
-**** Trees
-**** DAGs
-**** Equivalence Relations
-**** Partial Orders
-*** Propositional Logic and Boolean Algebra
-**** Propositions and Truth Tables
-***** Implication
-**** Truth Tables
-***** Logical Equivalence
-**** Boolean Algebra
-***** Duality
-**** Normal Forms
-***** Decision Diagrams
-**** Application of Boolean Algebra to Hardware Synthesis
-*** Counting
-**** Extended Operations
-**** Cardinality
-**** Permutations and Combinations
-**** Probability, Briefly
-*** Numerical Induction
-**** First Examples
-**** Base Translation
-**** "Strong" Induction
-**** More Examples of Induction
-**** Loop Invariants
-*** Program Analysis, Order, and Countability
-**** Performance Estimation Example
-***** The Program
-***** What Are We Counting?
-***** Estimation gets a lot harder
-**** Order Notation and Order Arithmetic
-**** Cardinality and Countability
-**** Decidability
-*** Induction II
-**** Introduction
-***** The Problem of Self-Reference
-***** Inductively Defined Sets
-***** The Principle of Structural Induction
-***** Defining Functions with Recursion
-***** Evaluation of Recursive Functions
-***** Reasoning About Recursive Functions
-***** Additional Problems
-***** Validity of the Induction Principle
-**** Languages and Meaning
-***** Language Definitions
-***** Defining How Languages are Interpreted
-***** Specifying Precedence
-***** Environments
-***** Backus-Naur Form
-***** Propositional Formulas
-***** Substitution
-***** The Programming Language of Statements
-***** Discussions
-****** Parenthesized Expressions
-** Induction, Recursion, and Programming (Mitchell Wand)
-*** Sets, Graphs, and Relations
-**** Sets, Relations, and Functions
-**** Relations as Graphs
-**** Equivalence Relations
-**** Trees
-**** Representations of Graphs
-**** Permutations and Combinations
-*** Induction and its Applications
-**** Mathematical Induction
-**** Defining Sets by Stages
-**** Defining Sets by Induction
-**** Defining Functions by Induction
-**** Using Global Information
-*** A Language for Programs
-**** Mathematical Data Types
-**** Languages on a Data Type
-**** The Langugage of Terms
-**** The Language of Conditionals
-**** The Language of Expressions
-**** Some Intriguing Examples
-**** Programming by Induction
-**** Proving Recursive Programs Correct
-*** Programs that Manipulate Programs
-**** The Data Type of Lists
-**** Representing Data Types as Lists
-**** The Evaluator for the Language of Expressions
-**** The Halting Problem
-*** The Language of Logic
-**** Languages for Facts and Questions
-**** The Language of Propositional Logic
-**** Substitution
-**** Disjunctive Normal Form
-**** Applications of Propositional Logic
-**** The Language of First-Order Logic
-**** Examples in First-Order Logic
-**** Degrees of Truth
-**** Provability
-*** Provering Assertions About Programs
-**** The Language of Statements
-**** The Language of Assertions
-**** The Soundness of System H
-**** Using System H
-**** Examples in System H
-**** Writing Programs Using Invariants
-**** Handling Arrays
-** MIT OPEN: Single Variable Calculus
-*** Derivatives
-**** 0 Recitation: graphing
-**** 1 Derivatives, slope, velocity, rate of change
-**** 2 Limits, continuity // Trigonometric limits
-**** 3 Derivatives of products, quotients, sine, cosine
-**** 4 Chain rule // Higher derivatives
-**** 5 Implicit differentiation, inverses
-**** 6 Exponential and log // Logarithmic differentiation; hyperbolic functions
-**** 7 Hyperbolic functions 
-**** 8 Exam 1 covering Ses #1-7
-*** Applications of Differentiation
-**** 9 Linear and quadratic approximations
-**** 10 Curve sketching
-**** 11 Max-min problems
-**** 12 Related rates
-**** 13 Newton's method and other applications
-**** 14 Mean value theorem // Inequalities
-**** 15 Differentials, antiderivatives
-**** 16 Differential equations, separation of variables
-**** 17 Exam 2 covering Ses #8-16
-*** Integration
-**** 18 Definite integrals
-**** 19 First fundamental theorem of calculus
-**** 20 Second fundamental theorem
-**** 21 Applications to logarithms and geometry
-**** 22 Volumes by disks, shells
-**** 23 Work, average value, probability
-**** 24 Numerical integration
-*** Techniques of Integration
-**** 26 Trigonometric integrals and substitution
-**** 27 Exam 3 covering Ses #18-24
-**** 28 Integration by inverse substitution; completing the square
-**** 29 Partial fractions
-**** 30 Integration by parts, reduction formulae
-**** 31 Parametric equations, arclength, surface area
-**** 32 Polar coordinates; area in polar coordinates
-**** 33 Exam 4 covering Ses #26-32
-**** 34 Indeterminate forms - L'Hôspital's rule
-**** 35 Improper integrals
-**** 36 Infinite series and convergence tests
-**** 37 Taylor's series	
-** MIT OPEN: Mathematics for Computer Science
-*** Part I: Proofs
-**** Chapter 1: Propositions
-**** Chapter 2: Patterns of Proof
-**** Chapter 3: Induction
-**** Chapter 4: Number theory
-*** Part II: Structures
-**** Chapter 5: Graph theory
-**** Chapter 6: Directed graphs
-**** Chapter 7: Relations and partial orders
-**** Chapter 8: State machines
-*** Part III: Counting
-**** Chapter 9: Sums and asymptotics
-**** Chapter 10: Recurrences
-**** Chapter 11: Cardinality rules
-**** Chapter 12: Generating functions
-**** Chapter 13: Infinite sets
-*** Part IV: Probability
-**** Chapter 14: Events and probability spaces
-**** Chapter 15: Conditional probability
-**** Chapter 16: Independence
-**** Chapter 17: Random variables and distributions
-**** Chapter 18: Expectation
-**** Chapter 19: Deviations
-**** Chapter 20: Random walks
-** Thinking Recursively
-*** The Idea of Recursion
-**** An Illustration of the Recursive Approach
-**** Mondrian and Computer Art
-**** Characteristics of Recursive Algorithms
-**** Nonterminating Recursion
-**** Thinking about Recursion - Two Perspectives
-*** Mathematical Preliminaries
-**** Mathematical Induction
-**** Computational Complexity
-*** Recursive Functions
-**** Functional vs. Procedural Recursion
-**** Factorials
-**** The Fibonacci Sequence
-*** The Procedural Approach
-**** Numeric Output
-**** Generating a Primer
-*** The Tower of Hanoi
-**** The Recursive Solution
-**** The Reductionist View
-*** Permutations
-*** Sorting
-**** Selection Sorting
-**** Merge Sorting
-*** Intelligent Algorithms
-**** Backtracking Through a Maze
-**** Lookahead Strategies
-*** Graphical Applications
-**** Computer Graphics in Pascal
-**** Fractal Geometry
-*** Recursive Data
-**** Representing Strings as Linked Lists
-**** Binary Trees
-**** Expression Trees
-*** Implementation of Recursion
-**** The Control Stack Model
-**** Simulating Recursion
-** The Little Prover
-** The Little Schemer
-** How to Prove It
-** The Book of Proof
-*** Fundamentals
-**** Sets
-***** Introduction to Sets
-***** The Cartesian Product
-***** Subsets
-***** Power Sets
-***** Union, Intersection, Difference
-***** Complement
-***** Venn Diagrams
-***** Indexed Sets
-***** Sets that are Number Systems
-***** Russell's Paradox
-**** Logic
-***** Statements
-***** And, Or, Not
-***** Conditional Statements
-***** Biconditional Statements
-***** Truth Tables for Statements
-***** Logical Equivalence
-***** Quantifiers
-***** More on Conditional Statements
-***** Translating English to Symbolic Logic
-***** Negating Statements
-***** Logical Inference
-***** An Important Note
-**** Counting
-***** Counting Lists
-***** Factorials
-***** Counting Subsets
-***** Pascal's Triangle and the Binomial Theorem
-***** Inclusion-Exclusion
-*** How to Prove Conditional Statements
-**** Direct Proof
-***** Theorems
-***** Definitions
-***** Direct Proof
-***** Using Cases
-***** Treating Similar Cases
-**** Contrapositive Proof
-***** Contrapositive Proof
-***** Congruence of Integers
-***** Mathematical Writing
-**** Proof by Contradiction
-***** Proving Statements with Contradiction
-***** PRoving Conditional Statements by Contradiction
-***** Combinging Techniques
-***** Some Words of Advice
-*** More on Proof
-**** Proving Non-Conditional Statements
-***** If-and-Only-If Proof
-***** Equivalent Statements
-***** Existence Proofs; Existence and Uniqueness Proofs
-***** Constructive Versus Non-constructive Proofs
-**** Proofs Involving Sets
-***** How to Prove a is a member of A 
-***** How to Prove A is a subset of B
-***** How to Prove A = B
-***** Examples: Perfect Numbers
-**** Disproof
-***** Counterexamples
-***** Disprooving Existence Statements
-***** Disproof by Contradiction
-**** Mathematical Induction
-***** Proof by Strong Induction
-***** Proof by Smallest Counterexample
-***** Fibonacci Numbers
-*** Relations, Functions and Cardinality
-**** Relations
-***** Properties of Relations
-***** Equivalence Relations
-***** Equivalence Classes and Partitions
-***** The Integers Modulo n
-***** Relations Between Sets
-**** Functions
-***** Functions
-***** Injective and Surhective Functions
-***** The Pigeonhole Principle
-***** Composition
-***** Inverse Functions
-***** Image and Preimage
-**** Cardinality of Sets
-***** Sets with Equal Cardinalities
-***** Countable and Uncountable Sets
-***** Comparing Cardinalities
-***** The Cantor-Bernstein-Shroeder Theorem
-*** Conclusion
-** Set Theory and Logic
-*** Sets & Relations
-**** Cantor's Comcept of a Set
-**** The Basis of Intuitive Set Theory
-**** Inclusion
-**** Operations for Sets
-**** The Algebra of Sets
-**** Relations
-**** Equivalence Relations
-**** Functions
-**** Composition and Inversion for Functions
-**** Operations for Collections of Sets
-**** Ordering Relations
-*** The Natural Number Sequence and its Generalization
-**** The Natural Number Sequence
-**** Proof and Definition by Induction
-**** Cardinal Numbers
-**** Sountable Sets
-**** Cardinal Arithmetic
-**** Order Types
-**** Well-ordered Sets and Ordinal Numbers
-**** The Axiom of Choice, the Well-ordering Theorem, and Zorn's Lemma
-**** Further PRoperties of Cardinal Numbers
-**** Some Theories Equivalent to the Axiom of Choice
-**** The Paradoxes of Intuitive Set Theory
-*** The Extension of the Natural NUmbers to the Real Numbers
-**** The System of Natural Numbers
-**** Differences
-**** Integers
-**** Rational Numbers
-**** Cauchy Sequences of Rational Numbers
-**** Real Numbers
-**** Further PRoperties of the Real Number System
-*** Logic
-**** The Statement Calculus: Sentential Connectives
-**** The Statement Calculus: Truth Tables
-**** The Statement Calculus: Validity
-**** The Statement Calculus: Consequence
-**** The Statement Calculus: Applications
-**** The Predicate Calculus: Symbolizing Everyday Language
-**** The Predicate Calculus: A Formulation
-**** The Predicate Calculus: Validity
-**** The Predicate Calculus: Consequence
-*** Informal Axiomatic Mathematics
-**** The Concept of an Axiomatic Theory
-**** Informal Theories
-**** Definitions of Axiomatic Theories by Set-theoretical Predicates
-**** Further Features of Informal Theories
-*** Boolean Algebras
-**** A Definition of a Boolean Algebra
-**** Some Basic Properties of a Boolean Algebra
-**** Another Formulation of the Theory
-**** Congruence Relations for a Boolean Algebra
-**** Representations of Boolean Algebras
-**** Statement Calculi as Boolean Algebras
-**** Free Boolean Algebras
-**** Applications of the Theory of Boolean Algebras to Statement Calculi
-**** Further Interconnections b/t Boolean Algebras and Statement Calculi
-*** Informal Axiomatic Set Theory
-**** The Axioms of Extension ans Set Formation
-**** The Axiom of Pairing
-**** The Axioms of Union and Power Set
-**** The Axiom of Infinity
-**** The Axiom of Choice
-**** The Axiom of Schemas of Replacement and Restriction
-**** Ordinal Numbers
-**** Ordinal Arithmetic
-**** Cardinal Numbers and Their Arithmetic
-**** The von-neuman-Bernays-Godel Theory of Sets
-*** Several Algebraic Theories
-**** Features of Algebraic Theories
-**** Definition of a Semigroup
-**** Definition of a Group
-**** Subgroups
-**** Coset Decompositions and Congruence Relations for Groups
-**** Rings, Integral Domains, and Fields
-**** Subrings and Difference Rings
-**** A Characterization of the System of Integers
-**** A Characterization of the System of Rational Numbers
-**** A Characterization of the Real Number System
-*** First-Order Theories
-**** Formal Axiomatic Theories
-**** The Statement Calculus as a Formal Axiomatic Theory
-**** Predicate Calculi of First Order as Formal Axiomatic Theories
-**** First-order Axiomatic Theories
-**** Metamathematics
-**** Consistency and satisfiability of Sets of Formulas
-**** Consistency, Completeness, and Categoricity of First-Order Theories
-**** Turing Machines and Recursive Functions
-**** Some Undecidable and Some Decidable Theories
-**** Godels Theorems
-**** Some Further Remarks about Set Theory
-** An Intro. to FP Through Lambda Calculus
-*** Introduction
-**** Names and values in programming
-**** Names and values in imperative and functional languages
-**** Execution order in imperative and functional languages
-**** Repetition in imperative and functional languages
-**** Data structures in functional languages
-**** Functions as values
-**** The origins of functional languages
-**** Computing and the theory of computing
-**** λ calculus
-**** Summary
-*** λ Calculus
-**** Abstraction
-**** Abstraction in programming languages
-**** Introducing λ Calculus
-**** λ expressions
-**** Simple λ functions
-**** Introducing new syntax
-**** Notations for naming functions and β reduction
-**** Functions from functions
-**** Argument selections and argument pairing functions
-**** Free and Bound Variables
-**** Name clashes and α conversion
-**** Simplification through η reduction
-**** Summary
-*** Conditions, booleans and numbers
-**** Truth calues and conditional expression
-**** NOT
-**** AND
-**** OR
-**** Natural numbers
-**** Simplified notations
-**** Summary
-*** Recursion and Arithmetic
-**** Repetitions, iteration and recursion
-**** Recursion through definitions
-**** Passing a function to itself
-**** Applicative order reduction
-**** Recursion function
-**** Recursion notation
-**** Arithmetic operations
-**** Summary
-*** Types
-**** Types and programming
-**** Types as objects and operations
-**** Representing typed objects
-**** Errors
-**** Booleans
-**** Typed conditional Expression
-**** Numbers and arithmetic
-**** Characters
-**** Repetitive Type Checking
-**** Static and dynamic type checking
-**** Infix operators
-**** Case definitions and structure matching
-**** Summary
-*** Lists and strings
-**** Lists
-**** List representation
-**** Operations on lists
-**** List notation
-**** Lists and evaluation
-**** Deletion from a list
-**** List comparison
-**** Strings
-**** String comparison
-**** Numeric string to number conversion
-**** Structure matching with lists
-**** Ordered linear lists, insertion and sorting
-**** Indexed linear list access
-**** Mapping Functions
-**** Summary
-*** Composite values and trees
-**** Composite values
-**** Processing composite value sequences
-**** Selector functions
-**** Generalized structure matching
-**** Local definitions
-**** Matching composite value results
-**** List inefficiency
-**** Trees
-**** Adding values to ordered binary trees
-**** Binary tree traversal
-**** Binary tree search
-**** Binary trees of composite values
-**** Binary tree efficiency
-**** Curried and uncurried functions
-**** Partial application
-**** Structures, values and functions
-**** Summary
-*** Evaluation
-**** Termination and normal form
-**** Normal order
-**** Applicative order
-**** Consistent applicative order use
-**** Delaying evaluation
-**** Evaluation termination, the halting problem, evaluation equivalence and the Church-Rosser theorems
-**** Infinite objects
-**** Lazy evaluation
-**** Summary
-*** Functional programming in Standard ML
-*** Functional programming and LISP
-** Foundations of Computer Science: C Edition
-*** Chapter 1. Computer Science: The Mechanization of Abstraction 1
-**** 1.1. What This Book Is About 3
-**** 1.2. What This Chapter Is About 6
-**** 1.3. Data Models 6
-**** 1.4. The C Data Model 13
-**** 1.5. Algorithms and the Design of Programs 20
-**** 1.6. Some C Conventions Used Throughout the Book 22
-**** 1.7. Summary of Chapter 1 23
-**** 1.8. Bibliographic Notes for Chapter 1 24
-*** Chapter 2. Iteration, Induction, and Recursion 25
-**** 2.1. What This Chapter Is About 27
-**** 2.2. Iteration 27
-**** 2.3. Inductive Proofs 34
-**** 2.4. Complete Induction 44
-**** 2.5. Proving Properties of Programs 52
-**** 2.6. Recursive Definitions 59
-**** 2.7. Recursive Functions 69
-**** 2.8. Merge Sort: A Recursive Sorting Algorithm 75
-**** 2.9. Proving Properties of Recursive Programs 84
-**** 2.10. Summary of Chapter 2 87
-**** 2.11. Bibliographic Notes for Chapter 2 88
-*** Chapter 3. The Running Time of Programs 89
-**** 3.1. What This Chapter Is About 89
-**** 3.2. Choosing an Algorithm 90
-**** 3.3. Measuring Running Time 91
-**** 3.4. Big-Oh and Approximate Running Time 96
-**** 3.5. Simplifying Big-Oh Expressions 101
-**** 3.6. Analyzing the Running Time of a Program 109
-**** 3.7. A Recursive Rule for Bounding Running Time 116
-**** 3.8. Analyzing Programs with Function Calls 127
-**** 3.9. Analyzing Recursive Functions 132
-**** 3.10. Analysis of Merge Sort 136
-**** 3.11. Solving Recurrence Relations 144
-**** 3.12. Summary of Chapter 3 154
-**** 3.13. Bibliographic Notes for Chapter 3 155
-*** Chapter 4. Combinatorics and Probability 156
-**** 4.1. What This Chapter Is About 156
-**** 4.2. Counting Assignments 157
-**** 4.3. Counting Permutations 160
-**** 4.4. Ordered Selections 167
-**** 4.5. Unordered Selections 170
-**** 4.6. Orderings With Identical Items 178
-**** 4.7. Distribution of Objects to Bins 181
-**** 4.8. Combining Counting Rules 184
-**** 4.9. Introduction to Probability Theory 187
-**** 4.10. Conditional Probability 193
-**** 4.11. Probabilistic Reasoning 203
-**** 4.12. Expected Value Calculations 212
-**** 4.13. Some Programming Applications of Probability 215
-**** 4.14. Summary of Chapter 4 220
-**** 4.15. Bibliographic Notes for Chapter 4 221
-*** Chapter 5. The Tree Data Model 223
-**** 5.1. What This Chapter Is About 223
-**** 5.2. Basic Terminology 224
-**** 5.3. Data Structures for Trees 231
-**** 5.4. Recursions on Trees 239
-**** 5.5. Structural Induction 248
-**** 5.6. Binary Trees 253
-**** 5.7. Binary Search Trees 258
-**** 5.8. Efficiency of Binary Search Tree Operations 268
-**** 5.9. Priority Queues and Partially Ordered Trees 271
-**** 5.10. Heapsort: Sorting with Balanced POTs 280
-**** 5.11. Summary of Chapter 5 284
-**** 5.12. Bibliographic Notes for Chapter 5 285
-*** Chapter 6. The List Data Model 286
-**** 6.1. What This Chapter Is About 286
-**** 6.2. Basic Terminology 287
-**** 6.3. Operations on Lists 291
-**** 6.4. The Linked-List Data Structure 293
-**** 6.5. Array-Based Implementation of Lists 301
-**** 6.6. Stacks 306
-**** 6.7. Implementing Function Calls Using a Stack 312
-**** 6.8. Queues 318
-**** 6.9. Longest Common Subsequences 321
-**** 6.10. Representing Character Strings 327
-**** 6.11. Summary of Chapter 6 334
-**** 6.12. Bibliographic Notes for Chapter 6 335
-*** Chapter 7. The Set Data Model 337
-**** 7.1. What This Chapter Is About 337
-**** 7.2. Basic Definitions 338
-**** 7.3. Operations on Sets 342
-**** 7.4. List Implementation of Sets 351
-**** 7.5. Characteristic-Vector Implementation of Sets 357
-**** 7.6. Hashing 360
-**** 7.7. Relations and Functions 366
-**** 7.8. Implementing Functions as Data 373
-**** 7.9. Implementing Binary Relations 380
-**** 7.10. Some Special Properties of Binary Relations 386
-**** 7.11. Infinite Sets 396
-**** 7.12. Summary of Chapter 7 401
-**** 7.13. Bibliographic Notes for Chapter 7 402
-*** Chapter 8. The Relational Data Model 403
-**** 8.1. What This Chapter Is About 403
-**** 8.2. Relations 404
-**** 8.3. Keys 411
-**** 8.4. Primary Storage Structures for Relations 414
-**** 8.5. Secondary Index Structures 419
-**** 8.6. Navigation among Relations 423
-**** 8.7. An Algebra of Relations 428
-**** 8.8. Implementing Relational Algebra Operations 436
-**** 8.9. Algebraic Laws for Relations 440
-**** 8.10. Summary of Chapter 8 449
-**** 8.11. Bibliographic Notes for Chapter 8 450
-*** Chapter 9. The Graph Data Model 451
-**** 9.1. What This Chapter Is About 451
-**** 9.2. Basic Concepts 452
-**** 9.3. Implementation of Graphs 459
-**** 9.4. Connected Components of an Undirected Graph 466
-**** 9.5. Minimal Spanning Trees 478
-**** 9.6. Depth-First Search 484
-**** 9.7. Some Uses of Depth-First Search 495
-**** 9.8. Dijkstra’s Algorithm for Finding Shortest Paths 502
-**** 9.9. Floyd’s Algorithm for Shortest Paths 513
-**** 9.10. An Introduction to Graph Theory 521
-**** 9.11. Summary of Chapter 9 526
-**** 9.12. Bibliographic Notes for Chapter 9 527
-*** Chapter 10. Patterns, Automata, and Regular Expressions 529
-**** 10.1. What This Chapter Is About 530
-**** 10.2. State Machines and Automata 530
-**** 10.3. Deterministic and Nondeterministic Automata 536
-**** 10.4. From Nondeterminism to Determinism 547
-**** 10.5. Regular Expressions 556
-**** 10.6. The UNIX Extensions to Regular Expressions 564
-**** 10.7. Algebraic Laws for Regular Expressions 568
-**** 10.8. From Regular Expressions to Automata 571
-**** 10.9. From Automata to Regular Expressions 582
-**** 10.10. Summary of Chapter 10 588
-**** 10.11. Bibliographic Notes for Chapter 10 589
-*** Chapter 11. Recursive Description of Patterns 591
-**** 11.1. What This Chapter Is About 591
-**** 11.2. Context-Free Grammars 592
-**** 11.3. Languages from Grammars 599
-**** 11.4. Parse Trees 602
-**** 11.5. Ambiguity and the Design of Grammars 610
-**** 11.6. Constructing Parse Trees 617
-**** 11.7. A Table-Driven Parsing Algorithm 625
-**** 11.8. Grammars Versus Regular Expressions 634
-**** 11.9. Summary of Chapter 11 640
-**** 11.10. Bibliographic Notes for Chapter 11 641
-*** Chapter 12. Propositional Logic 642
-**** 12.1. What This Chapter Is About 642
-**** 12.2. What Is Propositional Logic? 643
-**** 12.3. Logical Expressions 645
-**** 12.4. Truth Tables 649
-**** 12.5. From Boolean Functions to Logical Expressions 655
-**** 12.6. Designing Logical Expressions by Karnaugh Maps 660
-**** 12.7. Tautologies 669
-**** 12.8. Some Algebraic Laws for Logical Expressions 674
-**** 12.9. Tautologies and Methods of Proof 682
-**** 12.10. Deduction 686
-**** 12.11. Proofs by Resolution 692
-**** 12.12. Summary of Chapter 12 697
-**** 12.13. Bibliographic Notes for Chapter 12 698
-*** Chapter 13. Using Logic to Design Computer Components 699
-**** 13.1. What This Chapter is About 699
-**** 13.2. Gates 700
-**** 13.3. Circuits 701
-**** 13.4. Logical Expressions and Circuits 705
-**** 13.5. Some Physical Constraints on Circuits 711
-**** 13.6. A Divide-and-Conquer Addition Circuit 716
-**** 13.7. Design of a Multiplexer 723
-**** 13.8. Memory Elements 730
-**** 13.9. Summary of Chapter 13 731
-**** 13.10. Bibliographic Notes for Chapter 13 732
-*** Chapter 14. Predicate Logic 733
-**** 14.1. What This Chapter Is About 733
-**** 14.2. Predicates 734
-**** 14.3. Logical Expressions 736
-**** 14.4. Quantifiers 739
-**** 14.5. Interpretations 745
-**** 14.6. Tautologies 751
-**** 14.7. Tautologies Involving Quantifiers 753
-**** 14.8. Proofs in Predicate Logic 759
-**** 14.9. Proofs from Rules and Facts 762
-**** 14.10. Truth and Provability 768
-**** 14.11. Summary of Chapter 14 774
-**** 14.12. Bibliographic Notes for Chapter 14 775
-** Algorithms Unlocked
-** HtDP
-** SICP
-** EoPL
