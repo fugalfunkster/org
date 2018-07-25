@@ -1,0 +1,11 @@
+* Component Based Style Reuse : Pete Hunt
+** What are the components?
+** When do we decide a component's style attributes
+** Class name conflicts
+- caused by reliance on descendant selectors + nesting
+- solve with
+  1. No descendant selectors
+  2. Unambiguous namespaces! (BEM/CSS Modules/etc.) Namespacing effectively isolates a component from its neighbots, but not from it's children.
+  3. Component-based reuse, not class reuse. Don't use classes in JS.
+- Inline Styles can accomplish the above! But, it has some drawbacks (media queries, performance, inheritance / css reset, accessibility?)
+

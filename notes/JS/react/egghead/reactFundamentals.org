@@ -10,7 +10,29 @@ extends React.Component
 always has a render method, that returns jsx
 ** Stateless Function Component
 different than a class that extends React.Component
-class components can have state
+class components can have stateclass Toggle extends React.Component {
+  static defaultProps = {onToggle: () => {}}
+  state = {on: false}
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => {
+        this.props.onToggle(this.state.on)
+      },
+    )
+  render() {
+    const {on} = this.state
+    return (
+      <Switch on={on} onClick={this.toggle} />
+    )
+  }
+}
+function App() {
+  return (
+    <Toggle
+      onToggle={on => console.log('toggle', on)}
+    />
+  )
 stateless function components do not have state
 props are passed into SFCs as argument
 ** The Render Method

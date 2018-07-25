@@ -1,0 +1,25 @@
+* CSS GRID Changes Everything
+The history of web layout is a history of css hacks. We can't express that elements are 'next to' each other without wrapping them in non-semantic elements. This was a content-out and one-dimensional approach. You apply css to an element, and then have to relate that element to other things. CSS Grid is a two dimensional layout, that works layout-in.
+** Grid Terminology
+- Grid container
+- Grid item
+- Grid line
+- Grid cell
+- Grid track
+- Grid area
+- Grid gap (aka gutters)
+** Grid in a nutshell
+1. Define a grid
+2. Place items within the grid
+** Browser Support and Progressive Enhancement
+Backwards compatability is possible back to IE 11. Serve up a mobile experience on older browsers. Responsive not just to scren size, also for older browsers. Think about it as progressive enhancement. How?
+1. Build accessible mobile-first layout w/o grid.
+2. Use mobile-first layout as fallback for all browsers.
+3. Use @supports to detect grid support.
+4. At the appropriate breakpoint, create layout with grid and grid-areas.
+5. Explore new layouts as viewport
+** Getting Started
+- Firefox has a grid inspector
+- Rachel Andrew's "Grid By Example" is doctrine - use it to learn grid
+- MDN has good documentation, also CSS-Tricks has a CSS-Grid intro
+- Building Production Ready CSS Grids Today
