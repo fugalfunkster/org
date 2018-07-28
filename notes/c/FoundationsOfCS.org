@@ -1,0 +1,103 @@
+
+Foundations of Computer Science: C Edition
+
+* 1. Computer Science The Mechanization of Abstraction
+** 1.1 What This Book Is About
+** 1.2 What This Chapter Is About
+** 1.3 Data Models
+** 1.4 The C Data Model
+** 1.5 Algorithms and the Design of Programs
+** 1.6 Some C Conventions Used Throughout the Book
+** 1.7 Summary
+* 2. Iteration, Induction, and Recursion
+** 2.1 What this Chapter is About
+** 2.2 Iteration
+** 2.3 Inductive Proofs
+** 2.4 Complete Induction
+** 2.5 Proving Properties of Programs
+** 2.6 Recursive Definitions
+** 2.7 Recursive Functions
+** 2.8 Merge Sort: A Recursive Sorting Algorithm
+** 2.9 Proving Properties of Recursive Programs
+** 2.10 Summary
+* 3. The Running Time of Programs
+** 3.1 What this Chapter is About
+** 3.2 Choosing an Algorithm
+** 3.3 Measuring Running Time
+** 3.4 Big-Oh and Approzimate Running Time
+** 3.5 Simplifying Bigh-Oh Expressions
+** 3.6 Analyzing the Running Time of a Program
+** 3.7 A Recursive Rule for Bounding Running Time
+** 3.8 Analyzing Programs with Function Calls
+** 3.9 Analyzing Recursive Functions
+** 3.10 Analysis of Merge Sort
+** 3.11 Solving Recurrence Relations
+** 3.12 Summary
+* 4. Combinatorics and Probability
+** 4.1 What This Chapter Is About
+** 4.2 Counting Assignments
+** 4.3 Counting Permutations
+** 4.4 Ordered Selections
+** 4.5 Unordered Selections
+** 4.6 Ordering With Identical Items
+** 4.7 Distrubition of Objects to Bins
+** 4.8 Combining Counting Rules
+** 4.9 Introduction to Probability Theory
+** 4.10 Conditional Probability
+** 4.11 Probabilistic Reasoning
+** 4.12 Expected Value Calculations
+** 4.13 Some Programming Applications of Probability
+** 4.14 Summary
+* 5. The Tree Data Model
+* 6. The List Data Model
+* 7. The Set Data Model
+* 8. The Relational Data Model
+* 9. The Graph Data Model
+* 10. Patterns, Automata, and Regular Expressions
+** 10.1 What This Chapter is About
+** 10.2 State Machines and Automata
+** 10.3 Deterministic and Nondeterministic Automata
+** 10.4 From Nondeterminism to Determinism
+** 10.5 Regular Expressions
+** 10.6 The UNIX Extensions to Regular Expressions
+** 10.7 Algebraic Laws for Regular Expressions
+** 10.8 From Regular Expressions to Automata
+** 10.9 From Automata to Regular Expressions
+** 10.10 Summary
+* 11. Recursive Descriptions of Patterns
+** 11.1 What This Chapter Is About
+** 11.2 Context-Free Grammars
+** 11.3 Languages from Grammars
+** 11.4 Parse Trees
+** 11.5 Ambiguity and the Design of Grammars
+** 11.6 Constructing Parse Trees
+** 11.7 A Table-Driven Parsing Algorithm
+** 11.8 Grammar Versus Regular Expressions
+** 11.9 Summary
+* 12. Propositional Logic
+** 12.1 What This Chapter Is About
+** 12.2 What Is Propositional Logic?
+** 12.3 Logical Expressions
+** 12.4 Truth Tables
+** 12.5 From Boolean Functions to Logical Expressions
+** 12.6 Designing Logical Expressions from Karnaugh Maps
+** 12.7 Tautologies
+** 12.8 Some Algebraic Laws for Logical Expressions
+** 12.9 Tautologies and Methods of Proof
+** 12.10 Deduction
+** 12.11 Proofs by Resolution
+** 12.12 Summary
+* 13. Using Logic to Design Computer Components
+* 14. Predicate Logic
+** 14.1 What This Chapter Is About
+** 14.2 Predicates
+** 14.3 Logical Expressions
+** 14.4 Quantifiers
+** 14.5 Interpretations
+** 14.6 Tautologies
+** 14.7 Tautologies Involving Quantifiers
+** 14.8 Proofs in Predicate Logic
+** 14.9 Truth from Rules and Facts
+** 14.10 Truth and Provability
+** 14.11 Summary 
+

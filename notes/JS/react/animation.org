@@ -1,0 +1,14 @@
+* Animating in React: Sarah Drasner
+- Opacity & transforms are cheap for the browser to repaint
+- you can dignal to the browser that a property will change and take advantage of hardware acceleration
+- user requestAnimationFrame instead of setTimeout (moar performant)
+- ReactTransitionGroup + GSAP
+** Reccomended Tools
+*** CSS/SCSS
+- good for small sequences and simple interactions
+- for more than 2, switch to GSAP
+*** GSAP
+- great for sequencing and complex movement
+- cross-browser consistency
+*** React-Motion
+- great for single movements that you'd like to look realistic

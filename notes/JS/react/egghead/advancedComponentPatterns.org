@@ -1,0 +1,965 @@
+Advanced React Component Patterns : Kent C. Dodds - 71:46
+
+stopped @ Lesson 16. Implement a React Contect Provider
+pending updates re: React v.16.3.0
+
+
+* Default Toggle Component
+
+#+BEGIN_SRC js
+class Toggle extends React.Component {
+  static defaultProps = {onToggle: () => {}}
+  state = {on: false}
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => {
+        this.props.onToggle(this.state.on)
+      },
+    )
+  render() {
+    const {on} = this.state
+    return (
+      <Switch on={on} onClick={this.toggle} />
+    )
+  }
+}
+function App() {
+  return (
+    <Toggle
+      onToggle={on => console.log('toggle', on)}
+    />
+  )
+#+END_SRC
+
+A few notes about what Kent did here:
+- First, notice the callback function passed to setState in the toggle method. It passes the new state to 
+  a function from props. The function logs the new state.
+- Next, noatice the defaultProps declaration. If the "onToggle" prop is not passed to the component, the default
+  props are used.
+- How do defaultProps work within Typescript?
+
+* Compound Components
+The compound component pattern allows component authors to encapsulate the component's state and functionality, while providing flexibility to the component's users to determine what to render. When a component's state, functionality, and what is rendered is coupled, modifications to what will be rendered affect the component as a whole: either the component must be modified directly, or the component must provide options, and corresponding control flow, that determine what to render.
+
+Below, we have a handful of function components: =ToggleOn=, =ToggleOff=, and =ToggleButton=. The first two are boolean gates, taking the boolean =on= prop, and rendering =children= appropriatey. =ToggleButton= simply renders the switch component.
+
+The core of this pattern is in the render function of the component that encapsulates the state and functionality. The encapsulating component maps over its children, and passes it's state and functionality as props to the children. In this case, the logic of what to render is contained within the encapsulating component's children, the children determine whether to render or return null. This is not the only way, the function passed to React.Children.map could also contain render logic, but the point is to separate those concerns.
+
+This provides a middle-ground between app state and component state, whereby a component's state and functionality are encapsulated,  transparently passed to its children, and decoupled from how those children will be rendered.
+
+Note that static methods on the encapsulating class component appear as children of the encapsulating component using dot access. This is because JSX tags simply reference and return objects and functions.
+
+See also Ryan Florence's talk on Compound Components : https://www.youtube.com/watch?v=hEGg-3pIHlE
+ 
+#+BEGIN_SRC js
+function ToggleOn({on, children}) {
+  return on ? children : null
+}
+function ToggleOff({on, children}) {
+  return on ? null : children
+}
+function ToggleButton({on, toggle, ...props}) {
+  return (
+    <Switch on={on} onClick={toggle} {...props} />
+  )
+}
+class Toggle extends React.Component {
+  static On = ToggleOn
+  static Off = ToggleOff
+  static Button = ToggleButton
+  static defaultProps = {onToggle: () => {}}
+  state = {on: false}
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => this.props.onToggle(this.state.on),
+    )
+  render() {
+    const children = React.Children.map(
+      this.props.children,
+      child =>
+        React.cloneElement(child, {
+          on: this.state.on,
+          toggle: this.toggle,
+        }),
+    )
+    return <div>{children}</div>
+  }
+}
+
+function App() {
+  return (
+    <Toggle
+      onToggle={on => console.log('toggle', on)}
+    >
+      <Toggle.On>The button is on</Toggle.On>
+      <Toggle.Off>The button is off</Toggle.Off>
+      <Toggle.Button />
+    </Toggle>
+  )
+}
+#+END_SRC
+* Using Context with Compound Components
+The compound components pattern is helpful when the components responsible for rendering the encapsulating component's state are direct children. But this doesn't provide structural flexibility to the component's users. For example, wrapping one of the encapsulating component's children in a div, breaks the relationship that facilitates transparent prop passing. 
+
+NOTE THIS CODE SAMPLE USES THE OLD CONTEXT API
+
+#+BEGIN_SRC js
+const TOGGLE_CONTEXT = '__toggle__'
+function ToggleOn({children}, context) {
+  const {on} = context[TOGGLE_CONTEXT]
+  return on ? children : null
+}
+ToggleOn.contextTypes = {
+  [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
+}
+function ToggleOff({children}, context) {
+  const {on} = context[TOGGLE_CONTEXT]
+  return on ? null : children
+}
+ToggleOff.contextTypes = {
+  [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
+}
+function ToggleButton(props, context) {
+  const {on, toggle} = context[TOGGLE_CONTEXT]
+  return (
+    <Switch on={on} onClick={toggle} {...props} />
+  )
+}
+ToggleButton.contextTypes = {
+  [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
+}
+class Toggle extends React.Component {
+  static On = ToggleOn
+  static Off = ToggleOff
+  static Button = ToggleButton
+  static defaultProps = {onToggle: () => {}}
+  static childContextTypes = {
+    [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
+  }
+
+  state = {on: false}
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => this.props.onToggle(this.state.on),
+    )
+  getChildContext() {
+    return {
+      [TOGGLE_CONTEXT]: {
+        on: this.state.on,
+        toggle: this.toggle,
+      },
+    }
+  }
+  render() {
+    return <div>{this.props.children}</div>
+  }
+}
+
+function App() {
+  return (
+    <Toggle
+      onToggle={on => console.log('toggle', on)}
+    >
+      <Toggle.On>The button is on</Toggle.On>
+      <Toggle.Off>The button is off</Toggle.Off>
+      <div>
+        <Toggle.Button />
+      </div>
+    </Toggle>
+  )
+}
+#+END_SRC
+* Higher Order Components
+Once we refactored the toggle component's children to receive the toggle state through context, context became the only way to access these properties. This could be a problem if we want to use a component that expects these values as props instead of accessing it through context. (Really, it seems improbable that an application would have components that have identical apis for consuming state and functionality, but they intentionally use different methods of consuming those values - props v. context).
+
+However, we can create a higher order component that accesses context, and passes it to its children as props. This is basically a facade pattern, abstracting away the context api by providing a wrapper that accesses context, accepts a component, and returns that component with the context provided as props.
+
+#+BEGIN_SRC js
+const TOGGLE_CONTEXT = '__toggle__'
+const ToggleOn = withToggle(({children, on}) => {
+  return on ? children : null
+})
+const ToggleOff = withToggle(({children, on}) => {
+  return on ? null : children
+})
+const ToggleButton = withToggle(
+  ({on, toggle, ...props}) => {
+    return (
+      <Switch
+        on={on}
+        onClick={toggle}
+        {...props}
+      />
+    )
+  },
+)
+class Toggle extends React.Component {
+  static On = ToggleOn
+  static Off = ToggleOff
+  static Button = ToggleButton
+  static defaultProps = {onToggle: () => {}}
+  static childContextTypes = {
+    [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
+  }
+
+  state = {on: false}
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => this.props.onToggle(this.state.on),
+    )
+  getChildContext() {
+    return {
+      [TOGGLE_CONTEXT]: {
+        on: this.state.on,
+        toggle: this.toggle,
+      },
+    }
+  }
+  render() {
+    return <div>{this.props.children}</div>
+  }
+}
+
+function withToggle(Component) {
+  function Wrapper(props, context) {
+    const toggleContext = context[TOGGLE_CONTEXT]
+    return (
+      <Component {...toggleContext} {...props} />
+    )
+  }
+  Wrapper.contextTypes = {
+    [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
+  }
+  return Wrapper
+}
+
+const MyToggle = withToggle(({on, toggle}) => (
+  <button onClick={toggle}>
+    {on ? 'on' : 'off'}
+  </button>
+))
+
+function App() {
+  return (
+    <Toggle
+      onToggle={on => console.log('toggle', on)}
+    >
+      <Toggle.On>The button is on</Toggle.On>
+      <Toggle.Off>The button is off</Toggle.Off>
+      <Toggle.Button />
+      <hr />
+      <MyToggle />
+    </Toggle>
+  )
+}
+#+END_SRC
+
+Sometimes, this might result in namespace collisions between a component's props, and the context that are passed as props - but this only really happens when you're spreading both the context object and props into a component. So, don't spread context, and instead destructure it in the component that receives props...
+* Ref as props w/ HOCs
+HOC wrappers are usually stateless function components. And, SFCs cannot be given refs. So, if we want a ref to the component, we need to drill through the HOC and declare the ref on the inner component. We do this by creating a ref-like prop on the HOC, called innerRef, and give that prop the value we want the ref to have. Then, in the HOC's returned component, we assign the value of the innerRef prop to a ref prop.
+
+#+BEGIN_SRC js
+const TOGGLE_CONTEXT = '__toggle__'
+const ToggleOn = ({children, toggle: {on}}) => {
+  return on ? children : null
+}
+const ToggleOff = ({children, toggle: {on}}) => {
+  return on ? null : children
+}
+const ToggleButton = ({
+  toggle: {on, toggle},
+  ...props
+}) => {
+  return (
+    <Switch on={on} onClick={toggle} {...props} />
+  )
+}
+class Toggle extends React.Component {
+  static On = withToggle(ToggleOn)
+  static Off = withToggle(ToggleOff)
+  static Button = withToggle(ToggleButton)
+  static defaultProps = {onToggle: () => {}}
+  static childContextTypes = {
+    [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
+  }
+
+  state = {on: false}
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => this.props.onToggle(this.state.on),
+    )
+  getChildContext() {
+    return {
+      [TOGGLE_CONTEXT]: {
+        on: this.state.on,
+        toggle: this.toggle,
+      },
+    }
+  }
+  render() {
+    return <div>{this.props.children}</div>
+  }
+}
+
+function withToggle(Component) {
+  function Wrapper(
+    {innerRef, ...props},
+    context,
+  ) {
+    const toggleContext = context[TOGGLE_CONTEXT]
+    return (
+      <Component
+        {...props}
+        ref={innerRef}
+        toggle={toggleContext}
+      />
+    )
+  }
+  Wrapper.contextTypes = {
+    [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
+  }
+  Wrapper.displayName = `withToggle(${Component.displayName ||
+    Component.name})`
+  return Wrapper
+}
+
+class MyToggle extends React.Component {
+  focus = () => this.button.focus()
+  render() {
+    const {toggle: {on, toggle}} = this.props
+    return (
+      <button
+        onClick={toggle}
+        ref={button => (this.button = button)}
+      >
+        {on ? 'on' : 'off'}
+      </button>
+    )
+  }
+}
+
+const MyToggleWrapper = withToggle(MyToggle)
+
+class App extends React.Component {
+  render() {
+    return (
+      <Toggle
+        onToggle={on =>
+          on ? this.myToggle.focus() : null}
+      >
+        <Toggle.On>The button is on</Toggle.On>
+        <Toggle.Off>The button is off</Toggle.Off>
+        <Toggle.Button />
+        <hr />
+        <MyToggleWrapper
+          innerRef={myToggle =>
+            (this.myToggle = myToggle)}
+        />
+      </Toggle>
+    )
+  }
+}
+#+END_SRC
+
+* Render Props
+See also Michael Jackson's talk on HOCs : https://www.youtube.com/watch?v=BcVAq3YFiuc
+And, the React documentation : https://reactjs.org/docs/render-props.html
+** Using Render Props instead of HOCs
+Pain points of HOCs:
+- possible namespace collisions (minor, and also a possible problem with Render Props)
+- indirection - what state is coming from where
+- HOCs require you to wrap everything that needs the state.
+- It can be onerous to type an HOC in typescript
+- Where does composition occur? With render props, composition takes place dynamically - during the life of the component, specifically during the render function's execution. With HOCs composition happens statically, during the creation of the components.
+
+#+BEGIN_SRC js
+class Toggle extends React.Component {
+  static defaultProps = {onToggle: () => {}}
+  state = {on: false}
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => this.props.onToggle(this.state.on),
+    )
+  render() {
+    return this.props.render({
+      on: this.state.on,
+      toggle: this.toggle,
+    })
+  }
+}
+
+function MyToggle({on, toggle}) {
+  return (
+    <button onClick={toggle}>
+      {on ? 'on' : 'off'}
+    </button>
+  )
+}
+
+function App() {
+  return (
+    <Toggle
+      onToggle={on => console.log('toggle', on)}
+      render={({on, toggle}) => (
+        <div>
+          {on
+            ? 'The button is on'
+            : 'The button is off'}
+          <Switch on={on} onClick={toggle} />
+          <hr />
+          <MyToggle on={on} toggle={toggle} />
+        </div>
+      )}
+    />
+  )
+}
+#+END_SRC
+
+** Prop Collections
+Using render props also allows you to pass along props that are common to a use case. For example, if for every toggle component
+we want to provide aria-expanded, and onClick props, we can pass those through the render props.
+
+#+BEGIN_SRC js
+const compose = (...fns) => (...args) =>
+  fns.forEach(fn => fn && fn(...args))
+class Toggle extends React.Component {
+  static defaultProps = {onToggle: () => {}}
+  state = {on: false}
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => this.props.onToggle(this.state.on),
+    )
+  render() {
+    return this.props.render({
+      on: this.state.on,
+      toggle: this.toggle,
+      togglerProps: {
+        'aria-expanded': this.state.on,
+        onClick: this.toggle,
+      },
+    })
+  }
+}
+
+function App() {
+  return (
+    <Toggle
+      onToggle={on => console.log('toggle', on)}
+      render={({on, toggle, togglerProps}) => (
+        <div>
+          <Switch on={on} {...togglerProps} />
+          <hr />
+          <button {...togglerProps}>
+            {on ? 'on' : 'off'}
+          </button>
+        </div>
+      )}
+    />
+  )
+}
+#+END_SRC
+
+** Prop Getters with Render Props
+Sometimes, direct props will overwrite props provided by an encapsulating component. The previous example has an =onClick= prop in =togglerProps=. If the user of the Toggle component wanted to put an =onClick= handler on the button component, the two click handlers would collide.
+
+One way the user can solve this is to call the togglerProps.onClick function in the direct onClick prop. But this requires the user to know implementation details of the toggle component, which breaks the abstraction barrier.
+
+Instead, we can compose the two click handlers. 
+
+I don't think this is much better. It still requires the component author to forsee the user's use cases in order to compose the colliding methods. And it requires the user to use the getTogglerProps function.
+
+#+BEGIN_SRC js
+const compose = (...fns) => (...args) =>
+  fns.forEach(fn => fn && fn(...args))
+
+class Toggle extends React.Component {
+  static defaultProps = {onToggle: () => {}}
+  state = {on: false}
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => this.props.onToggle(this.state.on),
+    )
+  getTogglerProps = (
+    {onClick, ...props} = {},
+  ) => {
+    return {
+      'aria-expanded': this.state.on,
+      onClick: compose(onClick, this.toggle),
+      ...props,
+    }
+  }
+  render() {
+    return this.props.render({
+      on: this.state.on,
+      toggle: this.toggle,
+      getTogglerProps: this.getTogglerProps,
+    })
+  }
+}
+
+function App() {
+  return (
+    <Toggle
+      onToggle={on => console.log('toggle', on)}
+      render={({on, toggle, getTogglerProps}) => (
+        <div>
+          <Switch
+            on={on}
+            {...getTogglerProps()}
+          />
+          <hr />
+          <button
+            {...getTogglerProps({
+              onClick: () => alert('hi'),
+              id: 'hi',
+            })}
+          >
+            {on ? 'on' : 'off'}
+          </button>
+        </div>
+      )}
+    />
+  )
+}
+#+END_SRC
+* State Initializers
+If you want to have the initial state configurable by the component's user:
+
+#+BEGIN_SRC js
+const compose = (...fns) => (...args) =>
+  fns.forEach(fn => fn && fn(...args))
+
+class Toggle extends React.Component {
+  static defaultProps = {
+    defaultOn: false,
+    onToggle: () => {},
+    onReset: () => {},
+  }
+  initialState = {on: this.props.defaultOn}
+  state = this.initialState
+  reset = () =>
+    this.setState(this.initialState, () =>
+      this.props.onReset(this.state.on),
+    )
+  toggle = () =>
+    this.setState(
+      ({on}) => ({on: !on}),
+      () => this.props.onToggle(this.state.on),
+    )
+  getTogglerProps = (
+    {onClick, ...props} = {},
+  ) => ({
+    onClick: compose(onClick, this.toggle),
+    'aria-expanded': this.state.on,
+    ...props,
+  })
+  render() {
+    return this.props.render({
+      on: this.state.on,
+      toggle: this.toggle,
+      reset: this.reset,
+      getTogglerProps: this.getTogglerProps,
+    })
+  }
+}
+
+function App() {
+  return (
+    <Toggle
+      defaultOn={true}
+      onToggle={on => console.log('toggle', on)}
+      onReset={on => console.log('reset', on)}
+      render={toggle => (
+        <div>
+          <Switch
+            {...toggle.getTogglerProps({
+              on: toggle.on,
+            })}
+          />
+          <hr />
+          <button onClick={() => toggle.reset()}>
+            Reset
+          </button>
+        </div>
+      )}
+    />
+  )
+}
+#+END_SRC
+* Controlled Components
+A component author can also make a component controllable, meaning that the component's parent assumes control over some aspect of the component's state. Here, the =Toggle= component's =on= state is controlled the parent =App= component. 
+
+To accomplish this, the component's author can optionally accept a state value as props, and instead of managing the state internally, defer to props via a this.is___Controlled predicate whenever a state change is triggered.
+
+This results in a tight coupling of the controlling parent and the controlled component. In order to effectively manage the state of the controlled component, the parent must provide not only state, but all state manipulating methods, as props to the controlled component. 
+
+#+BEGIN_SRC js
+const compose = (...fns) => (...args) =>
+  fns.forEach(fn => fn && fn(...args))
+
+class Toggle extends React.Component {
+  static defaultProps = {
+    defaultOn: false,
+    onToggle: () => {},
+    onReset: () => {},
+  }
+  initialState = {on: this.props.defaultOn}
+  state = this.initialState
+  reset = () => {
+    if (this.isOnControlled()) {
+      this.props.onReset(!this.props.on)
+    } else {
+      this.setState(this.initialState, () =>
+        this.props.onReset(this.state.on),
+      )
+    }
+  }
+  toggle = () => {
+    if (this.isOnControlled()) {
+      this.props.onToggle(!this.props.on)
+    } else {
+      this.setState(
+        ({on}) => ({on: !on}),
+        () => this.props.onToggle(this.state.on),
+      )
+    }
+  }
+  getTogglerProps = (
+    {onClick, ...props} = {},
+  ) => ({
+    onClick: compose(onClick, this.toggle),
+    'aria-expanded': this.state.on,
+    ...props,
+  })
+  isOnControlled() {
+    return this.props.on !== undefined
+  }
+  render() {
+    return this.props.render({
+      on: this.isOnControlled()
+        ? this.props.on
+        : this.state.on,
+      toggle: this.toggle,
+      reset: this.reset,
+      getTogglerProps: this.getTogglerProps,
+    })
+  }
+}
+
+class App extends React.Component {
+  initialState = {timesClicked: 0, on: false}
+  state = this.initialState
+  handleToggle = () => {
+    this.setState(({timesClicked, on}) => ({
+      timesClicked: timesClicked + 1,
+      on: timesClicked >= 4 ? false : !on,
+    }))
+  }
+  handleReset = () => {
+    this.setState(this.initialState)
+  }
+
+  render() {
+    const {timesClicked, on} = this.state
+    return (
+      <Toggle
+        on={on}
+        onToggle={this.handleToggle}
+        onReset={this.handleReset}
+        render={toggle => (
+          <div>
+            <Switch
+              {...toggle.getTogglerProps({
+                on: toggle.on,
+              })}
+            />
+            {timesClicked > 4 ? (
+              <div>
+                Whoa, you've clicked too much!
+                <br />
+                <button onClick={toggle.reset}>
+                  reset
+                </button>
+              </div>
+            ) : timesClicked > 0 ? (
+              <div>
+                Click count: {timesClicked}
+              </div>
+            ) : null}
+          </div>
+        )}
+      />
+    )
+  }
+}
+#+END_SRC
+
+* Context Provider Pattern and Redux
+** Implement a React Context Provider (old)
+
+#+BEGIN_SRC js
+const compose = (...fns) => (...args) =>
+  fns.forEach(fn => fn && fn(...args))
+
+class Toggle extends React.Component {
+  static defaultProps = {
+    defaultOn: false,
+    onToggle: () => {},
+    onReset: () => {},
+  }
+  initialState = {on: this.props.defaultOn}
+  state = this.initialState
+  reset = () => {
+    if (this.isOnControlled()) {
+      this.props.onReset(!this.props.on)
+    } else {
+      this.setState(this.initialState, () =>
+        this.props.onReset(this.state.on),
+      )
+    }
+  }
+  toggle = () => {
+    if (this.isOnControlled()) {
+      this.props.onToggle(!this.props.on)
+    } else {
+      this.setState(
+        ({on}) => ({on: !on}),
+        () => this.props.onToggle(this.state.on),
+      )
+    }
+  }
+  getTogglerProps = (
+    {onClick, ...props} = {},
+  ) => ({
+    onClick: compose(onClick, this.toggle),
+    'aria-expanded': this.state.on,
+    ...props,
+  })
+  isOnControlled() {
+    return this.props.on !== undefined
+  }
+  render() {
+    return this.props.render({
+      on: this.isOnControlled()
+        ? this.props.on
+        : this.state.on,
+      toggle: this.toggle,
+      reset: this.reset,
+      getTogglerProps: this.getTogglerProps,
+    })
+  }
+}
+
+class ToggleProvider extends React.Component {
+  static contextName = '__toggle__'
+  static Renderer = class extends React.Component {
+    static childContextTypes = {
+      [ToggleProvider.contextName]:
+        PropTypes.object.isRequired,
+    }
+    getChildContext() {
+      return {
+        [ToggleProvider.contextName]: this.props
+          .toggle,
+      }
+    }
+    render() {
+      return this.props.children
+    }
+  }
+  render() {
+    const {
+      children,
+      ...remainingProps
+    } = this.props
+    return (
+      <Toggle
+        {...remainingProps}
+        render={toggle => (
+          <ToggleProvider.Renderer
+            toggle={toggle}
+            children={children}
+          />
+        )}
+      />
+    )
+  }
+}
+
+function ConnectedToggle(props, context) {
+  return props.render(
+    context[ToggleProvider.contextName],
+  )
+}
+ConnectedToggle.contextTypes = {
+  [ToggleProvider.contextName]:
+    PropTypes.object.isRequired,
+}
+
+function Nav() {
+  return (
+    <ConnectedToggle
+      render={toggle => (
+        <nav style={{flex: 1}}>
+          <ul
+            style={{
+              display: 'flex',
+              justifyContent: 'space-around',
+              listStyle: 'none',
+              paddingLeft: '0',
+            }}
+          >
+            <li>
+              <a href="index.html">
+                {toggle.on ? '🏡' : 'Home'}
+              </a>
+            </li>
+            <li>
+              <a href="/about/">
+                {toggle.on ? '❓' : 'About'}
+              </a>
+            </li>
+            <li>
+              <a href="/blog/">
+                {toggle.on ? '📖' : 'Blog'}
+              </a>
+            </li>
+          </ul>
+        </nav>
+      )}
+    />
+  )
+}
+
+function NavSwitch() {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        textAlign: 'center',
+      }}
+    >
+      <div>
+        <ConnectedToggle
+          render={toggle =>
+            toggle.on ? '🦄' : 'Enable Emoji'}
+        />
+      </div>
+      <ConnectedToggle
+        render={toggle => (
+          <Switch
+            {...toggle.getTogglerProps({
+              on: toggle.on,
+            })}
+          />
+        )}
+      />
+    </div>
+  )
+}
+
+function Header() {
+  return (
+    <div>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+        }}
+      >
+        <Nav />
+        <NavSwitch />
+      </div>
+    </div>
+  )
+}
+
+function Subtitle() {
+  return (
+    <ConnectedToggle
+      render={toggle =>
+        toggle.on
+          ? '👩‍🏫 👉 🕶'
+          : 'Teachers are awesome'}
+    />
+  )
+}
+
+function Title() {
+  return (
+    <div>
+      <h1>
+        <ConnectedToggle
+          render={toggle =>
+            `Who is ${toggle.on
+              ? '🕶❓'
+              : 'awesome?'}`}
+        />
+      </h1>
+      <Subtitle />
+    </div>
+  )
+}
+
+function Article() {
+  return (
+    <div>
+      <ConnectedToggle
+        render={toggle =>
+          [
+            'Once, I was in',
+            toggle.on ? '🏫‍' : 'school',
+            'when I',
+            toggle.on ? '🤔' : 'realized',
+            'something...',
+          ].join(' ')}
+      />
+      <hr />
+      <ConnectedToggle
+        render={toggle =>
+          [
+            'Without',
+            toggle.on ? '👩‍🏫' : 'teachers',
+            `I wouldn't know anything so`,
+            toggle.on ? '🙏' : 'thanks',
+            toggle.on ? '👩‍🏫❗️' : 'teachers!',
+          ].join(' ')}
+      />
+    </div>
+  )
+}
+
+function Post() {
+  return (
+    <div>
+      <Title />
+      <Article />
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <ToggleProvider>
+      <div>
+        <Header />
+        <Post />
+      </div>
+    </ToggleProvider>
+  )
+}
+#+END_SR
+
+
+
