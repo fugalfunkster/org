@@ -175,577 +175,6 @@
 *** TODO Regular Expressions (brave)
 
 
-* Compound Data: Collections & Seqs
-** Immutability and Persistence
-Collections have two important features: immutability and persistence. Immutable 
-collections cannot be changed. Instead, the data in a collection is shared by 
-collections created from the original collection. Thus, a function that "adds" a
-new value to an existing collection does no such thing; It instead returns a 
-new collection, containing the new value, and references to each value in the 
-original collection. This is called structural sharing.
-  We can observe structural sharing using identical?, a predicate that tells us
-whether two valuesa are the same object in memory:
-
-#+BEGIN_SRC clojure :results output
-  (let [xs (list 1 2 3)
-        ys (cons 0 xs)]
-    (println "xs:" xs)
-    (println "ys:" ys)
-    (println "rest ys:" (rest ys))
-    (println (identical? xs (rest ys))))
-#+END_SRC
-
-#+RESULTS:
-: xs: (1 2 3)
-: ys: (0 1 2 3)
-: rest ys: (1 2 3)
-: true
-
-** The Collection Abstraction (brave)
-All collections support functions =count=, =conj=, and =seq=. However, different
-collection types implement these functions in different ways. For example, =conj= 
-returns a new collection from an existing collection and a value. When =conj= is 
-applied to a list, the new value appears at the beginning of the new list. But, 
-when =conj= is applied to a vector, the new value appears at the end of the new 
-vector. In both cases =conj= returns a new collection with a new value, but the 
-implementation is different.
-** The Sequence Abstraction
-Collections also provide a consistent interface to a category of functions called 
-'sequence functions,' which include =first=, =rest=, and =cons=. The =seq= function accepts a collection and returns a sequence. The sequence interface permits 'walking:' accessing the elements of the collection as sequences of values. When sequence functions are applied to collections, the collection is first represented as a sequence, and then the sequence function is performed.
-*** rest & next
-rest and next are similar function, but when they are passed an empty collection their behavior differs.
-
-#+BEGIN_SRC clojure :results output
-  (println (rest []))
-  (println (next []))
-#+END_SRC
-
-#+RESULTS:
-: ()
-: nil
-*** nil is sorta seqable
-Check it out:
-
-#+BEGIN_SRC clojure :results output
-  (println (seq nil))
-  (println (first nil))
-  (println (rest nil))
-#+END_SRC
-
-#+RESULTS:
-: nil
-: nil
-: ()
-
-*** TODO Treating Lists, Vectors, Sets and Maps as Sequences
-*** TODO Abstraction Through Indirection
-** Types of Collections
-*** Lists
-In Clojure, lists are singly linked lists. Lists are syntatictally important in 
-any LISP; See also 'Compound Expressions'. Lists are enclosed in parens, and 
-preceded with a ' to prevent evaluation of the list as an expression. Lists are 
-very efficient for sequential access to elements, and acesss to the first item 
-in a list is very fast. 
-**** Create a list
-***** list literal
-
-#+BEGIN_SRC clojure
-  '(1 true "three" :four nil)
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | nil |
-
-***** programmatically
-#+BEGIN_SRC clojure
-  ( list 1 true "three" :four nil)
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | nil |
-
-**** Lists as seqs
-***** first
-
-#+BEGIN_SRC clojure
-  (first '(1 true "three" :four nil))
-#+END_SRC
-
-#+RESULTS:
-: 1
-
-***** rest
-
-#+BEGIN_SRC clojure
-  (rest '(1 true "three" :four nil))
-#+END_SRC
-
-#+RESULTS:
-| true | three | :four | nil |
-
-***** cons
-
-#+BEGIN_SRC clojure
-  (cons 0 '(1 2 3 4))
-#+END_SRC
-
-#+RESULTS:
-| 0 | 1 | 2 | 3 | 4 |
-
-**** Lists as stacks
-***** peek
-
-#+BEGIN_SRC clojure
-  (peek '(1 true "three" :four nil))
-#+END_SRC
-
-#+RESULTS:
-: 1
-
-***** pop
-
-#+BEGIN_SRC clojure
-  (pop '(1 true "three" :four nil))
-#+END_SRC
-
-#+RESULTS:
-| true | three | :four | nil |
-
-***** conj (equivalent to push for list-stacks)
-
-#+BEGIN_SRC clojure
-  (conj '(1 2 3 4) 0)
-#+END_SRC
-
-#+RESULTS:
-| 0 | 1 | 2 | 3 | 4 |
-
-*** Vectors
-Vectors provide fast index access, and grow from their tail. When creating a vector, every item is evaluated before being stored.
-**** Create a vector
-***** literal
-
-#+BEGIN_SRC clojure
-  [1 true "three" :four nil]
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | nil |
-
-***** programatically
-
-#+BEGIN_SRC clojure
-  (vector 1 true "three" :four nil)
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | nil |
-
-**** nth
-
-#+BEGIN_SRC clojure
-  (nth [1 true "three" :four nil] 3)
-#+END_SRC
-
-#+RESULTS:
-: :four
-
-**** last
-
-#+BEGIN_SRC clojure
-  (last [1 true "three" :four nil])
-#+END_SRC
-
-#+RESULTS:
-: nil
-
-**** Vectors as Stacks
-***** peek
-
-#+BEGIN_SRC clojure
-  (peek [1 true "three" :four "something"])
-#+END_SRC
-
-#+RESULTS:
-: something
-
-***** pop
-
-#+BEGIN_SRC clojure
-  (pop [1 true "three" :four "something"])
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four |
-
-***** conj
-
-#+BEGIN_SRC clojure
-  (conj [1 true "three" :four "something"] "else")
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | something | else |
-
-**** Vectors as Associative Collections
-Because vectors access values in relation to numerical indexes - a type of key - we can use the assoc function to return a new collection with a different value at a specified index. Note that Clojure won't permit us to create sparse arrays, and we can only specify existing indexes or the index after the last item - effectively conjing the value onto the vector.
-
-#+BEGIN_SRC clojure
-  (assoc [1 2 3 5 5 6 7] 3 4)
-#+END_SRC
-
-#+RESULTS:
-| 1 | 2 | 3 | 4 | 5 | 6 | 7 |
-
-Vectors are functions of their keys.
-
-#+BEGIN_SRC clojure
-  ([1 2 3 4 5 6 7] 3)
-#+END_SRC
-
-#+RESULTS:
-: 4
-
-**** mapv & filterv
-The map and filter functions return lazy seqs, but it is common to need a fully realized seq instead. We can accomplish this when working with vectors by using mapv and filterv. This form is also faster. 
-
-#+BEGIN_SRC clojure :results output
-
-  (println (type (mapv inc [1 2 3 4])))
-#+END_SRC
-
-#+RESULTS:
-: clojure.lang.PersistentVector
-
-*** Maps
-Maps are associative collections that store key value pairs. Every item is evaluated before being stored in 
-a map, like vectors, but the order of evaluation is indeterminate - we can't predict what order a map's 
-items will surface in. However, other relatives, like the sorted-maps, do provide ordering guarantees.
-  It is most common to use keywords as the keys in a map, in great part because keywords can be used as 
-functions that take the map as an argument and return the corresponding value if the key is present in the 
-map.
-**** Create a map
-***** literal
-
-#+BEGIN_SRC clojure
-  {:key "value"}
-#+END_SRC
-
-#+RESULTS:
-| :key | value | 
-
-***** programmatically
-
-#+BEGIN_SRC clojure
-  (hash-map :key "value")
-#+END_SRC
-
-#+RESULTS:
-| :key | value |
-
-**** Element retrieval with get, keyword access, and default values
-***** get
-#+BEGIN_SRC clojure
-  (get {:a "A" :b "B" :c "C"} :a)
-#+END_SRC
-
-#+RESULTS:
-: A
-
-***** keyword access
-
-#+BEGIN_SRC clojure
-  (:a {:a "A" :b "B" :c "C"})
-#+END_SRC
-
-#+RESULTS:
-: A
-
-***** default values
-
-#+BEGIN_SRC clojure
-  (:d {:a "A" :b "B" :c "C"} "not found")
-#+END_SRC
-
-#+RESULTS:
-: not found
-**** assoc & dissoc
-***** assoc
-#+BEGIN_SRC clojure
-  (assoc {:a "A" :b "B" :c "C"} :d "D")
-#+END_SRC
-
-#+RESULTS:
-| :a | A | :b | B | :c | C | :d | D |
-
-***** dissoc
-
-#+BEGIN_SRC clojure
-  (dissoc {:a "A" :b "B" :c "C"} :a)
-#+END_SRC
-
-#+RESULTS:
-| :b | B | :c | C |
-**** keys & vals
-***** keys
-
-#+BEGIN_SRC clojure
-  (keys {:a "A" :b "B" :c "C"})
-#+END_SRC
-
-#+RESULTS:
-| :a | :b | :c |
-
-***** vals
-
-#+BEGIN_SRC clojure
-  (vals {:a "A" :b "B" :c "C"})
-#+END_SRC
-
-#+RESULTS:
-| A | B | C |
-
-**** merge
-
-#+BEGIN_SRC clojure
-  (merge {:a "A" :b "B" :c "C"} {:d "D" :e "E" :f "F"})
-#+END_SRC
-
-#+RESULTS:
-| :a | A | :b | B | :c | C | :d | D | :e | E | :f | F |
-
-*** Sets
-Sets are collections of unique values. No duplicate values are allowed when creating a set, even when 
-nesting sets. Like maps, sets are unordered, but have ordered relatives such as sorted-set and 
-sorted-set-by.
-**** Create a set
-***** literal
-
-#+BEGIN_SRC clojure
-  #{1 2 3 4}
-#+END_SRC
-
-#+RESULTS:
-: #{1 4 3 2}
-
-***** programatically
-
-#+BEGIN_SRC clojure
-  (hash-set 1 2 3 4)
-#+END_SRC
-
-#+RESULTS:
-: #{1 4 3 2}
-
-**** Element retrieval with get, keyword access, set access, & contains?
-***** get
-
-#+BEGIN_SRC clojure
-  (get #{1 2 3 4} 2)
-#+END_SRC
-
-#+RESULTS:
-: 2
-
-***** keyword access
-
-#+BEGIN_SRC clojure
-  (:b #{:a :b :c :d})
-#+END_SRC
-
-#+RESULTS:
-: :b
-
-***** set access
-
-#+BEGIN_SRC clojure
-  (#{:a :b :c :d} :b)
-#+END_SRC
-
-#+RESULTS:
-: :b
-
-***** contains?
-
-#+BEGIN_SRC clojure
-  (contains? #{1 2 3 4} 2)
-#+END_SRC
-
-#+RESULTS:
-: true
-
-**** conj & disj
-***** conj
-
-#+BEGIN_SRC clojure
-  (conj #{1 2 3 4} 5)
-#+END_SRC
-
-#+RESULTS:
-: #{1 4 3 2 5}
-
-***** disj
-
-#+BEGIN_SRC clojure
-  (disj #{1 2 3 4} 4)
-#+END_SRC
-
-#+RESULTS:
-: #{1 3 2}
-
-**** Using the clojure.set library
-***** clojure.set/union
-
-#+BEGIN_SRC clojure
-  (clojure.set/union #{1 2 3 4} #{3 4 5})
-#+END_SRC
-
-#+RESULTS:
-: #{1 4 3 2 5}
-
-***** clojure.set/difference
-
-#+BEGIN_SRC clojure
-  (clojure.set/difference #{1 2 3 4} #{3 4 5})
-#+END_SRC
-
-#+RESULTS:
-: #{1 2}
-
-***** clojure.set/intersection
-
-#+BEGIN_SRC clojure
-  (clojure.set/intersection #{1 2 3 4} #{3 4 5})
-#+END_SRC
-
-#+RESULTS:
-: #{4 3}
-*** Queues
-Queues largely borrow the semantics of stacks. But, where a stack peeks and conjs to the same 'end', a queue peeks data from one end, and conj's it to another end.
-**** crete a queue
-Creating a queue is not as straightforward as other collections, and requires literal syntax.
-
-#+BEGIN_SRC clojure
-  (def pg #queue [1 2 3 4 5])
-#+END_SRC
-
-#+RESULTS:
-
-**** peek
-
-#+BEGIN_SRC clojure :results output
-  (def pq #queue [1 2 3 4 5])
-  (peek pq)
-#+END_SRC
-
-#+RESULTS:
-
-**** conj
-
-#+BEGIN_SRC clojure :results output
-  (def pq #queue [1 2 3 4 5])
-  (conj pq 5)
-#+END_SRC** The Power of Laziness (lc) / Lazy seqs (brave) / Laziness (cu)
-"Most of ClojureScript's sequence-returning functions generate lazy sequences instead of 
-eagerly creating a whole new sequence. Lazy sequences generate their contents as they are 
-requested, usually when iterating over them. Laziness ensures that we don't do more work than 
-we need to and gives us the possibility of treating potentially infinite sequences as regular 
-ones."
-** Sequence Comprehension with =for=
-The for function accepts a vector of bindings and an expression, and returns a 
-sequence of the result of evaluating the expression. for can accept multiple 
-bindings, and iterates through them in a nested fashion.
-
-#+BEGIN_SRC clojure
-  (for [x [1 2 3]
-        y [4 5]]
-    [y (* x x)])
-#+END_SRC
-
-#+RESULTS:
-| 4 | 1 |
-| 5 | 1 |
-| 4 | 4 |
-| 5 | 4 |
-| 4 | 9 |
-| 5 | 9 |
-
-*** using :let to create local bindings
-
-#+BEGIN_SRC clojure
-  (for [animal [:mouse :duck :lory]
-        color [:red :blue]
-        :let [animal-str (str "animal-"(name animal))
-              color-str (str "color-"(name color))
-              display-str (str animal-str "-" color-str)]]
-    display-str)
-#+END_SRC
-
-#+RESULTS:
-| animal-mouse-color-red | animal-mouse-color-blue | animal-duck-color-red | animal-duck-color-blue | animal-lory-color-red | animal-lory-color-blue |
-
-*** using :while to break out of the sequence generation
-
-#+BEGIN_SRC clojure
-  (for [animal [:mouse :duck :lory]
-        color [:red :blue]
-        :let [animal-str (str "animal-"(name animal))
-              color-str (str "color-"(name color))
-              display-str (str animal-str "-" color-str)]
-        :while (not= animal :duck)]
-    display-str)
-#+END_SRC
-
-#+RESULTS:
-| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
-
-*** using :when to filter out values
-
-#+BEGIN_SRC clojure
-  (for [animal [:mouse :duck :lory]
-        color [:red :blue]
-        :let [animal-str (str "animal-"(name animal))
-              color-str (str "color-"(name color))
-              display-str (str animal-str "-" color-str)]
-        :when (not= animal :duck)]
-    display-str)
-#+END_SRC
-
-#+RESULTS:
-| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
-
-*** doseq and run! for side effects
-doseq is similar to for, but executes the expression, discards the resulting values, and returns nil.
-
-#+BEGIN_SRC clojure :results output
-  (doseq [x [1 2 3]
-          y [4 5]
-          :let [z (+ x y)]]
-    (println x "+" y "=" z))
-#+END_SRC
-
-#+RESULTS:
-: 1 + 4 = 5
-: 1 + 5 = 6
-: 2 + 4 = 6
-: 2 + 5 = 7
-: 3 + 4 = 7
-: 3 + 5 = 8
-
-run! similarly returns nil, and acts similarly to reduce.
-
-#+BEGIN_SRC clojure :results output
-  (run! println [1 2 3 4 5])
-#+END_SRC
-
-#+RESULTS:
-: 1
-: 2
-: 3
-: 4
-: 5
-
-
 * Basic Functions
 ** Compound Expressions
 Clojure is a dialect of LISP (LISt Processing). All lisp code is made of lists of 
@@ -1328,6 +757,577 @@ Sometimes, you want to use a symbol that it bound in a library you are loading. 
 *** Using libs (lc)
 
 
+* Compound Data: Collections & Seqs
+** Immutability and Persistence
+Collections have two important features: immutability and persistence. Immutable 
+collections cannot be changed. Instead, the data in a collection is shared by 
+collections created from the original collection. Thus, a function that "adds" a
+new value to an existing collection does no such thing; It instead returns a 
+new collection, containing the new value, and references to each value in the 
+original collection. This is called structural sharing.
+  We can observe structural sharing using identical?, a predicate that tells us
+whether two valuesa are the same object in memory:
+
+#+BEGIN_SRC clojure :results output
+  (let [xs (list 1 2 3)
+        ys (cons 0 xs)]
+    (println "xs:" xs)
+    (println "ys:" ys)
+    (println "rest ys:" (rest ys))
+    (println (identical? xs (rest ys))))
+#+END_SRC
+
+#+RESULTS:
+: xs: (1 2 3)
+: ys: (0 1 2 3)
+: rest ys: (1 2 3)
+: true
+
+** The Collection Abstraction (brave)
+All collections support functions =count=, =conj=, and =seq=. However, different
+collection types implement these functions in different ways. For example, =conj= 
+returns a new collection from an existing collection and a value. When =conj= is 
+applied to a list, the new value appears at the beginning of the new list. But, 
+when =conj= is applied to a vector, the new value appears at the end of the new 
+vector. In both cases =conj= returns a new collection with a new value, but the 
+implementation is different.
+** The Sequence Abstraction
+Collections also provide a consistent interface to a category of functions called 
+'sequence functions,' which include =first=, =rest=, and =cons=. The =seq= function accepts a collection and returns a sequence. The sequence interface permits 'walking:' accessing the elements of the collection as sequences of values. When sequence functions are applied to collections, the collection is first represented as a sequence, and then the sequence function is performed.
+*** rest & next
+rest and next are similar function, but when they are passed an empty collection their behavior differs.
+
+#+BEGIN_SRC clojure :results output
+  (println (rest []))
+  (println (next []))
+#+END_SRC
+
+#+RESULTS:
+: ()
+: nil
+*** nil is sorta seqable
+Check it out:
+
+#+BEGIN_SRC clojure :results output
+  (println (seq nil))
+  (println (first nil))
+  (println (rest nil))
+#+END_SRC
+
+#+RESULTS:
+: nil
+: nil
+: ()
+
+*** TODO Treating Lists, Vectors, Sets and Maps as Sequences
+*** TODO Abstraction Through Indirection
+** Types of Collections
+*** Lists
+In Clojure, lists are singly linked lists. Lists are syntatictally important in 
+any LISP; See also 'Compound Expressions'. Lists are enclosed in parens, and 
+preceded with a ' to prevent evaluation of the list as an expression. Lists are 
+very efficient for sequential access to elements, and acesss to the first item 
+in a list is very fast. 
+**** Create a list
+***** list literal
+
+#+BEGIN_SRC clojure
+  '(1 true "three" :four nil)
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+***** programmatically
+#+BEGIN_SRC clojure
+  ( list 1 true "three" :four nil)
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+**** Lists as seqs
+***** first
+
+#+BEGIN_SRC clojure
+  (first '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+***** rest
+
+#+BEGIN_SRC clojure
+  (rest '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+| true | three | :four | nil |
+
+***** cons
+
+#+BEGIN_SRC clojure
+  (cons 0 '(1 2 3 4))
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 | 3 | 4 |
+
+**** Lists as stacks
+***** peek
+
+#+BEGIN_SRC clojure
+  (peek '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+***** pop
+
+#+BEGIN_SRC clojure
+  (pop '(1 true "three" :four nil))
+#+END_SRC
+
+#+RESULTS:
+| true | three | :four | nil |
+
+***** conj (equivalent to push for list-stacks)
+
+#+BEGIN_SRC clojure
+  (conj '(1 2 3 4) 0)
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 | 3 | 4 |
+
+*** Vectors
+Vectors provide fast index access, and grow from their tail. When creating a vector, every item is evaluated before being stored.
+**** Create a vector
+***** literal
+
+#+BEGIN_SRC clojure
+  [1 true "three" :four nil]
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+***** programatically
+
+#+BEGIN_SRC clojure
+  (vector 1 true "three" :four nil)
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | nil |
+
+**** nth
+
+#+BEGIN_SRC clojure
+  (nth [1 true "three" :four nil] 3)
+#+END_SRC
+
+#+RESULTS:
+: :four
+
+**** last
+
+#+BEGIN_SRC clojure
+  (last [1 true "three" :four nil])
+#+END_SRC
+
+#+RESULTS:
+: nil
+
+**** Vectors as Stacks
+***** peek
+
+#+BEGIN_SRC clojure
+  (peek [1 true "three" :four "something"])
+#+END_SRC
+
+#+RESULTS:
+: something
+
+***** pop
+
+#+BEGIN_SRC clojure
+  (pop [1 true "three" :four "something"])
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four |
+
+***** conj
+
+#+BEGIN_SRC clojure
+  (conj [1 true "three" :four "something"] "else")
+#+END_SRC
+
+#+RESULTS:
+| 1 | true | three | :four | something | else |
+
+**** Vectors as Associative Collections
+Because vectors access values in relation to numerical indexes - a type of key - we can use the assoc function to return a new collection with a different value at a specified index. Note that Clojure won't permit us to create sparse arrays, and we can only specify existing indexes or the index after the last item - effectively conjing the value onto the vector.
+
+#+BEGIN_SRC clojure
+  (assoc [1 2 3 5 5 6 7] 3 4)
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+
+Vectors are functions of their keys.
+
+#+BEGIN_SRC clojure
+  ([1 2 3 4 5 6 7] 3)
+#+END_SRC
+
+#+RESULTS:
+: 4
+
+**** mapv & filterv
+The map and filter functions return lazy seqs, but it is common to need a fully realized seq instead. We can accomplish this when working with vectors by using mapv and filterv. This form is also faster. 
+
+#+BEGIN_SRC clojure :results output
+
+  (println (type (mapv inc [1 2 3 4])))
+#+END_SRC
+
+#+RESULTS:
+: clojure.lang.PersistentVector
+
+*** Maps
+Maps are associative collections that store key value pairs. Every item is evaluated before being stored in 
+a map, like vectors, but the order of evaluation is indeterminate - we can't predict what order a map's 
+items will surface in. However, other relatives, like the sorted-maps, do provide ordering guarantees.
+  It is most common to use keywords as the keys in a map, in great part because keywords can be used as 
+functions that take the map as an argument and return the corresponding value if the key is present in the 
+map.
+**** Create a map
+***** literal
+
+#+BEGIN_SRC clojure
+  {:key "value"}
+#+END_SRC
+
+#+RESULTS:
+| :key | value | 
+
+***** programmatically
+
+#+BEGIN_SRC clojure
+  (hash-map :key "value")
+#+END_SRC
+
+#+RESULTS:
+| :key | value |
+
+**** Element retrieval with get, keyword access, and default values
+***** get
+#+BEGIN_SRC clojure
+  (get {:a "A" :b "B" :c "C"} :a)
+#+END_SRC
+
+#+RESULTS:
+: A
+
+***** keyword access
+
+#+BEGIN_SRC clojure
+  (:a {:a "A" :b "B" :c "C"})
+#+END_SRC
+
+#+RESULTS:
+: A
+
+***** default values
+
+#+BEGIN_SRC clojure
+  (:d {:a "A" :b "B" :c "C"} "not found")
+#+END_SRC
+
+#+RESULTS:
+: not found
+**** assoc & dissoc
+***** assoc
+#+BEGIN_SRC clojure
+  (assoc {:a "A" :b "B" :c "C"} :d "D")
+#+END_SRC
+
+#+RESULTS:
+| :a | A | :b | B | :c | C | :d | D |
+
+***** dissoc
+
+#+BEGIN_SRC clojure
+  (dissoc {:a "A" :b "B" :c "C"} :a)
+#+END_SRC
+
+#+RESULTS:
+| :b | B | :c | C |
+**** keys & vals
+***** keys
+
+#+BEGIN_SRC clojure
+  (keys {:a "A" :b "B" :c "C"})
+#+END_SRC
+
+#+RESULTS:
+| :a | :b | :c |
+
+***** vals
+
+#+BEGIN_SRC clojure
+  (vals {:a "A" :b "B" :c "C"})
+#+END_SRC
+
+#+RESULTS:
+| A | B | C |
+
+**** merge
+
+#+BEGIN_SRC clojure
+  (merge {:a "A" :b "B" :c "C"} {:d "D" :e "E" :f "F"})
+#+END_SRC
+
+#+RESULTS:
+| :a | A | :b | B | :c | C | :d | D | :e | E | :f | F |
+
+*** Sets
+Sets are collections of unique values. No duplicate values are allowed when creating a set, even when 
+nesting sets. Like maps, sets are unordered, but have ordered relatives such as sorted-set and 
+sorted-set-by.
+**** Create a set
+***** literal
+
+#+BEGIN_SRC clojure
+  #{1 2 3 4}
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2}
+
+***** programatically
+
+#+BEGIN_SRC clojure
+  (hash-set 1 2 3 4)
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2}
+
+**** Element retrieval with get, keyword access, set access, & contains?
+***** get
+
+#+BEGIN_SRC clojure
+  (get #{1 2 3 4} 2)
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+***** keyword access
+
+#+BEGIN_SRC clojure
+  (:b #{:a :b :c :d})
+#+END_SRC
+
+#+RESULTS:
+: :b
+
+***** set access
+
+#+BEGIN_SRC clojure
+  (#{:a :b :c :d} :b)
+#+END_SRC
+
+#+RESULTS:
+: :b
+
+***** contains?
+
+#+BEGIN_SRC clojure
+  (contains? #{1 2 3 4} 2)
+#+END_SRC
+
+#+RESULTS:
+: true
+
+**** conj & disj
+***** conj
+
+#+BEGIN_SRC clojure
+  (conj #{1 2 3 4} 5)
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2 5}
+
+***** disj
+
+#+BEGIN_SRC clojure
+  (disj #{1 2 3 4} 4)
+#+END_SRC
+
+#+RESULTS:
+: #{1 3 2}
+
+**** Using the clojure.set library
+***** clojure.set/union
+
+#+BEGIN_SRC clojure
+  (clojure.set/union #{1 2 3 4} #{3 4 5})
+#+END_SRC
+
+#+RESULTS:
+: #{1 4 3 2 5}
+
+***** clojure.set/difference
+
+#+BEGIN_SRC clojure
+  (clojure.set/difference #{1 2 3 4} #{3 4 5})
+#+END_SRC
+
+#+RESULTS:
+: #{1 2}
+
+***** clojure.set/intersection
+
+#+BEGIN_SRC clojure
+  (clojure.set/intersection #{1 2 3 4} #{3 4 5})
+#+END_SRC
+
+#+RESULTS:
+: #{4 3}
+*** Queues
+Queues largely borrow the semantics of stacks. But, where a stack peeks and conjs to the same 'end', a queue peeks data from one end, and conj's it to another end.
+**** crete a queue
+Creating a queue is not as straightforward as other collections, and requires literal syntax.
+
+#+BEGIN_SRC clojure
+  (def pg #queue [1 2 3 4 5])
+#+END_SRC
+
+#+RESULTS:
+
+**** peek
+
+#+BEGIN_SRC clojure :results output
+  (def pq #queue [1 2 3 4 5])
+  (peek pq)
+#+END_SRC
+
+#+RESULTS:
+
+**** conj
+
+#+BEGIN_SRC clojure :results output
+  (def pq #queue [1 2 3 4 5])
+  (conj pq 5)
+#+END_SRC** The Power of Laziness (lc) / Lazy seqs (brave) / Laziness (cu)
+"Most of ClojureScript's sequence-returning functions generate lazy sequences instead of 
+eagerly creating a whole new sequence. Lazy sequences generate their contents as they are 
+requested, usually when iterating over them. Laziness ensures that we don't do more work than 
+we need to and gives us the possibility of treating potentially infinite sequences as regular 
+ones."
+** Sequence Comprehension with =for=
+The for function accepts a vector of bindings and an expression, and returns a 
+sequence of the result of evaluating the expression. for can accept multiple 
+bindings, and iterates through them in a nested fashion.
+
+#+BEGIN_SRC clojure
+  (for [x [1 2 3]
+        y [4 5]]
+    [y (* x x)])
+#+END_SRC
+
+#+RESULTS:
+| 4 | 1 |
+| 5 | 1 |
+| 4 | 4 |
+| 5 | 4 |
+| 4 | 9 |
+| 5 | 9 |
+
+*** using :let to create local bindings
+
+#+BEGIN_SRC clojure
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]]
+    display-str)
+#+END_SRC
+
+#+RESULTS:
+| animal-mouse-color-red | animal-mouse-color-blue | animal-duck-color-red | animal-duck-color-blue | animal-lory-color-red | animal-lory-color-blue |
+
+*** using :while to break out of the sequence generation
+
+#+BEGIN_SRC clojure
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]
+        :while (not= animal :duck)]
+    display-str)
+#+END_SRC
+
+#+RESULTS:
+| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
+
+*** using :when to filter out values
+
+#+BEGIN_SRC clojure
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]
+        :when (not= animal :duck)]
+    display-str)
+#+END_SRC
+
+#+RESULTS:
+| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
+
+*** doseq and run! for side effects
+doseq is similar to for, but executes the expression, discards the resulting values, and returns nil.
+
+#+BEGIN_SRC clojure :results output
+  (doseq [x [1 2 3]
+          y [4 5]
+          :let [z (+ x y)]]
+    (println x "+" y "=" z))
+#+END_SRC
+
+#+RESULTS:
+: 1 + 4 = 5
+: 1 + 5 = 6
+: 2 + 4 = 6
+: 2 + 5 = 7
+: 3 + 4 = 7
+: 3 + 5 = 8
+
+run! similarly returns nil, and acts similarly to reduce.
+
+#+BEGIN_SRC clojure :results output
+  (run! println [1 2 3 4 5])
+#+END_SRC
+
+#+RESULTS:
+: 1
+: 2
+: 3
+: 4
+: 5
+
+
 
 * Higher Order Functions and Working with Compound Data
 ** TODO Function Calls, Macro Calls, and Special Forms (brave)
@@ -1541,6 +1541,7 @@ expression. This is Clojure's way of recursion without consuming the stack.
 ** Records
 ** Types
 ** Structs
+
 
 * Data Abstractions and Polymorphism
 ** Abstractions and Polymorphism (brave)
@@ -2431,6 +2432,7 @@ Note that the splicing reader conditional can't be used to splice multiple top l
 - https://danielcompton.net/2015/06/10/clojure-reader-conditionals-by-example
 - https://github.com/funcool/cuerdas (example small project that uses reader conditionals)
 
+
 * Host Interop
 Clojure is a hosted language, and borrows heavily from the types provided by its host. In Clojure, a string is a java.lang.String; in ClojureScript a string is a JavaScript string. This common ground lets Clojure inter-operate with its host, including access to classes, objects,, libraries, and APIs of its host
 ** Javascript
@@ -2653,6 +2655,7 @@ The doto macro lets us to order operations and execute them on a Java object.
 
 #+RESULTS:
 : One ring to rule them all.
+
 
 * Web Libs
 ** Ring
@@ -3048,6 +3051,7 @@ Clojure has a standard testing libray, which can be lpaded into out test files.
 - deftest : defines a test function
 - testing : a string that is used withing deftest to provide context to what is being tested
 - is : is the assertion function, which accepts an argument and reports whether the argument is truthy.
+
 
 * Building and Production
 ** Building with Lein and Boot
