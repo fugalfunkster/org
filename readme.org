@@ -16,6 +16,22 @@ Additionally, org mode's sparse trees provide a convient way to navigate by keyw
 
 Simply "C-c / /" <KEYWORD-STATE> (see ln 1)
 
+* TODO
+** Build Complex Layouts with CSS Grid Layout - Rory Smith 42:29 (egghead)
+** Learn Advanced CSS Layout Techniques - Damon Bauer 14:07 (egghead)
+** NOT PUBLISHED YET :: Convert SCSS (Sass) to CSS-IN-JS - Oleg Isonen 23:48 (egghead)
+** Use TypeScript to develop React Applications - Basarat Ali Syed (egghead)
+** Maintainble CSS Using TypeStyle - Basarat Ali Syed (egghead)
+** NOT PUBLISHED YED :: Practical Advanced Typescript Features - Rares Matei 21:20 (egghead)
+** Reduce Redux Boilerplate with Redux-Actions - Andy Van Slaars 39:15 (egghead)
+** Manage Complex State in React Apps with MobX - Michael Weststrate 28 (egghead)
+** Manage Application State with Mobx-state-tree - Michael Weststrate 79 (egghead)
+** Manage React Form State with redux-form - Rory Smith (egghead)
+** Advanced React Component Patterns - Kent C. Dodds (egghead)
+** Async React with Redux Saga - Tyler Clark (egghead)
+** Learn the Best and Most Useful SCSS - Ari Picker (egghead)
+** Build a GraphQL Server - Josh Black 57:00 (egghead)
+
 * Directory
 ** Books
 *** Mathematics
@@ -979,3 +995,21 @@ Simply "C-c / /" <KEYWORD-STATE> (see ln 1)
 *** 18.02  - MultiVariable Calculus
 *** 6.046  - Algorithms
 *** 18.310 - Principles of Discrete Applied Math
+
+
+
+
+
+
+* Typescript ORG MODE efforts
+
+http://2ality.com/2017/09/native-esm-node.html
+
+#+BEGIN_SRC typescript
+  let Root = require('../repos/aarp/ts/app/Root');
+
+  console.log('Hello, from org mode');
+  console.log(Root);
+#+END_SRC
+
+#+RESULTS:

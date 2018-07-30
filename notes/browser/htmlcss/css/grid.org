@@ -1,3 +1,5 @@
+
+
 * CSS GRID Changes Everything
 The history of web layout is a history of css hacks. We can't express that elements are 'next to' each other without wrapping them in non-semantic elements. This was a content-out and one-dimensional approach. You apply css to an element, and then have to relate that element to other things. CSS Grid is a two dimensional layout, that works layout-in.
 ** Grid Terminology
@@ -23,3 +25,103 @@ Backwards compatability is possible back to IE 11. Serve up a mobile experience 
 - Rachel Andrew's "Grid By Example" is doctrine - use it to learn grid
 - MDN has good documentation, also CSS-Tricks has a CSS-Grid intro
 - Building Production Ready CSS Grids Today
+* Grid By Example - Rachel Andrew
+** Defining a Grid
+
+#+BEGIN_SRC css
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+  grid-template-rows: 200px 100px;
+  grid-auto-rows: 100px;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  grid-gap: 20px;
+#+END_SRC
+
+** The fr unit
+A new unit for grid layout, that represents a fraction of the available space in the grid container - a responsive value like %.
+
+#+BEGIN_SRC css
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+#+END_SRC
+
+Because fr uses available space, you can mix absolutely defined values and fr values.
+
+#+BEGIN_SRC css
+  display: grid;
+  grid-template-columns: 2fr 1fr 300px;
+  grid-gap: 20px;
+#+END_SRC
+
+** Repeat Notation
+
+#+BEGIN_SRC css
+  display: grid;
+  grid-template-columns: repeat(2, 1fr 2fr);
+  grid-gap: 20px;  
+#+END_SRC
+
+** Intro. minmax()
+We can specify both the minimum size and the maximum size of a grid track!
+
+#+BEGIN_SRC css
+display: grid;
+grid-template-columns: minmax(200px, 250px) 1fr 1fr;
+grid-gap: 20px;
+#+END_SRC
+
+#+BEGIN_SRC css
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+grid-auto-rows: minmax(60px, auto);
+grid-gap: 20px;
+#+END_SRC
+
+** Intro. grid auto-placement and order
+
+#+BEGIN_SRC css
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 100px 100px 100px;
+  grid-gap: 20px;
+  grid-auto-flow: column;
+}
+#+END_SRC
+
+#+BEGIN_SRC css
+.grid div:nth-child(2){
+  order: 1;
+}
+#+END_SRC
+
+** Intro. auto-fill and auto-fit
+
+#+BEGIN_SRC css
+.grid {
+  display: grid;
+  grid-template-columns: 
+  grid-gap: 20px;
+}
+#+END_SRC
+
+** Auto-placement and packing modes
+** Line-based Positioning
+** Named Lines
+** Aligning and justifying grid items
+** Aligning and justifying the grid
+** Grid Template Areas
+** Magic lines and Magic areas
+** Nested Grids
+** Subgrid and display: contents
+** Stacking and z-index
+** Anonymous Items
+** Absolute positionoing and grid items
+** The grid-template Shorthand
+** Feature queries and grid
+** Content sizing keywords
+* Grid Garden (https://cssgridgarden.com/)
+
+

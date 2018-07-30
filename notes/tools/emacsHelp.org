@@ -139,6 +139,7 @@ Used C-h k (M-x describe-key).
 *** c (commit popup)
 *** P (push popup)
 *** F (fetch/pull popup)
+*** f a (fetch all remotes)
 *** l (log popup)
 *** n (next line)
 *** p (previous line)
