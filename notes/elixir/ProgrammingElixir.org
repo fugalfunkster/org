@@ -1,0 +1,184 @@
+Programming Elixir :: Dave Thomas
+
+* Take the Red Pill
+
+#+BEGIN_SRC elixir
+h IO.puts
+#+END_SRC
+
+#+RESULTS:
+: * def puts(device \\ group_leader(), item)
+: 
+: Writes `item` to the given `device`, similar to `write/2`,
+: but adds a newline at the end.
+: 
+
+#+BEGIN_SRC elixir
+i "i" 
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Term
+  "i"
+Data type
+  BitString
+Byte size
+  1
+Description
+  This is a string: a UTF-8 encoded binary. It's printed surrounded by
+  "double quotes" because all UTF-8 encoded codepoints in it are printable.
+Raw representation
+  <<105>>
+Reference modules
+  String, :binary
+#+end_example
+
+* Pattern Matching
+* Immutability
+* Elixir Basics
+
+#+BEGIN_SRC elixir
+a = %{red: "red", blue: "blue"}
+a.blue
+#+END_SRC
+
+#+RESULTS:
+: "blue"
+
+* Anonymous Functions
+
+#+BEGIN_SRC elixir
+list_concat = fn a, b -> a ++ b end
+list_concat.([1, 2], [3, 4])
+#+END_SRC
+
+#+RESULTS:
+: [1, 2, 3, 4]
+
+
+#+BEGIN_SRC elixir
+sum = &(&1 + &2 + &3)
+sum.(1, 2, 3)
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+#+BEGIN_SRC elixir
+pair_tuple_to_list = fn {a,b} -> [a, b] end  
+pair_tuple_to_list.({1234,5678})
+#+END_SRC
+
+#+RESULTS:
+: [1234, 5678]
+
+#+BEGIN_SRC elixir
+fun = fn
+      (0, 0, _) -> "FizzBuzz"
+      (0, _, _) -> "Fizz"
+      (_, 0, _) -> "Buzz"
+      (_, _, x) -> x
+      end
+
+fb = fn
+     (n) -> fun.(rem(n,3), rem(n,5), n)
+     end
+
+IO.puts(fb.(10))
+IO.puts(fb.(11)) 
+IO.puts(fb.(12))
+IO.puts(fb.(13))
+IO.puts(fb.(14))
+IO.puts(fb.(15))
+IO.puts(fb.(16))
+#+END_SRC
+
+#+RESULTS:
+: Buzz
+: 11
+: Fizz
+: 13
+: 14
+: FizzBuzz
+: 16
+: :ok
+
+
+#+BEGIN_SRC elixir
+
+#+END_SRC
+
+#+BEGIN_SRC elixir
+prefix = fn b -> (fn a -> "#{b} #{a}" end) end 
+mrs = prefix.("Mrs.")
+mrs.("Smith")
+
+#+END_SRC
+
+#+RESULTS:
+: "Mrs. Smith"
+
+#+BEGIN_SRC elixir
+Enum.map([1,2,3,4],&(&1 + 2))
+Enum.each([1,2,3,4],&(IO.inspect(&1)))
+#+END_SRC
+
+#+RESULTS:
+: 1
+: 2
+: 3
+: 4
+: :ok
+
+* Modules and Named Functions
+Named functions can only exist inside modules. 
+Named functions are identifie by both name and arity.
+
+Modules are compiled.
+
+#+BEGIN_SRC elixir
+c "./e/times.esx"
+#+END_SRC
+
+#+RESULTS:
+: [Times]
+
+#+BEGIN_SRC elixir
+Times.double(5.5)
+#+END_SRC
+
+#+RESULTS:
+: 11.0
+
+#+BEGIN_SRC elixir
+Times.double("string")
+#+END_SRC
+
+#+RESULTS:
+: ** (ArithmeticError) bad argument in arithmetic expression: "string" * 2
+:     :erlang.*("string", 2)
+:     e/times.esx:3: Times.double/1
+
+
+
+* Lists and Recursion
+* Maps, Keyword Lists, Sets, and Structs
+* An Aside - What are Types?
+* Strings and Binaries
+* Control Flow
+* Organizing a Project
+* Tooling
+* Working With Multiple Processes
+* Nodes - the Key to Distributing Services
+* OTP: Servers
+* OTP: Supervisors
+* A More Complex Example
+* OTP: Applications
+* Tasks and Agents
+* Macros an Code Evaluation
+* Linking Modules: Behaviors and Use
+* Protocols - Polymorphic Functions
+* More Cool Stuff
+* Exceptions: raise and try, catch and throw
+* Type Specifications and Type Checking
