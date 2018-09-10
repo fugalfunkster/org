@@ -175,6 +175,825 @@
 *** TODO Regular Expressions (brave)
 
 
+* Basic Functions
+** Compound Expressions
+Clojure is a dialect of LISP (LISt Processing). All lisp code is made of lists of 
+data - literally, data in the list data structure.  Lists are evaluated in 
+Clojure as expressions; The first element in a list is the function, and 
+subsequent elements are arguments of the first element. This is known as 'prefix' 
+notation. Note, that Clojure does not have operators, only functions. This 
+facilitates function argument arbitrarity. As a bonus, there's no operator 
+precedence table to memorize. 
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (+ 1/2 3/4)
+=======
+#+BEGIN_SRC clojurescript :results output
+  (let [xs (list 1 2 3)
+        ys (cons 0 xs)]
+    (println "xs:" xs)
+    (println "ys:" ys)
+    (println "rest ys:" (rest ys))
+    (println (identical? xs (rest ys))))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: 5/4
+
+Clojure also uses lists as compound data structures when the list is preceded by 
+a single-quote. Emphatically, in Clojure: code is data.
+** Functions Are Values
+In Clojure, functions are first class values: They can be referenced with vars, passed to functions as arguments, and returned from functions. 
+*** Anonymous functions with fn (brave, lc)
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  ((fn [parameter] (println parameter)) "Code is Data")
+=======
+#+BEGIN_SRC clojurescript :results output
+  (println (rest []))
+  (println (next []))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: Code is Data
+*** Binding a Function to a Symbol Using def (cu)
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (def symbolicName (fn [parameter1] (println parameter1)))
+  (symbolicName "Code is Data")
+#+End_SRC
+=======
+#+BEGIN_SRC clojurescript :results output
+  (println (seq nil))
+  (println (first nil))
+  (println (rest nil))
+#+END_SRC
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+
+#+RESULTS:
+: Code is Data
+
+*** Binding a Function to a Symbol Using defn (lc, cu)
+The defn macro is the idiomatic way to define functions, and optionally 
+includes a 'docstring'.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (defn symbolicName "This is a description of the function" 
+    [parameter1] (println parameter1))
+  (symbolicName "Code is Data")
+#+End_SRC
+=======
+#+BEGIN_SRC clojurescript
+  '(1 true "three" :four nil)
+#+END_SRC
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+
+#+RESULTS:
+: Code is Data
+
+<<<<<<< HEAD
+*** Functions with Multiple Arities and Variadic Functions (cu)
+Function definitions can include different bodies for different arities.
+
+#+BEGIN_SRC clojure :results output
+  (defn myinc
+    "Self defined version of parameterized 'inc'."
+    ([x] (myinc x 1))
+    ([x y] (+ x y)))
+  (println (myinc 5))
+  (println (myinc 9))
+=======
+***** programmatically
+#+BEGIN_SRC clojurescript
+  ( list 1 true "three" :four nil)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: 6
+: 10
+
+And, functions can accept an arbitrary number of arguments using the & symbol.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (defn my-variadic-set [& params] (set params))
+  (my-variadic-set 1 2 3 4 2 3)
+=======
+#+BEGIN_SRC clojurescript
+  (first '(1 true "three" :four nil))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: #'user/my-variadic-set#{1 4 3 2}
+
+*** Anonymous function shorthand #(%) (lc)
+The # reader macro expands shorthand function expressions into legit function expressions during compilation. A single arity function would use % as shorthand for its argument. Otherwise, arguments should be numbered (%1 %1 etc.) or variable (%&).
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (#(println %) "Code is Data")
+=======
+#+BEGIN_SRC clojurescript
+  (rest '(1 true "three" :four nil))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: Code is Data
+** TODO Pure Functions: What and Why (brave)
+Pure functions always return the same output when given the same input. Pure functions are free of 'side effects'. 
+*** comp
+*** memoize
+
+
+* You must learn Control (flow)
+** Boolean Logic
+*** Predicates: Basic Logic Tests
+Only two values evaluate to false in logic operations: false and nil. nil is 
+logically false. In Clojure, functions that return a boolean value as their result typically end with a question mark.
+**** true? - tests for true values
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (true? nil)
+=======
+#+BEGIN_SRC clojurescript
+  (cons 0 '(1 2 3 4))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: false
+
+**** false? - tests for the boolean value false
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (false? nil)
+=======
+#+BEGIN_SRC clojurescript
+  (peek '(1 true "three" :four nil))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: false
+
+**** nil? - tests for nil, the absence of value
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (nil? nil)
+=======
+#+BEGIN_SRC clojurescript
+  (pop '(1 true "three" :four nil))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: true
+
+**** not - returns the negation of a boolean returned from its operand
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (true? (not nil))
+  (false? (not nil))
+=======
+#+BEGIN_SRC clojurescript
+  (conj '(1 2 3 4) 0)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: truefalse
+
+**** = & not= - tests for equality or inequality
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (= nil (not= nil false))
+=======
+#+BEGIN_SRC clojurescript
+  [1 true "three" :four nil]
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: false
+
+*** Collections As Predicates
+Maps and Sets implement the callable protocol (IFn), and can thus be used as 
+if they were functions. When calling a collection, it will return an argument's value that the collection itself contains. If the collection does not contain the argument's value, the result will be nil. 
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (#{1 2 3} 2)
+=======
+#+BEGIN_SRC clojurescript
+  (vector 1 true "three" :four nil)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+*** Logic Tests you Can Use on Collections
+**** coll?
+The coll? predicate returns true if its argument is a collection.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (coll? {})
+  (coll? 8)
+=======
+#+BEGIN_SRC clojurescript
+  (nth [1 true "three" :four nil] 3)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: truefalse
+
+**** empty?
+The empty? predicate tests whether a collection contains any items.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (empty? #{})
+=======
+#+BEGIN_SRC clojurescript
+  (last [1 true "three" :four nil])
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: true
+
+**** seq & 'nil pruning'
+The seq function isn't really a predicate, but it is idiomatic to use it as a predicate for 
+whether a collection is not empty. If a collection is empty, seq returns nil -  a falsey value. Otherwise, seq returns a list containing the elements of that collection - a truthy value.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (println (seq {:a "A"}))
+=======
+#+BEGIN_SRC clojurescript
+  (peek [1 true "three" :four "something"])
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: ([:a A])
+
+**** every?
+The every? function tests whether every element in a collection passes a predicate.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (every? #(= :zanzibar %) '(:zanzibar :zanzibar :zanzibarnacle))
+=======
+#+BEGIN_SRC clojurescript
+  (pop [1 true "three" :four "something"])
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: false
+**** not-any?
+The not-any? function tests whether each element in the collection fails a predicate.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (not-any? #(= :zanzibar %) '(:zanzibarnacle :zanzibarnacle :zanzibarnacle))
+=======
+#+BEGIN_SRC clojurescript
+  (conj [1 true "three" :four "something"] "else")
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: true
+
+**** some
+The some function returns true if any item in a collection passes a predicate.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (some #(> % 4) [1 2 3 4 5 6 7 8])
+=======
+#+BEGIN_SRC clojurescript
+  (assoc [1 2 3 5 5 6 7] 3 4)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: true
+
+And remember, that we can use sets as predicates for their members.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (some #{1 2 3} [2])
+=======
+#+BEGIN_SRC clojurescript
+  ([1 2 3 4 5 6 7] 3)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+<<<<<<< HEAD
+But be wary of falsey values!
+=======
+#+BEGIN_SRC clojurescript :results output
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+
+#+BEGIN_SRC clojure
+  (some #{nil} [nil])
+#+END_SRC
+
+#+RESULTS:
+: nil
+** Control Flow
+There are no statements in Clojure, only expressions. Every expression returns a value.
+*** do
+The do form accepts any number of arguments, evaluates them in turn, and returns the value of the last expression. This is how Clojure does 'blocks.' Idiomatically, do expressions are useful for side effects, like sdtout or logging. 
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (do 
+    (println "I was evaluated")
+    "And, I was returned")
+=======
+#+BEGIN_SRC clojurescript
+  {:key "value"}
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: And, I was returned
+
+*** when
+The when function accepts a predicate and an expression. If the predicate returns true, the expression will be evaluated. If the predicate returns false, when returns nil. That is all.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (when true "true")
+=======
+#+BEGIN_SRC clojurescript
+  (hash-map :key "value")
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: true
+
+<<<<<<< HEAD
+*** when-let
+The when-let function works similarly to when, but has a symbol-binding in the place of a logic test. If the expression bound to the symbol is truthy, the truthy value is bound to the symbol and the expression is evaluated.
+
+#+BEGIN_SRC clojure :results output
+  (when-let [name (> 5 1)]
+    (println (str name " is true!")))
+=======
+**** Element retrieval with get, keyword access, and default values
+***** get
+#+BEGIN_SRC clojurescript
+  (get {:a "A" :b "B" :c "C"} :a)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: true is great!
+ 
+*** if
+The if function takes three parameters: an expression to assess, an expression to evaluate in the event of 
+a true assessment, and - optionally - an expression to evaluate in the event of a false assessment.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (if false
+    "The Truth is Out There"
+    "The X-Files have been closed")
+=======
+#+BEGIN_SRC clojurescript
+  (:a {:a "A" :b "B" :c "C"})
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: The X-Files have been closed
+
+*** if-let
+The if-let function works similarly to let, but has a symbol-binding in the place of a logic test. If the expression bound to the symbol is truthy, the truthy value is bound to the symbol and the first expression is evaluated, otherwise the second expression is evaulated.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (if-let [sym 1]
+    (println (str sym " is true"))
+    (println (" is false")))
+#+END_SRC
+
+#+RESULTS:
+: 1 is true
+
+*** cond
+The cond expression permits a mapping of logic tests to expressions. Should a logic test 
+evaluate to true, the corresponding expression will be evaluated. To ensure that the final 
+predicate succeeds, you can use any truthy value as a predicate: "default" or :else are 
+semantically satisfying.
+  If none of the predicates succeed, cond returns nil.
+
+#+BEGIN_SRC clojure :results output
+  (def x 0)
+  (cond
+    (> x 0) (println "positive")
+    (< x 0) (println "negative")
+    "default" (println "zero"))
+=======
+#+BEGIN_SRC clojurescript
+  (:d {:a "A" :b "B" :c "C"} "not found")
+#+END_SRC
+
+#+RESULTS:
+: not found
+**** assoc & dissoc
+***** assoc
+#+BEGIN_SRC clojurescript
+  (assoc {:a "A" :b "B" :c "C"} :d "D")
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: zero
+
+*** condp
+The predicates in a cond expression may be very similar. The condp expression accepts a single predicate that applies to subsequent pairs of keywords and expressions.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (defn translate
+    [code]
+    (condp = (keyword code)
+      :es "Spanish"
+      :en "English"
+      :fr "French"
+      "unknown"))
+  (translate "fr")
+  (translate "pg")
+=======
+#+BEGIN_SRC clojurescript
+  (dissoc {:a "A" :b "B" :c "C"} :a)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: #'user/translate"French""unknown"
+
+*** case
+The case expression is similar to condp, but always checks for equality between a symbol and a 
+branching value that maps to an expression. Note that the branching values are evaluated during 
+compilation.
+  Unlike cond and condp, if there is no successful predicate, case will throw an error! 
+Thankfully, it is easy to provide a default, and the last expression in a case will always be 
+evaluated.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (defn translate
+    [code]
+    (case code
+      "es" "Spanish"
+      "en" "English"
+      "fr" "French"
+      "Unknown"))
+  (translate "fr")
+  (translate "pg")
+=======
+#+BEGIN_SRC clojurescript
+  (keys {:a "A" :b "B" :c "C"})
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: #'user/translate"French""Unknown"
+
+
+<<<<<<< HEAD
+* Naming Things and Namespaces
+** Binding Values to Symbols / Vars
+"Clojure symbols refer to values. When a symbol is evaluated, it returns the 
+thing it refers to." (lc) 
+  In Clojure, references cannot be reassigned - consistent with values being 
+immutable. Use let inside functions, not def!
+**** def
+Creates a var "object" scoped to the namespace. 
+
+#+BEGIN_SRC clojure :results output
+(def foo "bar")
+(println foo)
+=======
+#+BEGIN_SRC clojurescript
+  (vals {:a "A" :b "B" :c "C"})
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: bar
+
+**** let
+let defines a var "object(s)" scoped to the let expression. As its first parameter, let 
+takes a vector of paired items, typically symbol / expression pairs, and binds each expression's value to its corresponding symbol.
+  Remaining arguments are evaluated in the scope of the let bindings.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (let [sym "value"] 
+    (println sym))
+  (println sym)
+=======
+#+BEGIN_SRC clojurescript
+  (merge {:a "A" :b "B" :c "C"} {:d "D" :e "E" :f "F"})
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: value
+** Destructuring
+Anywhere you bind values (let, for, doseq, etc...) you can take advantage of 
+destructuring. Destructuring takes two forms, positional destructuring with 
+indexed sequences or associative destructuring with associative data structures. 
+  In the following example, the let binding contains two vectors nested in its 
+first parameter. The symbols in the first vector bind the values in the second 
+vector according to their respective indexes.
+  The _ is used as a placeholder, indicate that the value at that index is not
+needed. And, if a value is not present, the symbol will be bound to nil.
+
+#+BEGIN_SRC clojure :results output
+  ;; positional destructuring example, it's all about the index
+  (let [[color _ shape] ["red" "heavy" "square"]]
+    (println (str color " " shape)))
+
+<<<<<<< HEAD
+  ;; associative destructuring example, it's all about key matching
+  (let [{a :a _ 'b c "c"} {:a "red" 'b "heavy" "c" "square"}]
+    (println (str a " " c)))
+=======
+#+BEGIN_SRC clojurescript
+  #{1 2 3 4}
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: red square
+: red square
+
+*** Using & to Bundle the Rest Parameters
+Just like & can be used to collect surplus parameters to a variadic function, & can collect the remaining paramters in a destructuring form. 
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (let [[color & more] ["red" "heavy" "square" "ball"]]
+    (println (str color " " (last more))))
+=======
+#+BEGIN_SRC clojurescript
+  (hash-set 1 2 3 4)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: red ball
+
+*** Using :as to Retain the Original Data Structure
+Sometimes you want to access the data structure you are destructuring in its original form. The :as keyword permits you to provide a symbol to bind the original data structure. Although this example uses a vector, this also works for destructuring maps.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (let [[_ _ _ :as og] ["red" "heavy" "square" "ball"]]
+    (println (reduce #(str %1 " " %2) og)))
+=======
+#+BEGIN_SRC clojurescript
+  (get #{1 2 3 4} 2)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: red heavy square ball
+
+*** Using :or to Provide Default Values When Associatively Destructuring
+When destructuring a map, we can specify a default value for a symbol by using the :or keyword followed by a map with the symbol and default value.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (let [{a :a b :b c :c :or {c "triangle"}} {:a "red" :b "heavy"}]
+    (println (str a " " c)))
+=======
+#+BEGIN_SRC clojurescript
+  (:b #{:a :b :c :d})
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: red triangle
+
+*** Keeping the OG Keys Using :keys, :syms, and :strs
+Often, the symbols we will want to bind values to match the keys in a map. When this is the case, we can use :keys, :syms, or :strs to associate a vector of symbols with keys (be they keywords, symbols, or strings) in the map.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (let [{:keys [a b c]} {:a "red" :b "heavy" :c "square"}]
+    (println (str a b c)))
+  (let [{:syms [a b c]} {'a "red" 'b "heavy" 'c "square"}]
+    (println (str a b c)))
+  (let [{:strs [a b c]} {"a" "red" "b" "heavy" "c" "square"}]
+    (println (str a b c)))
+=======
+#+BEGIN_SRC clojurescript
+  (#{:a :b :c :d} :b)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: redheavysquare
+: redheavysquare
+: redheavysquare
+
+*** Destructuring Nested Data
+Thankfully, destructuring nested data is as easy as flat data.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (let [{a :a [one two three] :b _ :c} {:a "red" :b [1 2 3] :c "square"}]
+    (println (str a two)))
+=======
+#+BEGIN_SRC clojurescript
+  (contains? #{1 2 3 4} 2)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: red2
+
+** TODO Namespaces
+Namespaces are Clojure's fundamental unit of code modularity. It is idiomatic for 
+each file to begin with a namespace definition. In fact, namespaces must 
+correspond to filenames. For example, the namespace =mynamespace.core= must 
+correspond to the core.clj* file in the mynamespace directory. The default 
+namespace is "user". 
+  When we bind symbols and vars, those bindings are scoped to the current 
+namespaces. Although you can create a namespace dynamically, it is idiomatic to 
+only have one namespace per file.
+*** creating and identifying a namespace (lc)
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (ns alice.favfoods)
+  (println  *ns*)
+=======
+#+BEGIN_SRC clojurescript
+  (conj #{1 2 3 4} 5)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: #object[clojure.lang.Namespace 0x763be7bf alice.favfoods]
+
+*** remotely accessing a namespace (lc, cu)
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (ns userland)
+  (println *ns*)
+  (def whoDoYouFightFor "the users")
+  (println whoDoYouFightFor)
+  (ns the.System)
+  (println *ns*)
+  (println userland/whoDoYouFightFor) 
+=======
+#+BEGIN_SRC clojurescript
+  (disj #{1 2 3 4} 4)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: #object[clojure.lang.Namespace 0x2fea84c userland]
+: the users
+: #object[clojure.lang.Namespace 0x8a91f84 the.System]
+: the users
+
+*** :require(ing) libs (lc)
+Clojure has 'libs', namespaces full of symbols bound to values. Likely, function buckets...
+**** qualified namespaces with require
+After we require a namespace, symbols in that namespace will be accessible through a qualified namespace.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (require 'clojure.set)
+  clojure.set/union
+=======
+#+BEGIN_SRC clojurescript
+  (clojure.set/union #{1 2 3 4} #{3 4 5})
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+
+**** aliased namespaces with :require :as
+We can use the :as option to set an alias for a namespace.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (ns wonderland 
+    (require '[clojure.set :as s]))
+  s/union
+=======
+#+BEGIN_SRC clojurescript
+  (clojure.set/difference #{1 2 3 4} #{3 4 5})
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: #object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+
+This form is acceptable, but less common:
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (require '[clojure.set :as s])
+  s/union
+=======
+#+BEGIN_SRC clojurescript
+  (clojure.set/intersection #{1 2 3 4} #{3 4 5})
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+
+<<<<<<< HEAD
+**** unqualified symbols with :require :refer
+You can bring symbols directly into your current namespace without qualification so long as there is not a var collision. 
+#+BEGIN_SRC clojure :results output
+  (ns myapp.main
+    (require [clojure.string :refer [upper-case]]))
+  (println (upper-case "hello world"))
+=======
+#+BEGIN_SRC clojurescript
+  (def pg #queue [1 2 3 4 5])
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: HELLO WORLD
+
+**** :require :refer :all
+The :all option makes all of a namespace's symbols available in the current namespace without qualification. If symbols conflict between namespaces, the compiler will throw an exception.
+
+#+BEGIN_SRC clojure
+  (ns wonderland
+    (:require [alice.favfoods :refer :all]
+              [rabbit.favfoods :refer :all]))
+#+END_SRC
+**** excluding symbols with :exclude
+Sometimes, you want to use a symbol that it bound in a library you are loading. To avoid this var clash, you can exclude specific symbols from being loaded.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (ns myapp.main
+    (:refer-clojure :exclude [min]))
+
+  (defn min [x y]
+    (if (< x y)
+      y
+      x))
+
+  (println (min 5 8))
+
+=======
+#+BEGIN_SRC clojurescript :results output
+  (def pq #queue [1 2 3 4 5])
+  (peek pq)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
+#+END_SRC
+
+#+RESULTS:
+: 8
+
+*** Using libs (lc)
+
+<<<<<<< HEAD
+
 * Compound Data: Collections & Seqs
 ** Immutability and Persistence
 Collections have two important features: immutability and persistence. Immutable 
@@ -186,13 +1005,33 @@ original collection. This is called structural sharing.
   We can observe structural sharing using identical?, a predicate that tells us
 whether two valuesa are the same object in memory:
 
-#+BEGIN_SRC clojurescript :results output
+#+BEGIN_SRC clojure :results output
   (let [xs (list 1 2 3)
         ys (cons 0 xs)]
     (println "xs:" xs)
     (println "ys:" ys)
     (println "rest ys:" (rest ys))
     (println (identical? xs (rest ys))))
+=======
+#+BEGIN_SRC clojurescript :results output
+  (def pq #queue [1 2 3 4 5])
+  (conj pq 5)
+#+END_SRC** The Power of Laziness (lc) / Lazy seqs (brave) / Laziness (cu)
+"Most of ClojureScript's sequence-returning functions generate lazy sequences instead of 
+eagerly creating a whole new sequence. Lazy sequences generate their contents as they are 
+requested, usually when iterating over them. Laziness ensures that we don't do more work than 
+we need to and gives us the possibility of treating potentially infinite sequences as regular 
+ones."
+** Sequence Comprehension with =for=
+The for function accepts a vector of bindings and an expression, and returns a 
+sequence of the result of evaluating the expression. for can accept multiple 
+bindings, and iterates through them in a nested fashion.
+
+#+BEGIN_SRC clojurescript
+  (for [x [1 2 3]
+        y [4 5]]
+    [y (* x x)])
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
@@ -215,9 +1054,19 @@ Collections also provide a consistent interface to a category of functions calle
 *** rest & next
 rest and next are similar function, but when they are passed an empty collection their behavior differs.
 
-#+BEGIN_SRC clojurescript :results output
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
   (println (rest []))
   (println (next []))
+=======
+#+BEGIN_SRC clojurescript
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]]
+    display-str)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
@@ -226,10 +1075,21 @@ rest and next are similar function, but when they are passed an empty collection
 *** nil is sorta seqable
 Check it out:
 
-#+BEGIN_SRC clojurescript :results output
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
   (println (seq nil))
   (println (first nil))
   (println (rest nil))
+=======
+#+BEGIN_SRC clojurescript
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]
+        :while (not= animal :duck)]
+    display-str)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
@@ -249,458 +1109,10 @@ in a list is very fast.
 **** Create a list
 ***** list literal
 
-#+BEGIN_SRC clojurescript
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
   '(1 true "three" :four nil)
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | nil |
-
-***** programmatically
-#+BEGIN_SRC clojurescript
-  ( list 1 true "three" :four nil)
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | nil |
-
-**** Lists as seqs
-***** first
-
-#+BEGIN_SRC clojurescript
-  (first '(1 true "three" :four nil))
-#+END_SRC
-
-#+RESULTS:
-: 1
-
-***** rest
-
-#+BEGIN_SRC clojurescript
-  (rest '(1 true "three" :four nil))
-#+END_SRC
-
-#+RESULTS:
-| true | three | :four | nil |
-
-***** cons
-
-#+BEGIN_SRC clojurescript
-  (cons 0 '(1 2 3 4))
-#+END_SRC
-
-#+RESULTS:
-| 0 | 1 | 2 | 3 | 4 |
-
-**** Lists as stacks
-***** peek
-
-#+BEGIN_SRC clojurescript
-  (peek '(1 true "three" :four nil))
-#+END_SRC
-
-#+RESULTS:
-: 1
-
-***** pop
-
-#+BEGIN_SRC clojurescript
-  (pop '(1 true "three" :four nil))
-#+END_SRC
-
-#+RESULTS:
-| true | three | :four | nil |
-
-***** conj (equivalent to push for list-stacks)
-
-#+BEGIN_SRC clojurescript
-  (conj '(1 2 3 4) 0)
-#+END_SRC
-
-#+RESULTS:
-| 0 | 1 | 2 | 3 | 4 |
-
-*** Vectors
-Vectors provide fast index access, and grow from their tail. When creating a vector, every item is evaluated before being stored.
-**** Create a vector
-***** literal
-
-#+BEGIN_SRC clojurescript
-  [1 true "three" :four nil]
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | nil |
-
-***** programatically
-
-#+BEGIN_SRC clojurescript
-  (vector 1 true "three" :four nil)
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | nil |
-
-**** nth
-
-#+BEGIN_SRC clojurescript
-  (nth [1 true "three" :four nil] 3)
-#+END_SRC
-
-#+RESULTS:
-: :four
-
-**** last
-
-#+BEGIN_SRC clojurescript
-  (last [1 true "three" :four nil])
-#+END_SRC
-
-#+RESULTS:
-: nil
-
-**** Vectors as Stacks
-***** peek
-
-#+BEGIN_SRC clojurescript
-  (peek [1 true "three" :four "something"])
-#+END_SRC
-
-#+RESULTS:
-: something
-
-***** pop
-
-#+BEGIN_SRC clojurescript
-  (pop [1 true "three" :four "something"])
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four |
-
-***** conj
-
-#+BEGIN_SRC clojurescript
-  (conj [1 true "three" :four "something"] "else")
-#+END_SRC
-
-#+RESULTS:
-| 1 | true | three | :four | something | else |
-
-**** Vectors as Associative Collections
-Because vectors access values in relation to numerical indexes - a type of key - we can use the assoc function to return a new collection with a different value at a specified index. Note that Clojure won't permit us to create sparse arrays, and we can only specify existing indexes or the index after the last item - effectively conjing the value onto the vector.
-
-#+BEGIN_SRC clojurescript
-  (assoc [1 2 3 5 5 6 7] 3 4)
-#+END_SRC
-
-#+RESULTS:
-| 1 | 2 | 3 | 4 | 5 | 6 | 7 |
-
-Vectors are functions of their keys.
-
-#+BEGIN_SRC clojurescript
-  ([1 2 3 4 5 6 7] 3)
-#+END_SRC
-
-#+RESULTS:
-: 4
-
-**** mapv & filterv
-The map and filter functions return lazy seqs, but it is common to need a fully realized seq instead. We can accomplish this when working with vectors by using mapv and filterv. This form is also faster. 
-
-#+BEGIN_SRC clojurescript :results output
-
-  (println (type (mapv inc [1 2 3 4])))
-#+END_SRC
-
-#+RESULTS:
-: clojure.lang.PersistentVector
-
-*** Maps
-Maps are associative collections that store key value pairs. Every item is evaluated before being stored in 
-a map, like vectors, but the order of evaluation is indeterminate - we can't predict what order a map's 
-items will surface in. However, other relatives, like the sorted-maps, do provide ordering guarantees.
-  It is most common to use keywords as the keys in a map, in great part because keywords can be used as 
-functions that take the map as an argument and return the corresponding value if the key is present in the 
-map.
-**** Create a map
-***** literal
-
-#+BEGIN_SRC clojurescript
-  {:key "value"}
-#+END_SRC
-
-#+RESULTS:
-| :key | value | 
-
-***** programmatically
-
-#+BEGIN_SRC clojurescript
-  (hash-map :key "value")
-#+END_SRC
-
-#+RESULTS:
-| :key | value |
-
-**** Element retrieval with get, keyword access, and default values
-***** get
-#+BEGIN_SRC clojurescript
-  (get {:a "A" :b "B" :c "C"} :a)
-#+END_SRC
-
-#+RESULTS:
-: A
-
-***** keyword access
-
-#+BEGIN_SRC clojurescript
-  (:a {:a "A" :b "B" :c "C"})
-#+END_SRC
-
-#+RESULTS:
-: A
-
-***** default values
-
-#+BEGIN_SRC clojurescript
-  (:d {:a "A" :b "B" :c "C"} "not found")
-#+END_SRC
-
-#+RESULTS:
-: not found
-**** assoc & dissoc
-***** assoc
-#+BEGIN_SRC clojurescript
-  (assoc {:a "A" :b "B" :c "C"} :d "D")
-#+END_SRC
-
-#+RESULTS:
-| :a | A | :b | B | :c | C | :d | D |
-
-***** dissoc
-
-#+BEGIN_SRC clojurescript
-  (dissoc {:a "A" :b "B" :c "C"} :a)
-#+END_SRC
-
-#+RESULTS:
-| :b | B | :c | C |
-**** keys & vals
-***** keys
-
-#+BEGIN_SRC clojurescript
-  (keys {:a "A" :b "B" :c "C"})
-#+END_SRC
-
-#+RESULTS:
-| :a | :b | :c |
-
-***** vals
-
-#+BEGIN_SRC clojurescript
-  (vals {:a "A" :b "B" :c "C"})
-#+END_SRC
-
-#+RESULTS:
-| A | B | C |
-
-**** merge
-
-#+BEGIN_SRC clojurescript
-  (merge {:a "A" :b "B" :c "C"} {:d "D" :e "E" :f "F"})
-#+END_SRC
-
-#+RESULTS:
-| :a | A | :b | B | :c | C | :d | D | :e | E | :f | F |
-
-*** Sets
-Sets are collections of unique values. No duplicate values are allowed when creating a set, even when 
-nesting sets. Like maps, sets are unordered, but have ordered relatives such as sorted-set and 
-sorted-set-by.
-**** Create a set
-***** literal
-
-#+BEGIN_SRC clojurescript
-  #{1 2 3 4}
-#+END_SRC
-
-#+RESULTS:
-: #{1 4 3 2}
-
-***** programatically
-
-#+BEGIN_SRC clojurescript
-  (hash-set 1 2 3 4)
-#+END_SRC
-
-#+RESULTS:
-: #{1 4 3 2}
-
-**** Element retrieval with get, keyword access, set access, & contains?
-***** get
-
-#+BEGIN_SRC clojurescript
-  (get #{1 2 3 4} 2)
-#+END_SRC
-
-#+RESULTS:
-: 2
-
-***** keyword access
-
-#+BEGIN_SRC clojurescript
-  (:b #{:a :b :c :d})
-#+END_SRC
-
-#+RESULTS:
-: :b
-
-***** set access
-
-#+BEGIN_SRC clojurescript
-  (#{:a :b :c :d} :b)
-#+END_SRC
-
-#+RESULTS:
-: :b
-
-***** contains?
-
-#+BEGIN_SRC clojurescript
-  (contains? #{1 2 3 4} 2)
-#+END_SRC
-
-#+RESULTS:
-: true
-
-**** conj & disj
-***** conj
-
-#+BEGIN_SRC clojurescript
-  (conj #{1 2 3 4} 5)
-#+END_SRC
-
-#+RESULTS:
-: #{1 4 3 2 5}
-
-***** disj
-
-#+BEGIN_SRC clojurescript
-  (disj #{1 2 3 4} 4)
-#+END_SRC
-
-#+RESULTS:
-: #{1 3 2}
-
-**** Using the clojure.set library
-***** clojure.set/union
-
-#+BEGIN_SRC clojurescript
-  (clojure.set/union #{1 2 3 4} #{3 4 5})
-#+END_SRC
-
-#+RESULTS:
-: #{1 4 3 2 5}
-
-***** clojure.set/difference
-
-#+BEGIN_SRC clojurescript
-  (clojure.set/difference #{1 2 3 4} #{3 4 5})
-#+END_SRC
-
-#+RESULTS:
-: #{1 2}
-
-***** clojure.set/intersection
-
-#+BEGIN_SRC clojurescript
-  (clojure.set/intersection #{1 2 3 4} #{3 4 5})
-#+END_SRC
-
-#+RESULTS:
-: #{4 3}
-*** Queues
-Queues largely borrow the semantics of stacks. But, where a stack peeks and conjs to the same 'end', a queue peeks data from one end, and conj's it to another end.
-**** crete a queue
-Creating a queue is not as straightforward as other collections, and requires literal syntax.
-
-#+BEGIN_SRC clojurescript
-  (def pg #queue [1 2 3 4 5])
-#+END_SRC
-
-#+RESULTS:
-
-**** peek
-
-#+BEGIN_SRC clojurescript :results output
-  (def pq #queue [1 2 3 4 5])
-  (peek pq)
-#+END_SRC
-
-#+RESULTS:
-
-**** conj
-
-#+BEGIN_SRC clojurescript :results output
-  (def pq #queue [1 2 3 4 5])
-  (conj pq 5)
-#+END_SRC** The Power of Laziness (lc) / Lazy seqs (brave) / Laziness (cu)
-"Most of ClojureScript's sequence-returning functions generate lazy sequences instead of 
-eagerly creating a whole new sequence. Lazy sequences generate their contents as they are 
-requested, usually when iterating over them. Laziness ensures that we don't do more work than 
-we need to and gives us the possibility of treating potentially infinite sequences as regular 
-ones."
-** Sequence Comprehension with =for=
-The for function accepts a vector of bindings and an expression, and returns a 
-sequence of the result of evaluating the expression. for can accept multiple 
-bindings, and iterates through them in a nested fashion.
-
-#+BEGIN_SRC clojurescript
-  (for [x [1 2 3]
-        y [4 5]]
-    [y (* x x)])
-#+END_SRC
-
-#+RESULTS:
-| 4 | 1 |
-| 5 | 1 |
-| 4 | 4 |
-| 5 | 4 |
-| 4 | 9 |
-| 5 | 9 |
-
-*** using :let to create local bindings
-
-#+BEGIN_SRC clojurescript
-  (for [animal [:mouse :duck :lory]
-        color [:red :blue]
-        :let [animal-str (str "animal-"(name animal))
-              color-str (str "color-"(name color))
-              display-str (str animal-str "-" color-str)]]
-    display-str)
-#+END_SRC
-
-#+RESULTS:
-| animal-mouse-color-red | animal-mouse-color-blue | animal-duck-color-red | animal-duck-color-blue | animal-lory-color-red | animal-lory-color-blue |
-
-*** using :while to break out of the sequence generation
-
-#+BEGIN_SRC clojurescript
-  (for [animal [:mouse :duck :lory]
-        color [:red :blue]
-        :let [animal-str (str "animal-"(name animal))
-              color-str (str "color-"(name color))
-              display-str (str animal-str "-" color-str)]
-        :while (not= animal :duck)]
-    display-str)
-#+END_SRC
-
-#+RESULTS:
-| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
-
-*** using :when to filter out values
-
+=======
 #+BEGIN_SRC clojurescript
   (for [animal [:mouse :duck :lory]
         color [:red :blue]
@@ -709,66 +1121,67 @@ bindings, and iterates through them in a nested fashion.
               display-str (str animal-str "-" color-str)]
         :when (not= animal :duck)]
     display-str)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
+| 1 | true | three | :four | nil |
 
-*** doseq and run! for side effects
-doseq is similar to for, but executes the expression, discards the resulting values, and returns nil.
-
+<<<<<<< HEAD
+***** programmatically
+#+BEGIN_SRC clojure
+  ( list 1 true "three" :four nil)
+=======
 #+BEGIN_SRC clojurescript :results output
   (doseq [x [1 2 3]
           y [4 5]
           :let [z (+ x y)]]
     (println x "+" y "=" z))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: 1 + 4 = 5
-: 1 + 5 = 6
-: 2 + 4 = 6
-: 2 + 5 = 7
-: 3 + 4 = 7
-: 3 + 5 = 8
+| 1 | true | three | :four | nil |
 
-run! similarly returns nil, and acts similarly to reduce.
+**** Lists as seqs
+***** first
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (first '(1 true "three" :four nil))
+=======
 #+BEGIN_SRC clojurescript :results output
   (run! println [1 2 3 4 5])
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
 : 1
-: 2
-: 3
-: 4
-: 5
 
+***** rest
 
-* Basic Functions
-** Compound Expressions
-Clojure is a dialect of LISP (LISt Processing). All lisp code is made of lists of 
-data - literally, data in the list data structure.  Lists are evaluated in 
-Clojure as expressions; The first element in a list is the function, and 
-subsequent elements are arguments of the first element. This is known as 'prefix' 
-notation. Note, that Clojure does not have operators, only functions. This 
-facilitates function argument arbitrarity. As a bonus, there's no operator 
-precedence table to memorize. 
-
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (rest '(1 true "three" :four nil))
+=======
 #+BEGIN_SRC clojurescript
   (+ 1/2 3/4)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: 5/4
+| true | three | :four | nil |
 
-Clojure also uses lists as compound data structures when the list is preceded by 
-a single-quote. Emphatically, in Clojure: code is data.
-** Functions Are Values
-In Clojure, functions are first class values: They can be referenced with vars, passed to functions as arguments, and returned from functions. 
-*** Anonymous functions with fn (brave, lc)
+***** cons
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (cons 0 '(1 2 3 4))
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 | 3 | 4 |
+=======
 #+BEGIN_SRC clojurescript :results output
   ((fn [parameter] (println parameter)) "Code is Data")
 #+END_SRC
@@ -784,23 +1197,32 @@ In Clojure, functions are first class values: They can be referenced with vars, 
 
 #+RESULTS:
 : Code is Data
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 
-*** Binding a Function to a Symbol Using defn (lc, cu)
-The defn macro is the idiomatic way to define functions, and optionally 
-includes a 'docstring'.
+**** Lists as stacks
+***** peek
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (peek '(1 true "three" :four nil))
+#+END_SRC
+=======
 #+BEGIN_SRC clojurescript :results output
   (defn symbolicName "This is a description of the function" 
     [parameter1] (println parameter1))
   (symbolicName "Code is Data")
 #+End_SRC
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 
 #+RESULTS:
-: Code is Data
+: 1
 
-*** Functions with Multiple Arities and Variadic Functions (cu)
-Function definitions can include different bodies for different arities.
+***** pop
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (pop '(1 true "three" :four nil))
+=======
 #+BEGIN_SRC clojurescript :results output
   (defn myinc
     "Self defined version of parameterized 'inc'."
@@ -808,172 +1230,254 @@ Function definitions can include different bodies for different arities.
     ([x y] (+ x y)))
   (println (myinc 5))
   (println (myinc 9))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: 6
-: 10
+| true | three | :four | nil |
 
-And, functions can accept an arbitrary number of arguments using the & symbol.
+***** conj (equivalent to push for list-stacks)
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (conj '(1 2 3 4) 0)
+=======
 #+BEGIN_SRC clojurescript
   (defn my-variadic-set [& params] (set params))
   (my-variadic-set 1 2 3 4 2 3)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: #'user/my-variadic-set#{1 4 3 2}
+| 0 | 1 | 2 | 3 | 4 |
 
-*** Anonymous function shorthand #(%) (lc)
-The # reader macro expands shorthand function expressions into legit function expressions during compilation. A single arity function would use % as shorthand for its argument. Otherwise, arguments should be numbered (%1 %1 etc.) or variable (%&).
+*** Vectors
+Vectors provide fast index access, and grow from their tail. When creating a vector, every item is evaluated before being stored.
+**** Create a vector
+***** literal
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  [1 true "three" :four nil]
+=======
 #+BEGIN_SRC clojurescript :results output
   (#(println %) "Code is Data")
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: Code is Data
-** TODO Pure Functions: What and Why (brave)
-Pure functions always return the same output when given the same input. Pure functions are free of 'side effects'. 
-*** comp
-*** memoize
+| 1 | true | three | :four | nil |
 
+***** programatically
 
-* You must learn Control (flow)
-** Boolean Logic
-*** Predicates: Basic Logic Tests
-Only two values evaluate to false in logic operations: false and nil. nil is 
-logically false. In Clojure, functions that return a boolean value as their result typically end with a question mark.
-**** true? - tests for true values
-
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (vector 1 true "three" :four nil)
+=======
 #+BEGIN_SRC clojurescript
   (true? nil)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: false
+| 1 | true | three | :four | nil |
 
-**** false? - tests for the boolean value false
+**** nth
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (nth [1 true "three" :four nil] 3)
+=======
 #+BEGIN_SRC clojurescript
   (false? nil)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: false
+: :four
 
-**** nil? - tests for nil, the absence of value
+**** last
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (last [1 true "three" :four nil])
+=======
 #+BEGIN_SRC clojurescript
   (nil? nil)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: true
+: nil
 
-**** not - returns the negation of a boolean returned from its operand
+**** Vectors as Stacks
+***** peek
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (peek [1 true "three" :four "something"])
+=======
 #+BEGIN_SRC clojurescript
   (true? (not nil))
   (false? (not nil))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: truefalse
+: something
 
-**** = & not= - tests for equality or inequality
+***** pop
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (pop [1 true "three" :four "something"])
+=======
 #+BEGIN_SRC clojurescript
   (= nil (not= nil false))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: false
+| 1 | true | three | :four |
 
-*** Collections As Predicates
-Maps and Sets implement the callable protocol (IFn), and can thus be used as 
-if they were functions. When calling a collection, it will return an argument's value that the collection itself contains. If the collection does not contain the argument's value, the result will be nil. 
+***** conj
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (conj [1 true "three" :four "something"] "else")
+=======
 #+BEGIN_SRC clojurescript
   (#{1 2 3} 2)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: 2
+| 1 | true | three | :four | something | else |
 
-*** Logic Tests you Can Use on Collections
-**** coll?
-The coll? predicate returns true if its argument is a collection.
+**** Vectors as Associative Collections
+Because vectors access values in relation to numerical indexes - a type of key - we can use the assoc function to return a new collection with a different value at a specified index. Note that Clojure won't permit us to create sparse arrays, and we can only specify existing indexes or the index after the last item - effectively conjing the value onto the vector.
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (assoc [1 2 3 5 5 6 7] 3 4)
+=======
 #+BEGIN_SRC clojurescript
   (coll? {})
   (coll? 8)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: truefalse
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 
-**** empty?
-The empty? predicate tests whether a collection contains any items.
+Vectors are functions of their keys.
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  ([1 2 3 4 5 6 7] 3)
+=======
 #+BEGIN_SRC clojurescript
   (empty? #{})
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: true
+: 4
 
-**** seq & 'nil pruning'
-The seq function isn't really a predicate, but it is idiomatic to use it as a predicate for 
-whether a collection is not empty. If a collection is empty, seq returns nil -  a falsey value. Otherwise, seq returns a list containing the elements of that collection - a truthy value.
+**** mapv & filterv
+The map and filter functions return lazy seqs, but it is common to need a fully realized seq instead. We can accomplish this when working with vectors by using mapv and filterv. This form is also faster. 
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+
+  (println (type (mapv inc [1 2 3 4])))
+=======
 #+BEGIN_SRC clojurescript :results output
   (println (seq {:a "A"}))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: ([:a A])
+: clojure.lang.PersistentVector
 
-**** every?
-The every? function tests whether every element in a collection passes a predicate.
+*** Maps
+Maps are associative collections that store key value pairs. Every item is evaluated before being stored in 
+a map, like vectors, but the order of evaluation is indeterminate - we can't predict what order a map's 
+items will surface in. However, other relatives, like the sorted-maps, do provide ordering guarantees.
+  It is most common to use keywords as the keys in a map, in great part because keywords can be used as 
+functions that take the map as an argument and return the corresponding value if the key is present in the 
+map.
+**** Create a map
+***** literal
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  {:key "value"}
+=======
 #+BEGIN_SRC clojurescript
   (every? #(= :zanzibar %) '(:zanzibar :zanzibar :zanzibarnacle))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: false
-**** not-any?
-The not-any? function tests whether each element in the collection fails a predicate.
+| :key | value | 
 
+***** programmatically
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (hash-map :key "value")
+=======
 #+BEGIN_SRC clojurescript
   (not-any? #(= :zanzibar %) '(:zanzibarnacle :zanzibarnacle :zanzibarnacle))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: true
+| :key | value |
 
-**** some
-The some function returns true if any item in a collection passes a predicate.
-
+<<<<<<< HEAD
+**** Element retrieval with get, keyword access, and default values
+***** get
+#+BEGIN_SRC clojure
+  (get {:a "A" :b "B" :c "C"} :a)
+=======
 #+BEGIN_SRC clojurescript
   (some #(> % 4) [1 2 3 4 5 6 7 8])
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: true
+: A
 
-And remember, that we can use sets as predicates for their members.
+***** keyword access
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (:a {:a "A" :b "B" :c "C"})
+=======
 #+BEGIN_SRC clojurescript
   (some #{1 2 3} [2])
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: 2
+: A
 
-But be wary of falsey values!
+***** default values
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (:d {:a "A" :b "B" :c "C"} "not found")
+#+END_SRC
+
+#+RESULTS:
+: not found
+**** assoc & dissoc
+***** assoc
+#+BEGIN_SRC clojure
+  (assoc {:a "A" :b "B" :c "C"} :d "D")
+=======
 #+BEGIN_SRC clojurescript
   (some #{nil} [nil])
 #+END_SRC
@@ -989,78 +1493,102 @@ The do form accepts any number of arguments, evaluates them in turn, and returns
   (do 
     (println "I was evaluated")
     "And, I was returned")
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: And, I was returned
+| :a | A | :b | B | :c | C | :d | D |
 
-*** when
-The when function accepts a predicate and an expression. If the predicate returns true, the expression will be evaluated. If the predicate returns false, when returns nil. That is all.
+***** dissoc
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (dissoc {:a "A" :b "B" :c "C"} :a)
+=======
 #+BEGIN_SRC clojurescript
   (when true "true")
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: true
+| :b | B | :c | C |
+**** keys & vals
+***** keys
 
-*** when-let
-The when-let function works similarly to when, but has a symbol-binding in the place of a logic test. If the expression bound to the symbol is truthy, the truthy value is bound to the symbol and the expression is evaluated.
-
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (keys {:a "A" :b "B" :c "C"})
+=======
 #+BEGIN_SRC clojurescript :results output
   (when-let [name (> 5 1)]
     (println (str name " is true!")))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: true is great!
- 
-*** if
-The if function takes three parameters: an expression to assess, an expression to evaluate in the event of 
-a true assessment, and - optionally - an expression to evaluate in the event of a false assessment.
+| :a | :b | :c |
 
+***** vals
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (vals {:a "A" :b "B" :c "C"})
+=======
 #+BEGIN_SRC clojurescript
   (if false
     "The Truth is Out There"
     "The X-Files have been closed")
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: The X-Files have been closed
+| A | B | C |
 
-*** if-let
-The if-let function works similarly to let, but has a symbol-binding in the place of a logic test. If the expression bound to the symbol is truthy, the truthy value is bound to the symbol and the first expression is evaluated, otherwise the second expression is evaulated.
+**** merge
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (merge {:a "A" :b "B" :c "C"} {:d "D" :e "E" :f "F"})
+=======
 #+BEGIN_SRC clojurescript :results output
   (if-let [sym 1]
     (println (str sym " is true"))
     (println (" is false")))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: 1 is true
+| :a | A | :b | B | :c | C | :d | D | :e | E | :f | F |
 
-*** cond
-The cond expression permits a mapping of logic tests to expressions. Should a logic test 
-evaluate to true, the corresponding expression will be evaluated. To ensure that the final 
-predicate succeeds, you can use any truthy value as a predicate: "default" or :else are 
-semantically satisfying.
-  If none of the predicates succeed, cond returns nil.
+*** Sets
+Sets are collections of unique values. No duplicate values are allowed when creating a set, even when 
+nesting sets. Like maps, sets are unordered, but have ordered relatives such as sorted-set and 
+sorted-set-by.
+**** Create a set
+***** literal
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  #{1 2 3 4}
+=======
 #+BEGIN_SRC clojurescript :results output
   (def x 0)
   (cond
     (> x 0) (println "positive")
     (< x 0) (println "negative")
     "default" (println "zero"))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: zero
+: #{1 4 3 2}
 
-*** condp
-The predicates in a cond expression may be very similar. The condp expression accepts a single predicate that applies to subsequent pairs of keywords and expressions.
+***** programatically
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (hash-set 1 2 3 4)
+=======
 #+BEGIN_SRC clojurescript
   (defn translate
     [code]
@@ -1071,19 +1599,19 @@ The predicates in a cond expression may be very similar. The condp expression ac
       "unknown"))
   (translate "fr")
   (translate "pg")
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: #'user/translate"French""unknown"
+: #{1 4 3 2}
 
-*** case
-The case expression is similar to condp, but always checks for equality between a symbol and a 
-branching value that maps to an expression. Note that the branching values are evaluated during 
-compilation.
-  Unlike cond and condp, if there is no successful predicate, case will throw an error! 
-Thankfully, it is easy to provide a default, and the last expression in a case will always be 
-evaluated.
+**** Element retrieval with get, keyword access, set access, & contains?
+***** get
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (get #{1 2 3 4} 2)
+=======
 #+BEGIN_SRC clojurescript
   (defn translate
     [code]
@@ -1094,102 +1622,112 @@ evaluated.
       "Unknown"))
   (translate "fr")
   (translate "pg")
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: #'user/translate"French""Unknown"
+: 2
 
+<<<<<<< HEAD
+***** keyword access
 
-* Naming Things and Namespaces
-** Binding Values to Symbols / Vars
-"Clojure symbols refer to values. When a symbol is evaluated, it returns the 
-thing it refers to." (lc) 
-  In Clojure, references cannot be reassigned - consistent with values being 
-immutable. Use let inside functions, not def!
-**** def
-Creates a var "object" scoped to the namespace. 
-
+#+BEGIN_SRC clojure
+  (:b #{:a :b :c :d})
+=======
 #+BEGIN_SRC clojurescript :results output
 (def foo "bar")
 (println foo)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: bar
+: :b
 
-**** let
-let defines a var "object(s)" scoped to the let expression. As its first parameter, let 
-takes a vector of paired items, typically symbol / expression pairs, and binds each expression's value to its corresponding symbol.
-  Remaining arguments are evaluated in the scope of the let bindings.
+***** set access
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (#{:a :b :c :d} :b)
+=======
 #+BEGIN_SRC clojurescript :results output
   (let [sym "value"] 
     (println sym))
   (println sym)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: value
-** Destructuring
-Anywhere you bind values (let, for, doseq, etc...) you can take advantage of 
-destructuring. Destructuring takes two forms, positional destructuring with 
-indexed sequences or associative destructuring with associative data structures. 
-  In the following example, the let binding contains two vectors nested in its 
-first parameter. The symbols in the first vector bind the values in the second 
-vector according to their respective indexes.
-  The _ is used as a placeholder, indicate that the value at that index is not
-needed. And, if a value is not present, the symbol will be bound to nil.
+: :b
 
+<<<<<<< HEAD
+***** contains?
+=======
 #+BEGIN_SRC clojurescript :results output
   ;; positional destructuring example, it's all about the index
   (let [[color _ shape] ["red" "heavy" "square"]]
     (println (str color " " shape)))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 
-  ;; associative destructuring example, it's all about key matching
-  (let [{a :a _ 'b c "c"} {:a "red" 'b "heavy" "c" "square"}]
-    (println (str a " " c)))
+#+BEGIN_SRC clojure
+  (contains? #{1 2 3 4} 2)
 #+END_SRC
 
 #+RESULTS:
-: red square
-: red square
+: true
 
-*** Using & to Bundle the Rest Parameters
-Just like & can be used to collect surplus parameters to a variadic function, & can collect the remaining paramters in a destructuring form. 
+**** conj & disj
+***** conj
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (conj #{1 2 3 4} 5)
+=======
 #+BEGIN_SRC clojurescript :results output
   (let [[color & more] ["red" "heavy" "square" "ball"]]
     (println (str color " " (last more))))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: red ball
+: #{1 4 3 2 5}
 
-*** Using :as to Retain the Original Data Structure
-Sometimes you want to access the data structure you are destructuring in its original form. The :as keyword permits you to provide a symbol to bind the original data structure. Although this example uses a vector, this also works for destructuring maps.
+***** disj
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (disj #{1 2 3 4} 4)
+=======
 #+BEGIN_SRC clojurescript :results output
   (let [[_ _ _ :as og] ["red" "heavy" "square" "ball"]]
     (println (reduce #(str %1 " " %2) og)))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: red heavy square ball
+: #{1 3 2}
 
-*** Using :or to Provide Default Values When Associatively Destructuring
-When destructuring a map, we can specify a default value for a symbol by using the :or keyword followed by a map with the symbol and default value.
+**** Using the clojure.set library
+***** clojure.set/union
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (clojure.set/union #{1 2 3 4} #{3 4 5})
+=======
 #+BEGIN_SRC clojurescript :results output
   (let [{a :a b :b c :c :or {c "triangle"}} {:a "red" :b "heavy"}]
     (println (str a " " c)))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: red triangle
+: #{1 4 3 2 5}
 
-*** Keeping the OG Keys Using :keys, :syms, and :strs
-Often, the symbols we will want to bind values to match the keys in a map. When this is the case, we can use :keys, :syms, or :strs to associate a vector of symbols with keys (be they keywords, symbols, or strings) in the map.
+***** clojure.set/difference
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (clojure.set/difference #{1 2 3 4} #{3 4 5})
+=======
 #+BEGIN_SRC clojurescript :results output
   (let [{:keys [a b c]} {:a "red" :b "heavy" :c "square"}]
     (println (str a b c)))
@@ -1197,45 +1735,50 @@ Often, the symbols we will want to bind values to match the keys in a map. When 
     (println (str a b c)))
   (let [{:strs [a b c]} {"a" "red" "b" "heavy" "c" "square"}]
     (println (str a b c)))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: redheavysquare
-: redheavysquare
-: redheavysquare
+: #{1 2}
 
-*** Destructuring Nested Data
-Thankfully, destructuring nested data is as easy as flat data.
+***** clojure.set/intersection
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (clojure.set/intersection #{1 2 3 4} #{3 4 5})
+=======
 #+BEGIN_SRC clojurescript :results output
   (let [{a :a [one two three] :b _ :c} {:a "red" :b [1 2 3] :c "square"}]
     (println (str a two)))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: red2
+: #{4 3}
+*** Queues
+Queues largely borrow the semantics of stacks. But, where a stack peeks and conjs to the same 'end', a queue peeks data from one end, and conj's it to another end.
+**** crete a queue
+Creating a queue is not as straightforward as other collections, and requires literal syntax.
 
-** TODO Namespaces
-Namespaces are Clojure's fundamental unit of code modularity. It is idiomatic for 
-each file to begin with a namespace definition. In fact, namespaces must 
-correspond to filenames. For example, the namespace =mynamespace.core= must 
-correspond to the core.clj* file in the mynamespace directory. The default 
-namespace is "user". 
-  When we bind symbols and vars, those bindings are scoped to the current 
-namespaces. Although you can create a namespace dynamically, it is idiomatic to 
-only have one namespace per file.
-*** creating and identifying a namespace (lc)
-
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (def pg #queue [1 2 3 4 5])
+=======
 #+BEGIN_SRC clojurescript :results output
   (ns alice.favfoods)
   (println  *ns*)
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: #object[clojure.lang.Namespace 0x763be7bf alice.favfoods]
 
-*** remotely accessing a namespace (lc, cu)
+**** peek
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure :results output
+  (def pq #queue [1 2 3 4 5])
+  (peek pq)
+=======
 #+BEGIN_SRC clojurescript :results output
   (ns userland)
   (println *ns*)
@@ -1244,63 +1787,124 @@ only have one namespace per file.
   (ns the.System)
   (println *ns*)
   (println userland/whoDoYouFightFor) 
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: #object[clojure.lang.Namespace 0x2fea84c userland]
-: the users
-: #object[clojure.lang.Namespace 0x8a91f84 the.System]
-: the users
 
-*** :require(ing) libs (lc)
-Clojure has 'libs', namespaces full of symbols bound to values. Likely, function buckets...
-**** qualified namespaces with require
-After we require a namespace, symbols in that namespace will be accessible through a qualified namespace.
+**** conj
 
+#+BEGIN_SRC clojure :results output
+  (def pq #queue [1 2 3 4 5])
+  (conj pq 5)
+#+END_SRC** The Power of Laziness (lc) / Lazy seqs (brave) / Laziness (cu)
+"Most of ClojureScript's sequence-returning functions generate lazy sequences instead of 
+eagerly creating a whole new sequence. Lazy sequences generate their contents as they are 
+requested, usually when iterating over them. Laziness ensures that we don't do more work than 
+we need to and gives us the possibility of treating potentially infinite sequences as regular 
+ones."
+** Sequence Comprehension with =for=
+The for function accepts a vector of bindings and an expression, and returns a 
+sequence of the result of evaluating the expression. for can accept multiple 
+bindings, and iterates through them in a nested fashion.
+
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (for [x [1 2 3]
+        y [4 5]]
+    [y (* x x)])
+=======
 #+BEGIN_SRC clojurescript
   (require 'clojure.set)
   clojure.set/union
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+| 4 | 1 |
+| 5 | 1 |
+| 4 | 4 |
+| 5 | 4 |
+| 4 | 9 |
+| 5 | 9 |
 
-**** aliased namespaces with :require :as
-We can use the :as option to set an alias for a namespace.
+*** using :let to create local bindings
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]]
+    display-str)
+=======
 #+BEGIN_SRC clojurescript
   (ns wonderland 
     (require '[clojure.set :as s]))
   s/union
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: #object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+| animal-mouse-color-red | animal-mouse-color-blue | animal-duck-color-red | animal-duck-color-blue | animal-lory-color-red | animal-lory-color-blue |
 
-This form is acceptable, but less common:
+*** using :while to break out of the sequence generation
 
+<<<<<<< HEAD
+#+BEGIN_SRC clojure
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]
+        :while (not= animal :duck)]
+    display-str)
+=======
 #+BEGIN_SRC clojurescript
   (require '[clojure.set :as s])
   s/union
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: nil#object[clojure.set$union 0x72f24ffb "clojure.set$union@72f24ffb"]
+| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
 
+<<<<<<< HEAD
+*** using :when to filter out values
+
+#+BEGIN_SRC clojure
+  (for [animal [:mouse :duck :lory]
+        color [:red :blue]
+        :let [animal-str (str "animal-"(name animal))
+              color-str (str "color-"(name color))
+              display-str (str animal-str "-" color-str)]
+        :when (not= animal :duck)]
+    display-str)
+=======
 **** unqualified symbols with :require :refer
 You can bring symbols directly into your current namespace without qualification so long as there is not a var collision. 
 #+BEGIN_SRC clojurescript :results output
   (ns myapp.main
     (require [clojure.string :refer [upper-case]]))
   (println (upper-case "hello world"))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 #+END_SRC
 
 #+RESULTS:
-: HELLO WORLD
+| animal-mouse-color-red | animal-mouse-color-blue | animal-lory-color-red | animal-lory-color-blue |
 
-**** :require :refer :all
-The :all option makes all of a namespace's symbols available in the current namespace without qualification. If symbols conflict between namespaces, the compiler will throw an exception.
+<<<<<<< HEAD
+*** doseq and run! for side effects
+doseq is similar to for, but executes the expression, discards the resulting values, and returns nil.
 
+#+BEGIN_SRC clojure :results output
+  (doseq [x [1 2 3]
+          y [4 5]
+          :let [z (+ x y)]]
+    (println x "+" y "=" z))
+#+END_SRC
+=======
 #+BEGIN_SRC clojurescript
   (ns wonderland
     (:require [alice.favfoods :refer :all]
@@ -1312,20 +1916,28 @@ Sometimes, you want to use a symbol that it bound in a library you are loading. 
 #+BEGIN_SRC clojurescript :results output
   (ns myapp.main
     (:refer-clojure :exclude [min]))
+>>>>>>> 0984f036db3256f5b55495856bdf01683f2ae313
 
-  (defn min [x y]
-    (if (< x y)
-      y
-      x))
+#+RESULTS:
+: 1 + 4 = 5
+: 1 + 5 = 6
+: 2 + 4 = 6
+: 2 + 5 = 7
+: 3 + 4 = 7
+: 3 + 5 = 8
 
-  (println (min 5 8))
+run! similarly returns nil, and acts similarly to reduce.
 
+#+BEGIN_SRC clojure :results output
+  (run! println [1 2 3 4 5])
 #+END_SRC
 
 #+RESULTS:
-: 8
-
-*** Using libs (lc)
+: 1
+: 2
+: 3
+: 4
+: 5
 
 
 

@@ -1,0 +1,641 @@
+Leverage New Features of React 16 : Nik Graf - 39:07
+
+* Error Handling using Error Boundaries
+React 16 introduces the =componentDidCatch= lifecycle method. This lifecycle fires when a component's tree
+throws an error (via return/render), or when a class component method throws (constructor, lifecycle methods, etc.). An error that is not caught will result in the entire component tree unmounting.
+
+We can setState within =componentDidCatch= in order to render an alternate UI when a component throws.
+=componentDidCatch= accepts two arguments: the =error= object, and an =info= object.
+And, we can create an ErrorBoundary component that manages the error state and lifecycle method independently, providing a reusable error wrapper.
+
+Note that errors thrown in event handlers are NOT CAUGHT by =componentDidCatch=, with one exception being functions passed to =setState=.
+
+#+BEGIN_SRC js
+let sendToErrorReporting = (error, info) => {
+  console.log(error)
+  console.log(info)
+}
+
+
+class MyErrorBoundary extends React.Component {
+constructor(props) {
+  super(props);
+  this.state = {
+    hasError: false
+  };
+}
+
+componentDidCatch(error, info) {
+  this.setState(state => ({ ...state, hasError: true }));
+  sendToErrorReporting(error, info);
+}
+
+render() {
+  if (this.state.hasError) {
+    return <div>Sorry, something went wrong.</div>;
+  } else {
+    return this.props.children;
+  }
+}
+}
+
+class Profile extends React.Component {
+onClick = () => {
+  this.setState(state => {
+    throw new Error("Oh nooo!");
+    return { ...state };
+  });
+};
+
+render() {
+  return (
+    <div onClick={this.onClick}>
+      Name: {this.props.user.name}
+    </div>
+  );
+}
+}
+
+class App extends React.Component {
+constructor(props) {
+  super(props);
+  this.state = {
+    user: { name: "Chris" }
+  };
+}
+
+updateUser = () => {
+  this.setState(state => ({ ...state, user: null }));
+};
+
+render() {
+  return (
+    <div>
+      <MyErrorBoundary>
+        <Profile user={this.state.user} />
+        <button onClick={this.updateUser}>Update</button>
+      </MyErrorBoundary>
+    </div>
+  );
+}
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+#+END_SRC
+
+* Render Multiple Elements w/o Wrapping Element in a Component
+React 16 allows you to return an array of elements:
+
+#+BEGIN_SRC js
+const data = [[14, 24, 125, 182], [10, 122, 220, 310], [0, 19, 38, 50]];
+
+const Aux = props => {
+  return props.children;
+};
+
+const Fruits = () => [
+  <li key="1">Apple</li>,
+  <li key="2">Orange</li>,
+  <li key="3">Banana</li>
+];
+
+class MoreFruits extends React.Component {
+  render() {
+    return [<li key="1">Strawberry</li>, <li key="2">Blueberry</li>];
+  }
+}
+
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <ul>
+          <li>Peach</li>
+          <li>Ananas</li>
+          <Fruits />
+          <MoreFruits />
+        </ul>
+        <table>
+          <tbody>
+            <RawRows data={data} />
+            <StatsRows data={data} />
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
+#+END_SRC
+
+* Render Text Only Components
+React 16 permits rendering strings directly, without need for a wrapping element
+
+#+BEGIN_SRC js
+const Comment = ({ text }) => {
+  const emojifiedText = text
+    .replace(':)', '😊')
+    .replace(':D', '😀')
+    .replace(':(', '🙁');
+  return emojifiedText;
+};
+
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <Comment text="Today we are sailing home :)" />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+#+END_SRC
+
+* TODO Render Elements Outside the Current React Tree using Portals
+* Define DOM Attribures
+React 16 no longer ignores unknown DOM attributes. Any value that can be coerced toString() is acceptable.
+
+Note that attributes that start with "on_" are not passed through, for security reasons.
+
+#+BEGIN_SRC js
+class Foo {
+  toString() {
+    return 'foo'
+  }
+}
+const foo = new Foo();
+
+class App extends React.Component {
+  render() {
+    return (
+      <div
+        my-attribute="foo"
+        // tabindex="-1"
+        // tabIndex="-1"
+        class="bar"
+      // className={false}
+      // className={NaN}
+      // className={() => null}
+      // className={Symbol('foo')}
+      // className={{ foo: 'bar' }}
+      // className={foo}
+      // onclick="alert('Hi!')"
+      >
+        Hello!
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+#+END_SRC
+
+* Call setState with null to Avoid Triggering an Update 
+When calling an 'updater' or 'loader' function that updates the component's state, you may want to prevent the component from re-rendering. This can be accomplished by passing null to =setState= in React 16, effectively moving the logic re: whether to change the component's state inside the call to setState:
+
+#+BEGIN_SRC js
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { city: 'vienna' };
+  }
+
+  selectCity = evt => {
+    const newValue = evt.target.value;
+    this.setState(state => {
+      if (state.city === newValue) {
+        return null;
+      }
+      return {
+        city: newValue
+      };
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <button type="button" value="vienna" onClick={this.selectCity}>
+          Vienna
+        </button>
+        <button type="button" value="paris" onClick={this.selectCity}>
+          Paris
+        </button>
+        <City name={this.state.city} />
+      </div>
+    );
+  }
+}
+
+
+// ---------------------------------------------------------------
+// City.js
+// ---------------------------------------------------------------
+
+ class City extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { loading: true };
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 1000);
+  }
+
+  componentWillReceiveProps() {
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 1000);
+  }
+
+  render() {
+    if (this.state.loading) {
+      return (
+        <img src={`/spinner.gif`} alt="loading" />
+      );
+    }
+    return (
+      <img
+        style={{ width: '100%' }}
+        alt={this.props.name}
+        src={`/${this.props.name}.png`}
+      />
+    );
+  }
+}
+
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+#+END_SRC
+
+* Render Multiple Elements using React.Fragment and the JSX Fragment Syntax
+When using React.Fragment or <></>, you can ommit keys on its children!
+However, if the fragment itself requires a key, use React.Fragment, which accepts props.
+
+#+BEGIN_SRC js
+import React, { Component, Fragment } from "react";
+
+function Fruits() {
+  return (
+    <React.Fragment>
+      <li>Apple</li>
+      <li>Orange</li>
+      <li>Banana</li>
+    </React.Fragment>
+  );
+}
+
+function Glossary(props) {
+  return (
+    <dl>
+      {props.items.map(item => (
+        <Fragment key={item.id}>
+          <dt>{item.term}</dt>
+          <dd>{item.description}</dd>
+        </Fragment>
+      ))}
+    </dl>
+  );
+}
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <ul>
+          <li>Peach</li>
+          <li>Ananas</li>
+          <Fruits />
+        </ul>
+        <Glossary
+          items={[
+            {
+              id: 1,
+              term: "HTML",
+              description:
+                "Is a descriptive language that specifies webpage structure"
+            },
+            {
+              id: 2,
+              term: "CSS",
+              description:
+                "Is a declarative language that controls how webpages look in the browser"
+            }
+          ]}
+        />
+      </div>
+    );
+  }
+}
+
+export default App;
+#+END_SRC
+
+* Create a DOM reference using createRef
+In the React model, the only way that parents are aware of their children is through props. If we need to imperatively modify a child, outside of the react data-flow, we can use refs.
+
+Create a ref in the constructor of the parent component, using =React.createRef()=, and assigning the value to a property on the parent. At the time of construction, the ref value will be null. We can then assign that value to the =ref= attribute of the child component. When the component has mounted, the value will become a pointer to the child element as rendered in the DOM... (i think) 
+
+Note that you can't bind a ref to a functional component, because it lacks an 'instance.' However, you can use refs "inside" a functional component.
+
+Also, React will continue to support the traditional callback-refs.
+
+#+BEGIN_SRC js
+import React, { Component } from "react";
+import BarChart from "./BarChart";
+
+function FunctionalComponent() {
+  let inputRef = React.createRef();
+
+  function handleClick() {
+    inputRef.current.focus();
+  }
+
+  return (
+    <div>
+      <input ref={inputRef} />
+      <button onClick={handleClick}>Focus</button>
+    </div>
+  );
+}
+
+class App extends Component {
+  barChartRef = React.createRef();
+  inputRef = React.createRef();
+
+  highlightThird = () => {
+    this.barChartRef.current.highlight(3);
+  };
+
+  render() {
+    return (
+      <div>
+        <BarChart data={[5, 8, 14, 15, 22, 34]} ref={this.barChartRef} />
+        <button onClick={this.highlightThird}>Highlight</button>
+        <FunctionalComponent ref={this.inputRef} />
+      </div>
+    );
+  }
+}
+
+export default App;
+#+END_SRC
+
+* TODO Forward a DOM refernce to another Component using forwardRef
+=ref= is not a prop, similar to =key=, React handles refs differently.
+* Update State Based on Props using the Lifecycle Hook getDerivedStateFromProps
+=getDerivedStateFromProps= is intended as a replacement for =componentWillReceiveProps=. It is called after a component mounts, and whenever props are passed to the component. =getDerivedStateFromProps= accepts two arguments: =nextProps=, and =previousState=. It's return value should be the same as that passed to setState: null, or an object containing updates to the component's state.
+
+Note that this lifescycle method doesn't have access to previous props because it is a static method, and therefore does not have access to =this=, so we must store previous props that affect state in the component's state.
+
+Note also that this method fires when a parent component rerenders, even if the props have not changed, and we must handle the logic of when not to update state.
+
+#+BEGIN_SRC js
+import React, { Component, Fragment } from "react";
+
+class FetchJson extends Component {
+  state = {
+    url: null,
+    data: null,
+    isLoading: true
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log("getDerivedStateFromProps", nextProps);
+    if (prevState.url !== nextProps.url) {
+      return {
+        url: nextProps.url,
+        data: null,
+        isLoading: true
+      };
+    }
+
+    return null;
+  }
+
+  fetchAndUpdate = async () => {
+    const url = this.state.url;
+    const response = await fetch(url);
+    const result = await response.json();
+    this.setState(state => {
+      if (state.url === url) {
+        return { data: result, isLoading: false };
+      }
+      return null;
+    });
+  };
+
+  componentDidMount() {
+    this.fetchAndUpdate();
+  }
+
+  componentDidUpdate() {
+    if (this.state.isLoading) {
+      this.fetchAndUpdate();
+    }
+  }
+
+  render() {
+    return <Fragment>{this.props.render(this.state)}</Fragment>;
+  }
+}
+
+export default FetchJson;
+
+#+END_SRC
+
+* Capture values using the lifecycle hook getSnapshotBeforeUpdate
+=getSnapshotBeforeUpdate= is another new lifecycle hook, which receives =prevProps= and =prevState= as arguments. This method is called before the most recently rendered output is committed to the DOM. The return value, is passed to =componentDidUpdate= as it's third argument. 
+
+This allows you to capture values before a change occurs.
+
+In the example below, 
+
+#+BEGIN_SRC js
+import React, { Component } from "react";
+
+class Chat extends Component {
+  wrapperRef = React.createRef();
+
+  componentDidMount() {
+    this.wrapperRef.current.scrollTop = this.wrapperRef.current.scrollHeight;
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    const wrapper = this.wrapperRef.current;
+    return wrapper.scrollTop + wrapper.offsetHeight >= wrapper.scrollHeight;
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (snapshot) {
+      this.wrapperRef.current.scrollTop = this.wrapperRef.current.scrollHeight;
+    }
+  }
+
+  render() {
+    return (
+      <div
+        style={{
+          height: 200,
+          overflowY: "scroll",
+          border: "1px solid #ccc"
+        }}
+        ref={this.wrapperRef}
+        children={this.props.children}
+      >
+        {this.props.children}
+      </div>
+    );
+  }
+}
+
+export default Chat;
+#+END_SRC
+
+* Pass Data through a component tree using Context Providers and Consumers
+** Index.js
+
+#+BEGIN_SRC js
+import React from "react";
+import { render } from "react-dom";
+import App from "./App";
+
+render(<App />, document.getElementById("root"));
+
+#+END_SRC
+
+** UserContext.js
+
+#+BEGIN_SRC js
+import React from "react";
+
+const UserContext = React.createContext({ name: "Joe" });
+
+export default UserContext;
+#+END_SRC
+
+** ThemeContext.js
+
+#+BEGIN_SRC js
+import React from "react";
+
+export const themes = {
+  dark: {
+    foreground: "#fff",
+    background: "#666"
+  },
+  light: {
+    foreground: "#222",
+    background: "#eee"
+  }
+};
+
+const ThemeContext = React.createContext({
+  theme: themes.dark,
+  toggleTheme: () => {}
+});
+
+export default ThemeContext;
+#+END_SRC
+
+** App.js
+
+#+BEGIN_SRC js
+import React, { Component } from "react";
+import Toolbar from "./Toolbar";
+import ThemeContext, { themes } from "./ThemeContext";
+import UserContext from "./UserContext";
+
+const user = { name: "Jane" };
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      theme: themes.dark,
+      toggleTheme: this.toggleTheme
+    };
+  }
+
+  toggleTheme = () => {
+    this.setState(state => ({
+      theme: state.theme === themes.dark ? themes.light : themes.dark
+    }));
+  };
+
+  render() {
+    return (
+      <UserContext.Provider value={user}>
+        <ThemeContext.Provider value={this.state}>
+          <Toolbar />
+        </ThemeContext.Provider>
+      </UserContext.Provider>
+    );
+  }
+}
+
+export default App;
+#+END_SRC
+
+** Button.js
+
+#+BEGIN_SRC js
+import React from "react";
+import ThemeContext from "./ThemeContext";
+
+function Button(props) {
+  return (
+    <ThemeContext.Consumer>
+      {({ theme }) => {
+        const style = {
+          background: theme.background,
+          color: theme.foreground
+        };
+        return (
+          <button style={style} onClick={props.onClick}>
+            {props.children}
+          </button>
+        );
+      }}
+    </ThemeContext.Consumer>
+  );
+}
+
+export default Button;
+
+#+END_SRC
+
+** Toolbar.js
+
+#+BEGIN_SRC js
+import React from "react";
+import Button from "./Button";
+import ThemeContext from "./ThemeContext";
+import UserContext from "./UserContext";
+
+function Toolbar() {
+  return (
+    <div>
+      <Button>Edit</Button>
+      <Button>Save</Button>
+      <ThemeContext.Consumer>
+        {({ toggleTheme }) => <Button onClick={toggleTheme}>Toggle</Button>}
+      </ThemeContext.Consumer>
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <UserContext.Consumer>
+            {user => (
+              <div style={{ background: theme.background }}>{user.name}</div>
+            )}
+          </UserContext.Consumer>
+        )}
+      </ThemeContext.Consumer>
+    </div>
+  );
+}
+export default Toolbar;
+#+END_SRC

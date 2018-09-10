@@ -1,7 +1,7 @@
 EMACS
 
 * Chord Exploration for ergodox and typescript
-Used C-h k  to discover C/M bindings in org more.
+Used C-h k (M-x describe-key).
 ** TODO Use C-h b (describe-bindings) for a complete list.
 ** TODO Get list of Popular emacs bindings for editing text, JS, clojure
 ** TODO Get list of popular vim bindings
@@ -139,6 +139,7 @@ Used C-h k  to discover C/M bindings in org more.
 *** c (commit popup)
 *** P (push popup)
 *** F (fetch/pull popup)
+*** f a (fetch all remotes)
 *** l (log popup)
 *** n (next line)
 *** p (previous line)
@@ -195,7 +196,7 @@ Used C-h k  to discover C/M bindings in org more.
 *** C-c ! v (verify flychecker works)
 *** C-c ! x (disable flycheck in buffer)
 *** if in node, paste at top: /* jslint node: true */
-** yasnippet snippets (tab)
+** TODO yasnippet snippets (tab)
 *** variable declarations
      c - const
      v - var
