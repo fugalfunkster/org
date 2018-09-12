@@ -1,0 +1,8 @@
+defmodule Mathy do
+  def factorialOf(0), do: 1
+  def factorialOf(n), do: n * factorialOf(n-1)
+  def sum(0), do: 0
+  def sum(n), do: n + sum(n-1)
+  def gcd(x,0), do: x 
+  def gcd(x,y), do: gcd(y, rem(x,y))  
+end

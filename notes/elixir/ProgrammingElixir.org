@@ -132,35 +132,58 @@ Enum.each([1,2,3,4],&(IO.inspect(&1)))
 : :ok
 
 * Modules and Named Functions
-Named functions can only exist inside modules. 
-Named functions are identifie by both name and arity.
+Named functions can only exist inside modules. Internally, named functions are identified by both name and arity. Thus, you could have two functions in the same module, with the same name, but with different arity. Check out the code block below and corresponding file for function forms.
 
-Modules are compiled.
+Modules are compiled: either give IEx a source file's name or use the =c= helper
+
+#+BEGIN_SRC shell
+$ iex ./e/times.esx
+#+END_SRC
+
+or
 
 #+BEGIN_SRC elixir
-c "./e/times.esx"
+# c "./e/times.esx" # the c helper, in org-mode it only needs to be loaded once
+# Times.double(5.5)
+  Times.double(2,2) # multi-arity experiment
+# Times.double("string")
+# Times.triple(2)
+# Times.quadruple(2)
 #+END_SRC
 
 #+RESULTS:
-: [Times]
+: 8
+
+the params and args do that pattern matching 
+so just like the anonymous functions,
+we can have multiple clauses of the same definition - in one module 
+but, we gotta write the function multiple times
+in the order (first to last) that they must be matched
+and the arity's gotta be consistent,
+adjacency is nice
+
+Let's use pattern matching, and multiple function clauses to implement a recursive function that calculates its argument's factorial
 
 #+BEGIN_SRC elixir
-Times.double(5.5)
+  # c "./e/mathy.esx"
+  Mathy.factorialOf(10)
 #+END_SRC
 
 #+RESULTS:
-: 11.0
+: 3628800
 
 #+BEGIN_SRC elixir
-Times.double("string")
+  # c "./e/mathy.esx"
+  # Mathy.sum(10)
+  # Mathy.gcd(7,31)
+  Mathy.gcd(6,36)
 #+END_SRC
 
 #+RESULTS:
-: ** (ArithmeticError) bad argument in arithmetic expression: "string" * 2
-:     :erlang.*("string", 2)
-:     e/times.esx:3: Times.double/1
+: 6
 
-
+** Guard Clauses
+Guard classes are predicates that are attached to a function definiton using one or more =when= keywords.
 
 * Lists and Recursion
 * Maps, Keyword Lists, Sets, and Structs

@@ -2,5 +2,15 @@ defmodule Times do
   def double(n) do
     n * 2
   end
+  def double(n, a) do
+    n * (2 * a)
+  end
+  # do <BLOCK> end - most typical of multi-line functions
+  def triple(n), do: n * 3
+  # note the inline definition above features a comma after the param list, and a colon after do
+  def quadruple(n), do: (
+    double(n, n)
+  ) 
+  # yuck
 end
   
