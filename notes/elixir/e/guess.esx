@@ -1,0 +1,16 @@
+defmodule Chop do
+  def guess(actual, low..high) do
+    middle = div(high - low, 2) + low
+    IO.puts "Is it #{middle}"
+    compare(actual, middle, low..high)
+  end
+  def compare(a, m, _.._) when a === m do
+    IO.puts "The answer is #{a}"
+  end
+  def compare(a, m, _..high) when a > m do
+    guess(a, m+1..high)
+  end
+  def compare(a, m, low.._) when a < m do
+    guess(a, low..m-1)
+  end  
+end

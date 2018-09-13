@@ -1,0 +1,18 @@
+defmodule DefaultParams do 
+  # these two irritate the compiler, in this order, and when their order is switched
+  # def func(p1, p2) do
+    # IO.inspect [p1, p2]
+  # end
+  # def func(p1, p2 \\ 2, p3 \\ 3, p4) do
+    # IO.inspect [p1, p2, p3, p4]
+  # end
+  
+  def otherFunc(p1, p2 \\ 123 ) 
+  def otherFunc(p1, 99) do
+    IO.inspect "you said 99"
+  end  
+  def otherFunc(p1, p2) do
+    IO.inspect [p1, p2]
+  end
+  
+end

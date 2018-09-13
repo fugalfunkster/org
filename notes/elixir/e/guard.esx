@@ -1,0 +1,18 @@
+defmodule Guard do
+  def. what_is(x) when is_number(x) do
+    IO.puts "#{x} is a number"
+  end
+  def what_is(x) when is_list(x) do
+    IO.puts "#{x} is a list"
+  end
+  def what_is(x) when is_atom(x) do
+    IO.puts "#{x} is a atom"
+  end
+
+  def factorialOf(0), do: 1
+  def factorialOf(n) when is_integer(n) and n > 0 do
+    n * factorialOf(n-1)
+  end
+end
+
+  

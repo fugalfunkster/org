@@ -1,0 +1,435 @@
+
+Programming Elixir :: Dave Thomas
+
+* Take the Red Pill
+** Programming Should Be About Transforming Data
+** Installing Elixir
+** Running Elixir
+** Suggestions for Reading the Book
+** Exercises
+#+BEGIN_SRC elixir
+h IO.puts
+#+END_SRC
+
+#+RESULTS:
+: * def puts(device \\ group_leader(), item)
+: 
+: Writes `item` to the given `device`, similar to `write/2`,
+: but adds a newline at the end.
+: 
+
+#+BEGIN_SRC elixir
+i "i" 
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Term
+  "i"
+Data type
+  BitString
+Byte size
+  1
+Description
+  This is a string: a UTF-8 encoded binary. It's printed surrounded by
+  "double quotes" because all UTF-8 encoded codepoints in it are printable.
+Raw representation
+  <<105>>
+Reference modules
+  String, :binary
+#+end_example
+
+** Think Different(ly)
+
+* Pattern Matching
+** Assignment: I Do Not Think It Means What You Think It Means
+** More Complex Matches
+** Ignoring a Value with =_=
+** Variables Bind Once (per Match)
+** Another Way of Looking at the Equals Sign
+* Immutability
+** You Already Have (Some) Immutable Data
+** Immutable Data Is Known Data
+** Performance Implications of Immutability
+* TODO Elixir Basics
+** Built-in Types
+** Value Types
+** System Types
+** Collection Types
+** Maps
+#+BEGIN_SRC elixir
+a = %{red: "red", blue: "blue"}
+a.blue
+#+END_SRC
+
+#+RESULTS:
+: "blue"
+** Binaries
+** Dates and Times
+** Names, Source Files, Conventions, Operations, etc.
+** Variable Scope
+** End of the Basics
+
+* TODO Anonymous Functions
+** Functions and Pattern Matching
+** One Function, Multiple Bodies
+** Functions Can Return Functions
+** Passing Functions as Arguments
+** Functions Are the Core
+
+#+BEGIN_SRC elixir
+list_concat = fn a, b -> a ++ b end
+list_concat.([1, 2], [3, 4])
+#+END_SRC
+
+#+RESULTS:
+: [1, 2, 3, 4]
+
+
+#+BEGIN_SRC elixir
+sum = &(&1 + &2 + &3)
+sum.(1, 2, 3)
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+#+BEGIN_SRC elixir
+pair_tuple_to_list = fn {a,b} -> [a, b] end  
+pair_tuple_to_list.({1234,5678})
+#+END_SRC
+
+#+RESULTS:
+: [1234, 5678]
+
+#+BEGIN_SRC elixir
+fun = fn
+      (0, 0, _) -> "FizzBuzz"
+      (0, _, _) -> "Fizz"
+      (_, 0, _) -> "Buzz"
+      (_, _, x) -> x
+      end
+
+fb = fn
+     (n) -> fun.(rem(n,3), rem(n,5), n)
+     end
+
+IO.puts(fb.(10))
+IO.puts(fb.(11)) 
+IO.puts(fb.(12))
+IO.puts(fb.(13))
+IO.puts(fb.(14))
+IO.puts(fb.(15))
+IO.puts(fb.(16))
+#+END_SRC
+
+#+RESULTS:
+: Buzz
+: 11
+: Fizz
+: 13
+: 14
+: FizzBuzz
+: 16
+: :ok
+
+
+#+BEGIN_SRC elixir
+
+#+END_SRC
+
+#+BEGIN_SRC elixir
+prefix = fn b -> (fn a -> "#{b} #{a}" end) end 
+mrs = prefix.("Mrs.")
+mrs.("Smith")
+
+#+END_SRC
+
+#+RESULTS:
+: "Mrs. Smith"
+
+#+BEGIN_SRC elixir
+Enum.map([1,2,3,4],&(&1 + 2))
+Enum.each([1,2,3,4],&(IO.inspect(&1)))
+#+END_SRC
+
+#+RESULTS:
+: 1
+: 2
+: 3
+: 4
+: :ok
+
+* DONE Modules and Named Functions
+Named functions can only exist inside modules. Internally, named functions are identified by both name and arity. Thus, you could have two functions in the same module, with the same name, but with different arity. Check out the code block below and corresponding file for function forms.
+** Compiling a Module
+Modules are compiled: either give IEx a source file's name or use the =c= helper
+
+#+BEGIN_SRC shell
+$ iex ./e/times.esx
+#+END_SRC
+
+or
+
+#+BEGIN_SRC elixir
+# c "./e/times.esx" # the c helper, in org-mode it only needs to be loaded once
+# Times.double(5.5)
+  Times.double(2,2) # multi-arity experiment
+#+END_SRC
+
+#+RESULTS:
+: 8
+
+** The Function Body - Block Syntax
+
+#+BEGIN_SRC elixir
+c "./e/times.esx"
+# Times.double("string")
+# Times.triple(2)
+# Times.quadruple(2)
+#+END_SRC
+
+#+RESULTS:
+: 8
+
+** Function Calls and Pattern Matching
+Like anonymous functions, the passed arguments are matched to the functions parameter list.
+Each function can have multiple clauses - a function body that matches a parameter list.
+We can have multiple clauses the same definition - in one module 
+
+in the order (first to last) that they must be matched
+and the arity's gotta be consistent,
+adjacency is nice
+
+Let's use pattern matching, and multiple function clauses to implement a recursive function that calculates its argument's factorial
+
+#+BEGIN_SRC elixir
+  # c "./e/mathy.esx"
+  Mathy.factorialOf(10)
+#+END_SRC
+
+#+RESULTS:
+: 3628800
+
+#+BEGIN_SRC elixir
+  # c "./e/mathy.esx"
+  # Mathy.sum(10)
+  # Mathy.gcd(7,31)
+  Mathy.gcd(6,36)
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+** Guard Clauses
+Guard clauses are predicates used to match function definitons. Guard classes are matched after any paramater-based matching.
+
+They use introduce the =when= keyword, which preceeds the predicate.
+
+#+BEGIN_SRC elixir
+# c "./e/guard.esx"
+
+# Guard.what_is(:bin)
+
+Guard.factorialOf(-1) # not defined for this input
+
+#+END_SRC
+
+#+RESULTS:
+: ** (FunctionClauseError) no function clause matching in Guard.factorialOf/1
+:     e/guard.esx:12: Guard.factorialOf(-1)
+
+*** Operators, type-check functions, etc.
+https://elixir-lang.org/getting-started/case-cond-and-if.html#expressions-in-guard-clauses
+**** Comparison Operators
+== != === !== > < <= >=
+**** Boolean and negation (sans || &&)
+or and not ! 
+**** Join operators
+<> ++
+**** in operator
+**** Type-check functions
+usually looks like : is_<type>
+
+** Default Parameters
+You can give a default value to any parameter using =\\=. Parameters without a default value are "required parameters." When a function with default values is called, the call will fail if the number of arguments is less than the number of required parameters. If the function is called with fewer arguments than the number of paramters, default parameters will supplement the arguments to meet arity, from right to left. Then, the arguments will match the parameters from left to right, as usual. 
+
+When you have multiple function clauses, the relationship between arity, requried paramaters, and defaults can conflict. So, there are some rules to follow:
+1. When one clause has the same arity as another clause's required parameters, one would shadow the other. So, if the clause with the default params is first, it will throw a compile error that the functions are in conflict. If the clause with the default params appears later, the compiler will issue a warning, that the clause is shadowed by a prior clause w/ respect to arity.
+
+#+BEGIN_SRC elixir
+c "./e/arity.esx"
+#+END_SRC
+
+#+RESULTS:
+: [33mwarning: [0mthis clause cannot match because a previous clause at line 2 always matches
+:   e/arity.esx:5
+: 
+: [DefaultParams]
+
+2. When you have multiple function clauses, with the same arity, and one of them has default values, write the default parameters in a function head with no body. These defaults will apply to all calls to the function.
+
+#+BEGIN_SRC elixir
+c "./e/arity.esx"
+#+END_SRC
+
+#+RESULTS:
+: [33mwarning: [0mredefining module DefaultParams (current version loaded from Elixir.DefaultParams.beam)
+:   e/arity.esx:1
+: 
+: [33mwarning: [0mvariable p1 is unused
+:   e/arity.esx:11
+: 
+: [DefaultParams]
+
+
+EXERCISE: 
+
+#+BEGIN_SRC elixir
+  # c "./e/guess.esx"
+
+ Chop.guess(7, 1..10)
+#+END_SRC
+
+#+RESULTS:
+: Is it 5
+: Is it 8
+: Is it 6
+: Is it 7
+: The answer is 7
+: :ok
+
+** Private Functions
+Use the =defp= macro. Note, functions with multiple heads must all be private. 
+
+** The Amazing Pipe Operator: |>
+The =|>= operator passes the result of the expressions on its left as the first argument to the function to its right.
+
+#+BEGIN_SRC elixir
+# not execuable
+list
+|> salesTax(2018) # note that 2018 becomes the second param on invocation
+|> prepare_filing
+#+END_SRC
+
+** Modules
+Modules provide namespacing for funcitons, macros, structs, protocols, and other modules. When you nest modules in your code, the namespace is the concatenation of the names, with =.=. But, also note, all modules are defined "at the top level." So a module named "Tasks" inside a module named "Mix" would be named =Mix.Tasks=, but would have no other relationship to functions that are simply in the =Mix= module. This is illustrated by the ability to name modules with =.=s directly.
+
+*** The =import= Directive
+=import= let's you brink a module's functions/macros into the current scope. 
+
+full syntax: =import Module [, only:|except:]=
+
+The optional =only:= and =except:= parameters accept a keyword list of name: arity pairs.
+
+*** The =alias= Directive
+Helps cut down on typing!
+
+=alias My.Other.Module.Parser= puts =Parser= in scope. 
+The optional parameter =as:= can be used to ref the module with a different name.
+We can also grab multople modules at a time:
+=alias My.Other.Module.{Parser, Runner}=
+
+*** The =require= Directive
+Necessary for macros
+
+** Module Attributes
+Module attributes are metadata, assigned using =@=. You can access attributes in functions, but must declare, and set! them in the top level of a module. You can set the same attribute multiple times in a module, and the lookup behaves lexically, like other vars.
+
+** Module Names
+In Elixir, module names should be capatalized. When Elixir encouters a name starting with an uppercase letter, the name is converted to an atom of the same name with =Elixir= prepended. In a way, Elixir is basically a module within Erlang. A call to =IO.puts= is a call to =Elixir.IO.puts=.
+** Calling a Function in an Erlang Library
+Erlang vars start with an uppercase, and atoms are lowercase (no colon) - in Elixir modules are uppercased, vars begin lowercased, and atoms are preceded by a colon. To reference an erlang atom, just put a colon in from of it.
+
+#+BEGIN_SRC elixir
+:io.format("the number is ~3.1f~n", [5.678])
+#+END_SRC
+
+#+RESULTS:
+: the number is 5.7
+: :ok
+
+** Finding Libraries
+
+#+BEGIN_SRC elixir
+  # :io.format("~4.2f~n", [3.8746])
+  # System.user_home()
+  # Path.extname("./e/arity.esx")
+  # System.cwd()
+  # System.cmd("node", ["-v"])
+#+END_SRC
+
+#+RESULTS:
+: {"v6.3.1\n", 0}
+
+* TODO Lists and Recursion
+** Heads and Tails
+** Using Head and Tail to Process a List
+** Using Head and Tail to Build a List
+** Creating a Map Function
+** Reducing a List to a Single Value
+** More Complex List Patterns
+** The List Module in Action
+** Get Friendly with Lists
+* TODO Maps, Keyword Lists, Sets, and Structs
+** How to Choose Between Maps, Structs, and Keyword Lists
+** Keyword Lists
+** Maps
+** Pattern Matching and Updating Maps
+** Updating a Map
+** Structs
+** Nested Dictionary Structures
+** Sets
+** With Great Power Comes Great Temptation
+* TODO An Aside - What are Types?
+* TODO Strings and Binaries
+** String Literals
+** The Name "Strings"
+** Single-Quoted Strings - Lists of Character Codes
+** Binaries
+** Double-Quoted Strings are Binaries
+** Binaries and Pattern Matching
+** Familiar Yet Strange
+* TODO Control Flow
+** =if= and =unless=
+** =cond=
+** =case=
+** Raising Exceptions
+** Designing with Exceptions
+** Doing More with Less
+* TODO Organizing a Project
+** The Project: Fetch Issues from GitHub
+** Step 1: Use Mix to Create Our New Project
+** Transformation: Parse the Command Line
+** Write Some Basic Tests
+** Refactor: Big Function Alert
+** Transformation: Fetch from GitHub
+** Step 2: Use Libraries
+** Transformation: Convert Response
+** Transformation: Sort Data
+** Transformation: Take First n Items
+** Transformation: Format the Table
+** Step 3: Make a Command-Line Executable
+** Step 4: Add Some Logging
+** Step 5: Create Project Documentation
+** Coding by Transforming Data
+* TODO Tooling
+** Debugging with IEx
+** Testing
+** Code Dependencies
+** Server Monitoring
+** Source-Code Formatting
+** Inevitable, There's More
+* Working With Multiple Processes
+* Nodes - the Key to Distributing Services
+* OTP: Servers
+* OTP: Supervisors
+* A More Complex Example
+* OTP: Applications
+* Tasks and Agents
+* Macros an Code Evaluation
+* Linking Modules: Behaviors and Use
+* Protocols - Polymorphic Functions
+* More Cool Stuff
+* Exceptions: raise and try, catch and throw
+* Type Specifications and Type Checking
