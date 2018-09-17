@@ -1,0 +1,34 @@
+defmodule MyList do
+  def myLength([]), do: 0
+  def myLength([_head | tail]), do: 1 + length(tail)
+
+  def squares([]), do: []
+  # def squares([head | tail]), do: [ head * head ] ++ squares(tail)
+  def squares([head | tail]), do: [ head * head  | squares(tail)]
+
+  def add_1([]), do: []
+  def add_1([head | tail]), do: [head + 1 | add_1(tail)]
+
+  def myMap([], _func), do: []
+  def myMap([head|tail], func), do: [func.(head) | myMap(tail, func)]
+
+  def myReduce([], value, _func), do: value
+  def myReduce([head|tail], value, func), do: myReduce(tail, func.(head, value), func)
+
+  def mapsum(list, func), do: myMap(list, func) |> myReduce(0, &(&1 + &2)) 
+
+  def myMax(_head, value \\ 0)
+  def myMax([], value), do: value
+  def myMax([head | tail], value) when head > value do myMax(tail, head) end
+  def myMax([head | tail], value) when head <= value do myMax(tail, value) end
+  
+  def charAdd(char, num) do
+    a = ?a
+    rem(char - a + num, 26) + a
+  end
+  def caesar(str, num), do: myMap(str, &(charAdd(&1, num)))  |> List.to_string()
+
+  def span(x, x), do: [x]
+  def span(low,high), do: [low | span(low+1, high)]
+  
+end

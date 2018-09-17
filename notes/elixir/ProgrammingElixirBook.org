@@ -1,4 +1,3 @@
-
 Programming Elixir :: Dave Thomas
 
 * Take the Red Pill
@@ -362,26 +361,413 @@ Erlang vars start with an uppercase, and atoms are lowercase (no colon) - in Eli
 #+RESULTS:
 : {"v6.3.1\n", 0}
 
-* TODO Lists and Recursion
+* DONE Lists and Recursion
 ** Heads and Tails
+Ah, hello old friend, the empty list : =[]=. In Elixir, the join operator =|= denotes the separation between the =head= and =tail= of a list, for the purposes of list creation and matching.
+
+#+BEGIN_SRC elixir
+list = [1 | [2 | [3 | []]]]
+[a | b] = list
+b
+#+END_SRC
+
+#+RESULTS:
+: [2, 3]
+
+For more on the join operator, see "More Complex List Patterns"
+
 ** Using Head and Tail to Process a List
+Let's find the length of a list, using a recursive function and pattern matching.
+
+#+BEGIN_SRC elixir
+  # c "./e/listLength.esx"
+  MyList.myLength([1,2,3,4])
+#+END_SRC
+
+#+RESULTS:
+: 4
+
 ** Using Head and Tail to Build a List
+Write a function that takes a list of number and returns a new list containing the square of each.
+
+#+BEGIN_SRC elixir
+  # c "./e/listLength.esx"
+  MyList.squares([3,4,5])
+#+END_SRC
+
+#+RESULTS:
+: [9, 16, 25]
+
+Write a function that adds 1 to each element in a list.
+
+#+BEGIN_SRC elixir
+  # c "./e/listLength.esx"
+  MyList.add_1([1,2,3,4])
+#+END_SRC
+
+#+RESULTS:
+: [33mwarning: [0mredefining module MyList (current version loaded from Elixir.MyList.beam)
+:   e/listLength.esx:1
+: 
+: [2, 3, 4, 5]
+
 ** Creating a Map Function
+Implement Map
+
+#+BEGIN_SRC elixir
+c "./e/listLength.esx"
+MyList.myMap([1,2,3,4], fn (x) -> x * x end)
+#+END_SRC
+
+#+RESULTS:
+: [33mwarning: [0mredefining module MyList (current version loaded from Elixir.MyList.beam)
+:   e/listLength.esx:1
+: 
+: [1, 4, 9, 16]
+
 ** Reducing a List to a Single Value
+Implement Reduce
+
+#+BEGIN_SRC elixir
+c "./e/listLength.esx"
+
+MyList.myReduce([1, 2, 3, 4], 0, fn (a,b) -> a + b end)
+#+END_SRC
+
+#+RESULTS:
+: [33mwarning: [0mredefining module MyList (current version loaded from Elixir.MyList.beam)
+:   e/listLength.esx:1
+: 
+: 10
+
+*** Exercises
+
+#+BEGIN_SRC elixir
+c "./e/listLength.esx"
+MyList.mapsum([1,2,3], &(&1 * &1))
+MyList.myMax([1,8,2,3,6,9,4,5])
+MyList.caesar('ryvke', 13)
+#+END_SRC
+
+#+RESULTS:
+: [33mwarning: [0mredefining module MyList (current version loaded from Elixir.MyList.beam)
+:   e/listLength.esx:1
+: 
+: "elixr"
+
 ** More Complex List Patterns
+The join operator can be used to separate any number of vars during list building, or matching.
+
+#+BEGIN_SRC elixir
+list = [1, 2, 3, 4 | [5, 6, 7, 8]]
+[a, b | tail] = list
+b
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+#+BEGIN_SRC elixir
+c "./e/listLength.esx"
+inspect MyList.span(8, 12), char_lists: false
+#+END_SRC
+
+#+RESULTS:
+: [33mwarning: [0mredefining module MyList (current version loaded from Elixir.MyList.beam)
+:   e/listLength.esx:1
+: 
+: "[8, 9, 10, 11, 12]"
+
 ** The List Module in Action
+*** concatenate : =++=
+*** flatten : =List.flatten()=
+*** fold : =List.foldl(list, value, func)= =List.foldr(list, value, func)=
+*** =List.replace_at(list, location, value)=
+*** Working with lists of tuples with keywords
+Three list functions: =keyfind=, =keydelete=, =keyreplace= 
+
+#+BEGIN_SRC elixir
+kw = [{:name, "Matthew"}, {:likes, "Eating"}, {:where, "Portland", "OR"}]
+List.keyfind(kw, "Matthew", 1)
+List.keyfind(kw, "OR", 2)
+List.keyfind(kw, "Portland", 2)
+List.keyfind(kw, "Portland", 2, "No State Called Portland")
+List.keydelete(kw, "Eating", 1) # preserves tuples
+List.keydelete(kw, "Portland", 1) # produces keyword list
+List.keyreplace(kw, :name, 0, {:full_name, "Matthew Hoselton"})
+List.keyreplace(kw, :where, 0, {:where, "Seattle", "WA"}) # not sure how the positon works...
+#+END_SRC
+
+#+RESULTS:
+: [{:name, "Matthew"}, {:likes, "Eating"}, {:where, "Portland", "OR"}]
+
 ** Get Friendly with Lists
-* TODO Maps, Keyword Lists, Sets, and Structs
+* DONE Maps, Keyword Lists, Sets, and Structs
 ** How to Choose Between Maps, Structs, and Keyword Lists
+Maps are great when you want to match against a key to get a value, or otherwise associalte values with names. But, if you want more than one entry with the same key, or need the elements to be ordered in some way, use a keyword list. If the map will always have a fixed set of fields, use a struct.
 ** Keyword Lists
+Typically, keyword lists are used to pass a list of options to a function. You can access a value from a keyword list using the access operator =[:keyword]=. Also checkout the =Keyword= and =Enum= modules. Remember that when declaring a keyword list, the colon appears after the keyword, and the pairs are followed by a comma. When accessing the list, the comma precedes the keyword.
+
+#+BEGIN_SRC elixir
+list = [first_name: "Matthew", last_name: "Hoselton", city: "Portland", state: "Oregon" ]
+list[:last_name]
+#+END_SRC
+
+#+RESULTS:
+: "Hoselton"
+
 ** Maps
-** Pattern Matching and Updating Maps
+So unordered!
+
+#+BEGIN_SRC elixir
+myMap = %{name: "Matthew Hoselton", likes: ["Eating", "Gardening"], where: "anywhere!"}
+
+Map.keys myMap   # These two return lists
+Map.values myMap
+
+myMap[:name] # value access
+myMap.likes  # also for access
+
+Map.drop myMap, [:name] 
+Map.put myMap, :birthday, "1985-10-21"
+Map.has_key? myMap, :birthday
+newMap = Map.put myMap, :birthday, "1985-10-21"
+Map.has_key? newMap, :birthday
+{birthday, newNewMap} = Map.pop newMap, :birthday 
+newNewMap === myMap
+
+#+END_SRC
+
+#+RESULTS:
+: true
+
+** Pattern Matching
+Map pattern matching can be used anywhere pattern matching would be used: control flow, function head matching, etc. Note that pattern matching can bind a value to a var but not a key.
+
+#+BEGIN_SRC elixir
+myMap = %{name: "Matthew Hoselton", likes: ["Eating", "Gardening"], where: "anywhere!"}
+
+# is the key name in the map?
+%{name: _} = myMap 
+# returns the map :: TRUTHY
+
+# bind the name to a var
+%{name: name} = myMap 
+# %{not_a_key: key} = myMap # match error
+
+# does the entry have the key with a specific value
+%{name: "Matthew Hoselton"} = myMap 
+# returns the map :: TRUTHY
+
+#+END_SRC
+
+#+RESULTS:
+: %{likes: ["Eating", "Gardening"], name: "Matthew Hoselton", where: "anywhere!"}
+
+The =for= construct lets us iterate over a collection :: "collection comprehension":
+
+#+BEGIN_SRC elixir
+  crew = [
+  %{name: "Picard", station: "Command"},
+  %{name: "Riker", station: "Command"},
+  %{name: "Crusher", station: "Medical"},
+  %{name: "LaForge", station: "Engineering"},
+  %{name: "Data", station: "Command"},
+  ]
+
+for person = %{station: station} <- crew, station === "Command", do: person
+
+#+END_SRC
+
+#+RESULTS:
+: [%{name: "Picard", station: "Command"}, %{name: "Riker", station: "Command"},
+:  %{name: "Data", station: "Command"}]
+
+We can use the pin operator to match with maps:
+
+#+BEGIN_SRC elixir
+ myMap = %{name: "Matthew Hoselton", likes: ["Eating", "Gardening"], where: "anywhere!"}
+
+  for key <- [:name, :likes] do
+    %{^key => value} = myMap
+    value
+  end
+#+END_SRC
+
+#+RESULTS:
+: ["Matthew Hoselton", ["Eating", "Gardening"]]
+
 ** Updating a Map
+There are two kinds of updates we can perform. First, if we just want to create a new map with the same keys but different values, we can use the pipe operator. If we want to create a map with new keys, we need to use the =put_new= function from the =Map= module
+
+#+BEGIN_SRC elixir
+  myMap = %{name: "Matthew Hoselton", likes: ["Eating", "Gardening"], where: "anywhere!"}
+  # newMap = %{myMap | :name => "Matt"}
+  # newMap
+
+  Map.put_new(myMap, :birthday, "1985-10-21")
+
+#+END_SRC
+
+#+RESULTS:
+: %{birthday: "1985-10-21", likes: ["Eating", "Gardening"],
+:   name: "Matthew Hoselton", where: "anywhere!"}
+
 ** Structs
+Structs are typed maps, and must be defined in a module using =defstruct=. The keys of a struct must be atoms, and the name of a struct is taken from the module name. The module is also a logical place to put functions that accept the struct. More on polymorphism later.
+
+#+BEGIN_SRC elixir
+  c "./e/defstruct.ex"
+
+  generic = %AppleVarietal{} # creation is like a map, but with the module's name
+  amere = %AppleVarietal{name: "Amere de Berthcort", color: "green", tannic: true}
+  browns = %AppleVarietal{name: "Brown's Apple"}
+
+  amere.name              # access via dot notation
+  %{name: name} = amere   # access via pattern matching
+  # name
+
+  AppleVarietal.spitter?(amere)
+  AppleVarietal.spitter?(browns)
+#+END_SRC
+
+#+RESULTS:
+: [33mwarning: [0mredefining module AppleVarietal (current version loaded from Elixir.AppleVarietal.beam)
+:   e/defstruct.ex:1
+: 
+: "chew your food"
+
 ** Nested Dictionary Structures
+As with clojure, modifying deeply nested, immutable data structures can be a pain. Thankfully, elixir provides a handful of macros and functions to make it easier to work with nested structures. Let's start with the  =get_in= function and the  =put_in=, =update_in=, and =get_and_update_in= macros.
+
+#+BEGIN_SRC elixir
+myMap = %{name: "Matthew Hoselton", likes: %{food: "sushi", activity: "Gardening"}, where: %{state: "OR", city: "Portland"}}
+
+get_in(myMap, [:likes, :food])
+
+put_in(myMap.where.state, "WA") # sets a value in a nested structure, using dot chaining
+put_in(myMap[:where][:city], "Seattle") # keys as atoms
+put_in(myMap.likes.food, "pizza") # doesnt work for keyword lists...
+   
+update_in(myMap.likes.activity, fn (x) -> String.downcase(x) end) # applies a function to a value in a structure
+get_and_update_in(myMap.likes.activity, fn (x) -> {x, String.downcase(x)} end) # also retrieves the previous value
+
+#+END_SRC
+
+#+RESULTS:
+: {"Gardening",
+:  %{likes: %{activity: "gardening", food: "sushi"}, name: "Matthew Hoselton",
+:    where: %{city: "Portland", state: "OR"}}}
+
+Because all but the =get_in=  nested accessors are macros, we can't dynamically specify the path at runtime. But, those accessor macros mirror kernel functions of the same name but a different arity: (dict, keys, value || fn). 
+
+#+BEGIN_SRC elixir
+myMap = %{name: "Matthew Hoselton", likes: %{food: "sushi", activity: "Gardening"}, where: %{state: "OR", city: "Portland"}}
+key_path = [:likes, :activity]
+
+# get_and_update_in(myMap.key_path,  fn activity -> {activity, String.upcase(activity)} end) # KeyError
+
+get_and_update_in(myMap, key_path, fn activity -> {activity, String.upcase(activity)} end)
+#+END_SRC
+
+#+RESULTS:
+: {"Gardening",
+:  %{likes: %{activity: "GARDENING", food: "sushi"}, name: "Matthew Hoselton",
+:    where: %{city: "Portland", state: "
+
+Under the hood, the nested accessor functions use the =Access= module for traversing nested data structures. The =Access= module also provides helper functions for working with lists and tuples. 
+
+For example, the =Access.all= and =Access.at= functions work on lists:
+
+#+BEGIN_SRC elixir
+  crew = [
+  %{name: "Picard", station: "Command"},
+  %{name: "Riker", station: "Command"},
+  %{name: "Crusher", station: "Medical"},
+  %{name: "LaForge", station: "Engineering"},
+  %{name: "Data", station: "Command"},
+  ]
+
+get_in(crew, [Access.all(), :name])
+get_in(crew, [Access.at(0), :station])
+
+update_in(crew, [Access.at(2), :station], fn(station) -> "Command" end)
+#+END_SRC
+
+#+RESULTS:
+: [%{name: "Picard", station: "Command"}, %{name: "Riker", station: "Command"},
+:  %{name: "Crusher", station: "Command"},
+:  %{name: "LaForge", station: "Engineering"},
+:  %{name: "Data", station: "Command"}]
+
+
+The =Access.elem= function works on tuples, and the =Access.key= and =Access.key!= functions work on dictionary types.
+
+#+BEGIN_SRC elixir
+cast = [
+%{
+  character: "Buttercup",
+    actor: {"Robin", "Wright"},
+    role: "princess"
+  },
+%{
+character:   "Westley", 
+    actor: {"Carey", "Elwes"},
+    role: "farm boy"
+  }
+]
+
+get_in(cast, [Access.all(), :actor, Access.elem(1)]) # accessing an element in a tuple
+
+
+cast = %{
+   Buttercup: %{
+     actor: {"Robin", "Wright"},
+     role: "princess"
+   },
+  Westley: %{
+    actor: {"Carey", "Elwes"},
+    role: "farm boy"
+  }
+}
+
+get_in(cast, [Access.key(:Buttercup), :actor, Access.elem(0)])
+update_in(cast, [Access.key!(:Westley), :role], fn _ -> "Dread Pirate Roberts" end)
+
+#+END_SRC
+
+#+RESULTS:
+: %{Buttercup: %{actor: {"Robin", "Wright"}, role: "princess"},
+:   Westley: %{actor: {"Carey", "Elwes"}, role: "Dread Pirate Roberts"}}
+
+And, the =Access.pop= function returns a tuple containing the value at a specific key, and the structure with that value removed.
+
+#+BEGIN_SRC elixir
+Access.pop(%{first_name: "Matthew", last_name: "Hoselton"}, :last_name)
+Access.pop([first_name: "Matthew", last_name: "Hoselton"], :last_name)
+Access.pop([first_name: "Matthew", last_name: "Hoselton"], :birthday) # returns nil if value not found
+#+END_SRC
+
+#+RESULTS:
+: {nil, [first_name: "Matthew", last_name: "Hoselton"]}
+
 ** Sets
+Sets are created using the MapSet module, which contains the =new=, =member?=, =union=, =difference=, and =intersection= functions.
+
+#+BEGIN_SRC elixir
+  mySet = MapSet.new([1, 2, 3, 4, 4, 4])
+  myOtherSet = MapSet.new([2, 4, 6, 8])
+  # MapSet.difference mySet, myOtherSet
+  MapSet.difference myOtherSet, mySet
+  MapSet.union mySet, myOtherSet
+#+END_SRC
+
+#+RESULTS:
+: #MapSet<[1, 2, 3, 4, 6, 8]>
+
 ** With Great Power Comes Great Temptation
 * TODO An Aside - What are Types?
+
 * TODO Strings and Binaries
 ** String Literals
 ** The Name "Strings"
